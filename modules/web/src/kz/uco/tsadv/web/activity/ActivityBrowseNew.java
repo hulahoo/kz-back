@@ -4,10 +4,14 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.GroupDatasource;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.OpenMode;
+import com.haulmont.cuba.gui.screen.Screen;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.events.NotificationRefreshEvent;
@@ -15,6 +19,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.components.GroupsComponent;
 import kz.uco.tsadv.entity.dbview.ActivityTask;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.web.screens.activity.ActivityForHandbellBrowse;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.StatusEnum;
 import org.springframework.context.event.EventListener;
@@ -25,7 +30,7 @@ import java.util.*;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
- * @author daniil.ivantsov
+ * @author Kairat.Karipkul
  */
 
 public class ActivityBrowseNew extends AbstractLookup {
@@ -62,6 +67,18 @@ public class ActivityBrowseNew extends AbstractLookup {
     private GroupDatasource<ActivityTask, UUID> activityTasksDs;
     @Inject
     protected GroupsComponent groupsComponent;
+    @Inject
+    private Button openNotification;
+    @Inject
+    private ScreenBuilders screenBuilders;
+
+    @Override
+    public void init(Map<String, Object> params) {
+        super.init(params);
+        if (params != null && params.containsKey("notification")) {
+            defaultTabFromLink = "notificationsTab";
+        }
+    }
 
     @Override
     public void ready() {
@@ -99,11 +116,12 @@ public class ActivityBrowseNew extends AbstractLookup {
             checkBox.setValue(true);
         }
         checkBox.addValueChangeListener(e -> {
-            if (e.getValue() != null && (Boolean) e.getValue() && !notifications.contains(entity)) {
+            if (e.getValue() != null && e.getValue() && !notifications.contains(entity)) {
                 notifications.add(entity);
                 notifications.forEach(notification -> {
                     if (StatusEnum.active.equals(notification.getStatus())) {
                         markAsReadButton.setEnabled(true);
+                        openNotification.setEnabled(true);
                     } else {
                         markAsUnreadButton.setEnabled(true);
                     }
@@ -118,6 +136,7 @@ public class ActivityBrowseNew extends AbstractLookup {
                 notifications.forEach(notification -> {
                     if (StatusEnum.active.equals(notification.getStatus())) {
                         markAsReadButton.setEnabled(true);
+                        openNotification.setEnabled(true);
                     } else {
                         markAsUnreadButton.setEnabled(true);
                     }
@@ -139,10 +158,10 @@ public class ActivityBrowseNew extends AbstractLookup {
 
     public Component generateTaskStatusColumn(ActivityTask entity) {
         Label label = componentsFactory.createComponent(Label.class);
-        if (entity.getStatus().equals("20")) {
+        if (entity.getStatus().equals(20)) {
             label.setValue(getMessage("closed"));
         }
-        if (entity.getStatus().equals("10")) {
+        if (entity.getStatus().equals(10)) {
             label.setValue(getMessage("inProgress"));
         }
         return label;
@@ -178,6 +197,7 @@ public class ActivityBrowseNew extends AbstractLookup {
             notifications.clear();
             notificationsTable.repaint();
             markAsReadButton.setEnabled(false);
+            openNotification.setEnabled(false);
             markAsUnreadButton.setEnabled(false);
         }
     }
@@ -197,6 +217,7 @@ public class ActivityBrowseNew extends AbstractLookup {
             notifications.clear();
             notificationsTable.repaint();
             markAsReadButton.setEnabled(false);
+            openNotification.setEnabled(false);
             markAsUnreadButton.setEnabled(false);
         }
     }
@@ -252,18 +273,20 @@ public class ActivityBrowseNew extends AbstractLookup {
             Entity entity = commonService.getEntity(metadata.getClass(activity.getType().getWindowProperty().getEntityName()).getJavaClass(),
                     activity.getReferenceId(), activity.getType().getWindowProperty().getViewName());
 
+            Map<String, Object> windowParam = new HashMap<>(getWindowParam(activity, entity));
+            windowParam.put("activityId", activityTask.getActivity().getId().toString());
             if (isOpenWindow(activity.getType().getCode().toUpperCase())) {
                 abstractWindow = openWindow(activity.getType().getWindowProperty().getScreenName(),
                         WindowManager.OpenType.NEW_TAB,
-                        getWindowParam(activity, entity));
+                        windowParam);
             } else {
                 abstractWindow = openEditor(activity.getType().getWindowProperty().getScreenName(),
-                        entity, WindowManager.OpenType.NEW_TAB, getWindowParam(activity, entity));
+                        entity, WindowManager.OpenType.NEW_TAB, windowParam);
             }
 
-            if (activity.getNotificationHeader() != null || activity.getNotificationBody() != null) {
-                groupsComponent.addActivityBodyToWindow(abstractWindow, activity);
-            }
+//            if (activity.getNotificationHeader() != null || activity.getNotificationBody() != null) {
+//                groupsComponent.addActivityBodyToWindow(abstractWindow, activity);
+//            }
 
             abstractWindow.addCloseListener(closeId -> activityTasksDs.refresh());
         }
@@ -340,5 +363,24 @@ public class ActivityBrowseNew extends AbstractLookup {
 
     protected boolean isSessionUser(UUID userId) {
         return userSession.getUser().getId().equals(userId);
+    }
+
+    public void openNotification() {
+        Map<String, Object> windowParams = new HashMap<>();
+        windowParams.put("activity", notifications.get(0));
+        Screen screen = screenBuilders.screen(this)
+                .withScreenClass(ActivityForHandbellBrowse.class)
+                .withOpenMode(OpenMode.THIS_TAB)
+                .withOptions(new MapScreenOptions(windowParams))
+                .build().show();
+        screen.addAfterCloseListener(afterCloseEvent -> {
+            activityTasksDs.refresh();
+            notificationsDs.refresh();
+            notifications.clear();
+            notificationsTable.repaint();
+            markAsReadButton.setEnabled(false);
+            openNotification.setEnabled(false);
+            markAsUnreadButton.setEnabled(false);
+        });
     }
 }

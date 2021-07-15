@@ -7,10 +7,14 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileLoader;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.Metadata;
+import kz.uco.base.entity.shared.Person;
 import kz.uco.base.importer.exception.ImportFileEofEvaluationException;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.importer.utils.XlsHelper;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.dictionary.DicTestType;
 import kz.uco.tsadv.modules.learning.enums.QuestionType;
 import kz.uco.tsadv.modules.learning.enums.TestSectionOrder;
@@ -54,6 +58,12 @@ public class LearningServiceBean implements LearningService {
 
     @Inject
     protected FileLoader fileLoader;
+    @Inject
+    private DatesService datesService;
+    @Inject
+    private FrontConfig frontConfig;
+    @Inject
+    private NotificationSenderAPIService notificationSenderAPIService;
 
     @Override
     public void importQuestionBank(FileDescriptor fileDescriptor) throws Exception {
@@ -205,8 +215,12 @@ public class LearningServiceBean implements LearningService {
                 e.printStackTrace();
             } finally {
                 try {
-                    inputStream.close();
-                    fileOutputStream.close();
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                    if (fileOutputStream != null) {
+                        fileOutputStream.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -240,14 +254,22 @@ public class LearningServiceBean implements LearningService {
                 e.printStackTrace();
             } finally {
                 try {
-                    isrStdout.close();
-                    stdout.close();
-                    brStdout.close();
+                    if (isrStdout != null) {
+                        isrStdout.close();
+                    }
+                    if (stdout != null) {
+                        stdout.close();
+                    }
+                    if (brStdout != null) {
+                        brStdout.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            file.delete();
+            if (file != null) {
+                file.delete();
+            }
             result = commonConfig.getScormPackageDomainURL() + "/" + packageName + commonConfig.getDefualtIndexHtmlUrl();
         }
         return result;
@@ -624,15 +646,17 @@ public class LearningServiceBean implements LearningService {
     }
 
     @Override
-    public boolean allCourseSectionPassed(List<CourseSection> courseSectionList) {
-        if(courseSectionList == null) return false;
+    public boolean allCourseSectionPassed(List<CourseSection> courseSectionList, Enrollment enrollment) {
+        if (courseSectionList == null) return false;
         boolean success = true;
         for (CourseSection section : courseSectionList) {
-            List<CourseSectionAttempt> courseSectionAttemptList = dataManager.load(CourseSectionAttempt.class)
+            List<CourseSectionAttempt> courseSectionAttemptList = transactionalDataManager.load(CourseSectionAttempt.class)
                     .query("select e from tsadv$CourseSectionAttempt e " +
                             " where e.success = true " +
-                            " and e.courseSection = :section")
+                            " and e.courseSection = :section" +
+                            " and e.enrollment = :enrollment")
                     .parameter("section", section)
+                    .parameter("enrollment", enrollment)
                     .view("courseSectionAttempt.edit")
                     .list();
             if (courseSectionAttemptList.size() < 1) {
@@ -681,5 +705,95 @@ public class LearningServiceBean implements LearningService {
             }
         }
         return success;
+    }
+
+    @Override
+    public void noDataForFeedbackAnswerMore7Days() {
+        List<Enrollment> enrollmentList = dataManager.load(Enrollment.class)
+                .query("select distinct e from tsadv$Enrollment e " +
+                        " join tsadv$Course c on e.course.id = c.id " +
+                        " join tsadv$CourseFeedbackPersonAnswer p on c.id = p.course.id " +
+                        " where e.status <> 5 " +
+                        " and :date >= e.date " +
+                        " and :date >= p.completeDate " +
+                        " and e.personGroup not in (" +
+                        " p.personGroup )")
+                .parameter("date", getDate())
+                .view("enrollment.for.course").list();
+        if (!enrollmentList.isEmpty()) {
+            enrollmentList.forEach(enrollment -> {
+                TsadvUser tsadvUser = getTsadvUser(enrollment.getPersonGroup());
+                if (tsadvUser != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    Person person = enrollment.getPersonGroup() != null ? enrollment.getPersonGroup().getPerson() : null;
+                    if (person != null) {
+                        params.put("studentFioRu", person.getFirstName() + " " + person.getLastName());
+                        params.put("studentFioEn", person.getFirstNameLatin() != null
+                                && !person.getFirstNameLatin().isEmpty()
+                                && person.getLastNameLatin() != null
+                                && !person.getLastNameLatin().isEmpty()
+                                ? person.getFirstNameLatin() + " " + person.getLastNameLatin()
+                                : person.getFirstName() + " " + person.getLastName());
+                        params.put("course", enrollment.getCourse().getName());
+                        String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                                + "/my-course/" + enrollment.getId().toString()
+                                + "\" target=\"_blank\">%s " + "</a>";
+                        params.put("linkRu", String.format(requestLink, "ЗДЕСЬ"));
+                        params.put("linkEn", String.format(requestLink, "CLICK"));
+                        params.put("linkKz", String.format(requestLink, "осы жерде"));
+
+                        notificationSenderAPIService.sendParametrizedNotification("tdc.course.completed", tsadvUser, params);
+                    }
+                }
+            });
+        }
+
+    }
+
+    protected Date getDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -7);
+        return calendar.getTime();
+    }
+
+    protected TsadvUser getTsadvUser(PersonGroupExt personGroupExt) {
+        return dataManager.load(TsadvUser.class)
+                .query("select e from tsadv$UserExt e " +
+                        " where e.personGroup = :personGroup")
+                .parameter("personGroup", personGroupExt)
+                .view("userExt.edit")
+                .list().stream().findFirst().orElse(null);
+    }
+
+    @Override
+    public void noAttemptLast7Days() {
+        List<Enrollment> enrollmentList = dataManager.load(Enrollment.class)
+                .query("select distinct e from tsadv$Enrollment e " +
+                        " where e.status <> 5 " +
+                        " and :date >= (select max(t.attemptDate) from tsadv$CourseSectionAttempt t" +
+                        " where t.enrollment = e)")
+                .parameter("date", getDate())
+                .view("enrollment.for.course").list();
+        if (!enrollmentList.isEmpty()) {
+            enrollmentList.forEach(enrollment -> {
+                TsadvUser tsadvUser = getTsadvUser(enrollment.getPersonGroup());
+                if (tsadvUser != null) {
+                    Person person = enrollment.getPersonGroup() != null ? enrollment.getPersonGroup().getPerson() : null;
+                    if (person != null) {
+                        Map<String, Object> params = new HashMap<>();
+                        params.put("studentFioRu", person.getFirstName() + " " + person.getLastName());
+                        params.put("studentFioEn", person.getFirstNameLatin() != null
+                                && !person.getFirstNameLatin().isEmpty()
+                                && person.getLastNameLatin() != null
+                                && !person.getLastNameLatin().isEmpty()
+                                ? person.getFirstNameLatin() + " " + person.getLastNameLatin()
+                                : person.getFirstName() + " " + person.getLastName());
+                        params.put("course", enrollment.getCourse().getName());
+
+                        notificationSenderAPIService.sendParametrizedNotification("tdc.module.is.not.completed", tsadvUser, params);
+                    }
+                }
+            });
+        }
     }
 }

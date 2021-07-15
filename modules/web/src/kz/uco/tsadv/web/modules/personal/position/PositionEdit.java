@@ -142,9 +142,11 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     protected Caseframe caseFrame;
 //    @Named("flightTimeRateTable.create")
 //    protected CreateAction flightTimeRateTableCreate;
-    /*@Named("goalsTable.create")
-    protected CreateAction goalsTableCreate;*/
-//    protected int languageIndex = languageIndex();
+    @Named("goalsTable.create")
+    protected CreateAction goalsTableCreate;
+    @Named("goalsTable.edit")
+    private EditAction goalsTableEdit;
+    //    protected int languageIndex = languageIndex();
     protected boolean isNewItem = false;
     protected List<Entity> commitInstances = new ArrayList<>();
     @Named("hierarchyElementsTable.close")
@@ -230,8 +232,13 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
         getDsContext().addBeforeCommitListener(context -> context.addInstanceToCommit(analyticsDs.getItem()));
 
         competencePosTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroup", getItem().getGroup()));
+        goalsTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroup", getItem().getGroup()));
+        goalsTableCreate.setWindowParams(ParamsMap.of("goalsDs",goalsDs));
+        goalsTableEdit.setWindowParams(ParamsMap.of("goalsDs",goalsDs));
 //        flightTimeRateTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroupName", getItem().getGroup()));
 //        flySurChargeTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroupId", getItem().getGroup()));
+
+
     }
 
     protected void selectLangTab(TabSheet tabSheet, String num, boolean lang) {
@@ -384,21 +391,23 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
         Label label = (Label) componentsFactory.createComponent(Label.NAME);
         if (element.getParent() != null) {
             HierarchyElementExt parentElement = commonService.getEntity(HierarchyElementExt.class, "select e from base$HierarchyElementExt e where e.id = :parentId", Collections.singletonMap("parentId", element.getParent().getId()), "hierarchyElement.parent");
-            label.setValue(parentElement.getName());
+            label.setValue(parentElement != null ? parentElement.getName() : "");
         }
         return label;
     }
 
-    public void onCreate(Component source) {
-        PositionGroupGoalLink positionGroupGoalLink = metadata.create(PositionGroupGoalLink.class);
-        positionGroupGoalLink.setPositionGroup(getItem().getGroup());
-        PositionGroupGoalLinkEdit positionGroupGoalLinkEdit = (PositionGroupGoalLinkEdit) openEditor(positionGroupGoalLink, WindowManager.OpenType.THIS_TAB);
-        positionGroupGoalLinkEdit.addCloseListener(a -> goalsDs.refresh());
-    }
+//    public void onCreate(Component source) {
+//        PositionGroupGoalLink positionGroupGoalLink = metadata.create(PositionGroupGoalLink.class);
+//        positionGroupGoalLink.setPositionGroup(getItem().getGroup());
+//        PositionGroupGoalLinkEdit positionGroupGoalLinkEdit = (PositionGroupGoalLinkEdit) openEditor(positionGroupGoalLink, WindowManager.OpenType.THIS_TAB,null,goalsDs);
+//        positionGroupGoalLinkEdit.addAfterCloseListener(a -> goalsDs.refresh());
+//    }
 
-    public void onEdit(Component source) {
-        openEditor(goalsDs.getItem(), WindowManager.OpenType.THIS_TAB, null, goalsDs);
-    }
+//    public void onEdit(Component source) {
+//        openEditor(goalsDs.getItem(), WindowManager.OpenType.THIS_TAB, null, goalsDs);
+//    }
+
+
 
 
     /*public void fillParentElementsGoalsDs() {

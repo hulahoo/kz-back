@@ -13,16 +13,17 @@ import java.util.UUID;
 public class StartBprocParams extends BaseUuidEntity {
     private static final long serialVersionUID = 7266277022845784235L;
 
-    @MetaProperty
-    private TsadvUser employee;
-
     @MetaProperty(mandatory = true)
     @NotNull
     private AbstractBprocRequest request;
 
     @MetaProperty(mandatory = true)
     @NotNull
-    private UUID initiatorPersonGroupId;
+    private UUID employeePersonGroupId;
+
+    @MetaProperty(mandatory = true)
+    @NotNull
+    private Boolean isAssistant = false;
 
     protected Map<String, Object> params;
 
@@ -34,12 +35,12 @@ public class StartBprocParams extends BaseUuidEntity {
         this.params = params;
     }
 
-    public UUID getInitiatorPersonGroupId() {
-        return initiatorPersonGroupId;
+    public UUID getEmployeePersonGroupId() {
+        return employeePersonGroupId;
     }
 
-    public void setInitiatorPersonGroupId(UUID initiatorPersonGroupId) {
-        this.initiatorPersonGroupId = initiatorPersonGroupId;
+    public void setEmployeePersonGroupId(UUID employeePersonGroupId) {
+        this.employeePersonGroupId = employeePersonGroupId;
     }
 
     public AbstractBprocRequest getRequest() {
@@ -50,11 +51,11 @@ public class StartBprocParams extends BaseUuidEntity {
         this.request = request;
     }
 
-    public TsadvUser getEmployee() {
-        return employee;
+    public Boolean getIsAssistant() {
+        return isAssistant;
     }
 
-    public void setEmployee(TsadvUser employee) {
-        this.employee = employee;
+    public void setIsAssistant(Boolean isAssistant) {
+        this.isAssistant = isAssistant;
     }
 }

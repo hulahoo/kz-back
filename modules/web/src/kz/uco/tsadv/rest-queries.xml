@@ -25,23 +25,6 @@
             <param name="userId" type="java.util.UUID"/>
         </params>
     </query>
-    <query name="personGroupInfo" entity="base$PersonGroupExt" view="personGroup-with-position">
-        <jpql>
-            <![CDATA[
-            select p
-            from tsadv$UserExt u
-                inner join u.personGroup p
-                inner join p.assignments a
-            where u.id = :userId
-                and a.startDate <= CURRENT_DATE
-                and a.endDate >= CURRENT_DATE
-                and a.primaryFlag = true
-             ]]>
-        </jpql>
-        <params>
-            <param name="userId" type="java.util.UUID"/>
-        </params>
-    </query>
     <query name="kpiEditPage" entity="tsadv$AssignedPerformancePlan" view="assignedPerformancePlan-myKpi-edit">
         <jpql>
             <![CDATA[select app
@@ -267,7 +250,7 @@
             <![CDATA[
                 select d
                 from tsadv$DicBookCategory d
-                    join d.books b
+                where d.books is not empty
                 order by
                     d.order
             ]]>
@@ -342,6 +325,52 @@
         <params>
             <param name="homeworkId" type="java.util.UUID"/>
             <param name="personGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="getScheduleOffsetRequest" entity="tsadv_ScheduleOffsetsRequest"
+           view="scheduleOffsetsRequest-for-my-team">
+        <jpql>
+            <![CDATA[
+            select e from tsadv_ScheduleOffsetsRequest e
+            where  e.personGroup.id = :personGroupId
+            order by e.requestDate desc
+            ]]>
+        </jpql>
+        <params>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="currentStandardSchedule" entity="tsadv$StandardSchedule" view="_minimal">
+        <jpql>
+            <![CDATA[
+            select cs
+            from tsadv$AssignmentSchedule s
+                join s.schedule cs
+                join s.assignmentGroup ag
+                join ag.list a
+            where a.personGroup.id = :personGroupId
+                and a.assignmentStatus.code = 'ACTIVE'
+                and a.startDate <= CURRENT_DATE
+                and a.endDate >= CURRENT_DATE
+                and a.primaryFlag = true
+            ]]>
+        </jpql>
+        <params>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="usersAccessibleDicSchedulePurpose" entity="tsadv_DicSchedulePurpose" view="_minimal">
+        <jpql>
+            <![CDATA[
+            select e
+            from tsadv_DicSchedulePurpose e
+                left join base_DicCompany c on c.id = e.company.id
+            where c.id = :companyId
+                or c is null
+            ]]>
+        </jpql>
+        <params>
+            <param name="companyId" type="java.util.UUID"/>
         </params>
     </query>
 </queries>

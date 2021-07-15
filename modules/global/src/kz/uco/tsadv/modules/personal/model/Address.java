@@ -11,6 +11,8 @@ import kz.uco.base.entity.dictionary.DicCity;
 import kz.uco.base.entity.dictionary.DicCountry;
 import kz.uco.base.entity.dictionary.DicLanguage;
 import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
+import kz.uco.tsadv.modules.personal.dictionary.DicKato;
+import kz.uco.tsadv.modules.personal.dictionary.DicStreetType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
@@ -88,6 +90,118 @@ public class Address extends AbstractParentEntity {
             inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
     @ManyToMany
     private List<FileDescriptor> attachments;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "KATO_ID")
+    protected DicKato kato;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STREET_TYPE_ID")
+    protected DicStreetType streetType;
+
+    @Column(name = "STREET_NAME")
+    protected String streetName;
+
+    @Column(name = "BUILDING")
+    protected String building;
+
+    @Column(name = "BLOCK")
+    protected String block;
+
+    @Column(name = "FLAT")
+    protected String flat;
+
+    @Column(name = "ADDRESS_FOR_EXPATS")
+    protected String addressForExpats;
+
+    @Column(name = "NOTES")
+    protected String notes;
+
+    @Column(name = "ADDRESS_KAZAKH")
+    protected String addressKazakh;
+
+    @Column(name = "ADDRESS_ENGLISH")
+    protected String addressEnglish;
+
+    public String getAddressEnglish() {
+        return addressEnglish;
+    }
+
+    public void setAddressEnglish(String addressEnglish) {
+        this.addressEnglish = addressEnglish;
+    }
+
+    public String getAddressKazakh() {
+        return addressKazakh;
+    }
+
+    public void setAddressKazakh(String addressKazakh) {
+        this.addressKazakh = addressKazakh;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getAddressForExpats() {
+        return addressForExpats;
+    }
+
+    public void setAddressForExpats(String addressForExpats) {
+        this.addressForExpats = addressForExpats;
+    }
+
+    public String getFlat() {
+        return flat;
+    }
+
+    public void setFlat(String flat) {
+        this.flat = flat;
+    }
+
+    public String getBlock() {
+        return block;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building;
+    }
+
+    public String getStreetName() {
+        return streetName;
+    }
+
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
+    }
+
+    public DicStreetType getStreetType() {
+        return streetType;
+    }
+
+    public void setStreetType(DicStreetType streetType) {
+        this.streetType = streetType;
+    }
+
+    public DicKato getKato() {
+        return kato;
+    }
+
+    public void setKato(DicKato kato) {
+        this.kato = kato;
+    }
 
     public List<FileDescriptor> getAttachments() {
         return attachments;

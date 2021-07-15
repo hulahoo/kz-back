@@ -34,7 +34,9 @@
                 <action id="sendNotification" trackSelection="true" caption="msg://sendNotification"/>
             </actions>
             <columns>
-                <column id="contractField" property="contract"/>
+                <column id="contractField" property="contract">
+                    <componentRenderer/>
+                </column>
                 <column id="policyNameField" property="policyName"/>
                 <column id="signDateField" property="startDate"/>
                 <column id="companyField" property="company"/>

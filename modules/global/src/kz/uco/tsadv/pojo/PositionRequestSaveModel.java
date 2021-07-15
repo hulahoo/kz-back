@@ -11,6 +11,8 @@ public class PositionRequestSaveModel extends RequestDetailSaveModel {
     private UUID positionGroupId;
     private UUID gradeGroupId;
     private BigDecimal headCount;
+    private BigDecimal minSalary;
+    private BigDecimal maxSalary;
 
     public UUID getPositionGroupId() {
         return positionGroupId;
@@ -34,5 +36,21 @@ public class PositionRequestSaveModel extends RequestDetailSaveModel {
 
     public void setHeadCount(BigDecimal headCount) {
         this.headCount = headCount;
+    }
+
+    public BigDecimal getMinSalary() {
+        return minSalary;
+    }
+
+    public void setMinSalary(BigDecimal minSalary) {
+        this.minSalary = minSalary;
+    }
+
+    public BigDecimal getMaxSalary() {
+        return maxSalary;
+    }
+
+    public void setMaxSalary(BigDecimal maxSalary) {
+        this.maxSalary = maxSalary;
     }
 }

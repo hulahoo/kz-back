@@ -7,6 +7,7 @@
     <data>
         <instance id="absenceRvdRequestDc"
                   class="kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest" view="absenceRvdRequest.edit">
+            <collection id="filesDc" property="files"/>
             <loader/>
         </instance>
         <collection id="dicAbsenceTypesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType">
@@ -66,7 +67,7 @@
                     <dateField id="timeOfStartingField" property="timeOfStarting" required="true"/>
                     <dateField id="timeOfFinishingField" property="timeOfFinishing" required="true"/>
                     <textField id="totalHoursField" property="totalHours" required="true" editable="false"/>
-                    <checkBox id="compencationField" property="compencation" editable="false"
+                    <checkBox id="compencationField" property="compensation" editable="false"
                               stylename="check-to-radio"/>
                     <checkBox id="vacationDayField" property="vacationDay" editable="false"
                               stylename="check-to-radio"/>
@@ -74,8 +75,29 @@
                     <checkBox id="agreeField" property="agree" visible="false"/>
                 </column>
             </form>
+            <groupBox id="filesBox"
+                      spacing="true">
+                <table id="fileTable"
+                       dataContainer="filesDc"
+                       multiselect="true"
+                       height="AUTO"
+                       width="100%">
+                    <actions>
+                        <action id="remove"
+                                type="remove"
+                                caption="mainMsg://table.btn.remove"/>
+                    </actions>
+                    <columns>
+                        <column id="name" link="true" linkInvoke="exportFile" caption="mainMsg://fileName"/>
+                    </columns>
+                    <buttonsPanel>
+                        <upload id="addFile"/>
+                        <button action="fileTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
             <vbox id="bpmActorsVBox"
-                  width="1000px"
+                  width="100%"
                   spacing="true">
                 <groupBox id="bpmActorsBox"
                           caption="msg://TransferRequest.approvalProcess.actors"

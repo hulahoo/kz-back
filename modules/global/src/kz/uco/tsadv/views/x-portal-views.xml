@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
+    <view entity="tsadv$PersonEducation" name="portal.my-profile" extends="_local">
+        <property name="educationType" view="_minimal"/>
+    </view>
+    <view entity="tsadv_PersonDocumentRequest" name="portal.my-profile" extends="_local">
+        <property name="personGroup" view="_minimal"/>
+        <property name="issuingAuthority" view="_minimal"/>
+        <property name="documentType" view="_minimal">
+            <property name="foreigner"/>
+        </property>
+        <property name="attachments" view="_minimal"/>
+        <property name="status" view="_local"/>
+        <property name="editedPersonDocument" view="_minimal"/>
+    </view>
     <view entity="tsadv$PersonDocument" name="portal.my-profile" extends="_local">
         <property name="documentType">
             <property name="langValue"/>
@@ -38,38 +51,38 @@
         <property name="stepStageStatus"/>
     </view>
     <view entity="base$AssignmentExt" name="assignedPerformancePlan-assignment" extends="_minimal">
-        <property name="personGroup">
-            <property name="list" view="_local"/>
-        </property>
+        <!--        <property name="personGroup">-->
+        <!--            <property name="list" view="_local"/>-->
+        <!--        </property>-->
         <property name="jobGroup">
             <property name="jobNameLang1"/>
         </property>
         <property name="organizationGroup" view="_minimal">
             <property name="list" view="_local"/>
-            <property name="organization" view="_minimal">
-                <property name="organizationNameLang1"/>
-            </property>
+            <property name="organizationName"/>
         </property>
         <property name="positionGroup" view="_local"/>
+        <property name="primaryFlag"/>
+        <property name="startDate"/>
+        <property name="endDate"/>
     </view>
     <view entity="tsadv$AssignedPerformancePlan" name="assignedPerformancePlan-myKpi-edit" extends="_minimal">
         <property name="performancePlan">
             <property name="performancePlanName"/>
-            <property name="performancePlanNameEn"/>
-            <property name="performancePlanNameKz"/>
             <property name="startDate"/>
             <property name="endDate"/>
+            <property name="performancePlanNameKz"/>
+            <property name="performancePlanNameEn"/>
         </property>
-        <property name="stepStageStatus"/>
+        <property name="assignedPerson" view="_local" fetch="AUTO">
+            <property name="person" view="_local"/>
+            <property name="assignments" view="assignedPerformancePlan-assignment" fetch="AUTO"/>
+        </property>
         <property name="extraPoint"/>
         <property name="finalScore"/>
         <property name="purpose"/>
         <property name="file" view="_local"/>
-        <property name="assignedPerson" view="_local">
-            <property name="currentAssignment" view="assignedPerformancePlan-assignment"/>
-            <property name="person" view="_local"/>
-            <property name="assignments" view="assignedPerformancePlan-assignment"/>
-        </property>
+        <property name="lineManager" view="_minimal"/>
         <property name="status" view="_minimal">
             <property name="code"/>
         </property>
@@ -79,14 +92,10 @@
             <property name="order"/>
         </property>
         <property name="goal" view="_minimal">
-            <property name="successCriteria"/>
+            <property name="successCriteriaLang"/>
         </property>
         <property name="goalLibrary" view="_minimal"/>
-        <property name="assignedByPersonGroup" view="_minimal">
-            <property name="assignments" view="_minimal">
-                <property name="positionGroup" view="_minimal"/>
-            </property>
-        </property>
+        <property name="positionGroup" view="_minimal"/>
     </view>
     <view entity="base$AssignmentExt" name="assignment-portal-kpi" extends="_local">
         <property name="jobGroup" view="_local"/>
@@ -147,14 +156,9 @@
     </view>
     <view name="portal-course-edit" entity="tsadv$Course" extends="_minimal">
         <property name="name"/>
-        <property name="description"/>
-        <property name="educationDuration"/>
-        <property name="educationPeriod"/>
-        <property name="avgRate"/>
-        <property name="preRequisition">
-            <property name="requisitionCourse">
-                <property name="name"/>
-            </property>
+        <property name="isIssuedCertificate"/>
+        <property name="enrollments" view="_minimal">
+            <property name="personGroup" view="_minimal"/>
         </property>
         <property name="courseTrainers">
             <property name="trainer">
@@ -165,14 +169,27 @@
                 </property>
             </property>
         </property>
+        <property name="feedbackTemplates" view="_minimal">
+            <property name="feedbackTemplate" view="_minimal"/>
+            <property name="course" view="_minimal"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="description"/>
+        <property name="logo" view="_minimal"/>
         <property name="sections">
             <property name="session">
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
         </property>
-        <property name="logo"/>
-        <property name="isIssuedCertificate"/>
+        <property name="preRequisition">
+            <property name="requisitionCourse">
+                <property name="name"/>
+            </property>
+        </property>
+        <property name="avgRate"/>
+        <property name="selfEnrollment"/>
         <property name="reviews" view="_local">
             <property name="personGroup">
                 <property name="person">
@@ -181,10 +198,8 @@
                 <property name="fullName"/>
             </property>
         </property>
-        <property name="enrollments" view="_minimal">
-            <property name="personGroup" view="_minimal"/>
-        </property>
-        <property name="selfEnrollment"/>
+        <property name="educationPeriod"/>
+        <property name="educationDuration"/>
         <property name="learningProof"/>
     </view>
     <view name="course-trainer-info" entity="tsadv$Trainer">
@@ -203,6 +218,8 @@
                 <property name="enrollments"/>
             </property>
         </property>
+        <property name="trainerGreetingLang"/>
+        <property name="informationTrainerLang"/>
     </view>
     <view name="assigned-goal-weight" entity="tsadv$AssignedGoal" extends="_minimal">
         <property name="weight"/>
@@ -224,9 +241,8 @@
         <property name="assignedPerformancePlan" view="_minimal"/>
         <property name="goalLibrary" view="_minimal"/>
     </view>
-    <view entity="tsadv$AssignedGoal" name="assignedGoal-library" extends="_minimal">
+    <view entity="tsadv$AssignedGoal" name="assignedGoal-library" extends="_local">
         <property name="goal" view="_minimal"/>
-        <property name="weight"/>
         <property name="goalLibrary" view="_minimal"/>
         <property name="category" view="_minimal"/>
     </view>
@@ -263,14 +279,23 @@
             </property>
         </property>
         <property name="format" view="_minimal"/>
+        <property name="sectionObject" view="_minimal">
+            <property name="objectType" view="_minimal">
+                <property name="code"/>
+            </property>
+            <property name="test" view="_minimal">
+                <property name="maxAttempt"/>
+            </property>
+        </property>
     </view>
     <view name="course-enrollment" entity="tsadv$Course" extends="_local">
         <property name="sections" view="enrollment-course-section"/>
         <property name="logo"/>
     </view>
-    <view name="enrollment-course" entity="tsadv$Enrollment" extends="_local">
-        <property name="course" view="course-enrollment"/>
-    </view>
+    <!--    unused-->
+    <!--    <view name="enrollment-course" entity="tsadv$Enrollment" extends="_local">-->
+    <!--        <property name="course" view="course-enrollment"/>-->
+    <!--    </view>-->
     <view name="course-section-attempt" entity="tsadv$CourseSectionAttempt" extends="_local">
         <property name="courseSection" view="_minimal">
             <property name="format" view="_minimal"/>
@@ -305,6 +330,7 @@
     <view name="portal-books-category-browse" entity="tsadv$DicBookCategory" extends="_minimal">
         <property name="order"/>
         <property name="books" view="_minimal">
+            <property name="active"/>
             <property name="category" view="_minimal"/>
             <property name="image" view="_minimal"/>
             <property name="fb2" view="_minimal"/>
@@ -317,8 +343,11 @@
     </view>
     <view name="portal-bproc-users" entity="tsadv$UserExt" extends="_minimal">
         <property name="fullNameWithLogin"/>
+        <property name="personGroup"/>
     </view>
     <view name="portal-activity" entity="uactivity$Activity" systemProperties="true" extends="_local">
+        <property name="notificationBody"/>
+        <property name="notificationHeader"/>
         <property name="type" view="_local">
             <property name="windowProperty" view="_local"/>
         </property>
@@ -339,18 +368,28 @@
           extends="_local"
           name="portal-assignment-group">
         <property name="group"
-                  view="_minimal"/>
+                  view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="primaryFlag"/>
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="code"/>
+                </property>
+            </property>
+        </property>
         <property name="personGroup"
                   view="_minimal"/>
     </view>
-    <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
-          extends="_local"
-          name="portal-assignment-group">
-        <property name="group"
-                  view="_minimal"/>
-        <property name="personGroup"
-                  view="_minimal"/>
-    </view>
+    <!--    unused-->
+    <!--    <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"-->
+    <!--          extends="_local"-->
+    <!--          name="portal-assignment-group">-->
+    <!--        <property name="group"-->
+    <!--                  view="_minimal"/>-->
+    <!--        <property name="personGroup"-->
+    <!--                  view="_minimal"/>-->
+    <!--    </view>-->
     <view class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
           extends="_local"
           name="assigned-goal-cascade-positionGroupExt-view">
@@ -361,6 +400,7 @@
             <property name="category" view="_minimal"/>
         </property>
         <property name="successCriteria"/>
+        <property name="successCriteriaLang"/>
     </view>
     <view entity="tsadv$Enrollment" name="learning-history" extends="_local">
         <property name="courseSchedule" view="_minimal">
@@ -408,5 +448,96 @@
             </property>
             <property name="sections" view="_minimal"/>
         </property>
+        <property name="mandatory"/>
+        <property name="description"/>
+    </view>
+    <view entity="tsadv$CourseSection" name="courseSection.with.learningObject" extends="_minimal">
+        <property name="course" view="_minimal">
+            <property name="feedbackTemplates" view="_minimal">
+                <property name="feedbackTemplate" view="_minimal"/>
+                <property name="course" view="_minimal"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
+        <property name="sectionObject" view="_minimal">
+            <property name="content" view="_local"/>
+        </property>
+    </view>
+    <view entity="tsadv$BookView" name="bookView.personGroup.book" extends="_minimal">
+        <property name="personGroup" view="_minimal"/>
+        <property name="book" view="_local"/>
+    </view>
+    <view entity="tsadv$Course" name="course.list" extends="_minimal">
+        <property name="logo" view="_minimal"/>
+        <property name="category" view="_minimal"/>
+        <property name="isOnline"/>
+    </view>
+    <view entity="tsadv$Goal" name="goal.with.successCriteriaLang" extends="_local">
+        <property name="successCriteriaLang"/>
+    </view>
+    <view class="kz.uco.tsadv.modules.personal.model.AddressRequest"
+          extends="_local"
+          name="portal.my-profile">
+        <property name="addressType"
+                  view="_minimal"/>
+        <property name="country"
+                  view="_minimal"/>
+        <property name="attachments"
+                  view="_minimal"/>
+        <property name="status"
+                  view="_minimal">
+            <property name="code"/>
+        </property>
+        <property name="personGroup"
+                  view="_minimal"/>
+        <property name="baseAddress"
+                  view="_minimal"/>
+        <property name="kato"
+                  view="_minimal"/>
+        <property name="streetType"
+                  view="_minimal"/>
+    </view>
+    <view class="kz.uco.tsadv.modules.personal.model.Address"
+          extends="_local"
+          name="portal.my-profile">
+        <property name="addressType"
+                  view="_minimal"/>
+        <property name="country"
+                  view="_minimal"/>
+        <property name="attachments"
+                  view="_minimal"/>
+        <property name="personGroup"
+                  view="_minimal"/>
+        <property name="kato"
+                  view="_minimal"/>
+        <property name="streetType"
+                  view="_minimal"/>
+    </view>
+    <view entity="tsadv$PersonalDataRequest"
+          extends="_local"
+          name="portal.my-profile">
+        <property name="status" view="_local"/>
+        <property name="attachments"
+                  view="_minimal"/>
+        <property name="personGroup"
+                  view="_minimal"/>
+    </view>
+    <view entity="base$AssignmentExt" name="assignment.gradeGroup" extends="_minimal">
+        <property name="positionGroup" view="_minimal">
+            <property name="gradeGroup" view="_local"/>
+        </property>
+        <property name="gradeGroup" view="_local"/>
+    </view>
+    <view entity="base$PersonGroupExt" name="personGroup.currentAssignment" extends="_minimal">
+        <property name="currentAssignment" view="_minimal"/>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveIndicators" name="portal-organizationIncentiveIndicators-view"
+          extends="_local">
+        <property name="indicator" view="_minimal"/>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveResult" name="portal-organizationIncentiveResult-view"
+          extends="_local">
+        <property name="indicator" view="_minimal"/>
     </view>
 </views>

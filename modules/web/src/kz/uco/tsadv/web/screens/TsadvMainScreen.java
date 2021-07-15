@@ -16,6 +16,7 @@ import kz.uco.base.NotificationMessagePojo;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.base.web.root.BaseMainScreen;
 import kz.uco.tsadv.components.GroupsComponent;
+import kz.uco.tsadv.web.screens.activity.ActivityForHandbellBrowse;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.StatusEnum;
 
@@ -108,8 +109,8 @@ public class TsadvMainScreen extends BaseMainScreen {
         windowParams.put("notificationMessagePojo", notificationMessagePojo);
         windowParams.put("activity", activity);
         Screen screen = screenBuilders.screen(this)
-                .withScreenId("ext-user-notification-view")
-                .withOpenMode(OpenMode.DIALOG)
+                .withScreenClass(ActivityForHandbellBrowse.class)
+                .withOpenMode(OpenMode.THIS_TAB)
                 .withOptions(new MapScreenOptions(windowParams))
                 .build().show();
         screen.addAfterCloseListener(afterCloseEvent -> {
@@ -185,7 +186,8 @@ public class TsadvMainScreen extends BaseMainScreen {
             @Override
             public void actionPerform(Component component) {
                 screenBuilders.screen(mainMenuFrameOwner)
-                        .withScreenId("person-notification")
+                        .withScreenId("my-tasks")
+                        .withOptions(new MapScreenOptions(ParamsMap.of("notification", true)))
                         .build()
                         .show();
             }
@@ -203,5 +205,35 @@ public class TsadvMainScreen extends BaseMainScreen {
                         .show();
             }
         };
+    }
+
+    @Override
+    protected long fillNotifications() {
+        List<Activity> activities = loadActivities("NOTIFICATION");
+
+        listNotifications.removeAll();
+        for (Activity activity : activities) {
+            listNotifications.add(createNotification(activity));
+        }
+
+        return activities.size();
+    }
+
+    protected Component createNotification(Activity activity) {
+        CssLayout cssLayout = getCssLayout(activity);
+        Label label = createLabel(String.format("<div class=\"note-wrapper\">" +
+                        "<div class=\"note-body\">" +
+                        "<div class=\"note-template-name\">%s</div>" +
+                        "<div class=\"note-time\">%s</div></div></div>",
+                activity.getName(),
+                activity.getCreateTs() == null ? "" : simpleDateTimeFormat.format(activity.getCreateTs())));
+
+        cssLayout.add(label);
+        return cssLayout;
+    }
+
+    @Override
+    protected long getNotificationCount() {
+        return loadActivities("NOTIFICATION").size();
     }
 }

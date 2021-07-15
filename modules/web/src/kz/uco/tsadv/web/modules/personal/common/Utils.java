@@ -108,7 +108,7 @@ public class Utils {
         if (course.getLogo() == null)
             embedded.setSource("theme://images/course-min.png");
         else
-            embedded.setSource("ci-" + course.getId(), new ByteArrayInputStream(course.getLogo()));
+//            embedded.setSource("ci-" + course.getId(), new ByteArrayInputStream(course.getLogo()));
         embedded.setType(Embedded.Type.IMAGE);
 
         embedded.addStyleName("b-course-image");

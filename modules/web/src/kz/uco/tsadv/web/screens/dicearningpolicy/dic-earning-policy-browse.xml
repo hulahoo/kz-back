@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://browseCaption"
+        focusComponent="dicEarningPoliciesTable"
+        messagesPack="kz.uco.tsadv.web.screens.dicearningpolicy">
+    <data readOnly="true">
+        <collection id="dicEarningPoliciesDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicEarningPolicy"
+                    view="dicEarningPolicy.edit">
+            <loader id="dicEarningPoliciesDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicEarningPolicy e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicEarningPoliciesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicEarningPoliciesTable"
+                dataLoader="dicEarningPoliciesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicEarningPoliciesTable"
+                    width="100%"
+                    dataContainer="dicEarningPoliciesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="company"/>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="isSystemRecord"/>
+                <column id="active"/>
+                <column id="isDefault"/>
+                <column id="order"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicEarningPoliciesTable.create"/>
+                <button id="editBtn" action="dicEarningPoliciesTable.edit"/>
+                <button id="removeBtn" action="dicEarningPoliciesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

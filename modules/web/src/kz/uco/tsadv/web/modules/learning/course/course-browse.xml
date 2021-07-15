@@ -23,7 +23,6 @@
                 dataLoader="coursesDl">
             <properties include=".*"/>
         </filter>
-        0
         <groupTable id="coursesTable"
                     width="100%"
                     dataContainer="coursesDc">
@@ -38,10 +37,8 @@
                         caption="mainMsg://table.btn.empty"/>
             </actions>
             <columns>
-                <column id="logo"
-                        caption="msg://Logo"
-                        generator="generateCourseImageCell"
-                        sortable="false"/>
+<!--                <column id="logo"-->
+<!--                        caption="msg://Logo"/>-->
                 <column id="name"/>
                 <column id="shortDescription"/>
                 <column id="party"/>

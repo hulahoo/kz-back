@@ -1,0 +1,16 @@
+update TSADV_DIC_ABSENCE_TYPE set IS_ONLY_WORKING_DAY = false where IS_ONLY_WORKING_DAY is null ;
+alter table TSADV_DIC_ABSENCE_TYPE alter column IS_ONLY_WORKING_DAY set not null ;
+update TSADV_DIC_ABSENCE_TYPE set USE_ONLY_ABSENCE_TYPE = false where USE_ONLY_ABSENCE_TYPE is null ;
+alter table TSADV_DIC_ABSENCE_TYPE alter column USE_ONLY_ABSENCE_TYPE set not null ;
+update TSADV_DIC_ABSENCE_TYPE set DISPLAY_ABSENCE = false where DISPLAY_ABSENCE is null ;
+alter table TSADV_DIC_ABSENCE_TYPE alter column DISPLAY_ABSENCE set not null ;
+update TSADV_DIC_ABSENCE_TYPE set CANCEL_PARENT_ABSENCE = false where CANCEL_PARENT_ABSENCE is null ;
+alter table TSADV_DIC_ABSENCE_TYPE alter column CANCEL_PARENT_ABSENCE set not null ;
+update TSADV_DIC_ABSENCE_TYPE set AVAILABLE_TO_MANAGER = false where AVAILABLE_TO_MANAGER is null ;
+alter table TSADV_DIC_ABSENCE_TYPE alter column AVAILABLE_TO_MANAGER set not null ;
+update TSADV_DIC_ABSENCE_TYPE set WORK_ON_WEEKEND = false where WORK_ON_WEEKEND is null ;
+alter table TSADV_DIC_ABSENCE_TYPE alter column WORK_ON_WEEKEND set not null ;
+update TSADV_DIC_ABSENCE_TYPE set TEMPORARY_TRANSFER = false where TEMPORARY_TRANSFER is null ;
+alter table TSADV_DIC_ABSENCE_TYPE alter column TEMPORARY_TRANSFER set not null ;
+update TSADV_DIC_ABSENCE_TYPE set OVERTIME_WORK = false where OVERTIME_WORK is null ;
+alter table TSADV_DIC_ABSENCE_TYPE alter column OVERTIME_WORK set not null ;
