@@ -1,0 +1,10 @@
+alter table TSADV_ADDRESS add column STREET_NAME varchar(255) ;
+alter table TSADV_ADDRESS add column BUILDING varchar(255) ;
+alter table TSADV_ADDRESS add column ADDRESS_ENGLISH varchar(255) ;
+alter table TSADV_ADDRESS add column NOTES varchar(255) ;
+alter table TSADV_ADDRESS add column FLAT varchar(255) ;
+alter table TSADV_ADDRESS add column ADDRESS_KAZAKH varchar(255) ;
+alter table TSADV_ADDRESS add column KATO_ID uuid ;
+alter table TSADV_ADDRESS add column ADDRESS_FOR_EXPATS varchar(255) ;
+alter table TSADV_ADDRESS add column BLOCK varchar(255) ;
+alter table TSADV_ADDRESS add column STREET_TYPE_ID uuid ;

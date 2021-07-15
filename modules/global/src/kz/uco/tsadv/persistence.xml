@@ -566,7 +566,6 @@
         <class>kz.uco.tsadv.modules.personal.model.HierarchyElementGroup</class>
         <class>kz.uco.tsadv.modules.performance.dictionary.DicJobGroup</class>
         <class>kz.uco.tsadv.modules.performance.model.InstructionsKpi</class>
-        <class>kz.uco.tsadv.entity.VacationSchedule</class>
         <class>kz.uco.tsadv.entity.VacationScheduleRequest</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicCertificateType</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicReceivingType</class>
@@ -646,5 +645,20 @@
         <class>kz.uco.tsadv.modules.learning.dictionary.DicLearningProof</class>
         <class>kz.uco.tsadv.modules.learning.model.ScormQuestionMapping</class>
         <class>kz.uco.tsadv.modules.learning.model.CourseSectionScormResult</class>
+        <class>kz.uco.tsadv.modules.learning.model.ScormSuspendData</class>
+        <class>kz.uco.tsadv.modules.learning.model.BookView</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicEarningPolicy</class>
+        <class>kz.uco.tsadv.modules.performance.model.PersonException</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicStreetType</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicKato</class>
+        <class>kz.uco.tsadv.modules.personal.model.DicShift</class>
+        <class>kz.uco.tsadv.entity.ResizedImage</class>
+        <class>kz.uco.tsadv.entity.ImageSize</class>
+        <class>kz.uco.tsadv.entity.ExecutiveAssistants</class>
+        <class>kz.uco.tsadv.modules.learning.dictionary.DicTypeOfTraining</class>
+        <class>kz.uco.tsadv.modules.learning.dictionary.DicProgrammCode</class>
+        <class>kz.uco.tsadv.modules.learning.dictionary.DicAssessmentMethod</class>
+        <class>kz.uco.tsadv.modules.learning.model.PositionCourse</class>
+        <class>kz.uco.tsadv.modules.administration.PortalMenuCustomization</class>
     </persistence-unit>
 </persistence>

@@ -11,6 +11,7 @@ import kz.uco.tsadv.entity.dbview.AbsenceBalanceV;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.enums.VacationDurationType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.personal.model.Absence;
 import kz.uco.tsadv.modules.personal.model.AbsenceBalance;
 import kz.uco.tsadv.modules.personal.model.VacationConditions;
 import kz.uco.tsadv.service.AbsenceBalanceService;
@@ -51,6 +52,7 @@ public class AbsenceBalanceBrowse extends EditableFrame {
 
     @Override
     public void init(Map<String, Object> params) {
+        absenceBalancesDs = (CollectionDatasource<AbsenceBalance, UUID>) getDsContext().get("absenceBalancesDs");
         Objects.requireNonNull(getDsContext().get("absenceBalancesVDs")).refresh();
         absenceBalancesTable.repaint();
         personGroup = (PersonGroupExt) Objects.requireNonNull(getDsContext().get("personGroupDs")).getItem();
@@ -173,10 +175,10 @@ public class AbsenceBalanceBrowse extends EditableFrame {
         newBalance.setPersonGroup(personGroup);
         newBalance.setDateFrom(dateFrom);
         newBalance.setDateTo(dateTo);
-        newBalance.setBalanceDays(balanceDays);
+        newBalance.setBalanceDays((double) balanceDays);
 //        newBalance.setAdditionalBalanceDays(additionalBalanceDays);
-        newBalance.setDaysSpent(annualDaysSpent);
-        newBalance.setExtraDaysSpent(extraDaysSpent);
+        newBalance.setDaysSpent((double) annualDaysSpent);
+        newBalance.setExtraDaysSpent((double) extraDaysSpent);
 //        newBalance.setExtraDaysLeft(extraDaysLeft);
         if (daysLeft < 0) {
             daysLeft = 0;

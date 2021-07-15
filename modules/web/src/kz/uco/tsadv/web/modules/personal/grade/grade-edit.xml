@@ -26,6 +26,7 @@
                 <field property="recognitionNominate"/>
                 <field property="bonusPercent"/>
                 <field property="company" datasource="groupDs"/>
+                <field property="availableSalary" datasource="groupDs"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

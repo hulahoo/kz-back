@@ -13,6 +13,7 @@ import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.model.Grade;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +35,18 @@ public class GradeGroup extends AbstractGroup implements IEntityGroup<Grade> {
     @Transient
     @MetaProperty(related = "list")
     protected Grade grade;
+
+    @NotNull
+    @Column(name = "AVAILABLE_SALARY", nullable = false)
+    protected Boolean availableSalary = false;
+
+    public Boolean getAvailableSalary() {
+        return availableSalary;
+    }
+
+    public void setAvailableSalary(Boolean availableSalary) {
+        this.availableSalary = availableSalary;
+    }
 
     public DicCompany getCompany() {
         return company;

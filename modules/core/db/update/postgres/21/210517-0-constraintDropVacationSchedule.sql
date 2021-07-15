@@ -1,0 +1,1 @@
+alter table tsadv_absence_request drop constraint FK_TSADV_ABSENCE_REQUEST_VACATION_SCHEDULE ;

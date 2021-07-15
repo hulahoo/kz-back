@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Listeners("tsadv_JobListener")
-@NamePattern("%s|jobName")
+@NamePattern("%s|jobName,startDate,endDate")
 @Table(name = "TSADV_JOB")
 @Entity(name = "tsadv$Job")
 @PublishEntityChangedEvents

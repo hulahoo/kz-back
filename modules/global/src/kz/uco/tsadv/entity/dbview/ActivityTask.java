@@ -18,7 +18,7 @@ import kz.uco.uactivity.entity.Activity;
 
 @NamePattern("%s|orderCode")
 @DesignSupport("{'dbView':true,'generateDdl':false}")
-@Table(name = "TSADV_ACTIVITY_TASK_VIEW")
+@Table(name = "TSADV_ACTIVITY_TASK_VIEW_NEW")
 @Entity(name = "tsadv$ActivityTask")
 public class ActivityTask extends BaseUuidEntity {
     private static final long serialVersionUID = 8491218128136470781L;

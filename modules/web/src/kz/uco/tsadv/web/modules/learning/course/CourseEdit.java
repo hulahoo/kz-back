@@ -5,10 +5,14 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.CommitContext;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.DataGrid;
+import com.haulmont.cuba.gui.components.GroupTable;
+import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -16,31 +20,29 @@ import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.common.BaseCommonUtils;
-import kz.uco.base.common.IMAGE_SIZE;
 import kz.uco.base.cuba.actions.CreateActionExt;
-import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
-import kz.uco.tsadv.web.modules.personal.common.Utils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @UiController("tsadv$Course.edit")
 @UiDescriptor("course-edit.xml")
 @EditedEntityContainer("courseDc")
 public class CourseEdit extends StandardEditor<Course> {
 
-    @Inject
-    protected FileUploadField imageUpload;
+//    @Inject
+//    protected FileUploadField imageUpload;
 
-    @Inject
-    protected Embedded courseImage;
+//    @Inject
+//    protected Embedded courseImage;
 
     @Inject
     protected DataManager dataManager;
@@ -95,6 +97,8 @@ public class CourseEdit extends StandardEditor<Course> {
     protected Table<CoursePreRequisition> preRequisitionTable;
     @Inject
     protected CollectionLoader<CoursePreRequisition> preRequisitionDl;
+    @Inject
+    protected ExtAppPropertiesConfig extAppPropertiesConfig;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -146,7 +150,18 @@ public class CourseEdit extends StandardEditor<Course> {
     @Subscribe
     protected void onAfterShow(AfterShowEvent event) {
         Course course = courseDc.getItem();
-        Utils.getCourseImageEmbedded(course, null, courseImage);
+        if (PersistenceHelper.isNew(course)) {
+            FileDescriptor fileDescriptor = dataManager.load(FileDescriptor.class)
+                    .query("select e from sys$FileDescriptor e " +
+                            " where e.id = :fileId")
+                    .parameter("fileId", extAppPropertiesConfig.getDefaultLogo() != null
+                            && !extAppPropertiesConfig.getDefaultLogo().isEmpty()
+                            ? UUID.fromString(extAppPropertiesConfig.getDefaultLogo())
+                            : null)
+                    .list().stream().findFirst().orElse(null);
+            course.setLogo(fileDescriptor);
+        }
+//        Utils.getCourseImageEmbedded(course, null, courseImage);
 
         homeworkTable.addSelectionListener(homeworkSelectionEvent -> {
             if (homeworkSelectionEvent.getSelected().size() > 0) {
@@ -264,40 +279,40 @@ public class CourseEdit extends StandardEditor<Course> {
 //        return dataManager.getCount(loadContext) > 0;
 //    }
 
-    protected void fileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
-        Course course = courseDc.getItem();
-        if (imageUpload.getFileContent() != null) {
-            try {
-                course.setLogo(CommonUtils.resize(imageUpload.getFileContent(), IMAGE_SIZE.XSS));
-                Utils.getCourseImageEmbedded(course, null, courseImage);
-            } catch (IOException e) {
-                notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                        .withCaption(messageBundle.getMessage("fileUploadErrorMessage")).show();
-            }
-        }
-        imageUpload.setValue(null);
-    }
+//    protected void fileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+//        Course course = courseDc.getItem();
+//        if (imageUpload.getFileContent() != null) {
+//            try {
+//                course.setLogo(CommonUtils.resize(imageUpload.getFileContent(), IMAGE_SIZE.XSS));
+//                Utils.getCourseImageEmbedded(course, null, courseImage);
+//            } catch (IOException e) {
+//                notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+//                        .withCaption(messageBundle.getMessage("fileUploadErrorMessage")).show();
+//            }
+//        }
+//        imageUpload.setValue(null);
+//    }
 
-    protected void beforeValueClearPerformed(FileUploadField.BeforeValueClearEvent beforeEvent) {
-        beforeEvent.preventClearAction();
-        dialogs.createOptionDialog()
-                .withCaption(messageBundle.getMessage("confirmation"))
-                .withMessage(messageBundle.getMessage("aUSure"))
-                .withType(Dialogs.MessageType.CONFIRMATION)
-                .withActions(
-                        new DialogAction(DialogAction.Type.YES)
-                                .withHandler(actionPerformedEvent -> {
-                                            courseDc.getItem().setLogo(null);
-                                            courseImage.resetSource();
-                                        }
-                                ),
-                        new DialogAction(DialogAction.Type.NO))
-                .show();
-    }
+//    protected void beforeValueClearPerformed(FileUploadField.BeforeValueClearEvent beforeEvent) {
+//        beforeEvent.preventClearAction();
+//        dialogs.createOptionDialog()
+//                .withCaption(messageBundle.getMessage("confirmation"))
+//                .withMessage(messageBundle.getMessage("aUSure"))
+//                .withType(Dialogs.MessageType.CONFIRMATION)
+//                .withActions(
+//                        new DialogAction(DialogAction.Type.YES)
+//                                .withHandler(actionPerformedEvent -> {
+//                                            courseDc.getItem().setLogo(null);
+//                                            courseImage.resetSource();
+//                                        }
+//                                ),
+//                        new DialogAction(DialogAction.Type.NO))
+//                .show();
+//    }
 
     @Subscribe("enrollmentsTable.create")
     protected void onEnrollmentsTableCreate(Action.ActionPerformedEvent event) {
-        List<Enrollment> newEnrollmentList = new ArrayList<>();
+        List<Enrollment> changedEnrollmentList = new ArrayList<>();
         CommitContext newCommitContext = new CommitContext();
         screenBuilders.lookup(PersonExt.class, this)
                 .withScreenId("base$PersonForKpiCard.browse")
@@ -314,6 +329,13 @@ public class CourseEdit extends StandardEditor<Course> {
                             for (Enrollment enrollment : enrollmentList) {
                                 if (enrollment.getPersonGroup().equals(personExt.getGroup())) {
                                     isNew = false;
+                                    if (courseScheduleDc.getItems().size() == 1) {
+                                        enrollment.setCourseSchedule(courseScheduleDc.getItems().get(0));
+                                    } else if (courseScheduleDc.getItems().size() == 0) {
+                                        enrollment.setCourseSchedule(null);
+                                    }
+                                    newCommitContext.addInstanceToCommit(enrollment);
+                                    changedEnrollmentList.add(enrollment);
                                     break;
                                 }
                             }
@@ -322,16 +344,16 @@ public class CourseEdit extends StandardEditor<Course> {
                             Enrollment enrollment = metadata.create(Enrollment.class);
                             enrollment.setCourse(courseDc.getItem());
                             enrollment.setPersonGroup(personExt.getGroup());
-                            enrollment.setStatus(EnrollmentStatus.REQUEST);
+                            enrollment.setStatus(EnrollmentStatus.APPROVED);
                             enrollment.setDate(BaseCommonUtils.getSystemDate());
                             if (courseScheduleDc.getItems().size() == 1) {
                                 enrollment.setCourseSchedule(courseScheduleDc.getItems().get(0));
                             }
-                            newEnrollmentList.add(enrollment);
+                            changedEnrollmentList.add(enrollment);
                             newCommitContext.addInstanceToCommit(enrollment);
                         }
                     });
-                    if (courseScheduleDc.getItems().size() == 1) {
+                    if (courseScheduleDc.getItems().size() == 1 || courseScheduleDc.getItems().size() == 0) {
                         dataManager.commit(newCommitContext);
                         enrollmentDl.load();
                     }
@@ -343,7 +365,7 @@ public class CourseEdit extends StandardEditor<Course> {
                                 .withOptions(new MapScreenOptions(ParamsMap.of("course", courseDc.getItem())))
                                 .withSelectHandler(courseSchedules -> {
                                     courseSchedules.forEach(courseSchedule ->
-                                            newEnrollmentList.forEach(enrollment -> {
+                                            changedEnrollmentList.forEach(enrollment -> {
                                                 enrollment.setCourseSchedule(courseSchedule);
                                                 newCommitContext.addInstanceToCommit(enrollment);
                                             }));
@@ -353,8 +375,8 @@ public class CourseEdit extends StandardEditor<Course> {
                                 .build().show();
                     } else if (courseScheduleDc.getItems().size() == 0) {
                         notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                                .withCaption(messageBundle.getMessage("notCourseSchedule"
-                                        + " " + courseDc.getItem().getName()))
+                                .withCaption(messageBundle.getMessage("notCourseSchedule")
+                                        + " " + courseDc.getItem().getName())
                                 .show();
                     }
                 });
@@ -417,15 +439,15 @@ public class CourseEdit extends StandardEditor<Course> {
         dataManager.commit(commitContext);
     }
 
-    @Subscribe("imageUpload")
-    protected void onImageUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
-        fileUploadSucceed(event);
-    }
-
-    @Subscribe("imageUpload")
-    protected void onImageUploadBeforeValueClear(FileUploadField.BeforeValueClearEvent event) {
-        beforeValueClearPerformed(event);
-    }
+//    @Subscribe("imageUpload")
+//    protected void onImageUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+//        fileUploadSucceed(event);
+//    }
+//
+//    @Subscribe("imageUpload")
+//    protected void onImageUploadBeforeValueClear(FileUploadField.BeforeValueClearEvent event) {
+//        beforeValueClearPerformed(event);
+//    }
 
     @Subscribe("courseReviewTable.create")
     protected void onCourseReviewTableCreate(Action.ActionPerformedEvent event) {
@@ -450,5 +472,34 @@ public class CourseEdit extends StandardEditor<Course> {
                     preRequisitionDl.load();
                 }).build().show()
                 .addAfterCloseListener(afterCloseEvent -> preRequisitionDl.load());
+    }
+
+    @Subscribe("enrollmentsTable.addAttempt")
+    public void onEnrollmentsTableAddAttempt(Action.ActionPerformedEvent event) {
+        CommitContext commitContext = new CommitContext();
+        for (Enrollment enrollment : enrollmentsTable.getSelected()) {
+            for (CourseSection section : courseDc.getItem().getSections()) {
+                if (section.getSectionObject() != null && section.getSectionObject().getObjectType() != null
+                        && "TEST".equals(section.getSectionObject().getObjectType().getCode())) {
+                    Test test = section.getSectionObject().getTest();
+                    CourseSectionAttempt courseSectionAttempt = dataManager.load(CourseSectionAttempt.class)
+                            .query("select e from tsadv$CourseSectionAttempt e " +
+                                    " where e.enrollment = :enrollment " +
+                                    " and e.test = :test " +
+                                    " and e.activeAttempt = true ")
+                            .parameter("enrollment", enrollment)
+                            .parameter("test", test)
+                            .view("courseSectionAttempt.edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (courseSectionAttempt != null) {
+                        courseSectionAttempt.setActiveAttempt(false);
+                        commitContext.addInstanceToCommit(courseSectionAttempt);
+                    }
+                }
+            }
+        }
+        dataManager.commit(commitContext);
+        notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                .withCaption(messageBundle.getMessage("attemptAdded")).show();
     }
 }

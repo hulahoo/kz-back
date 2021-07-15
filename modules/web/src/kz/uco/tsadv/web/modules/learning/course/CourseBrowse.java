@@ -1,13 +1,16 @@
 package kz.uco.tsadv.web.modules.learning.course;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.actions.list.RemoveAction;
 import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.FileDescriptorResource;
 import com.haulmont.cuba.gui.components.GroupTable;
+import com.haulmont.cuba.gui.components.Image;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
-import kz.uco.tsadv.web.modules.personal.common.Utils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -19,17 +22,21 @@ import java.util.List;
 @LoadDataBeforeShow
 public class CourseBrowse extends StandardLookup<Course> {
 
-    private static final String IMAGE_CELL_HEIGHT = "50px";
-
     @Inject
     protected DataManager dataManager;
     @Inject
     protected GroupTable<Course> coursesTable;
     @Named("coursesTable.remove")
     protected RemoveAction<Course> coursesTableRemove;
+    @Inject
+    protected UiComponents uiComponents;
 
     @Subscribe
     protected void onInit(InitEvent event) {
+//        coursesTable.addGeneratedColumn(
+//                "logo",
+//                this::renderAvatarImageComponent
+//        );
 //        String query = "select e from tsadv$Course e where 1 = 1";
 //
 //        MapScreenOptions options = (MapScreenOptions) event.getOptions();
@@ -85,6 +92,27 @@ public class CourseBrowse extends StandardLookup<Course> {
                 }
             }
         });
+    }
+
+    protected Component renderAvatarImageComponent(Course course) {
+        FileDescriptor photoFile = course.getLogo();
+        if (photoFile == null) {
+            return null;
+        }
+        Image image = smallAvatarImage();
+        image.setSource(FileDescriptorResource.class)
+                .setFileDescriptor(photoFile);
+
+        return image;
+    }
+
+    protected Image smallAvatarImage() {
+        Image image = uiComponents.create(Image.class);
+        image.setScaleMode(Image.ScaleMode.CONTAIN);
+        image.setHeight("50");
+        image.setWidth("100");
+        image.setStyleName("avatar-icon-small");
+        return image;
     }
 
 
@@ -153,10 +181,6 @@ public class CourseBrowse extends StandardLookup<Course> {
                 .parameter("courseId", course.getId())
                 .view("enrollment.for.course")
                 .list();
-    }
-
-    public Component generateCourseImageCell(Course course) {
-        return Utils.getCourseImageEmbedded(course, IMAGE_CELL_HEIGHT, null);
     }
 
 //    public void createEnrollments() {

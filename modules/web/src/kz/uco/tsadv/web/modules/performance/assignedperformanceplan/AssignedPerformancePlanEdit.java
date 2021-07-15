@@ -1,17 +1,21 @@
 package kz.uco.tsadv.web.modules.performance.assignedperformanceplan;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.components.Action;
-import com.haulmont.cuba.gui.components.Table;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.*;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
+import kz.uco.tsadv.modules.learning.model.AttestationParticipant;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
+import kz.uco.tsadv.modules.performance.model.Goal;
+import kz.uco.tsadv.web.screens.assignedperformanceplan.ModalAssignedPerformancePlanEdit;
 
 import javax.inject.Inject;
 
@@ -41,6 +45,8 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
     protected DataManager dataManager;
     @Inject
     protected ExtAppPropertiesConfig extAppPropertiesConfig;
+    @Inject
+    protected ComponentsFactory componentsFactory;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -202,5 +208,28 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                 }).build().show()
                 .addAfterCloseListener(afterCloseEvent ->
                         assignedGoalDl.load());
+    }
+
+    @Subscribe("extraPointBtn")
+    protected void onExtraPointBtnClick(Button.ClickEvent event) {
+        screenBuilders.editor(AssignedPerformancePlan.class, this)
+                .editEntity(assignedPerformancePlanDc.getItem())
+                .withScreenClass(ModalAssignedPerformancePlanEdit.class)
+                .build().show();
+    }
+
+    public Component getGoalName(AssignedGoal entity) {
+        Label label = componentsFactory.createComponent(Label.class);
+        if (entity.getGoalString() != null && !entity.getGoalString().isEmpty()) {
+            label.setValue(entity.getGoalString());
+        } else {
+            Goal goal = dataManager.load(Goal.class)
+                    .query("select e from tsadv$Goal e " +
+                            " where e = :goal ")
+                    .parameter("goal", entity.getGoal())
+                    .list().stream().findFirst().orElse(null);
+            label.setValue(goal != null ? goal.getGoalLang() : "");
+        }
+        return label;
     }
 }

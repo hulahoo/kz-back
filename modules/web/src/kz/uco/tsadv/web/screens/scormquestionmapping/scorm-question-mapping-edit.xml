@@ -15,6 +15,7 @@
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="scormQuestionMappingDc">
             <column width="250px">
+                <textField id="serialNumber" property="serialNumber"/>
                 <textField id="codeField" property="code"/>
                 <textField id="questionField" property="question"/>
             </column>

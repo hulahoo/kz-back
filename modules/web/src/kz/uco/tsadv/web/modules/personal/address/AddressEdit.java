@@ -169,17 +169,19 @@ public class AddressEdit extends AbstractEditor<Address> {
     }
 
     protected boolean hasAddres(Address address) {
-        return commonService.getCount(Address.class,
-                "select e from tsadv$Address e " +
-                        " where e.addressType.id = :typeId " +
-                        "   and e.personGroup.id = :personGroupId " +
-                        "   and e.startDate <= :endDate and e.endDate >= :startDate " +
-                        "   and e.id <> :id",
-                ParamsMap.of("personGroupId", address.getPersonGroup().getId(),
-                        "typeId", address.getAddressType().getId(),
-                        "startDate", address.getStartDate(),
-                        "endDate", address.getEndDate(),
-                        "id", address.getId())) > 0;
+        Map<String, Object> param = new HashMap<>(ParamsMap.of("personGroupId", address.getPersonGroup().getId(),
+                "startDate", address.getStartDate(),
+                "endDate", address.getEndDate(),
+                "id", address.getId()));
+        String jpql = "select e from tsadv$Address e " +
+                " where e.personGroup.id = :personGroupId " +
+                "   and e.startDate <= :endDate and e.endDate >= :startDate " +
+                "   and e.id <> :id";
+        if (address.getAddressType() != null) {
+            param.put("typeId", address.getAddressType().getId());
+            jpql = jpql + " and e.addressType.id = :typeId ";
+        }
+        return commonService.getCount(Address.class, jpql, param) > 0;
     }
 
     @Override

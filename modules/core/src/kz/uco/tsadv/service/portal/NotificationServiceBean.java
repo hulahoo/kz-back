@@ -30,7 +30,7 @@ public class NotificationServiceBean implements NotificationService {
     //todo need to add fistResult and maxResult
     @Override
     public List<BellNotificationResponsePojo> notifications() {
-        final int limit = 10;
+        final int limit = 5;
         UUID userId = userSessionSource.getUserSession().getUser().getId();
 
         return notificationDao.loadNotifications(userId, 0, limit)
@@ -42,7 +42,7 @@ public class NotificationServiceBean implements NotificationService {
     //todo need to add fistResult and maxResult
     @Override
     public List<BellNotificationResponsePojo> tasks() {
-        final int limit = 10;
+        final int limit = 5;
         UUID userId = userSessionSource.getUserSession().getUser().getId();
 
         return notificationDao.loadTasks(userId, 0, limit)
@@ -72,9 +72,12 @@ public class NotificationServiceBean implements NotificationService {
         if (NotificationDao.NOTIFICATION_CODE.equals(activityType.getCode())) return null;
         WindowProperty windowProperty = activityType.getWindowProperty();
         if (windowProperty == null || windowProperty.getEntityName() == null) return null;
-        MetaClass aClass = metadata.getClass(windowProperty.getEntityName());
+        return getLinkByEntityName(windowProperty.getEntityName());
+    }
+
+    public String getLinkByEntityName(String entityName) {
+        MetaClass aClass = metadata.getClass(entityName);
         if (aClass != null && AssignedPerformancePlan.class.isAssignableFrom(aClass.getJavaClass())) return "kpi";
-        String entityName = windowProperty.getEntityName();
         StringBuilder builder = new StringBuilder(entityName.substring(Math.max(entityName.indexOf("_"), entityName.indexOf("$")) + 1));
         builder.setCharAt(0, Character.toLowerCase(builder.charAt(0)));
         return builder.toString();

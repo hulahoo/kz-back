@@ -37,7 +37,8 @@ import java.util.Date;
         outcomes = {
                 @Outcome(id = AbstractBprocRequest.OUTCOME_REVISION),
                 @Outcome(id = AbstractBprocRequest.OUTCOME_APPROVE),
-                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT)
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_CANCEL)
         }
 )
 public class ChangeAbsenceDaysRequestEdit extends AbstractBprocEditor<ChangeAbsenceDaysRequest> {
@@ -86,11 +87,11 @@ public class ChangeAbsenceDaysRequestEdit extends AbstractBprocEditor<ChangeAbse
             throw new RuntimeException("Error saving file to FileStorage", e);
         }
         dataManager.commit(fd);
-        if (changeAbsenceDaysRequestDc.getItem().getFile() == null) {
-            changeAbsenceDaysRequestDc.getItem().setFile(new ArrayList<>());
+        if (changeAbsenceDaysRequestDc.getItem().getFiles() == null) {
+            changeAbsenceDaysRequestDc.getItem().setFiles(new ArrayList<>());
         }
         fileDc.getDisconnectedItems().add(fd);
-        changeAbsenceDaysRequestDc.getItem().getFile().add(fd);
+        changeAbsenceDaysRequestDc.getItem().getFiles().add(fd);
     }
 
     public Component generatorName(FileDescriptor fd) {

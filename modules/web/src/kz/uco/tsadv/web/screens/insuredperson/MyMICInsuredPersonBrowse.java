@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
@@ -92,9 +93,9 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         insuredPersonsDl.setParameter("relativeType", RelativeType.EMPLOYEE);
         insuredPersonsDl.setParameter("employeeId", personGroupExt != null ? personGroupExt.getId() : null);
 
-        DicCompany dicCompany = personGroupExt.getCurrentAssignment().getOrganizationGroup().getCompany();
 
-        if (dicCompany != null) {
+        if (personGroupExt != null && personGroupExt.getCurrentAssignment() != null) {
+            DicCompany dicCompany = personGroupExt.getCurrentAssignment().getOrganizationGroup().getCompany();
             InsuranceContract contract = dataManager.load(InsuranceContract.class)
                     .query("select e from tsadv$InsuranceContract e where e.company.id = :companyId" +
                             " and current_date between e.availabilityPeriodFrom and e.availabilityPeriodTo")
@@ -146,6 +147,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         DicRelationshipType relationshipType = commonService.getEntity(DicRelationshipType.class, "PRIMARY");
         Date today = timeSource.currentTimestamp();
         insuredPerson.setAttachDate(today);
+
         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
                 "from tsadv$UserExt e " +
                 "where e.id = :uId").parameter("uId", userSession.getUser().getId())
@@ -169,48 +171,38 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                 insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
             }
 
-            Address address = dataManager.load(Address.class).query("select e " +
-                    "from tsadv$Address e " +
-                    "where e.personGroup.id = :personGroupId " +
-                    " and current_date between e.startDate and e.endDate")
-                    .parameter("personGroupId", personGroupExt.getId())
-                    .view("address.view")
-                    .list().stream().findFirst().orElse(null);
-
            if (contract.getDefaultDocumentType() != null) {
                boolean isEmptyDocument = personGroupExt.getPersonDocuments().isEmpty();
                if (isEmptyDocument) {
                    insuredPerson.setDocumentType(contract.getDefaultDocumentType());
                } else {
-                   boolean isSetDocument = false;
+                   insuredPerson.setDocumentType(personGroupExt.getPersonDocuments().get(0).getDocumentType());
+                   insuredPerson.setDocumentNumber(personGroupExt.getPersonDocuments().get(0).getDocumentNumber());
                    for (PersonDocument document : personGroupExt.getPersonDocuments()) {
-                       if (document.getDocumentType().getId().equals(contract.getDefaultDocumentType().getId())) {
+                       if (document.getDocumentType().equals(contract.getDefaultDocumentType())) {
                            insuredPerson.setDocumentType(document.getDocumentType());
                            insuredPerson.setDocumentNumber(document.getDocumentNumber());
-                           isEmptyDocument = true;
                            break;
                        }
-                   }
-                   if (!isEmptyDocument) {
-                       insuredPerson.setDocumentType(personGroupExt.getPersonDocuments().get(0).getDocumentType());
-                       insuredPerson.setDocumentNumber(personGroupExt.getPersonDocuments().get(0).getDocumentNumber());
                    }
                }
            }
 
-            if (!personGroupExt.getAddresses().isEmpty()) {
-                boolean isSetAddress = false;
-                for (Address a : personGroupExt.getAddresses()) {
-                    if (a.getAddressType().getId().equals(contract.getDefaultAddress().getId())) {
-                        insuredPerson.setAddressType(a);
-                        isSetAddress = true;
-                        break;
-                    }
-                }
-                if (!isSetAddress) {
-                    insuredPerson.setAddressType(personGroupExt.getAddresses().get(0));
-                }
+            if (contract.getDefaultAddress() != null) {
+                dataManager.load(Address.class).query("select e " +
+                        "from tsadv$Address e " +
+                        "where e.personGroup.id = :personGroupId " +
+                        " and current_date between e.startDate and e.endDate" +
+                        " and :addressTypeId = e.addressType.id ")
+                        .parameter("personGroupId", personGroupExt.getId())
+                        .parameter("addressTypeId", contract.getDefaultAddress().getId())
+                        .view("address.view")
+                        .list().stream().findFirst()
+                        .map(Address::getAddress)
+                        .ifPresent(insuredPerson::setAddress);
             }
+
+            insuredPerson.setAddressType(contract.getDefaultAddress());
             insuredPerson.setEmployee(personGroupExt);
             insuredPerson.setFirstName(person.getFirstName());
             insuredPerson.setSecondName(person.getLastName());

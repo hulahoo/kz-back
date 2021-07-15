@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -135,7 +136,7 @@ public class LmsServiceBean implements LmsService {
             pojo.setId(enrollment.getCourse().getId().toString());
             pojo.setName(enrollment.getCourse().getName());
             if (enrollment.getCourse().getLogo() != null) {
-                pojo.setLogo(Base64.getEncoder().encodeToString(enrollment.getCourse().getLogo()));
+                pojo.setLogo(enrollment.getCourse().getLogo().getId());
             }
             enrollmentsPojo.add(pojo);
         }
@@ -353,7 +354,7 @@ public class LmsServiceBean implements LmsService {
                     "   join cs.sectionObject cso " +
                     "where cso.id = :csoId")
                     .setParameter("csoId", courseSectionObject.getId()))
-                    .setView(View.LOCAL));
+                    .setView("course.with.logo"));
             if (course == null) {
                 throw new NullPointerException("Can not find course by course section object id " + courseSectionObject.getId());
             }
@@ -362,7 +363,7 @@ public class LmsServiceBean implements LmsService {
             pojo.setId(courseSectionObject.getId().toString());
             pojo.setName(course.getName() + ": " + courseSectionObject.getTest().getName());
             if (course.getLogo() != null) {
-                pojo.setLogo(Base64.getEncoder().encodeToString(course.getLogo()));
+                pojo.setLogo(course.getLogo().getId());
             }
             enrollmentsPojo.add(pojo);
         }
@@ -456,11 +457,11 @@ public class LmsServiceBean implements LmsService {
                 }
                 response.setSuccess(isSucceed(test, response.getScore().intValue()));
 
+                csa.setTestResultPercent(response.getScore().multiply(BigDecimal.valueOf(100)).divide(response.getMaxScore(), RoundingMode.DOWN));
                 csa.setTestResult(response.getScore());
                 csa.setSuccess(response.getSuccess());
                 csa.setActiveAttempt(true);
                 em.merge(csa);
-
             });
             return response;
         });
@@ -724,14 +725,11 @@ public class LmsServiceBean implements LmsService {
     }
 
     @Override
-    public void finishFeedback(AnsweredFeedback answeredFeedback) {
+    public void finishFeedback(AnsweredFeedback answeredFeedback, UUID personGroupId) {
         List<LearningFeedbackQuestion> questions = getFeedbackQuestions(answeredFeedback.getTemplateId(), "question.with.answers");
         persistence.runInTransaction(em -> {
-            UUID userPersonGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
-            Objects.requireNonNull(userPersonGroupId);
-
-            PersonGroupExt personGroup = em.find(PersonGroupExt.class, userPersonGroupId);
-            Objects.requireNonNull(userPersonGroupId);
+            PersonGroupExt personGroup = em.find(PersonGroupExt.class, personGroupId);
+            Objects.requireNonNull(personGroupId);
 
             LearningFeedbackTemplate feedbackTemplate = em.find(LearningFeedbackTemplate.class, answeredFeedback.getTemplateId());
             Objects.requireNonNull(feedbackTemplate);
@@ -775,7 +773,7 @@ public class LmsServiceBean implements LmsService {
                 }
             });
             feedbackPersonAnswer.setSumScore(details.stream().mapToInt(CourseFeedbackPersonAnswerDetail::getScore).mapToLong(v -> (long) v).reduce(0L, Long::sum));
-            feedbackPersonAnswer.setAvgScore((double) (feedbackPersonAnswer.getSumScore() / questions.size()));
+            feedbackPersonAnswer.setAvgScore(BigDecimal.valueOf(feedbackPersonAnswer.getSumScore()).divide(BigDecimal.valueOf(questions.size()), 2, RoundingMode.DOWN).doubleValue());
 
             cc.addInstanceToCommit(feedbackPersonAnswer);
             details.forEach(cc::addInstanceToCommit);

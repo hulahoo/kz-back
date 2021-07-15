@@ -113,7 +113,8 @@ public class ScheduleOffsetsRequestChangedListener implements BeforeUpdateEntity
         scheduleOffsetsRequestJson.setEmployeeAgree(isEmployeeAgree);
         boolean isEmployeeInformed = Null.nullReplace(entity.getAcquainted(),false);
         scheduleOffsetsRequestJson.setEmployeeInformed(isEmployeeInformed);
-        scheduleOffsetsRequestJson.setEarningPolicy("");
+        scheduleOffsetsRequestJson.setEarningPolicy(entity.getEarningPolicy() != null
+                ? entity.getEarningPolicy().getCode() : null);
         String companyCode = "";
         if(entity.getPersonGroup() != null && entity.getPersonGroup().getCompany() != null){
             DicCompany company = entity.getPersonGroup().getCompany();

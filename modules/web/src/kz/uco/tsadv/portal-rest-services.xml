@@ -7,6 +7,12 @@
         <method name="getCompaniesForLoadDictionary">
             <param name="personGroupId" type="java.util.UUID"/>
         </method>
+        <method name="initPortalMenu">
+            <param name="menuList" type="java.util.List"/>
+        </method>
+        <method name="getPortalMenu">
+            <param name="menuType" type="java.lang.String"/>
+        </method>
     </service>
     <service name="tsadv_BprocService">
         <method name="getProcessInstanceData">
@@ -27,18 +33,19 @@
         </method>
     </service>
     <service name="tsadv_StartBprocService">
-        <method name="getBpmRolesDefiner">
-            <param name="processDefinitionKey" type="java.lang.String"/>
-            <param name="initiatorPersonGroupId" type="java.util.UUID"/>
-        </method>
-        <method name="getNotPersisitBprocActors">
-            <param name="employee" type="kz.uco.tsadv.modules.administration.TsadvUser"/>
-            <param name="initiatorPersonGroupId" type="java.util.UUID"/>
-            <param name="bpmRolesDefiner" type="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"/>
-        </method>
         <method name="saveBprocActors">
             <param name="entityId" type="java.util.UUID"/>
             <param name="notPersisitBprocActors" type="java.util.List"/>
+        </method>
+        <method name="getNotPersisitBprocActors">
+            <param name="employeePersonGroupId" type="java.util.UUID"/>
+            <param name="bpmRolesDefiner" type="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"/>
+            <param name="isAssistant" type="boolean"/>
+        </method>
+        <method name="getBpmRolesDefiner">
+            <param name="processDefinitionKey" type="java.lang.String"/>
+            <param name="employeePersonGroupId" type="java.util.UUID"/>
+            <param name="isAssistant" type="boolean"/>
         </method>
     </service>
     <service name="bproc_BprocRuntimeService">
@@ -58,11 +65,11 @@
     </service>
     <service name="tsadv_EnrollmentService">
         <method name="searchEnrollment">
-            <param name="userId" type="java.util.UUID"/>
+            <param name="personGroupId" type="java.util.UUID"/>
         </method>
         <method name="searchEnrollment">
+            <param name="personGroupId" type="java.util.UUID"/>
             <param name="courseName" type="java.lang.String"/>
-            <param name="userId" type="java.util.UUID"/>
         </method>
     </service>
     <service name="tsadv_CourseService">
@@ -73,13 +80,9 @@
         <method name="courseTrainerInfo">
             <param name="trainerId" type="java.util.UUID"/>
         </method>
-        <method name="searchCourses">
-            <param name="courseName" type="java.lang.String"/>
-        </method>
         <method name="courseEnrollmentInfo">
             <param name="enrollmentId" type="java.util.UUID"/>
         </method>
-        <method name="allCourses"/>
         <method name="courseSectionWithEnrollmentAttempts">
             <param name="courseSectionId" type="java.util.UUID"/>
             <param name="enrollmentId" type="java.util.UUID"/>
@@ -90,7 +93,6 @@
             <param name="score" type="java.math.BigDecimal"/>
             <param name="minScore" type="java.math.BigDecimal"/>
             <param name="maxScore" type="java.math.BigDecimal"/>
-            <param name="success" type="java.lang.Boolean"/>
         </method>
         <method name="createScormAttempt">
             <param name="courseSectionId" type="java.util.UUID"/>
@@ -100,7 +102,15 @@
         </method>
         <method name="validateEnroll">
             <param name="courseId"/>
+            <param name="personGroupId"/>
             <param name="locale"/>
+        </method>
+        <method name="allCourses">
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="searchCourses">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="courseName" type="java.lang.String"/>
         </method>
     </service>
     <service name="bproc_BprocTaskService">
@@ -127,6 +137,35 @@
             <param name="personGroupId" type="java.util.UUID"/>
             <param name="absenceTypeId" type="java.util.UUID"/>
             <param name="dateFrom" type="java.util.Date"/>
+        </method>
+        <method name="countDaysWithoutHolidays">
+            <param name="dateFrom" type="java.util.Date"/>
+            <param name="dateTo" type="java.util.Date"/>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="getReceivedVacationDaysOfYear">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="absenceTypeId" type="java.util.UUID"/>
+            <param name="date" type="java.util.Date"/>
+        </method>
+        <method name="getRemainingDaysWeekendWork">
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="scheduleOffsetDaysBeforeAbsence"/>
+    </service>
+    <service name="tsadv_AbsenceBalanceService">
+        <method name="getAbsenceBalance">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="absenceDate" type="java.util.Date"/>
+        </method>
+        <method name="getEnvironmentalDays">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="absenceDate" type="java.util.Date"/>
+        </method>
+        <method name="getAbsenceBalance">
+            <param name="absenceTypeId" type="java.util.UUID"/>
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="absenceDate" type="java.util.Date"/>
         </method>
     </service>
     <service name="tsadv_DocumentService">
@@ -155,23 +194,23 @@
         <method name="calcTotalAmount">
             <param name="insuredPersonId" type="java.util.UUID"/>
         </method>
+        <method name="getInsuredPersonMembersWithNewContract">
+            <param name="insuredPersonId" type="java.util.UUID"/>
+            <param name="contractId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="tsadv_EmployeeService">
         <method name="personProfile">
             <param name="personGroupId" type="java.util.UUID"/>
         </method>
-        <method name="findManagerListByPositionGroup">
-            <param name="positionGroupId" type="java.util.UUID"/>
-            <param name="showAll" type="boolean"/>
-            <param name="viewName" type="java.lang.String"/>
-        </method>
         <method name="getCompanyByPersonGroupId">
             <param name="personGroupId" type="java.util.UUID"/>
         </method>
-        <method name="findManagerListByPositionGroupReturnListPosition">
-            <param name="positionGroupId" type="java.util.UUID"/>
-            <param name="showAll" type="boolean"/>
-            <param name="viewName" type="java.lang.String"/>
+        <method name="personGroupInfo">
+            <param name="userId" type="java.util.UUID"/>
+        </method>
+        <method name="hasHrRole">
+            <param name="dicHrCode" type="java.lang.String"/>
         </method>
     </service>
     <service name="tsadv_OrgStructureRequestService">
@@ -195,6 +234,16 @@
         <method name="saveRequest">
             <param name="orgRequestSaveModel" type="kz.uco.tsadv.pojo.OrgRequestSaveModel"/>
         </method>
+        <method name="getMergedOrgStructure">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="changeTypeFilter" type="kz.uco.tsadv.api.OrgStructureRequestChangeType"/>
+        </method>
+        <method name="getMergedOrgStructure">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="displayFilter" type="kz.uco.tsadv.api.OrgStructureRequestDisplayType"/>
+        </method>
+        <method name="availableSalary"/>
+        <method name="hasPermitToCreate"/>
     </service>
     <service name="tsadv_MyTeamService">
         <method name="getChildren">
@@ -209,6 +258,50 @@
         <method name="isManagerOrSupManager">
             <param name="userId" type="java.util.UUID"/>
             <param name="employeePersonGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="getDicHrRoles">
+            <param name="userId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="cuba_UserSettingService">
+        <method name="saveSetting">
+            <param name="clientType" type="com.haulmont.cuba.core.global.ClientType"/>
+            <param name="name" type="java.lang.String"/>
+            <param name="value" type="java.lang.String"/>
+        </method>
+        <method name="loadSetting">
+            <param name="clientType" type="com.haulmont.cuba.core.global.ClientType"/>
+            <param name="name" type="java.lang.String"/>
+        </method>
+    </service>
+    <service name="tsadv_CommonReportsService">
+        <method name="downloadReportByCode">
+            <param name="reportCode" type="java.lang.String"/>
+            <param name="params" type="java.util.Map"/>
+        </method>
+        <method name="downloadReportByCode">
+            <param name="reportCode" type="java.lang.String"/>
+            <param name="entityParamName" type="java.lang.String"/>
+            <param name="entityId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_ExecutiveAssistantService">
+        <method name="getManagerList">
+            <param name="assistantPositionGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_PositionService">
+        <method name="getManager">
+            <param name="positionGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_VacationScheduleRequestService">
+        <method name="ganttChart">
+            <param name="startDate" type="java.util.Date"/>
+            <param name="endDate" type="java.util.Date"/>
+        </method>
+        <method name="getChildVacationSchedule">
+            <param name="paginationPojo" type="kz.uco.tsadv.pojo.pagination.PaginationPojo"/>
         </method>
     </service>
 </services>

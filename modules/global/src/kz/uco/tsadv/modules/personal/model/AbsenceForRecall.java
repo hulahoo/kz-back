@@ -6,9 +6,9 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose;
-import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -21,10 +21,6 @@ public class AbsenceForRecall extends AbstractBprocRequest {
     private static final long serialVersionUID = 1213611202573439060L;
 
     public static final String PROCESS_DEFINITION_KEY = "absenceForRecallRequest";
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ABSENCE_TYPE_ID")
-    protected DicAbsenceType absenceType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EMPLOYEE_ID")
@@ -78,7 +74,7 @@ public class AbsenceForRecall extends AbstractBprocRequest {
             inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
     @OnDelete(DeletePolicy.CASCADE)
     @ManyToMany
-    protected List<FileDescriptor> file;
+    protected List<FileDescriptor> files;
 
     public String getPurposeText() {
         return purposeText;
@@ -88,12 +84,12 @@ public class AbsenceForRecall extends AbstractBprocRequest {
         this.purposeText = purposeText;
     }
 
-    public List<FileDescriptor> getFile() {
-        return file;
+    public List<FileDescriptor> getFiles() {
+        return files;
     }
 
-    public void setFile(List<FileDescriptor> file) {
-        this.file = file;
+    public void setFiles(List<FileDescriptor> files) {
+        this.files = files;
     }
 
     public Boolean getCompensationPayment() {
@@ -184,16 +180,14 @@ public class AbsenceForRecall extends AbstractBprocRequest {
         this.employee = employee;
     }
 
-    public DicAbsenceType getAbsenceType() {
-        return absenceType;
-    }
-
-    public void setAbsenceType(DicAbsenceType absenceType) {
-        this.absenceType = absenceType;
-    }
-
     @Override
     public String getProcessDefinitionKey() {
         return PROCESS_DEFINITION_KEY;
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        super.postConstruct();
+        compensationPayment = true;
     }
 }

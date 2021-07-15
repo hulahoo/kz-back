@@ -18,13 +18,8 @@
             <query>
                 <![CDATA[
                    select css
-                     from tsadv$CourseSectionSession css
+                     from tsadv$CourseSectionSession css where css.courseSection.course = :component$courseField
                 ]]>
-                <filter>
-                    <c>
-                        css.courseSection.course.id = :component$courseField
-                    </c>
-                </filter>
             </query>
         </collectionDatasource>
     </dsContext>

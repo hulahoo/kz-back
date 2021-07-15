@@ -1,17 +1,20 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
-import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.modules.personal.dictionary.DicEarningPolicy;
 import kz.uco.tsadv.modules.personal.dictionary.DicSchedulePurpose;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Listeners("tsadv_ScheduleOffsetsRequestChangedListener")
 @Table(name = "TSADV_SCHEDULE_OFFSETS_REQUEST")
@@ -52,11 +55,41 @@ public class ScheduleOffsetsRequest extends AbstractBprocRequest {
     @Column(name = "DETAILS_OF_ACTUAL_WORK", length = 2000)
     protected String detailsOfActualWork;
 
-    @Column(name = "AGREE")
-    protected Boolean agree;
+    @NotNull
+    @Column(name = "AGREE", nullable = false)
+    protected Boolean agree = false;
 
-    @Column(name = "ACQUAINTED")
-    protected Boolean acquainted;
+    @NotNull
+    @Column(name = "ACQUAINTED", nullable = false)
+    protected Boolean acquainted = false;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "EARNING_POLICY_ID")
+    protected DicEarningPolicy earningPolicy;
+
+    @JoinTable(name = "TSADV_SCHEDULE_OFFSETS_REQUEST_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "SCHEDULE_OFFSETS_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @OnDelete(DeletePolicy.CASCADE)
+    @ManyToMany
+    private List<FileDescriptor> files;
+
+    public List<FileDescriptor> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<FileDescriptor> files) {
+        this.files = files;
+    }
+
+    public DicEarningPolicy getEarningPolicy() {
+        return earningPolicy;
+    }
+
+    public void setEarningPolicy(DicEarningPolicy earningPolicy) {
+        this.earningPolicy = earningPolicy;
+    }
 
     public String getPurposeText() {
         return purposeText;

@@ -6,7 +6,7 @@
     <data>
         <instance id="dicIssuingAuthorityDc"
                   class="kz.uco.tsadv.modules.personal.dictionary.DicIssuingAuthority">
-            <view extends="_local"/>
+            <view extends="dicIssuingAuthority.for.integration"/>
             <loader/>
         </instance>
     </data>

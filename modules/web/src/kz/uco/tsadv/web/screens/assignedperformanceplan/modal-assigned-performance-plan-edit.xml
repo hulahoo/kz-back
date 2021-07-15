@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.assignedperformanceplan">
+    <data>
+        <instance id="assignedPerformancePlanDc"
+                  class="kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan"
+                  view="assignedPerformancePlan-myKpi-edit">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode forceDialog="true" height="AUTO"
+                width="AUTO"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="assignedPerformancePlanDc">
+            <column width="250px">
+                <textArea id="purposeField" property="purpose" editable="false"/>
+                <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"
+                        editable="false"/>
+                <pickerField property="lineManager" editable="false"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

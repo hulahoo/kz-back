@@ -10,7 +10,7 @@
             <query>
                 <![CDATA[select e from tsadv$ActivityTask e
                             join e.activity a
-                            where a.assignedUser.id = :session$user.id
+                            where a.assignedUser = :session$user
                             and a.type.code <> 'NOTIFICATION'
                             order by e.orderDate desc
                 ]]>
@@ -21,7 +21,7 @@
                          view="_local">
             <query>
                 <![CDATA[select e from uactivity$Activity e
-                            where e.assignedUser.id = :session$user.id
+                            where e.assignedUser = :session$user
                             and e.type.code = 'NOTIFICATION'
                             order by e.startDateTime desc]]>
             </query>
@@ -111,9 +111,10 @@ and e.endDateTime is not null]]>
                        width="100%">
                     <columns>
                         <column id="checkboxColumn"
-                                caption="msg://select.column.caption"
+                                caption=" "
                                 generator="generateCheckBoxColumn"/>
                         <column id="name"
+                                maxTextLength="50"
                                 caption="msg://notificationText"/>
                         <column id="startDateTime"
                                 caption="msg://notificationDate"/>
@@ -134,6 +135,10 @@ and e.endDateTime is not null]]>
                             caption="msg://markAsNotRead"
                             enable="false"
                             invoke="markAsUnread"/>
+                    <button id="openNotification"
+                            caption="msg://openNotification"
+                            enable="false"
+                            invoke="openNotification"/>
                 </buttonsPanel>
             </tab>
         </tabSheet>

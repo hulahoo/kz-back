@@ -107,6 +107,17 @@ public class InsuranceContract extends StandardEntity {
     @OneToMany(mappedBy = "insuranceContract")
     private List<Attachment> attachments;
 
+    @OneToMany(mappedBy = "insuranceContract")
+    private List<InsuredPerson> insuredPersons;
+
+    public List<InsuredPerson> getInsuredPersons() {
+        return insuredPersons;
+    }
+
+    public void setInsuredPersons(List<InsuredPerson> insuredPersons) {
+        this.insuredPersons = insuredPersons;
+    }
+
     public DicAddressType getDefaultAddress() {
         return defaultAddress;
     }

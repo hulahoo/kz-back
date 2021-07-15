@@ -17,7 +17,7 @@
             </view>
             <loader id="certificateRequestsDl">
                 <query>
-                    <![CDATA[select e from tsadv_CertificateRequest e]]>
+                    <![CDATA[select e from tsadv_CertificateRequest e order by e.requestNumber desc]]>
                 </query>
             </loader>
         </collection>

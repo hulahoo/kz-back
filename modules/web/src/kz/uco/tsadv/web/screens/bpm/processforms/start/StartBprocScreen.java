@@ -37,13 +37,24 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
+ * For initiator :
+ * <ul>
+ *     <li>rejectNotificationTemplateCode - send after reject</li>
+ *     <li>approveNotificationTemplateCode - send after approve</li>
+ *     <li>initiatorNotificationTemplateCode - send after complete task</li>
+ * </ul>
+ * <p>
+ * For approver : approverNotificationTemplateCode - send after create task
+ *
  * @author Alibek Berdaulet
  */
 @UiController("tsadv_StartBprocScreen")
 @UiDescriptor("start-bproc-screen.xml")
 @ProcessForm(params = {
         @Param(name = "approverNotificationTemplateCode"),
-        @Param(name = "initiatorNotificationTemplateCode")
+        @Param(name = "initiatorNotificationTemplateCode"),
+        @Param(name = "rejectNotificationTemplateCode"),
+        @Param(name = "approveNotificationTemplateCode"),
 })
 public class StartBprocScreen extends Screen {
 
@@ -82,6 +93,12 @@ public class StartBprocScreen extends Screen {
     @ProcessFormParam
     @SuppressWarnings("unused")
     private String initiatorNotificationTemplateCode;
+    @ProcessFormParam
+    @SuppressWarnings("unused")
+    private String rejectNotificationTemplateCode;
+    @ProcessFormParam
+    @SuppressWarnings("unused")
+    private String approveNotificationTemplateCode;
     @Inject
     protected MessageBundle messageBundle;
 
@@ -102,12 +119,13 @@ public class StartBprocScreen extends Screen {
     protected void onBeforeShow(BeforeShowEvent event) {
         Assert.notNull(startBprocParams, "startBprocParams is null");
         Assert.notNull(startBprocParams.getRequest(), "entity is null");
-        Assert.notNull(startBprocParams.getInitiatorPersonGroupId(), "personGroupId is null");
+        Assert.notNull(startBprocParams.getEmployeePersonGroupId(), "personGroupId is null");
 
         try {
             bpmRolesDefinerDc.setItem(startBprocService.getBpmRolesDefiner(
                     startBprocParams.getRequest().getProcessDefinitionKey(),
-                    startBprocParams.getInitiatorPersonGroupId()));
+                    startBprocParams.getEmployeePersonGroupId(),
+                    startBprocParams.getIsAssistant()));
             initNotPersisitBprocActors();
             initHrRolesDcItems();
         } catch (PortalException e) {
@@ -125,9 +143,9 @@ public class StartBprocScreen extends Screen {
 
     protected void initNotPersisitBprocActors() {
         List<NotPersisitBprocActors> notPersisitBprocActors = startBprocService.getNotPersisitBprocActors(
-                startBprocParams.getEmployee(),
-                startBprocParams.getInitiatorPersonGroupId(),
-                bpmRolesDefinerDc.getItem());
+                startBprocParams.getEmployeePersonGroupId(),
+                bpmRolesDefinerDc.getItem(),
+                false);
         notPersisitBprocActorsDc.setItems(notPersisitBprocActors);
     }
 
@@ -144,6 +162,8 @@ public class StartBprocScreen extends Screen {
                 .addProcessVariable("initiator", userSession.getUser())
                 .addProcessVariable("rolesLinks", linksDc.getItems())
                 .addProcessVariable("approverNotificationTemplateCode", approverNotificationTemplateCode)
+                .addProcessVariable("rejectNotificationTemplateCode", rejectNotificationTemplateCode)
+                .addProcessVariable("approveNotificationTemplateCode", approveNotificationTemplateCode)
                 .addProcessVariable("initiatorNotificationTemplateCode", initiatorNotificationTemplateCode);
 
         Map<String, Object> params = startBprocParams.getParams();
@@ -221,13 +241,17 @@ public class StartBprocScreen extends Screen {
     protected void onAddHrRoleLookupValueChange(HasValue.ValueChangeEvent<DicHrRole> event) {
         DicHrRole role = event.getValue();
         if (role != null) {
-            Integer order = linksDc.getItems().stream()
+            BpmRolesLink rolesLink = linksDc.getItems().stream()
                     .filter(bpmRolesLink -> bpmRolesLink.getHrRole().equals(role))
-                    .findAny().get().getOrder();
+                    .findAny().get();
+            Integer order = rolesLink.getOrder();
+
             NotPersisitBprocActors bprocActors = metadata.create(NotPersisitBprocActors.class);
             bprocActors.setHrRole(role);
-            bprocActors.setBprocUserTaskCode(getBprocUserTaskCode(role));
-            bprocActors.setOrder(order);
+            bprocActors.setBprocUserTaskCode(rolesLink.getBprocUserTaskCode());
+            bprocActors.setOrder(rolesLink.getOrder());
+            bprocActors.setRolesLink(rolesLink);
+
             List<NotPersisitBprocActors> mutableItems = notPersisitBprocActorsDc.getMutableItems();
             boolean isAdded = false;
             for (int i = mutableItems.size() - 1; i >= 0; i--) {
@@ -242,12 +266,6 @@ public class StartBprocScreen extends Screen {
             if (!isAdded) mutableItems.add(bprocActors);
             addHrRoleLookup.setValue(null);
         }
-    }
-
-    protected String getBprocUserTaskCode(DicHrRole role) {
-        return linksDc.getItems().stream().filter(bpmRolesLink -> bpmRolesLink.getHrRole().equals(role))
-                .map(BpmRolesLink::getBprocUserTaskCode)
-                .findAny().orElseThrow(() -> new RuntimeException(role.getLangValue() + " : BprocUserTaskCode not found!"));
     }
 
     @Subscribe(id = "notPersisitBprocActorsDc", target = Target.DATA_CONTAINER)
