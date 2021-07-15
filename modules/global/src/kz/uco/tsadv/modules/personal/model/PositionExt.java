@@ -123,6 +123,18 @@ public class PositionExt extends Position implements IGroupedEntity<PositionGrou
     @JoinColumn(name = "EMPLOYEE_CATEGORY_ID")
     protected DicEmployeeCategory employeeCategory;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FUNCTIONAL_MANAGER_POSITION_GROUP_ID")
+    protected PositionGroupExt functionalManagerPositionGroup;
+
+    public PositionGroupExt getFunctionalManagerPositionGroup() {
+        return functionalManagerPositionGroup;
+    }
+
+    public void setFunctionalManagerPositionGroup(PositionGroupExt functionalManagerPositionGroup) {
+        this.functionalManagerPositionGroup = functionalManagerPositionGroup;
+    }
+
     public Boolean getSupManagerExclusion() {
         return supManagerExclusion;
     }
