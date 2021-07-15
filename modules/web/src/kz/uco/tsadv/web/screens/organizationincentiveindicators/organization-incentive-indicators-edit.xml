@@ -20,9 +20,9 @@
                 <dateField id="dateFromField" property="dateFrom"/>
                 <dateField id="dateToField" property="dateTo"/>
                 <lookupField id="indicatorTypeField" property="indicatorType"/>
-                <lookupPickerField id="indicator" property="indicator"/>
+                <pickerField id="indicator" property="indicator"/>
                 <textField id="weightField" property="weight"/>
-                <lookupPickerField id="responsiblePerson" property="responsiblePerson"/>
+                <pickerField id="responsiblePerson" property="responsiblePerson"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">
