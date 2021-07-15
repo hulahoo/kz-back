@@ -40,8 +40,7 @@ public class IncentiveServiceBean implements IncentiveService {
                 "    group by r.organization_group_id, to_char(r.period_date, 'yyyy-MM')\n" +
                 "),\n" +
                 "     INCENTIVE as (\n" +
-                "         select greatest(i.date_from, of.date_from) as date_from,\n" +
-                "                least(i.date_to, of.date_to)        as date_to,\n" +
+                "         select d as date_,\n" +
                 "                i.organization_group_id\n" +
                 "         from TSADV_ORGANIZATION_INCENTIVE_INDICATORS i\n" +
                 "                  join TSADV_ORGANIZATION_INCENTIVE_FLAG of\n" +
@@ -49,29 +48,30 @@ public class IncentiveServiceBean implements IncentiveService {
                 "                           and of.delete_ts is null\n" +
                 "                           and of.date_to >= i.date_from\n" +
                 "                           and of.date_from <= i.date_to\n" +
+                "                  join generate_series(greatest(i.date_from, of.date_from), least(i.date_to, of.date_to), '1 month'::interval) d on 1 = 1 \n" +
                 "         where i.delete_ts is null\n" +
                 "           and i.responsible_person_id = #personGroupId\n" +
+                "         group by d, i.organization_group_id\n" +
                 "     )\n" +
                 "select %s\n" +
                 "from INCENTIVE i\n" +
-                "         join generate_series(i.date_from, i.date_to, '1 month'::interval) d on 1 = 1\n" +
                 "         join base_organization o\n" +
                 "              on o.group_id = i.organization_group_id\n" +
                 "                  and o.delete_ts is null\n" +
                 "                  and current_date between o.start_date and o.end_date\n" +
                 "         left join result r\n" +
                 "                   on r.organization_group_id = i.organization_group_id\n" +
-                "                       and r.date_ = to_char(d, 'yyyy-MM')\n" +
+                "                       and r.date_ = to_char(i.date_, 'yyyy-MM')\n" +
                 "%s\n";
 
         final String fields = "i.organization_group_id, " +
-                "d as date, " +
+                "i.date_ as date, " +
                 "o.organization_name_lang1, " +
                 "o.organization_name_lang2, " +
                 "o.organization_name_lang3, " +
                 "r.result";
         final String count = "count(*)";
-        final String orderBy = "order by d desc, i.organization_group_id";
+        final String orderBy = "order by i.date_ desc, i.organization_group_id";
 
         return persistence.callInTransaction(em -> {
             EntitiesPaginationResult paginationResult = new EntitiesPaginationResult();
