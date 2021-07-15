@@ -16,13 +16,18 @@ public class BprocReassignment extends StandardEntity {
     @NotNull
     private String executionId;
 
+    @Column(name = "TASK_DEFINITION_KEY", nullable = false)
+    @NotNull
+    private String taskDefinitionKey;
+
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     @Column(name = "START_TIME", nullable = false)
     private Date startTime;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "END_TIME")
+    @Column(name = "END_TIME", nullable = false)
+    @NotNull
     private Date endTime;
 
     @Column(name = "COMMENT_", length = 2000)
@@ -43,6 +48,14 @@ public class BprocReassignment extends StandardEntity {
     @Column(name = "PROCESS_INSTANCE_ID", nullable = false, length = 50)
     @NotNull
     private String processInstanceId;
+
+    public String getTaskDefinitionKey() {
+        return taskDefinitionKey;
+    }
+
+    public void setTaskDefinitionKey(String taskDefinitionKey) {
+        this.taskDefinitionKey = taskDefinitionKey;
+    }
 
     public Date getEndTime() {
         return endTime;

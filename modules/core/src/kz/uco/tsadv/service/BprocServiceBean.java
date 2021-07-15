@@ -50,6 +50,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service(BprocService.NAME)
 public class BprocServiceBean extends AbstractBprocHelper implements BprocService {
@@ -276,9 +277,14 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                                 .ifPresent(taskData::setHrRole);
                 })
                 .peek(taskData -> {
-                    String executionId = taskData.getExecutionId();
-                    if (executionId != null) {
-                        List<BprocReassignment> reassignments = getBprocReassignments(executionId);
+                    String taskId = taskData.getTaskDefinitionKey();
+                    if (taskId != null) {
+                        List<BprocReassignment> reassignments = getBprocReassignments(taskId, taskData.getProcessInstanceId())
+                                .stream()
+                                .filter(bprocReassignment -> !bprocReassignment.getStartTime().before(taskData.getCreateTime()))
+                                .filter(bprocReassignment -> taskData.getEndTime() == null || !bprocReassignment.getEndTime().after(taskData.getEndTime()))
+                                .collect(Collectors.toList());
+
                         reassignments.stream()
                                 .map(reassignment -> parseToTaskData(taskData, reassignment))
                                 .forEach(tasks::add);
@@ -291,21 +297,21 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         return tasks;
     }
 
-    public List<BprocReassignment> getBprocReassignments(String executionId) {
+    public List<BprocReassignment> getBprocReassignments(String taskDefinitionKey, String processInstanceId) {
         return transactionalDataManager.load(BprocReassignment.class)
                 .query("select e from tsadv_BprocReassignment e " +
-                        " where e.executionId = :executionId " +
-//                        "   and e.processInstanceId = :processInstanceId" +
+                        " where e.taskDefinitionKey = :taskDefinitionKey " +
+                        "   and e.processInstanceId = :processInstanceId " +
                         "   order by e.order ")
-                .parameter("executionId", executionId)
-//                                .parameter("processInstanceId", taskData.getProcessInstanceId())
+                .parameter("taskDefinitionKey", taskDefinitionKey)
+                .parameter("processInstanceId", processInstanceId)
                 .view(viewRepository.getView(BprocReassignment.class, View.LOCAL).addProperty("assignee", viewRepository.getView(TsadvUser.class, "user-fioWithLogin")))
                 .list();
     }
 
     protected ExtTaskData parseToTaskData(ExtTaskData taskData, BprocReassignment reassignment) {
         ExtTaskData parsedTask = metadata.create(ExtTaskData.class);
-        parsedTask.setId(UUID.randomUUID().toString());
+        parsedTask.setId(reassignment.getId().toString());
         parsedTask.setName(taskData.getName());
         parsedTask.setTaskDefinitionKey(taskData.getTaskDefinitionKey());
         parsedTask.setHrRole(taskData.getHrRole());

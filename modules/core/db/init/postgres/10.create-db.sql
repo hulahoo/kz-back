@@ -18255,8 +18255,9 @@ create table TSADV_BPROC_REASSIGNMENT (
     DELETED_BY varchar(50),
     --
     EXECUTION_ID varchar(255) not null,
+    TASK_ID varchar(255) not null,
     START_TIME timestamp not null,
-    END_TIME timestamp,
+    END_TIME timestamp not null,
     COMMENT_ varchar(2000),
     OUTCOME varchar(50) not null,
     ORDER_ integer,

@@ -2,6 +2,7 @@ package kz.uco.tsadv.bproc.beans;
 
 import com.haulmont.addon.bproc.entity.ExecutionData;
 import com.haulmont.addon.bproc.provider.UserListProvider;
+import com.haulmont.addon.bproc.service.BprocHistoricService;
 import com.haulmont.addon.bproc.service.BprocRuntimeService;
 import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.entity.contracts.Id;
@@ -44,6 +45,8 @@ public class BprocUserListProvider implements UserListProvider {
 
     @Inject
     protected TransactionalDataManager transactionalDataManager;
+    @Inject
+    protected BprocHistoricService bprocHistoricService;
 
     @Override
     public List<User> get(String executionId) {
@@ -61,7 +64,7 @@ public class BprocUserListProvider implements UserListProvider {
         if (idBpmUserSubstitutionPath == null) return Collections.singletonList(user);
 
         ExecutionData executionData = bprocRuntimeService.createExecutionDataQuery().executionId(executionId).singleResult();
-        List<BprocReassignment> reassignments = bprocService.getBprocReassignments(executionId);
+        List<BprocReassignment> reassignments = bprocService.getBprocReassignments(executionData.getActivityId(), executionData.getProcessInstanceId());
 
         int order = reassignments.stream().map(BprocReassignment::getOrder).max(Integer::compareTo).orElse(0);
 
@@ -76,6 +79,7 @@ public class BprocUserListProvider implements UserListProvider {
 
             BprocReassignment bprocReassignment = metadata.create(BprocReassignment.class);
             bprocReassignment.setOrder(++order);
+            bprocReassignment.setTaskDefinitionKey(executionData.getActivityId());
             bprocReassignment.setAssignee(user);
             bprocReassignment.setStartTime(timeSource.currentTimestamp());
             bprocReassignment.setEndTime(timeSource.currentTimestamp());
@@ -99,5 +103,4 @@ public class BprocUserListProvider implements UserListProvider {
         AbstractBprocRequest bprocRequest = (AbstractBprocRequest) bprocRuntimeService.getVariable(executionId, "entity");
         return (List<User>) bprocService.getActors(bprocRequest.getId(), executionData.getActivityId(), View.MINIMAL);
     }
-
 }

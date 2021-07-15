@@ -54,7 +54,7 @@ public interface BprocService {
 
     List<ExtTaskData> getProcessTasks(ProcessInstanceData processInstanceData);
 
-    List<BprocReassignment> getBprocReassignments(String executionId);
+    List<BprocReassignment> getBprocReassignments(String taskDefinitionKey, String processInstanceId);
 
     ProcessDefinitionData getProcessDefinitionData(String processDefinitionKey);
 
