@@ -4294,12 +4294,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view("address.view").list().stream().findFirst().orElse(null);
 
                     if (address != null) {
-                        if (personAddressJson.getStartDate() != null && !personAddressJson.getStartDate().isEmpty()) {
-                            address.setStartDate(formatter.parse(personAddressJson.getStartDate()));
-                        }
-                        if (personAddressJson.getEndDate() != null && !personAddressJson.getEndDate().isEmpty()) {
-                            address.setEndDate(formatter.parse(personAddressJson.getEndDate()));
-                        }
+                        address.setStartDate(personAddressJson.getStartDate() != null
+                                && !personAddressJson.getStartDate().isEmpty()
+                                ? formatter.parse(personAddressJson.getStartDate())
+                                : null);
+                        address.setEndDate(personAddressJson.getEndDate() != null
+                                && !personAddressJson.getEndDate().isEmpty()
+                                ? formatter.parse(personAddressJson.getEndDate())
+                                : null);
 
                         DicAddressType dicAddressType = dataManager.load(DicAddressType.class)
                                 .query("select e from tsadv$DicAddressType e " +
@@ -4384,12 +4386,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     } else {
                         address = metadata.create(Address.class);
                         address.setId(UUID.randomUUID());
-                        if (personAddressJson.getStartDate() != null && !personAddressJson.getStartDate().isEmpty()) {
-                            address.setStartDate(formatter.parse(personAddressJson.getStartDate()));
-                        }
-                        if (personAddressJson.getEndDate() != null && !personAddressJson.getEndDate().isEmpty()) {
-                            address.setEndDate(formatter.parse(personAddressJson.getEndDate()));
-                        }
+                        address.setStartDate(personAddressJson.getStartDate() != null
+                                && !personAddressJson.getStartDate().isEmpty()
+                                ? formatter.parse(personAddressJson.getStartDate())
+                                : null);
+                        address.setEndDate(personAddressJson.getEndDate() != null
+                                && !personAddressJson.getEndDate().isEmpty()
+                                ? formatter.parse(personAddressJson.getEndDate())
+                                : null);
 
                         DicAddressType dicAddressType = dataManager.load(DicAddressType.class)
                                 .query("select e from tsadv$DicAddressType e " +
@@ -4474,12 +4478,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                 } else {
 
-                    if (personAddressJson.getStartDate() != null && !personAddressJson.getStartDate().isEmpty()) {
-                        address.setStartDate(formatter.parse(personAddressJson.getStartDate()));
-                    }
-                    if (personAddressJson.getEndDate() != null && !personAddressJson.getEndDate().isEmpty()) {
-                        address.setEndDate(formatter.parse(personAddressJson.getEndDate()));
-                    }
+                    address.setStartDate(personAddressJson.getStartDate() != null
+                            && !personAddressJson.getStartDate().isEmpty()
+                            ? formatter.parse(personAddressJson.getStartDate())
+                            : null);
+                    address.setEndDate(personAddressJson.getEndDate() != null
+                            && !personAddressJson.getEndDate().isEmpty()
+                            ? formatter.parse(personAddressJson.getEndDate())
+                            : null);
 
                     DicAddressType dicAddressType = dataManager.load(DicAddressType.class)
                             .query("select e from tsadv$DicAddressType e " +
