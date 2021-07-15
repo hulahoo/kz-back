@@ -1538,23 +1538,23 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         : null);
                 assignmentExt.setPrimaryFlag(Boolean.valueOf(assignmentJson.getPrimaryFlag()));
                 assignmentExt.setGroup(assignmentGroupExt);
-                if (assignmentGroupExt.getGradeGroup() == null || !assignmentGroupExt.getGradeGroup().equals(gradeGroup)) {
-                    assignmentGroupExt.setGradeGroup(gradeGroup);
-                }
-                if (assignmentGroupExt.getJobGroup() == null || !assignmentGroupExt.getJobGroup().equals(jobGroup)) {
-                    assignmentGroupExt.setJobGroup(jobGroup);
-                }
-                if (assignmentGroupExt.getOrganizationGroup() == null
-                        || !assignmentGroupExt.getOrganizationGroup().equals(organizationGroupExt)) {
-                    assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
-                }
-                if (assignmentGroupExt.getPositionGroup() == null
-                        || !assignmentGroupExt.getPositionGroup().equals(positionGroupExt)) {
-                    assignmentGroupExt.setPositionGroup(positionGroupExt);
-                }
-                if (assignmentGroupExt.getPersonGroup() == null || !assignmentGroupExt.getPersonGroup().equals(personGroupExt)) {
-                    assignmentGroupExt.setPersonGroup(personGroupExt);
-                }
+//                if (assignmentGroupExt.getGradeGroup() == null || !assignmentGroupExt.getGradeGroup().equals(gradeGroup)) {
+//                    assignmentGroupExt.setGradeGroup(gradeGroup);
+//                }
+//                if (assignmentGroupExt.getJobGroup() == null || !assignmentGroupExt.getJobGroup().equals(jobGroup)) {
+//                    assignmentGroupExt.setJobGroup(jobGroup);
+//                }
+//                if (assignmentGroupExt.getOrganizationGroup() == null
+//                        || !assignmentGroupExt.getOrganizationGroup().equals(organizationGroupExt)) {
+//                    assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
+//                }
+//                if (assignmentGroupExt.getPositionGroup() == null
+//                        || !assignmentGroupExt.getPositionGroup().equals(positionGroupExt)) {
+//                    assignmentGroupExt.setPositionGroup(positionGroupExt);
+//                }
+//                if (assignmentGroupExt.getPersonGroup() == null || !assignmentGroupExt.getPersonGroup().equals(personGroupExt)) {
+//                    assignmentGroupExt.setPersonGroup(personGroupExt);
+//                }
                 assignmentGroupExt.getList().add(assignmentExt);
             }
             for (AssignmentGroupExt assignmentGroupExt : assignmentGroupExtList) {
