@@ -14,6 +14,8 @@ public class PersonDocumentJson implements Serializable {
     protected String nationalIdentifier;
     protected String companyCode;
     protected String status;
+    protected String startDate;
+    protected String endDate;
 
     public String getStatus() {
         return status;
@@ -101,5 +103,21 @@ public class PersonDocumentJson implements Serializable {
 
     public void setIssueByForExpat(String issueByForExpat) {
         this.issueByForExpat = issueByForExpat;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

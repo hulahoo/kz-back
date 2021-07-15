@@ -1865,6 +1865,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("personDocument.edit").list().stream().findFirst().orElse(null);
                 if (personDocument != null) {
                     personDocument.setLegacyId(personDocumentJson.getLegacyId());
+                    personDocument.setStartDate(personDocumentJson.getStartDate() != null
+                            && !personDocumentJson.getStartDate().isEmpty()
+                            ? formatter.parse(personDocumentJson.getStartDate())
+                            : null);
+                    personDocument.setEndDate(personDocumentJson.getEndDate() != null
+                            && !personDocumentJson.getEndDate().isEmpty()
+                            ? formatter.parse(personDocumentJson.getEndDate())
+                            : null);
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query("select e from base$PersonGroupExt e " +
                                     " where e.legacyId = :legacyId " +
@@ -1933,6 +1941,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDocument = metadata.create(PersonDocument.class);
                     personDocument.setId(UUID.randomUUID());
                     personDocument.setLegacyId(personDocumentJson.getLegacyId());
+                    personDocument.setStartDate(personDocumentJson.getStartDate() != null
+                            && !personDocumentJson.getStartDate().isEmpty()
+                            ? formatter.parse(personDocumentJson.getStartDate())
+                            : null);
+                    personDocument.setEndDate(personDocumentJson.getEndDate() != null
+                            && !personDocumentJson.getEndDate().isEmpty()
+                            ? formatter.parse(personDocumentJson.getEndDate())
+                            : null);
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query("select e from base$PersonGroupExt e " +
                                     " where e.legacyId = :legacyId " +
