@@ -659,5 +659,10 @@
         <class>kz.uco.tsadv.modules.learning.dictionary.DicProgrammCode</class>
         <class>kz.uco.tsadv.modules.learning.dictionary.DicAssessmentMethod</class>
         <class>kz.uco.tsadv.modules.learning.model.PositionCourse</class>
+        <class>kz.uco.tsadv.modules.administration.PortalMenuCustomization</class>
+        <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveFlag</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators</class>
+        <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveIndicators</class>
+        <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult</class>
     </persistence-unit>
 </persistence>
