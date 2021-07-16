@@ -22,7 +22,8 @@ public class AddressRequestDataJson implements Serializable {
     protected String notes;
     protected String addressKazakh;
     protected String addressEnglish;
-    protected String effectiveDate;
+    protected String startDate;
+    protected String endDate;
     protected String companyCode;
 
     @JsonProperty
@@ -216,18 +217,25 @@ public class AddressRequestDataJson implements Serializable {
         this.addressEnglish = addressEnglish;
     }
 
-
     @JsonProperty
-    public String getEffectiveDate() {
-        return effectiveDate;
+    public String getStartDate() {
+        return startDate;
     }
 
-
     @JsonProperty
-    public void setEffectiveDate(String effectiveDate) {
-        this.effectiveDate = effectiveDate;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 
+    @JsonProperty
+    public String getEndDate() {
+        return endDate;
+    }
+
+    @JsonProperty
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
 
     @JsonProperty
     public String getCompanyCode() {

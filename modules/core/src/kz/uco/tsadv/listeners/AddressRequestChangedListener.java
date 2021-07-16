@@ -7,7 +7,6 @@ import com.haulmont.cuba.core.global.View;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kz.uco.tsadv.api.BaseResult;
-import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.integration.jsonobject.AddressRequestDataJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AddressRequest;
@@ -44,13 +43,18 @@ public class AddressRequestChangedListener {
             BaseResult baseResult = new BaseResult();
             AddressRequestDataJson addressRequestDataJson = new AddressRequestDataJson();
             try {
-                DicRequestStatus oldStatus = dataManager.load(DicRequestStatus.class)
-                        .query("select e from tsadv$DicRequestStatus e where e.id = :id")
-                        .parameter("id", ((Id<DicRequestStatus, UUID>) event.getChanges()
-                                .getOldValue("status")).getValue())
-                        .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                DicRequestStatus oldStatus = null;
+                if (event.getChanges().getOldValue("status") != null
+                        && ((Id<DicRequestStatus, UUID>) event.getChanges()
+                        .getOldValue("status")).getValue() != null) {
+                    oldStatus = dataManager.load(DicRequestStatus.class)
+                            .query("select e from tsadv$DicRequestStatus e where e.id = :id")
+                            .parameter("id", ((Id<DicRequestStatus, UUID>) event.getChanges()
+                                    .getOldValue("status")).getValue())
+                            .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                }
                 AddressRequest addressRequest = dataManager.load(event.getEntityId())
-                        .view("").one();
+                        .view("addressRequest-view").one();
                 DicRequestStatus requestStatus = addressRequest.getStatus();
                 if (APPROVED_STATUS.equals(requestStatus.getCode()) && !APPROVED_STATUS.equals(oldStatus != null
                         ? oldStatus.getCode() : "")) {
@@ -70,11 +74,11 @@ public class AddressRequestChangedListener {
                     addressRequestDataJson.setBuilding(addressRequest.getBuilding());
                     addressRequestDataJson.setBlock(addressRequest.getBlock());
                     addressRequestDataJson.setFlat(addressRequest.getFlat());
-                    addressRequestDataJson.setAddressForExpats(addressRequestDataJson.getAddressForExpats());
-                    addressRequestDataJson.setNotes(addressRequestDataJson.getNotes());
-                    addressRequestDataJson.setAddressKazakh(addressRequestDataJson.getAddressKazakh());
-                    addressRequestDataJson.setAddressEnglish(addressRequestDataJson.getAddressEnglish());
-                    addressRequestDataJson.setEffectiveDate(getFormattedDateString(CommonUtils.getSystemDate()));
+                    addressRequestDataJson.setAddressForExpats(addressRequest.getAddressForExpats());
+                    addressRequestDataJson.setAddressKazakh(addressRequest.getAddressKazakh());
+                    addressRequestDataJson.setAddressEnglish(addressRequest.getAddressEnglish());
+                    addressRequestDataJson.setStartDate(getFormattedDateString(addressRequest.getStartDate()));
+                    addressRequestDataJson.setEndDate(getFormattedDateString(addressRequest.getEndDate()));
                     addressRequestDataJson.setCompanyCode(addressRequest.getPersonGroup() != null
                             && addressRequest.getPersonGroup().getCompany() != null
                             ? addressRequest.getPersonGroup().getCompany().getLegacyId()
