@@ -17261,6 +17261,7 @@ alter table BASE_PERSON_GROUP add column LINKEDIN_PROFILE_LINK varchar(1000) ^
 alter table BASE_PERSON_GROUP add column LINKEDIN_TOKEN_EXPIRES_DATE timestamp ^
 alter table BASE_PERSON_GROUP add column COMPANY_ID uuid ^
 alter table BASE_PERSON_GROUP add column DTYPE varchar(31) ^
+alter table BASE_PERSON_GROUP add column IMAGE_ID uuid ^
 update BASE_PERSON_GROUP set DTYPE = 'base$PersonGroupExt' where DTYPE is null ^
 -- end BASE_PERSON_GROUP
 -- begin BASE_ASSIGNMENT_GROUP
