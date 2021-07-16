@@ -5009,6 +5009,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (integrationConfig.getIsIntegrationActiveDirectory()
                             && userJson.getEmail() != null
                             && !userJson.getEmail().isEmpty()
+                            && tsadvUser.getEmail() != null
+                            && !tsadvUser.getEmail().isEmpty()
                             && !tsadvUser.getEmail().equals(userJson.getEmail())) {
                         tsadvUser.setEmail(userJson.getEmail());
                     }
@@ -5079,8 +5081,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     tsadvUser.setLogin(userJson.getLogin());
                     if (integrationConfig.getIsIntegrationActiveDirectory()
                             && userJson.getEmail() != null
-                            && !userJson.getEmail().isEmpty()
-                            && !tsadvUser.getEmail().equals(userJson.getEmail())) {
+                            && !userJson.getEmail().isEmpty()) {
                         tsadvUser.setEmail(userJson.getEmail());
                     }
 
