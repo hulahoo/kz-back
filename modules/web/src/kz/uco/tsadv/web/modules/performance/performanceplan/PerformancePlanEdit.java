@@ -196,18 +196,19 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 .withScreenId("base$PersonForKpiCard.browse")
                 .withSelectHandler(personList -> {
                     CommitContext commitContext = new CommitContext();
+                    List<PersonExt> assignedPerformancePlanPersonList = dataManager.load(PersonExt.class)
+                            .query("select p from tsadv$AssignedPerformancePlan e " +
+                                    " join base$PersonExt p on e.assignedPerson = p.group " +
+                                    " and current_date between p.startDate and p.endDate " +
+                                    " where e.performancePlan = :performancePlan")
+                            .parameter("performancePlan", performancePlanDc.getItem())
+                            .view("person-view")
+                            .list();
                     personList.forEach(personExt -> {
                         boolean isNew = true;
-                        List<AssignedPerformancePlan> assignedPerformancePlanList =
-                                dataManager.load(AssignedPerformancePlan.class)
-                                        .query("select e from tsadv$AssignedPerformancePlan e " +
-                                                " where e.performancePlan = :performancePlan")
-                                        .parameter("performancePlan", performancePlanDc.getItem())
-                                        .view("assignedPerformancePlan.browse")
-                                        .list();
-                        if (!assignedPerformancePlanList.isEmpty()) {
-                            for (AssignedPerformancePlan item : assignedPerformancePlanList) {
-                                if (item.getAssignedPerson().equals(personExt.getGroup())) {
+                        if (!assignedPerformancePlanPersonList.isEmpty()) {
+                            for (PersonExt item : assignedPerformancePlanPersonList) {
+                                if (item.getGroup().equals(personExt.getGroup())) {
                                     isNew = false;
                                     break;
                                 }

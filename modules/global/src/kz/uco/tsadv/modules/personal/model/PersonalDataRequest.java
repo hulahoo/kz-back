@@ -1,27 +1,30 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.global.dictionary.DicNationality;
 import kz.uco.tsadv.modules.personal.dictionary.DicCitizenship;
 import kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus;
-import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_PERSONAL_DATA_REQUEST")
 @Entity(name = "tsadv$PersonalDataRequest")
-public class PersonalDataRequest extends AbstractParentEntity {
+@NamePattern("%s|personGroup")
+public class PersonalDataRequest extends AbstractBprocRequest {
     private static final long serialVersionUID = -1704847249874220670L;
+
+    public static final String PROCESS_DEFINITION_KEY = "personalDataRequest";
 
     @Column(name = "LAST_NAME")
     protected String lastName;
-
-    @Column(name = "REQUEST_NUMBER")
-    protected Long requestNumber;
 
     @Column(name = "FIRST_NAME")
     protected String firstName;
@@ -45,14 +48,6 @@ public class PersonalDataRequest extends AbstractParentEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "DATE_OF_BIRTH")
     protected Date dateOfBirth;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ATTACHMENT_ID")
-    protected FileDescriptor attachment;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STATUS_ID")
-    protected DicRequestStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERSON_GROUP_ID")
@@ -108,14 +103,6 @@ public class PersonalDataRequest extends AbstractParentEntity {
         return attachments;
     }
 
-    public void setRequestNumber(Long requestNumber) {
-        this.requestNumber = requestNumber;
-    }
-
-    public Long getRequestNumber() {
-        return requestNumber;
-    }
-
     public void setPersonGroup(PersonGroupExt personGroup) {
         this.personGroup = personGroup;
     }
@@ -130,22 +117,6 @@ public class PersonalDataRequest extends AbstractParentEntity {
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
-    }
-
-    public void setAttachment(FileDescriptor attachment) {
-        this.attachment = attachment;
-    }
-
-    public FileDescriptor getAttachment() {
-        return attachment;
-    }
-
-    public void setStatus(DicRequestStatus status) {
-        this.status = status;
-    }
-
-    public DicRequestStatus getStatus() {
-        return status;
     }
 
     public void setMaritalStatus(DicMaritalStatus maritalStatus) {
@@ -204,4 +175,8 @@ public class PersonalDataRequest extends AbstractParentEntity {
         return middleNameLatin;
     }
 
+    @Override
+    public String getProcessDefinitionKey() {
+        return PROCESS_DEFINITION_KEY;
+    }
 }

@@ -2,12 +2,14 @@ package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@Listeners("tsadv_LeavingVacationRequestListener")
 @Table(name = "TSADV_LEAVING_VACATION_REQUEST")
 @Entity(name = "tsadv$LeavingVacationRequest")
 @NamePattern("%s %s %s|id,startDate,endDate")

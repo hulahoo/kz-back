@@ -1,6 +1,8 @@
 package kz.uco.tsadv.service.portal;
 
 import com.haulmont.cuba.core.entity.BaseGenericIdEntity;
+import kz.uco.tsadv.modules.administration.PortalMenuCustomization;
+import kz.uco.tsadv.pojo.PortalMenuPojo;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,5 +18,9 @@ public interface PortalHelperService {
     <T extends BaseGenericIdEntity<K>, K> T newEntity(String entityName);
 
     List<UUID> getCompaniesForLoadDictionary(UUID personGroupId);
+
+    void initPortalMenu(List<PortalMenuPojo> menuList);
+
+    List<PortalMenuCustomization> getPortalMenu(String menuType);
 
 }

@@ -10,6 +10,7 @@ import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.learning.model.PartyExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
@@ -84,6 +85,18 @@ public class Trainer extends AbstractParentEntity {
     @Column(name = "TRAINER_GREETING_LANG3")
     protected String trainerGreetingLang3;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    private DicCompany company;
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
+
     public String getTrainerGreetingLang3() {
         return trainerGreetingLang3;
     }
@@ -133,7 +146,7 @@ public class Trainer extends AbstractParentEntity {
     }
 
     public String getTrainerFullName() {
-        return employee.getPerson().getFullName();
+        return employee.getPerson() != null ? employee.getPerson().getFullName() : "";
     }
 
 
@@ -194,7 +207,6 @@ public class Trainer extends AbstractParentEntity {
         return party;
     }
 
-    @Transient
     @MetaProperty(related = {"informationTrainer", "informationTrainerLang2", "informationTrainerLang3"})
     public String getInformationTrainerLang() {
         UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
@@ -225,7 +237,6 @@ public class Trainer extends AbstractParentEntity {
         return informationTrainer;
     }
 
-    @Transient
     @MetaProperty(related = {"trainerGreeting", "trainerGreetingLang2", "trainerGreetingLang3"})
     public String getTrainerGreetingLang() {
         UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");

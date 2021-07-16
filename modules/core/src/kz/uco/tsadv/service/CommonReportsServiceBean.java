@@ -8,6 +8,7 @@ import com.haulmont.reports.app.service.ReportService;
 import com.haulmont.reports.entity.Report;
 import com.haulmont.yarg.reporting.ReportOutputDocument;
 import kz.uco.base.entity.dictionary.DicCompany;
+import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.model.CertificateRequest;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -16,6 +17,11 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Service(CommonReportsService.NAME)
@@ -34,6 +40,8 @@ public class CommonReportsServiceBean implements CommonReportsService {
     protected FileStorageAPI fileStorageAPI;
     @Inject
     protected EmployeeService employeeService;
+    @Inject
+    private CommonService commonService;
 
     public FileDescriptor getReportByCertificateRequest(@Nonnull CertificateRequest request) {
 
@@ -80,5 +88,21 @@ public class CommonReportsServiceBean implements CommonReportsService {
         }
         file = dataManager.commit(file);
         return file;
+    }
+
+    @Override
+    public Map<String, Object> downloadReportByCode(@NotNull String reportCode, @NotNull Map<String, Object> params) {
+        Report report = commonService.getEntity(Report.class, reportCode);
+        ReportOutputDocument document = reportService.createReport(report, params);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("extension", document.getReportOutputType().getId());
+        response.put("content", new String(Base64.getEncoder().encode(document.getContent()), StandardCharsets.UTF_8));
+        return response;
+    }
+
+    @Override
+    public Map<String, Object> downloadReportByCode(String reportCode, String entityParamName, UUID entityId) {
+        return this.downloadReportByCode(reportCode, ParamsMap.of(entityParamName, entityId));
     }
 }

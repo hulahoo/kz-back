@@ -176,6 +176,20 @@
             <item id="hrGradeRuleGroups"
                   screen="tsadv$GradeRule.browse"/>
         </menu>
+        <menu id="incentive">
+            <item id="organizationIncentives"
+                  screen="tsadv_IncentiveBrowse"
+                  caption="mainMsg://org.structure"
+                  openType="NEW_TAB">
+                <param name="ELEMENT_TYPE" value="ORGANIZATION"/>
+            </item>
+            <item id="positionIncentives"
+                  screen="tsadv_IncentiveBrowse"
+                  caption="mainMsg://positions"
+                  openType="NEW_TAB">
+                <param name="ELEMENT_TYPE" value="POSITION"/>
+            </item>
+        </menu>
         <menu id="hrCompetences"
               icon="font-icon:BRIEFCASE">
             <item id="hrCompetenceGroups"
@@ -527,6 +541,9 @@
             <item screen="tsadv$DicEducationalEstablishmentType.browse"/>
             <item screen="tsadv$DicEducationalEstablishment.browse"/>
             <item screen="tsadv_DicLearningProof.browse"/>
+            <item screen="tsadv_DicProgrammCode.browse"/>
+            <item screen="tsadv_DicAssessmentMethod.browse"/>
+            <item screen="tsadv_DicTypeOfTraining.browse"/>
         </menu>
         <menu id="lrnContent">
             <item id="lrnLearningObjects"
@@ -613,6 +630,7 @@
         <item screen="tsadv$LearnerGroup.browse"/>
         <item screen="tsadv$Learner.browse"/>
         <item screen="tsadv$LmsSlider.browse"/>
+        <item screen="base$PositionGroupExtCourseMatrix.browse"/>
     </menu>
     <menu id="recruitment"
           icon="font-icon:SEARCH"
@@ -797,10 +815,12 @@
         </menu>
         <item screen="tsadv_News.browse"/>
         <item screen="base$AppNameAndLogo.browse"/>
+        <item screen="tsadv_PortalMenuCustomization.browse"
+              caption="mainMsg://menu_config.tsadv_PortalMenuCustomization.browse"/>
     </menu>
     <menu id="help" icon="font-icon:QUESTION_CIRCLE">
         <item id="aboutWindow" openType="DIALOG"/>
-        <item id="printDomain"/>
+        <item id="printDomain" class="com.haulmont.cuba.web.app.domain.DomainProvider"/>
         <separator/>
         <item id="settings"/>
         <item id="logWindow"/>

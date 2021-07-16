@@ -169,10 +169,10 @@ public class AddressEdit extends AbstractEditor<Address> {
     }
 
     protected boolean hasAddres(Address address) {
-        Map<String, Object> param = ParamsMap.of("personGroupId", address.getPersonGroup().getId(),
+        Map<String, Object> param = new HashMap<>(ParamsMap.of("personGroupId", address.getPersonGroup().getId(),
                 "startDate", address.getStartDate(),
                 "endDate", address.getEndDate(),
-                "id", address.getId());
+                "id", address.getId()));
         String jpql = "select e from tsadv$Address e " +
                 " where e.personGroup.id = :personGroupId " +
                 "   and e.startDate <= :endDate and e.endDate >= :startDate " +

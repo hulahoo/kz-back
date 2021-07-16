@@ -30,6 +30,15 @@
                 <dateField id="startDateField" property="startDate"/>
                 <dateField id="endDateField" property="endDate"/>
             </column>
+            <column width="350px">
+                <pickerField property="managerPositionGroup.position.organizationGroupExt" editable="false"
+                             caption="msg://manager.organization"/>
+                <pickerField property="assistancePositionGroup.position.organizationGroupExt" editable="false"
+                             caption="msg://assistance.organization"/>
+                <pickerField property="managerPositionGroup.company" editable="false" caption="msg://manager.company"/>
+                <pickerField property="assistancePositionGroup.company" editable="false"
+                             caption="msg://assistance.company"/>
+            </column>
         </form>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>

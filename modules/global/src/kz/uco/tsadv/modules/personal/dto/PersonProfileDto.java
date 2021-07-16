@@ -33,6 +33,26 @@ public class PersonProfileDto extends PersonDto implements Serializable {
 
     private String firstLastName;
 
+    private String nationality;
+
+    private UUID assignmentGroupId;
+
+    public UUID getAssignmentGroupId() {
+        return assignmentGroupId;
+    }
+
+    public void setAssignmentGroupId(UUID assignmentGroupId) {
+        this.assignmentGroupId = assignmentGroupId;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
     public String getFirstLastName() {
         return firstLastName;
     }
