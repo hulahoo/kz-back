@@ -30,7 +30,6 @@ public class ChangeAbsenceDaysRequestListener implements BeforeUpdateEntityListe
     IntegrationRestService integrationRestService;
     protected final String APPROVED_STATUS = "APPROVED";
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    protected String CHANGE_ABSENCE_DAYS_REQUEST_API_URL = integrationConfig.getChangeAbsenceDaysRequestUrl();
 
     @Override
     public void onBeforeUpdate(ChangeAbsenceDaysRequest entity, EntityManager entityManager) {
@@ -39,7 +38,7 @@ public class ChangeAbsenceDaysRequestListener implements BeforeUpdateEntityListe
 
             setupUnirest();
             HttpResponse<String> response = Unirest
-                    .post(CHANGE_ABSENCE_DAYS_REQUEST_API_URL)
+                    .post(getApiUrl())
                     .body(changeAbsenceDaysRequestJson)
                     .asString();
 
@@ -67,7 +66,7 @@ public class ChangeAbsenceDaysRequestListener implements BeforeUpdateEntityListe
 
             setupUnirest();
             HttpResponse<String> response = Unirest
-                    .post(CHANGE_ABSENCE_DAYS_REQUEST_API_URL)
+                    .post(getApiUrl())
                     .body(changeAbsenceDaysRequestJson)
                     .asString();
 
@@ -127,6 +126,10 @@ public class ChangeAbsenceDaysRequestListener implements BeforeUpdateEntityListe
         changeAbsenceDaysRequestJson.setCompanyCode(companyCode);
 
         return changeAbsenceDaysRequestJson;
+    }
+
+    protected String getApiUrl() {
+        return integrationConfig.getChangeAbsenceDaysRequestUrl();
     }
 
     protected void setupUnirest() {

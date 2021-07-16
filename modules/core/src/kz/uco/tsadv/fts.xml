@@ -976,9 +976,9 @@
         <entity class="kz.uco.tsadv.modules.personal.model.Analytics">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.global.entity.UserExtPersonGroup">
-            <include re=".*"/>
-        </entity>
+<!--        <entity class="kz.uco.tsadv.global.entity.UserExtPersonGroup">-->
+<!--            <include re=".*"/>-->
+<!--        </entity>-->
         <entity class="kz.uco.tsadv.modules.personal.model.OrganizationProperties">
             <include re=".*"/>
         </entity>
@@ -1747,7 +1747,7 @@
         <entity class="kz.uco.tsadv.modules.personal.model.CertificateRequest">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicLangaugeLevel">
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicLanguageLevel">
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.personal.model.PersonLanguage">

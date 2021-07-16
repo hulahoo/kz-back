@@ -38,7 +38,6 @@ public class AbsenceRvdRequestChangedListener {
     protected SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
     protected SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss");
     protected String APPROVED_STATUS = "APPROVED";
-    protected String ABSENCE_RVD_REQUEST_API_URL = integrationConfig.getAbsenceRvdRequestUrl();
     @Inject
     protected DataManager dataManager;
 
@@ -173,7 +172,7 @@ public class AbsenceRvdRequestChangedListener {
 
                         setupUnirest();
                         HttpResponse<String> response = Unirest
-                                .post(ABSENCE_RVD_REQUEST_API_URL)
+                                .post(getApiUrl())
                                 .body(absenceRvdRequestJson)
                                 .asString();
 
@@ -193,7 +192,7 @@ public class AbsenceRvdRequestChangedListener {
 
                         setupUnirest();
                         HttpResponse<String> response = Unirest
-                                .post(ABSENCE_RVD_REQUEST_API_URL)
+                                .post(getApiUrl())
                                 .body(absenceRvdRequestJson)
                                 .asString();
 
@@ -277,5 +276,9 @@ public class AbsenceRvdRequestChangedListener {
         absenceRvdRequestDataJson.setCompanyCode(companyCode);
 
         return absenceRvdRequestDataJson;
+    }
+
+    protected String getApiUrl() {
+        return integrationConfig.getAbsenceRvdRequestUrl();
     }
 }

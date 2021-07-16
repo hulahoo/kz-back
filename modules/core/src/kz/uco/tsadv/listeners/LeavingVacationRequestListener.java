@@ -34,7 +34,6 @@ public class LeavingVacationRequestListener implements BeforeUpdateEntityListene
 
     @Inject
     protected IntegrationConfig integrationConfig;
-    protected String MATERNITY_RECALL_API_URL = integrationConfig.getLeavingVacationRequestUrl();
 
     @Override
     public void onBeforeInsert(LeavingVacationRequest entity, EntityManager entityManager) {
@@ -132,7 +131,7 @@ public class LeavingVacationRequestListener implements BeforeUpdateEntityListene
     }
 
     protected String getApiUrl() {
-        return MATERNITY_RECALL_API_URL;
+        return integrationConfig.getLeavingVacationRequestUrl();
     }
 
     protected String getFormattedDateString(Date date) {

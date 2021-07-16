@@ -30,7 +30,6 @@ public class ScheduleOffsetsRequestChangedListener implements BeforeUpdateEntity
     protected IntegrationConfig integrationConfig;
     protected String APPROVED_STATUS = "APPROVED";
     protected SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-    protected String SCHEDULE_OFFSET_REQUEST_API_URL = integrationConfig.getScheduleOffsetsRequestUrl();
 
     @Override
     public void onBeforeInsert(ScheduleOffsetsRequest entity, EntityManager entityManager) {
@@ -39,7 +38,7 @@ public class ScheduleOffsetsRequestChangedListener implements BeforeUpdateEntity
 
             setupUnirest();
             HttpResponse<String> response = Unirest
-                    .post(SCHEDULE_OFFSET_REQUEST_API_URL)
+                    .post(getApiUrl())
                     .body(scheduleOffsetsRequestJson)
                     .asString();
 
@@ -66,7 +65,7 @@ public class ScheduleOffsetsRequestChangedListener implements BeforeUpdateEntity
 
             setupUnirest();
             HttpResponse<String> response = Unirest
-                    .post(SCHEDULE_OFFSET_REQUEST_API_URL)
+                    .post(getApiUrl())
                     .body(scheduleOffsetsRequestJson)
                     .asString();
 
@@ -130,6 +129,10 @@ public class ScheduleOffsetsRequestChangedListener implements BeforeUpdateEntity
         Unirest.config().addDefaultHeader("Content-Type", "application/json");
         Unirest.config().addDefaultHeader("Accept", "*/*");
         Unirest.config().addDefaultHeader("Accept-Encoding", "gzip, deflate, br");
+    }
+
+    protected String getApiUrl() {
+        return integrationConfig.getScheduleOffsetsRequestUrl();
     }
 
     protected boolean isApproved(ScheduleOffsetsRequest entity, EntityManager entityManager) {
