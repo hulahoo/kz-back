@@ -742,6 +742,7 @@
         <item screen="bproc_DecisionTableModelerScreen"/>
         <!--        <item screen="tsadv$BpmRolesDefiner.browse"/>-->
         <item screen="tsadv_BpmRolesDefinerCompany" caption="mainMsg://menu_config.tsadv_BpmRolesDefinerCompany"/>
+        <item screen="tsadv$ProcInstanceV.browse" caption="mainMsg://menu_config.tsadv$ProcInstanceV.browse"/>
     </menu>
     <menu id="application-uactivity" insertBefore="administration">
         <menu id="Tasks">
@@ -952,7 +953,6 @@
     <!--        <item id="bpm$ProcModel.lookup"/>-->
     <!--        <item id="bpm$ProcDefinition.lookup"/>-->
     <!--        <item id="bpm$ProcInstance.lookup"/>-->
-    <!--        <item screen="tsadv$ProcInstanceV.browse" id="tsadv$ProcInstanceV.browse"/>-->
     <!--        <item id="bpm$ProcTask.lookup"/>-->
     <!--        <item id="bpm$ProcAttachmentType.lookup"/>-->
     <!--        <item id="stencilSetEditor"/>-->

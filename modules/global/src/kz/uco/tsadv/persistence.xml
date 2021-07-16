@@ -664,5 +664,6 @@
         <class>kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators</class>
         <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveIndicators</class>
         <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult</class>
+        <class>kz.uco.tsadv.modules.bpm.BprocReassignment</class>
     </persistence-unit>
 </persistence>

@@ -20801,7 +20801,7 @@
     <view class="kz.uco.tsadv.entity.dbview.ProcInstanceV"
           extends="_base"
           name="procInstanceV-view">
-        <property name="startedBy"
+        <property name="startUser"
                   view="_minimal">
             <property name="firstName"/>
             <property name="lastName"/>

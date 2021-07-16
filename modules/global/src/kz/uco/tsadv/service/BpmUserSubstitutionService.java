@@ -13,16 +13,17 @@ public interface BpmUserSubstitutionService {
 
     String getBpmUserSubstitution(TsadvUser userExt, Date date, boolean path);
 
-    /**
-     * @param userExt
-     * @param path
-     * @return user id or user' ids
-     */
     String getCurrentBpmUserSubstitution(TsadvUser userExt, boolean path);
 
     BpmUserSubstitution reloadBpmUserSubstitution(String id);
 
     List<BpmUserSubstitution> getBpmUserSubstitutionList(TsadvUser userExt);
+
+    boolean validate(BpmUserSubstitution bpmUserSubstitution);
+
+    BpmUserSubstitution save(BpmUserSubstitution bpmUserSubstitution);
+
+    boolean hasBpmUserSubstitution(BpmUserSubstitution bpmUserSubstitution);
 
     boolean hasBpmUserSubstitution(UUID entityId, TsadvUser user, Date startDate, Date endDate);
 

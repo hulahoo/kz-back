@@ -2,9 +2,15 @@ package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
+import com.haulmont.cuba.core.entity.contracts.Id;
+import com.haulmont.cuba.core.global.*;
 import kz.uco.tsadv.entity.tb.BpmUserSubstitution;
+import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.administration.TsadvUser;
+import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
+import kz.uco.tsadv.modules.personal.model.AssignmentExt;
+import kz.uco.tsadv.modules.personal.model.PositionExt;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -18,6 +24,14 @@ public class BpmUserSubstitutionServiceBean implements BpmUserSubstitutionServic
 
     @Inject
     private Persistence persistence;
+    @Inject
+    protected DataManager dataManager;
+    @Inject
+    protected Messages messages;
+    @Inject
+    protected Metadata metadata;
+    @Inject
+    protected PositionService positionService;
 
     @Override
     public String getBpmUserSubstitution(TsadvUser userExt, Date date, boolean path) {
@@ -69,6 +83,59 @@ public class BpmUserSubstitutionServiceBean implements BpmUserSubstitutionServic
                         .setParameter("userId", userExt.getId())
                         .setViewName("bpmUserSubstitution-view")
                         .getResultList());
+    }
+
+    @Override
+    public boolean validate(BpmUserSubstitution bpmUserSubstitution) {
+        TsadvUser user = bpmUserSubstitution.getUser();
+        PositionExt position = positionService.getPosition(user.getId(), new View(PositionExt.class).addProperty("group", new View(PositionGroupExt.class)));
+
+        if (position == null || position.getGroup() == null)
+            throw new PortalException(messages.getMessage(BpmUserSubstitutionServiceBean.class, "bpmUserSubstitution.validation.position.not.found"));
+
+        long countAssignment = dataManager.getCount(LoadContext.create(AssignmentExt.class)
+                .setQuery(LoadContext.createQuery("select e from base$AssignmentExt e " +
+                        "   where e.positionGroup.id = :positionGroupId " +
+                        "       and current_date between e.startDate and e.endDate " +
+                        "       and e.primaryFlag = 'TRUE' " +
+                        "       and e.assignmentStatus.code in ('ACTIVE','SUSPENDED')")
+                        .setParameter("positionGroupId", position.getGroup().getId())));
+
+        if (countAssignment != 1)
+            throw new PortalException(messages.getMessage(BpmUserSubstitutionServiceBean.class, "bpmUserSubstitution.validation.assignment.more.than.1"));
+
+        if (bpmUserSubstitution.getSubstitutedUser().getId().equals(user.getId())) {
+            throw new PortalException(messages.getMessage(BpmUserSubstitutionServiceBean.class, "bpmUserSubstitution.validation.sameUser"));
+        }
+        if (this.hasBpmUserSubstitution(bpmUserSubstitution)) {
+            throw new PortalException(messages.getMessage(BpmUserSubstitutionServiceBean.class, "bpmUserSubstitution.validation.haveBpmUserSubstitution"));
+        }
+        if (this.isCycle(bpmUserSubstitution)) {
+            throw new PortalException(messages.getMessage(BpmUserSubstitutionServiceBean.class, "bpmUserSubstitution.validation.cycle"));
+        }
+        return true;
+    }
+
+    @Override
+    public BpmUserSubstitution save(BpmUserSubstitution bpmUserSubstitution) {
+        validate(bpmUserSubstitution);
+
+        BpmUserSubstitution entityToCommit = dataManager.load(Id.of(bpmUserSubstitution.getId(), BpmUserSubstitution.class))
+                .view("bpmUserSubstitution-view")
+                .optional()
+                .orElse(metadata.create(BpmUserSubstitution.class));
+
+        entityToCommit.setEndDate(bpmUserSubstitution.getEndDate());
+        entityToCommit.setStartDate(bpmUserSubstitution.getStartDate());
+        entityToCommit.setUser(bpmUserSubstitution.getUser());
+        entityToCommit.setSubstitutedUser(bpmUserSubstitution.getSubstitutedUser());
+
+        return dataManager.commit(entityToCommit);
+    }
+
+    @Override
+    public boolean hasBpmUserSubstitution(BpmUserSubstitution bpmUserSubstitution) {
+        return hasBpmUserSubstitution(bpmUserSubstitution.getId(), bpmUserSubstitution.getUser(), bpmUserSubstitution.getStartDate(), bpmUserSubstitution.getEndDate());
     }
 
     @Override
