@@ -150,6 +150,7 @@
                 <entry key="tsadv_ExecutiveAssistantService" value="kz.uco.tsadv.service.ExecutiveAssistantService"/>
                 <entry key="tsadv_VacationScheduleRequestService"
                        value="kz.uco.tsadv.service.portal.VacationScheduleRequestService"/>
+                <entry key="tsadv_IncentiveService" value="kz.uco.tsadv.service.IncentiveService"/>
             </map>
         </property>
     </bean>

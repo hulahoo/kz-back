@@ -76,34 +76,44 @@
                         dataLoader="vacationScheduleRequestsDl">
                     <properties include=".*"/>
                 </filter>
-                <groupTable id="vacationScheduleRequestsTable"
-                            width="100%"
-                            dataContainer="vacationScheduleRequestsDc">
+                <dataGrid id="vacationScheduleRequestsTable"
+                          selectionMode="MULTI_CHECK"
+                          width="100%"
+                          dataContainer="vacationScheduleRequestsDc">
                     <actions>
                         <action id="edit" type="edit"/>
                         <action id="remove" type="remove"/>
+                        <action id="sendToOracle" trackSelection="true"/>
                     </actions>
                     <columns>
-                        <column id="checkList" caption=" " generator="checkListGenerator"/>
-                        <column id="requestNumber" link="true" linkInvoke="openRequest"/>
-                        <column id="personGroup.fioWithEmployeeNumber" link="true" linkInvoke="openPersonCard"/>
+                        <!--                        <column id="checkList" caption=" " generator="checkListGenerator"/>-->
+                        <column id="requestNumber" property="requestNumber"
+                                generatedType="com.haulmont.cuba.gui.components.Component">
+                            <componentRenderer/>
+                            <renderer type="com.haulmont.cuba.gui.components.DataGrid$ComponentRenderer"/>
+                        </column>
+                        <column id="personGroup" property="personGroup.fioWithEmployeeNumber"
+                                generatedType="com.haulmont.cuba.gui.components.Component">
+                            <renderer type="com.haulmont.cuba.gui.components.DataGrid$ComponentRenderer"/>
+                        </column>
                         <column id="personGroup.currentAssignment.organizationGroup"
-                                captionProperty="personGroup.currentAssignment.organizationGroup.organization.organizationName"/>
+                                property="personGroup.currentAssignment.organizationGroup.organization"/>
                         <column id="personGroup.currentAssignment.jobGroup"
-                                captionProperty="personGroup.currentAssignment.jobGroup.job.jobName"/>
-                        <column id="sentToOracle"/>
-                        <column id="startDate"/>
-                        <column id="endDate"/>
-                        <column id="absenceDays"/>
-                        <column id="comment"/>
+                                property="personGroup.currentAssignment.jobGroup.job"/>
+                        <column id="sentToOracle" property="sentToOracle"/>
+                        <column id="startDate" property="startDate"/>
+                        <column id="endDate" property="endDate"/>
+                        <column id="absenceDays" property="absenceDays"/>
+                        <column id="comment" property="comment"/>
                     </columns>
                     <rowsCount/>
                     <buttonsPanel>
                         <button id="editBtn" action="vacationScheduleRequestsTable.edit"/>
                         <button id="removeBtn" action="vacationScheduleRequestsTable.remove"/>
-                        <button id="sendToOracleBtn" caption="msg://sendToOracle"/>
+                        <button id="sendToOracleBtn" action="vacationScheduleRequestsTable.sendToOracle"
+                                caption="msg://sendToOracle"/>
                     </buttonsPanel>
-                </groupTable>
+                </dataGrid>
             </tab>
             <tab id="vacationScheduleTab"
                  caption="msg://vacationSchedule"
