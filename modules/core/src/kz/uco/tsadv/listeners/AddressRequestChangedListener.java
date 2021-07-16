@@ -7,11 +7,13 @@ import com.haulmont.cuba.core.global.View;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kz.uco.tsadv.api.BaseResult;
+import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.modules.integration.jsonobject.AddressRequestDataJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AddressRequest;
 import kz.uco.tsadv.service.IntegrationRestService;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -26,14 +28,16 @@ import java.util.stream.Collectors;
 @Component("tsadv_AddressRequestChangedListener")
 public class AddressRequestChangedListener {
 
-    protected static final Logger log = org.slf4j.LoggerFactory.getLogger(AddressRequestChangedListener.class);
+    protected static final Logger log = LoggerFactory.getLogger(AddressRequestChangedListener.class);
     @Inject
     protected DataManager dataManager;
     @Inject
     protected IntegrationRestService integrationRestService;
     protected String APPROVED_STATUS = "APPROVED";
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    protected String personinfoRequestUrl = "http://10.2.200.101:8290/api/ahruco/address/request";
+    @Inject
+    protected IntegrationConfig integrationConfig;
+    protected String ADDRESS_REQUEST_API_URL = integrationConfig.getAddressRequestUrl();
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void afterCommit(EntityChangedEvent<AddressRequest, UUID> event) {
@@ -57,7 +61,7 @@ public class AddressRequestChangedListener {
                         .view("addressRequest-view").one();
                 DicRequestStatus requestStatus = addressRequest.getStatus();
                 if (APPROVED_STATUS.equals(requestStatus.getCode()) && !APPROVED_STATUS.equals(oldStatus != null
-                        ? oldStatus.getCode() : "")) {
+                        ? oldStatus.getCode() : "") && !integrationConfig.getAddressRequestOff()) {
                     addressRequestDataJson.setPersonId(addressRequest.getPersonGroup().getLegacyId());
                     addressRequestDataJson.setRequestNumber(addressRequest.getRequestNumber().toString());
                     addressRequestDataJson.setLegacyId(addressRequest.getBaseAddress() != null
@@ -85,7 +89,7 @@ public class AddressRequestChangedListener {
                             : "");
                     setupUnirest();
                     HttpResponse<String> response = Unirest
-                            .post(personinfoRequestUrl)
+                            .post(ADDRESS_REQUEST_API_URL)
                             .body(addressRequestDataJson)
                             .asString();
 
@@ -114,7 +118,7 @@ public class AddressRequestChangedListener {
     }
 
     protected void setupUnirest() {
-        Unirest.config().setDefaultBasicAuth("ahruco", "ahruco");
+        Unirest.config().setDefaultBasicAuth(integrationConfig.getBasicAuthLogin(), integrationConfig.getBasicAuthPassword());
         Unirest.config().addDefaultHeader("Content-Type", "application/json");
         Unirest.config().addDefaultHeader("Accept", "*/*");
         Unirest.config().addDefaultHeader("Accept-Encoding", "gzip, deflate, br");

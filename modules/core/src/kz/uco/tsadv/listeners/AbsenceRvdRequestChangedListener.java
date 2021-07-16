@@ -10,6 +10,7 @@ import kong.unirest.Unirest;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.api.Null;
+import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.modules.integration.jsonobject.AbsenceRvdRequestDataJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest;
@@ -32,12 +33,14 @@ public class AbsenceRvdRequestChangedListener {
     protected TransactionalDataManager transactionalDataManager;
     @Inject
     IntegrationRestService integrationRestService;
-
+    @Inject
+    protected IntegrationConfig integrationConfig;
     protected SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
     protected SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss");
     protected String APPROVED_STATUS = "APPROVED";
+    protected String ABSENCE_RVD_REQUEST_API_URL = integrationConfig.getAbsenceRvdRequestUrl();
     @Inject
-    private DataManager dataManager;
+    protected DataManager dataManager;
 
 //    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
 //    public void beforeCommit(EntityChangedEvent<AbsenceRvdRequest, UUID> event) {
@@ -164,13 +167,13 @@ public class AbsenceRvdRequestChangedListener {
                         .view("absenceRvdRequest.edit").one();
                 DicRequestStatus requestStatus = absenceRvdRequest.getStatus();
                 if (APPROVED_STATUS.equals(requestStatus.getCode()) && !APPROVED_STATUS.equals(oldStatus != null
-                        ? oldStatus.getCode() : "")) {
+                        ? oldStatus.getCode() : "") && !integrationConfig.getAbsenceRvdRequestOff()) {
                     if (absenceRvdRequest.getType().getWorkOnWeekend()) {
                         absenceRvdRequestJson = getAbsenceRvdRequestDataJson(absenceRvdRequest, true);
 
                         setupUnirest();
                         HttpResponse<String> response = Unirest
-                                .post("http://10.2.200.101:8290/api/ahruco/work/holiday/request")
+                                .post(ABSENCE_RVD_REQUEST_API_URL)
                                 .body(absenceRvdRequestJson)
                                 .asString();
 
@@ -190,7 +193,7 @@ public class AbsenceRvdRequestChangedListener {
 
                         setupUnirest();
                         HttpResponse<String> response = Unirest
-                                .post("http://10.2.200.101:8290/api/ahruco/work/night/request")
+                                .post(ABSENCE_RVD_REQUEST_API_URL)
                                 .body(absenceRvdRequestJson)
                                 .asString();
 
@@ -220,7 +223,7 @@ public class AbsenceRvdRequestChangedListener {
     }
 
     protected void setupUnirest() {
-        Unirest.config().setDefaultBasicAuth("ahruco", "ahruco");
+        Unirest.config().setDefaultBasicAuth(integrationConfig.getBasicAuthLogin(), integrationConfig.getBasicAuthPassword());
         Unirest.config().addDefaultHeader("Content-Type", "application/json");
         Unirest.config().addDefaultHeader("Accept", "*/*");
         Unirest.config().addDefaultHeader("Accept-Encoding", "gzip, deflate, br");

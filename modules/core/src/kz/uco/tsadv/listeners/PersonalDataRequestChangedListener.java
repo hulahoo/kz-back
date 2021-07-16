@@ -8,6 +8,7 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.tsadv.api.BaseResult;
+import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.modules.integration.jsonobject.PersonalDataRequestDataJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
@@ -33,7 +34,9 @@ public class PersonalDataRequestChangedListener {
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Inject
     protected IntegrationRestService integrationRestService;
-    protected String personinfoRequestUrl = "http://10.2.200.101:8290/api/ahruco/personinfo/request";
+    @Inject
+    protected IntegrationConfig integrationConfig;
+    protected String PERSONAL_DATA_REQUEST_API_URL = integrationConfig.getPersonalDataRequestUrl();
 
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -57,7 +60,7 @@ public class PersonalDataRequestChangedListener {
                         .view("personalDataRequest-for-integration").one();
                 DicRequestStatus requestStatus = personalDataRequest.getStatus();
                 if (APPROVED_STATUS.equals(requestStatus.getCode()) && !APPROVED_STATUS.equals(oldStatus != null
-                        ? oldStatus.getCode() : "")) {
+                        ? oldStatus.getCode() : "") && !integrationConfig.getPersonalDataRequestOff()) {
                     personalDataRequestDataJson.setPersonId(personalDataRequest.getPersonGroup().getLegacyId());
                     personalDataRequestDataJson.setRequestNumber(personalDataRequest.getRequestNumber().toString());
                     personalDataRequestDataJson.setLastName(personalDataRequest.getLastName());
@@ -85,7 +88,7 @@ public class PersonalDataRequestChangedListener {
                     personalDataRequestDataJson.setEffectiveDate(getFormattedDateString(BaseCommonUtils.getSystemDate()));
                     setupUnirest();
                     HttpResponse<String> response = Unirest
-                            .post(personinfoRequestUrl)
+                            .post(PERSONAL_DATA_REQUEST_API_URL)
                             .body(personalDataRequestDataJson)
                             .asString();
 
@@ -115,7 +118,7 @@ public class PersonalDataRequestChangedListener {
     }
 
     protected void setupUnirest() {
-        Unirest.config().setDefaultBasicAuth("ahruco", "ahruco");
+        Unirest.config().setDefaultBasicAuth(integrationConfig.getBasicAuthLogin(), integrationConfig.getBasicAuthPassword());
         Unirest.config().addDefaultHeader("Content-Type", "application/json");
         Unirest.config().addDefaultHeader("Accept", "*/*");
         Unirest.config().addDefaultHeader("Accept-Encoding", "gzip, deflate, br");
