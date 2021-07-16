@@ -7,11 +7,13 @@ import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.dictionary.DicCountry;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
 import kz.uco.tsadv.modules.personal.dictionary.DicKato;
 import kz.uco.tsadv.modules.personal.dictionary.DicStreetType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -249,5 +251,12 @@ public class AddressRequest extends AbstractBprocRequest {
     @Override
     public String getProcessDefinitionKey() {
         return PROCESS_DEFINITION_KEY;
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        super.postConstruct();
+        this.startDate = CommonUtils.getSystemDate();
+        this.endDate = CommonUtils.getEndOfTime();
     }
 }
