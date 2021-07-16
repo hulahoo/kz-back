@@ -23909,7 +23909,6 @@
             </property>
             <property name="legacyId"/>
         </property>
-        <property name="file" view="_minimal"/>
         <property name="editedPersonDocument" view="_minimal">
             <property name="legacyId"/>
         </property>
