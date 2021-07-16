@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.organizationincentiveflag">
+    <data>
+        <instance id="organizationIncentiveFlagDc"
+                  class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveFlag"
+                  view="_local">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="AUTO"
+                width="AUTO"
+                modal="true"
+                forceDialog="true"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="organizationIncentiveFlagDc">
+            <column width="250px">
+                <checkBox id="isIncentiveField" property="isIncentive"/>
+                <dateField id="dateFromField" property="dateFrom"/>
+                <dateField id="dateToField" property="dateTo"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
