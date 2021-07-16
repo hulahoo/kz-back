@@ -17447,6 +17447,7 @@
         <property name="country"
                   view="_minimal">
             <property name="code"/>
+            <property name="legacyId"/>
             <property name="langValue1"/>
             <property name="langValue2"/>
             <property name="langValue3"/>
@@ -17458,6 +17459,7 @@
         <property name="status" view="_local"/>
         <property name="baseAddress"
                   view="_minimal">
+            <property name="legacyId"/>
             <property name="personGroup"
                       view="_minimal"/>
             <property name="addressType"
@@ -17474,7 +17476,11 @@
             <property name="endDate"/>
         </property>
         <property name="personGroup"
-                  view="_minimal"/>
+                  view="_minimal">
+            <property name="legacyId"/>
+            <property name="company" view="_local"/>
+        </property>
+        <property name="streetType" view="_local"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.PersonExt"
           extends="_local"
