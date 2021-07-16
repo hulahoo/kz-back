@@ -121,6 +121,7 @@ public class EmployeeServiceBean implements EmployeeService {
                 .parameter("personGroupId", personGroupId)
                 .parameter("date", CommonUtils.getSystemDate())
                 .view(new View(AssignmentExt.class)
+                        .addProperty("group", new View(AssignmentGroupExt.class))
                         .addProperty("organizationGroup", new View(OrganizationGroupExt.class)
                                 .addProperty("organizationName")
                                 .addProperty("list", viewRepository.getView(OrganizationExt.class, View.LOCAL)))
@@ -165,6 +166,7 @@ public class EmployeeServiceBean implements EmployeeService {
         dto.setCitizenship(person.getCitizenship() != null ? person.getCitizenship().getLangValue() : "");
         dto.setNationality(person.getNationality() != null ? person.getNationality().getLangValue() : "");
         dto.setImageId(person.getImage() != null ? person.getImage().getId() : null);
+        dto.setAssignmentGroupId(assignment.getGroup().getId());
 
         PositionGroupExt positionGroup = this.getPositionGroupByPersonGroupId(personGroupId, new View(PositionGroupExt.class)
                 .addProperty("list", new View(PositionExt.class).addProperty("startDate").addProperty("endDate")));

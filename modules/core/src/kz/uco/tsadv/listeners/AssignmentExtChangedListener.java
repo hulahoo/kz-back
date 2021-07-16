@@ -37,24 +37,24 @@ public class AssignmentExtChangedListener {
     }
 
     protected void repeatCheck(AssignmentExt assignmentExt, AssignmentGroupExt assignmentGroupExt) {
-        if (assignmentGroupExt.getPersonGroup() != null
-                && !assignmentGroupExt.getPersonGroup().equals(assignmentExt.getPersonGroup())) {
+        if (assignmentGroupExt.getPersonGroup() == null || (assignmentGroupExt.getPersonGroup() != null
+                && !assignmentGroupExt.getPersonGroup().equals(assignmentExt.getPersonGroup()))) {
             assignmentGroupExt.setPersonGroup(assignmentExt.getPersonGroup());
         }
-        if (assignmentGroupExt.getOrganizationGroup() != null
-                && !assignmentGroupExt.getOrganizationGroup().equals(assignmentExt.getOrganizationGroup())) {
+        if (assignmentGroupExt.getOrganizationGroup() == null || (assignmentGroupExt.getOrganizationGroup() != null
+                && !assignmentGroupExt.getOrganizationGroup().equals(assignmentExt.getOrganizationGroup()))) {
             assignmentGroupExt.setOrganizationGroup(assignmentExt.getOrganizationGroup());
         }
-        if (assignmentGroupExt.getPositionGroup() != null
-                && !assignmentGroupExt.getPositionGroup().equals(assignmentExt.getPositionGroup())) {
+        if (assignmentGroupExt.getOrganizationGroup() == null || (assignmentGroupExt.getPositionGroup() != null
+                && !assignmentGroupExt.getPositionGroup().equals(assignmentExt.getPositionGroup()))) {
             assignmentGroupExt.setPositionGroup(assignmentExt.getPositionGroup());
         }
-        if (assignmentGroupExt.getJobGroup() != null
-                && !assignmentGroupExt.getJobGroup().equals(assignmentExt.getJobGroup())) {
+        if (assignmentGroupExt.getJobGroup() == null || (assignmentGroupExt.getJobGroup() != null
+                && !assignmentGroupExt.getJobGroup().equals(assignmentExt.getJobGroup()))) {
             assignmentGroupExt.setJobGroup(assignmentExt.getJobGroup());
         }
-        if (assignmentGroupExt.getGradeGroup() != null
-                && assignmentGroupExt.getGradeGroup().equals(assignmentExt.getGradeGroup())) {
+        if (assignmentGroupExt.getGradeGroup() == null || (assignmentGroupExt.getGradeGroup() != null
+                && assignmentGroupExt.getGradeGroup().equals(assignmentExt.getGradeGroup()))) {
             assignmentGroupExt.setGradeGroup(assignmentExt.getGradeGroup());
         }
     }

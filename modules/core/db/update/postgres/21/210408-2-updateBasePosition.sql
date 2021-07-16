@@ -1,0 +1,1 @@
+alter table BASE_POSITION add column FUNCTIONAL_MANAGER_POSITION_GROUP_ID uuid ;

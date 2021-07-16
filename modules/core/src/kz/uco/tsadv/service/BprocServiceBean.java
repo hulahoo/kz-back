@@ -10,6 +10,8 @@ import com.haulmont.addon.bproc.service.BprocFormService;
 import com.haulmont.addon.bproc.service.BprocHistoricService;
 import com.haulmont.addon.bproc.service.BprocRepositoryService;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.chile.core.datatypes.Datatype;
+import com.haulmont.chile.core.datatypes.Datatypes;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
@@ -334,6 +336,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     public <T extends AbstractBprocRequest> void sendNotificationAndActivity(T entity, User user, ActivityType activityType, String notificationTemplateCode) {
 
         User sessionUser = userSessionSource.getUserSession().getUser();
+        Datatype<Long> datatype = Datatypes.getNN(Long.class);
 
         notificationTemplateCode = changeNotificationTemplateCode(notificationTemplateCode, entity);
 
@@ -352,8 +355,10 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         notificationParams.put("requestFrontLinkEn", "");
 
         String requestFrontLink = getRequestLinkFront(entity);
-        notificationParams.put("entityFrontLinkRu", String.format(requestFrontLink, "Открыть заявку " + entity.getRequestNumber()));
-        notificationParams.put("entityFrontLinkEn", String.format(requestFrontLink, "Open request " + entity.getRequestNumber()));
+        notificationParams.put("entityFrontLinkRu", String.format(requestFrontLink, "Открыть заявку " + datatype.format(entity.getRequestNumber())));
+        notificationParams.put("entityFrontLinkEn", String.format(requestFrontLink, "Open request " + datatype.format(entity.getRequestNumber())));
+
+        notificationParams.put("requestNumber", datatype.format(entity.getRequestNumber()));
 
         Activity activity = activityService.createActivity(
                 user,
@@ -451,9 +456,9 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     }
 
     protected <T extends AbstractBprocRequest> Map<String, Object> getDefaultNotificationParams(Map<String, Object> params, T entity) {
+
         params.put("item", entity);
         params.put("entity", entity);
-        params.put("requestNumber", entity.getRequestNumber());
 
         ProcessInstanceData processInstanceData = getProcessInstanceData(entity.getProcessInstanceBusinessKey(), entity.getProcessDefinitionKey());
         TsadvUser initiator = getProcessVariable(processInstanceData.getId(), "initiator");
