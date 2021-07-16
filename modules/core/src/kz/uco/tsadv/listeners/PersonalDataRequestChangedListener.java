@@ -36,7 +36,6 @@ public class PersonalDataRequestChangedListener {
     protected IntegrationRestService integrationRestService;
     @Inject
     protected IntegrationConfig integrationConfig;
-    protected String PERSONAL_DATA_REQUEST_API_URL = integrationConfig.getPersonalDataRequestUrl();
 
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -88,7 +87,7 @@ public class PersonalDataRequestChangedListener {
                     personalDataRequestDataJson.setEffectiveDate(getFormattedDateString(BaseCommonUtils.getSystemDate()));
                     setupUnirest();
                     HttpResponse<String> response = Unirest
-                            .post(PERSONAL_DATA_REQUEST_API_URL)
+                            .post(getApiUrl())
                             .body(personalDataRequestDataJson)
                             .asString();
 
@@ -115,6 +114,10 @@ public class PersonalDataRequestChangedListener {
             }
 
         }
+    }
+
+    protected String getApiUrl() {
+        return integrationConfig.getPersonalDataRequestUrl();
     }
 
     protected void setupUnirest() {

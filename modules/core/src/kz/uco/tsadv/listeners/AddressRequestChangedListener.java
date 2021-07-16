@@ -37,7 +37,6 @@ public class AddressRequestChangedListener {
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     @Inject
     protected IntegrationConfig integrationConfig;
-    protected String ADDRESS_REQUEST_API_URL = integrationConfig.getAddressRequestUrl();
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void afterCommit(EntityChangedEvent<AddressRequest, UUID> event) {
@@ -89,7 +88,7 @@ public class AddressRequestChangedListener {
                             : "");
                     setupUnirest();
                     HttpResponse<String> response = Unirest
-                            .post(ADDRESS_REQUEST_API_URL)
+                            .post(getApiUrl())
                             .body(addressRequestDataJson)
                             .asString();
 
@@ -115,6 +114,10 @@ public class AddressRequestChangedListener {
             }
 
         }
+    }
+
+    protected String getApiUrl() {
+        return integrationConfig.getAddressRequestUrl();
     }
 
     protected void setupUnirest() {

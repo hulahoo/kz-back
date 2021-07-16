@@ -29,7 +29,6 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
 
     @Inject
     protected IntegrationConfig integrationConfig;
-    protected String ABSENCE_RECALL_API_URL = integrationConfig.getAbsenceForRecallUrl();
 
     @Inject
     IntegrationRestService integrationRestService;
@@ -67,7 +66,7 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
 
     @Override
     public void onBeforeUpdate(AbsenceForRecall entity, EntityManager entityManager) {
-        if (isApproved(entity, entityManager)  && !integrationConfig.getAbsenceForRecallOff()) {
+        if (isApproved(entity, entityManager) && !integrationConfig.getAbsenceForRecallOff()) {
             AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity, entityManager);
 
             setupUnirest();
@@ -100,7 +99,7 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
 
 
     protected String getApiUrl() {
-        return ABSENCE_RECALL_API_URL;
+        return integrationConfig.getAbsenceForRecallUrl();
     }
 
     protected AbsenceForRecallDataJson getAbsenceForRecallDataJson(AbsenceForRecall entity, EntityManager entityManager) {
