@@ -32,6 +32,8 @@ public interface OrganizationService extends kz.uco.base.service.OrganizationSer
 
     DicPayroll getPayroll();
 
+    void sendToResponsibleForIndicators();
+
     String getOrganizationPathToHint(UUID organizationGroupId, Date date);
 
     @Nonnull
