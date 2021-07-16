@@ -12423,7 +12423,7 @@ create table TSADV_PERSON_DOCUMENT (
     ISSUE_DATE date not null,
     START_DATE date,
     END_DATE date,
-    EXPIRED_DATE date not null,
+    EXPIRED_DATE date,
     ISSUED_BY varchar(500),
     ISSUING_AUTHORITY_ID uuid,
     DESCRIPTION varchar(2000),

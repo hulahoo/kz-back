@@ -47,7 +47,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -1871,10 +1870,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, personDocumentData,
                             "no issueDate");
                 }
-                if (personDocumentJson.getExpiredDate() == null || personDocumentJson.getExpiredDate().isEmpty()) {
-                    return prepareError(result, methodName, personDocumentData,
-                            "no expiredDate");
-                }
+//                if (personDocumentJson.getExpiredDate() == null || personDocumentJson.getExpiredDate().isEmpty()) {
+//                    return prepareError(result, methodName, personDocumentData,
+//                            "no expiredDate");
+//                }
                 if (personDocumentJson.getIssueAuthorityId() == null || personDocumentJson.getIssueAuthorityId().isEmpty()) {
                     return prepareError(result, methodName, personDocumentData,
                             "no issueAuthority");
@@ -1933,7 +1932,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     personDocument.setDocumentNumber(personDocumentJson.getDocumentNumber());
                     personDocument.setIssueDate(formatter.parse(personDocumentJson.getIssueDate()));
-                    personDocument.setExpiredDate(formatter.parse(personDocumentJson.getExpiredDate()));
+                    personDocument.setExpiredDate(personDocumentJson.getExpiredDate() != null
+                            && !personDocumentJson.getExpiredDate().isEmpty()
+                            ? formatter.parse(personDocumentJson.getExpiredDate())
+                            : null);
                     personDocument.setIssuedBy(personDocumentJson.getIssueByForExpat());
 
                     DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
@@ -2009,7 +2011,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     personDocument.setDocumentNumber(personDocumentJson.getDocumentNumber());
                     personDocument.setIssueDate(formatter.parse(personDocumentJson.getIssueDate()));
-                    personDocument.setExpiredDate(formatter.parse(personDocumentJson.getExpiredDate()));
+                    personDocument.setExpiredDate(personDocumentJson.getExpiredDate() != null
+                            && !personDocumentJson.getExpiredDate().isEmpty()
+                            ? formatter.parse(personDocumentJson.getExpiredDate())
+                            : null);
                     personDocument.setIssuedBy(personDocumentJson.getIssueByForExpat());
 
                     DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
