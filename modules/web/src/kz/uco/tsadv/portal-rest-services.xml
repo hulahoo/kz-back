@@ -304,4 +304,9 @@
             <param name="paginationPojo" type="kz.uco.tsadv.pojo.pagination.PaginationPojo"/>
         </method>
     </service>
+    <service name="tsadv_IncentiveService">
+        <method name="getIncentiveList">
+            <param name="paginationPojo" type="kz.uco.tsadv.pojo.pagination.PaginationPojo"/>
+        </method>
+    </service>
 </services>

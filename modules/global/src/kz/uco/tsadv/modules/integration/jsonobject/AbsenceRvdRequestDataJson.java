@@ -18,6 +18,8 @@ public class AbsenceRvdRequestDataJson implements Serializable {
     protected String startTime;
     protected String endTime;
     protected String companyCode;
+    protected String shift;
+    protected String overridebyallhours;
 
     public String getPersonId() {
         return personId;
@@ -129,5 +131,21 @@ public class AbsenceRvdRequestDataJson implements Serializable {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getShift() {
+        return shift;
+    }
+
+    public void setShift(String shift) {
+        this.shift = shift;
+    }
+
+    public String getOverridebyallhours() {
+        return overridebyallhours;
+    }
+
+    public void setOverridebyallhours(String overridebyallhours) {
+        this.overridebyallhours = overridebyallhours;
     }
 }

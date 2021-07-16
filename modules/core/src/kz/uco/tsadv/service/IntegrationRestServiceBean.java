@@ -1,5 +1,6 @@
 package kz.uco.tsadv.service;
 
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.haulmont.bali.util.ParamsMap;
@@ -892,7 +893,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "more than one hierarchyElement found to update");
                     }
                     hierarchyElementExt = hierarchyElementList.stream().findFirst().orElse(null);
-                    if (hierarchyElementExt != null) {
+                    if (hierarchyElementExt != null && hierarchyElementExt.getGroup() != null) {
                         organizationHierarchyElementGroup = hierarchyElementExt.getGroup();
                     }
                 }
@@ -901,7 +902,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         "select e from base$Hierarchy e " +
                                 " where e.primaryFlag = TRUE")
                         .view("hierarchy.view").list().stream().findFirst().orElse(null);
-                hierarchyElementExt.setHierarchy(hierarchy);
+                if (hierarchyElementExt != null) {
+                    hierarchyElementExt.setHierarchy(hierarchy);
+                }
                 if (hierarchy == null) {
                     return prepareError(result, methodName, hierarchyElementData,
                             "no organization hierarchy");
@@ -955,7 +958,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     parent = parentList.stream().findFirst().orElse(null);
                     if (parent != null) {
                         hierarchyElementExt.setParent(parent);
-                        hierarchyElementExt.setParentGroup(parent != null ? parent.getGroup() : null);
+                        hierarchyElementExt.setParentGroup(parent.getGroup());
                     }
                 } else {
                     hierarchyElementExt.setParent(null);
@@ -1443,11 +1446,13 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 assignmentExt.setAssignmentStatus(dataManager.load(DicAssignmentStatus.class)
                         .query("select e from tsadv$DicAssignmentStatus e " +
                                 " where e.code = 'ACTIVE'")
+                        .view(View.BASE)
                         .list().stream().findFirst().orElse(null));
                 DicAssignmentStatus dicAssignmentStatus = dataManager.load(DicAssignmentStatus.class)
                         .query("select e from tsadv$DicAssignmentStatus e " +
                                 " where e.legacyId = :legacyId")
                         .parameter("legacyId", assignmentJson.getAssignmentStatus())
+                        .view(View.BASE)
                         .list().stream().findFirst().orElse(null);
                 if (dicAssignmentStatus != null) {
                     assignmentExt.setAssignmentStatus(dicAssignmentStatus);
@@ -1462,6 +1467,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
                 if (personGroupExt != null) {
                     assignmentExt.setPersonGroup(personGroupExt);
+                    if (assignmentGroupExt.getPersonGroup() == null
+                            || !assignmentGroupExt.getPersonGroup().equals(personGroupExt)) {
+                        assignmentGroupExt.setPersonGroup(personGroupExt);
+                    }
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no base$PersonGroupExt with legacyId " + assignmentJson.getPersonId()
@@ -1477,6 +1486,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
                 if (organizationGroupExt != null) {
                     assignmentExt.setOrganizationGroup(organizationGroupExt);
+                    if (assignmentGroupExt.getOrganizationGroup() == null
+                            || !assignmentGroupExt.getOrganizationGroup().equals(organizationGroupExt)) {
+                        assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
+                    }
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no base$OrganizationGroupExt with legacyId " + assignmentJson.getOrganizationId()
@@ -1492,6 +1505,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
                 if (jobGroup != null) {
                     assignmentExt.setJobGroup(jobGroup);
+                    if (assignmentGroupExt.getJobGroup() == null || !assignmentGroupExt.getJobGroup().equals(jobGroup)) {
+                        assignmentGroupExt.setJobGroup(jobGroup);
+                    }
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no tsadv$JobGroup with legacyId " + assignmentJson.getJobId()
@@ -1507,6 +1523,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
                 if (positionGroupExt != null) {
                     assignmentExt.setPositionGroup(positionGroupExt);
+                    if (assignmentGroupExt.getPositionGroup() == null
+                            || !assignmentGroupExt.getPositionGroup().equals(positionGroupExt)) {
+                        assignmentGroupExt.setPositionGroup(positionGroupExt);
+                    }
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no base$PositionGroupExt with legacyId " + assignmentJson.getPositionId()
@@ -1522,6 +1542,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
                 if (gradeGroup != null) {
                     assignmentExt.setGradeGroup(gradeGroup);
+                    if (assignmentGroupExt.getGradeGroup() == null
+                            || !assignmentGroupExt.getGradeGroup().equals(gradeGroup)) {
+                        assignmentGroupExt.setGradeGroup(gradeGroup);
+                    }
                 } else {
                     assignmentExt.setGradeGroup(null);
                 }
@@ -1538,23 +1562,23 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         : null);
                 assignmentExt.setPrimaryFlag(Boolean.valueOf(assignmentJson.getPrimaryFlag()));
                 assignmentExt.setGroup(assignmentGroupExt);
-                if (assignmentGroupExt.getGradeGroup() == null || !assignmentGroupExt.getGradeGroup().equals(gradeGroup)) {
-                    assignmentGroupExt.setGradeGroup(gradeGroup);
-                }
-                if (assignmentGroupExt.getJobGroup() == null || !assignmentGroupExt.getJobGroup().equals(jobGroup)) {
-                    assignmentGroupExt.setJobGroup(jobGroup);
-                }
-                if (assignmentGroupExt.getOrganizationGroup() == null
-                        || !assignmentGroupExt.getOrganizationGroup().equals(organizationGroupExt)) {
-                    assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
-                }
-                if (assignmentGroupExt.getPositionGroup() == null
-                        || !assignmentGroupExt.getPositionGroup().equals(positionGroupExt)) {
-                    assignmentGroupExt.setPositionGroup(positionGroupExt);
-                }
-                if (assignmentGroupExt.getPersonGroup() == null || !assignmentGroupExt.getPersonGroup().equals(personGroupExt)) {
-                    assignmentGroupExt.setPersonGroup(personGroupExt);
-                }
+//                if (assignmentGroupExt.getGradeGroup() == null || !assignmentGroupExt.getGradeGroup().equals(gradeGroup)) {
+//                    assignmentGroupExt.setGradeGroup(gradeGroup);
+//                }
+//                if (assignmentGroupExt.getJobGroup() == null || !assignmentGroupExt.getJobGroup().equals(jobGroup)) {
+//                    assignmentGroupExt.setJobGroup(jobGroup);
+//                }
+//                if (assignmentGroupExt.getOrganizationGroup() == null
+//                        || !assignmentGroupExt.getOrganizationGroup().equals(organizationGroupExt)) {
+//                    assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
+//                }
+//                if (assignmentGroupExt.getPositionGroup() == null
+//                        || !assignmentGroupExt.getPositionGroup().equals(positionGroupExt)) {
+//                    assignmentGroupExt.setPositionGroup(positionGroupExt);
+//                }
+//                if (assignmentGroupExt.getPersonGroup() == null || !assignmentGroupExt.getPersonGroup().equals(personGroupExt)) {
+//                    assignmentGroupExt.setPersonGroup(personGroupExt);
+//                }
                 assignmentGroupExt.getList().add(assignmentExt);
             }
             for (AssignmentGroupExt assignmentGroupExt : assignmentGroupExtList) {
@@ -1870,6 +1894,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("personDocument.edit").list().stream().findFirst().orElse(null);
                 if (personDocument != null) {
                     personDocument.setLegacyId(personDocumentJson.getLegacyId());
+                    personDocument.setStartDate(personDocumentJson.getStartDate() != null
+                            && !personDocumentJson.getStartDate().isEmpty()
+                            ? formatter.parse(personDocumentJson.getStartDate())
+                            : null);
+                    personDocument.setEndDate(personDocumentJson.getEndDate() != null
+                            && !personDocumentJson.getEndDate().isEmpty()
+                            ? formatter.parse(personDocumentJson.getEndDate())
+                            : null);
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query("select e from base$PersonGroupExt e " +
                                     " where e.legacyId = :legacyId " +
@@ -1902,6 +1934,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDocument.setDocumentNumber(personDocumentJson.getDocumentNumber());
                     personDocument.setIssueDate(formatter.parse(personDocumentJson.getIssueDate()));
                     personDocument.setExpiredDate(formatter.parse(personDocumentJson.getExpiredDate()));
+                    personDocument.setIssuedBy(personDocumentJson.getIssueByForExpat());
 
                     DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
                             .query("select e from tsadv_DicIssuingAuthority e " +
@@ -1937,6 +1970,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDocument = metadata.create(PersonDocument.class);
                     personDocument.setId(UUID.randomUUID());
                     personDocument.setLegacyId(personDocumentJson.getLegacyId());
+                    personDocument.setStartDate(personDocumentJson.getStartDate() != null
+                            && !personDocumentJson.getStartDate().isEmpty()
+                            ? formatter.parse(personDocumentJson.getStartDate())
+                            : null);
+                    personDocument.setEndDate(personDocumentJson.getEndDate() != null
+                            && !personDocumentJson.getEndDate().isEmpty()
+                            ? formatter.parse(personDocumentJson.getEndDate())
+                            : null);
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query("select e from base$PersonGroupExt e " +
                                     " where e.legacyId = :legacyId " +
@@ -1969,6 +2010,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDocument.setDocumentNumber(personDocumentJson.getDocumentNumber());
                     personDocument.setIssueDate(formatter.parse(personDocumentJson.getIssueDate()));
                     personDocument.setExpiredDate(formatter.parse(personDocumentJson.getExpiredDate()));
+                    personDocument.setIssuedBy(personDocumentJson.getIssueByForExpat());
 
                     DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
                             .query("select e from tsadv_DicIssuingAuthority e " +
@@ -4264,33 +4306,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             "no personId");
                 }
 
-                if (personAddressJson.getFactAddress() == null || personAddressJson.getFactAddress().isEmpty()) {
+                if (personAddressJson.getAddressType() == null || personAddressJson.getAddressType().isEmpty()) {
                     return prepareError(result, methodName, personAddressData,
-                            "no factAddress");
-                }
-
-                if (personAddressJson.getRegistrationAddress() == null || personAddressJson.getRegistrationAddress().isEmpty()) {
-                    return prepareError(result, methodName, personAddressData,
-                            "no registrationAddress");
-                }
-
-                if (personAddressJson.getFactAddressKATOCode() == null || personAddressJson.getFactAddressKATOCode().isEmpty()) {
-                    return prepareError(result, methodName, personAddressData,
-                            "no factAddressKATOCode");
-                }
-
-                if (personAddressJson.getRegistrationAddressKATOCode() == null || personAddressJson.getRegistrationAddressKATOCode().isEmpty()) {
-                    return prepareError(result, methodName, personAddressData,
-                            "no registrationAddressKATOCode");
+                            "no addressType");
                 }
 
                 if (personAddressJson.getCompanyCode() == null || personAddressJson.getCompanyCode().isEmpty()) {
                     return prepareError(result, methodName, personAddressData,
                             "no companyCode");
                 }
-
-                Date startDate = CommonUtils.getSystemDate();
-                Date endDate = CommonUtils.getMaxDate();
 
                 Address address = personAddressesCommitList.stream().filter(filterAddress ->
                         filterAddress.getLegacyId() != null
@@ -4300,47 +4324,41 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 && filterAddress.getPersonGroup().getLegacyId().equals(personAddressJson.getPersonId())
                                 && filterAddress.getPersonGroup().getCompany() != null
                                 && filterAddress.getPersonGroup().getCompany().getLegacyId().equals(personAddressJson.getCompanyCode())
-                                && filterAddress.getFactAddress() != null
-                                && filterAddress.getFactAddress().equals(personAddressJson.getFactAddress())
-                                && filterAddress.getRegistrationAddress() != null
-                                && filterAddress.getRegistrationAddress().equals(personAddressJson.getRegistrationAddress())
-                                && filterAddress.getFactAddressKATOCode() != null
-                                && filterAddress.getFactAddressKATOCode().equals(personAddressJson.getFactAddressKATOCode())
-                                && filterAddress.getRegistrationAddressKATOCode() != null
-                                && filterAddress.getRegistrationAddressKATOCode().equals(personAddressJson.getRegistrationAddressKATOCode())
                 ).findFirst().orElse(null);
+                String addressText = "";
                 if (address == null) {
                     address = dataManager.load(Address.class)
-                            .query(
-                                    " select e from tsadv$Address e " +
-                                            " where e.legacyId = " + personAddressJson.getLegacyId() + " " +
-                                            " and e.personGroup.legacyId = :pgLegacyId " +
-                                            " and e.personGroup.company.legacyId = :companyCode " +
-                                            " and e.factAddress = :fd " +
-                                            " and e.registrationAddress = :rd" +
-                                            " and e.factAddressKATOCode = :fdkc" +
-                                            " and e.registrationAddressKATOCode = :rdkc ")
-                            .setParameters(
-                                    ParamsMap.of(
-                                            "pgLegacyId", personAddressJson.getPersonId(),
-                                            "companyCode", personAddressJson.getCompanyCode(),
-                                            "fd", personAddressJson.getFactAddress(),
-                                            "rd", personAddressJson.getRegistrationAddress(),
-                                            "fdkc", personAddressJson.getFactAddressKATOCode(),
-                                            "rdkc", personAddressJson.getRegistrationAddressKATOCode()
-                                    )
-                            )
+                            .query(" select e from tsadv$Address e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.personGroup.company.legacyId = :companyCode ")
+                            .parameter("legacyId", personAddressJson.getLegacyId())
+                            .parameter("companyCode", personAddressJson.getCompanyCode())
                             .view("address.view").list().stream().findFirst().orElse(null);
 
                     if (address != null) {
-                        address.setStartDate(startDate);
-                        address.setEndDate(endDate);
+                        address.setStartDate(personAddressJson.getStartDate() != null
+                                && !personAddressJson.getStartDate().isEmpty()
+                                ? formatter.parse(personAddressJson.getStartDate())
+                                : null);
+                        address.setEndDate(personAddressJson.getEndDate() != null
+                                && !personAddressJson.getEndDate().isEmpty()
+                                ? formatter.parse(personAddressJson.getEndDate())
+                                : null);
+
+                        DicAddressType dicAddressType = dataManager.load(DicAddressType.class)
+                                .query("select e from tsadv$DicAddressType e " +
+                                        " where e.legacyId = :legacyId")
+                                .parameter("legacyId", personAddressJson.getAddressType())
+                                .view(View.LOCAL).list().stream().findFirst().orElse(null);
+
+                        if (dicAddressType != null) {
+                            address.setAddressType(dicAddressType);
+                        } else {
+                            return prepareError(result, methodName, personAddressData,
+                                    "no addressType with legacyId : " + personAddressJson.getAddressType());
+                        }
 
                         address.setLegacyId(personAddressJson.getLegacyId());
-                        address.setFactAddress(personAddressJson.getFactAddress());
-                        address.setRegistrationAddress(personAddressJson.getRegistrationAddress());
-                        address.setFactAddressKATOCode(personAddressJson.getFactAddressKATOCode());
-                        address.setRegistrationAddressKATOCode(personAddressJson.getRegistrationAddressKATOCode());
 
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query("select e from base$PersonGroupExt e " +
@@ -4356,19 +4374,83 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     "no personGroup with legacyId and companyCode : "
                                             + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
                         }
+
+                        address.setPostalCode(personAddressJson.getPostal());
+
+                        DicCountry dicCountry = dataManager.load(DicCountry.class)
+                                .query("select e from base$DicCountry e " +
+                                        " where e.legacyId = :code ")
+                                .parameter("code", personAddressJson.getCountryId())
+                                .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                        if (dicCountry != null) {
+                            address.setCountry(dicCountry);
+                            addressText = dicCountry.getLangValue();
+                        }
+
+                        DicKato dicKato = dataManager.load(DicKato.class)
+                                .query("select e from tsadv_DicKato e " +
+                                        " where e.code = :code")
+                                .parameter("code", personAddressJson.getAddressKATOCode())
+                                .view(View.LOCAL)
+                                .list().stream().findFirst().orElse(null);
+                        if (dicKato != null) {
+                            address.setKato(dicKato);
+                            addressText = addressText + ", " + dicKato.getLangValue();
+                        }
+
+                        DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
+                                .query("select e from tsadv_DicStreetType e " +
+                                        " where e.legacyId = :legacyId")
+                                .parameter("legacyId", personAddressJson.getStreetTypeId())
+                                .view(View.LOCAL)
+                                .list().stream().findFirst().orElse(null);
+
+                        if (dicStreetType != null) {
+                            address.setStreetType(dicStreetType);
+                            addressText = addressText + ", " + dicAddressType.getLangValue();
+                        }
+
+                        address.setStreetName(personAddressJson.getStreetName());
+                        address.setBuilding(personAddressJson.getBuilding());
+                        address.setBlock(personAddressJson.getBlock());
+                        address.setFlat(personAddressJson.getFlat());
+                        address.setAddressForExpats(personAddressJson.getAddressForExpats());
+                        address.setNotes(personAddressJson.getNotes());
+                        address.setAddressKazakh(personAddressJson.getAddressKazakh());
+                        address.setAddressEnglish(personAddressJson.getAddressEnglish());
+                        address.setAddress(addressText + ", "
+                                + personAddressJson.getStreetName() + ", "
+                                + personAddressJson.getBuilding() + ", "
+                                + personAddressJson.getBlock() + ", "
+                                + personAddressJson.getFlat());
 
                         personAddressesCommitList.add(address);
                     } else {
                         address = metadata.create(Address.class);
                         address.setId(UUID.randomUUID());
-                        address.setLegacyId(personAddressJson.getLegacyId());
-                        address.setFactAddress(personAddressJson.getFactAddress());
-                        address.setRegistrationAddress(personAddressJson.getRegistrationAddress());
-                        address.setFactAddressKATOCode(personAddressJson.getFactAddressKATOCode());
-                        address.setRegistrationAddressKATOCode(personAddressJson.getRegistrationAddressKATOCode());
+                        address.setStartDate(personAddressJson.getStartDate() != null
+                                && !personAddressJson.getStartDate().isEmpty()
+                                ? formatter.parse(personAddressJson.getStartDate())
+                                : null);
+                        address.setEndDate(personAddressJson.getEndDate() != null
+                                && !personAddressJson.getEndDate().isEmpty()
+                                ? formatter.parse(personAddressJson.getEndDate())
+                                : null);
 
-                        address.setStartDate(startDate);
-                        address.setEndDate(endDate);
+                        DicAddressType dicAddressType = dataManager.load(DicAddressType.class)
+                                .query("select e from tsadv$DicAddressType e " +
+                                        " where e.legacyId = :legacyId")
+                                .parameter("legacyId", personAddressJson.getAddressType())
+                                .view("").list().stream().findFirst().orElse(null);
+
+                        if (dicAddressType != null) {
+                            address.setAddressType(dicAddressType);
+                        } else {
+                            return prepareError(result, methodName, personAddressData,
+                                    "no addressType with legacyId : " + personAddressJson.getAddressType());
+                        }
+
+                        address.setLegacyId(personAddressJson.getLegacyId());
 
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query("select e from base$PersonGroupExt e " +
@@ -4385,18 +4467,82 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                             + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
                         }
 
+                        address.setPostalCode(personAddressJson.getPostal());
+
+                        DicCountry dicCountry = dataManager.load(DicCountry.class)
+                                .query("select e from base$DicCountry e " +
+                                        " where e.legacyId = :code ")
+                                .parameter("code", personAddressJson.getCountryId())
+                                .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                        if (dicCountry != null) {
+                            address.setCountry(dicCountry);
+                            addressText = dicCountry.getLangValue();
+                        }
+
+                        DicKato dicKato = dataManager.load(DicKato.class)
+                                .query("select e from tsadv_DicKato e " +
+                                        " where e.code = :code")
+                                .parameter("code", personAddressJson.getAddressKATOCode())
+                                .view(View.LOCAL)
+                                .list().stream().findFirst().orElse(null);
+                        if (dicKato != null) {
+                            address.setKato(dicKato);
+                            addressText = addressText + ", " + dicKato.getLangValue();
+                        }
+
+                        DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
+                                .query("select e from tsadv_DicStreetType e " +
+                                        " where e.legacyId = :legacyId")
+                                .parameter("legacyId", personAddressJson.getStreetTypeId())
+                                .view(View.LOCAL)
+                                .list().stream().findFirst().orElse(null);
+
+                        if (dicStreetType != null) {
+                            address.setStreetType(dicStreetType);
+                            addressText = addressText + ", " + dicAddressType.getLangValue();
+                        }
+
+                        address.setStreetName(personAddressJson.getStreetName());
+                        address.setBuilding(personAddressJson.getBuilding());
+                        address.setBlock(personAddressJson.getBlock());
+                        address.setFlat(personAddressJson.getFlat());
+                        address.setAddressForExpats(personAddressJson.getAddressForExpats());
+                        address.setNotes(personAddressJson.getNotes());
+                        address.setAddressKazakh(personAddressJson.getAddressKazakh());
+                        address.setAddressEnglish(personAddressJson.getAddressEnglish());
+                        address.setAddress(addressText + ", "
+                                + personAddressJson.getStreetName() + ", "
+                                + personAddressJson.getBuilding() + ", "
+                                + personAddressJson.getBlock() + ", "
+                                + personAddressJson.getFlat());
+
                         personAddressesCommitList.add(address);
                     }
                 } else {
 
-                    address.setStartDate(startDate);
-                    address.setEndDate(endDate);
+                    address.setStartDate(personAddressJson.getStartDate() != null
+                            && !personAddressJson.getStartDate().isEmpty()
+                            ? formatter.parse(personAddressJson.getStartDate())
+                            : null);
+                    address.setEndDate(personAddressJson.getEndDate() != null
+                            && !personAddressJson.getEndDate().isEmpty()
+                            ? formatter.parse(personAddressJson.getEndDate())
+                            : null);
+
+                    DicAddressType dicAddressType = dataManager.load(DicAddressType.class)
+                            .query("select e from tsadv$DicAddressType e " +
+                                    " where e.legacyId = :legacyId")
+                            .parameter("legacyId", personAddressJson.getAddressType())
+                            .view("").list().stream().findFirst().orElse(null);
+
+                    if (dicAddressType != null) {
+                        address.setAddressType(dicAddressType);
+                    } else {
+                        return prepareError(result, methodName, personAddressData,
+                                "no addressType with legacyId : " + personAddressJson.getAddressType());
+                    }
 
                     address.setLegacyId(personAddressJson.getLegacyId());
-                    address.setFactAddress(personAddressJson.getFactAddress());
-                    address.setRegistrationAddress(personAddressJson.getRegistrationAddress());
-                    address.setFactAddressKATOCode(personAddressJson.getFactAddressKATOCode());
-                    address.setRegistrationAddressKATOCode(personAddressJson.getRegistrationAddressKATOCode());
 
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query("select e from base$PersonGroupExt e " +
@@ -4412,6 +4558,57 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "no personGroup with legacyId and companyCode : "
                                         + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
                     }
+
+                    address.setPostalCode(personAddressJson.getPostal());
+
+                    DicCountry dicCountry = dataManager.load(DicCountry.class)
+                            .query("select e from base$DicCountry e " +
+                                    " where e.legacyId = :code ")
+                            .parameter("code", personAddressJson.getCountryId())
+                            .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                    if (dicCountry != null) {
+                        address.setCountry(dicCountry);
+                        addressText = dicCountry.getLangValue();
+                    }
+
+                    DicKato dicKato = dataManager.load(DicKato.class)
+                            .query("select e from tsadv_DicKato e " +
+                                    " where e.code = :code")
+                            .parameter("code", personAddressJson.getAddressKATOCode())
+                            .view(View.LOCAL)
+                            .list().stream().findFirst().orElse(null);
+                    if (dicKato != null) {
+                        address.setKato(dicKato);
+                        addressText = addressText + ", " + dicKato.getLangValue();
+                    }
+
+                    DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
+                            .query("select e from tsadv_DicStreetType e " +
+                                    " where e.code = :code")
+                            .parameter("code", personAddressJson.getStreetTypeId())
+                            .view(View.LOCAL)
+                            .list().stream().findFirst().orElse(null);
+
+                    if (dicStreetType != null) {
+                        address.setStreetType(dicStreetType);
+                        addressText = addressText + ", " + dicAddressType.getLangValue();
+                    }
+
+                    address.setStreetName(personAddressJson.getStreetName());
+                    address.setBuilding(personAddressJson.getBuilding());
+                    address.setBlock(personAddressJson.getBlock());
+                    address.setFlat(personAddressJson.getFlat());
+                    address.setAddressForExpats(personAddressJson.getAddressForExpats());
+                    address.setNotes(personAddressJson.getNotes());
+                    address.setAddressKazakh(personAddressJson.getAddressKazakh());
+                    address.setAddressEnglish(personAddressJson.getAddressEnglish());
+                    address.setAddress(addressText + ", "
+                            + personAddressJson.getStreetName() + ", "
+                            + personAddressJson.getBuilding() + ", "
+                            + personAddressJson.getBlock() + ", "
+                            + personAddressJson.getFlat());
+
+                    personAddressesCommitList.add(address);
                 }
             }
 
@@ -5002,38 +5199,38 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, absenceBalanceData,
                             "no date");
                 }
-                if (absenceBalanceJson.getAnnualDueDays() == null || absenceBalanceJson.getAnnualDueDays().isEmpty()) {
-                    return prepareError(result, methodName, absenceBalanceData,
-                            "no annualDueDays");
-                }
-                if (absenceBalanceJson.getAdditionalDueDays() == null || absenceBalanceJson.getAdditionalDueDays().isEmpty()) {
-                    return prepareError(result, methodName, absenceBalanceData,
-                            "no additionalDueDays");
-                }
-                if (absenceBalanceJson.getEcologicalDueDays() == null || absenceBalanceJson.getEcologicalDueDays().isEmpty()) {
-                    return prepareError(result, methodName, absenceBalanceData,
-                            "no ecologicalDueDays");
-                }
-                if (absenceBalanceJson.getDisabilityDueDays() == null || absenceBalanceJson.getDisabilityDueDays().isEmpty()) {
-                    return prepareError(result, methodName, absenceBalanceData,
-                            "no disabilityDueDays");
-                }
-                if (absenceBalanceJson.getAnnualBalanceDays() == null || absenceBalanceJson.getAnnualBalanceDays().isEmpty()) {
-                    return prepareError(result, methodName, absenceBalanceData,
-                            "no annualBalanceDays");
-                }
-                if (absenceBalanceJson.getAdditionalBalanceDays() == null || absenceBalanceJson.getAdditionalBalanceDays().isEmpty()) {
-                    return prepareError(result, methodName, absenceBalanceData,
-                            "no additionalBalanceDays");
-                }
-                if (absenceBalanceJson.getEcologicalBalanceDays() == null || absenceBalanceJson.getEcologicalBalanceDays().isEmpty()) {
-                    return prepareError(result, methodName, absenceBalanceData,
-                            "no ecologicalBalanceDays");
-                }
-                if (absenceBalanceJson.getDisabilityBalanceDays() == null || absenceBalanceJson.getDisabilityBalanceDays().isEmpty()) {
-                    return prepareError(result, methodName, absenceBalanceData,
-                            "no disabilityBalanceDays");
-                }
+//                if (absenceBalanceJson.getAnnualDueDays() == null || absenceBalanceJson.getAnnualDueDays().isEmpty()) {
+//                    return prepareError(result, methodName, absenceBalanceData,
+//                            "no annualDueDays");
+//                }
+//                if (absenceBalanceJson.getAdditionalDueDays() == null || absenceBalanceJson.getAdditionalDueDays().isEmpty()) {
+//                    return prepareError(result, methodName, absenceBalanceData,
+//                            "no additionalDueDays");
+//                }
+//                if (absenceBalanceJson.getEcologicalDueDays() == null || absenceBalanceJson.getEcologicalDueDays().isEmpty()) {
+//                    return prepareError(result, methodName, absenceBalanceData,
+//                            "no ecologicalDueDays");
+//                }
+//                if (absenceBalanceJson.getDisabilityDueDays() == null || absenceBalanceJson.getDisabilityDueDays().isEmpty()) {
+//                    return prepareError(result, methodName, absenceBalanceData,
+//                            "no disabilityDueDays");
+//                }
+//                if (absenceBalanceJson.getAnnualBalanceDays() == null || absenceBalanceJson.getAnnualBalanceDays().isEmpty()) {
+//                    return prepareError(result, methodName, absenceBalanceData,
+//                            "no annualBalanceDays");
+//                }
+//                if (absenceBalanceJson.getAdditionalBalanceDays() == null || absenceBalanceJson.getAdditionalBalanceDays().isEmpty()) {
+//                    return prepareError(result, methodName, absenceBalanceData,
+//                            "no additionalBalanceDays");
+//                }
+//                if (absenceBalanceJson.getEcologicalBalanceDays() == null || absenceBalanceJson.getEcologicalBalanceDays().isEmpty()) {
+//                    return prepareError(result, methodName, absenceBalanceData,
+//                            "no ecologicalBalanceDays");
+//                }
+//                if (absenceBalanceJson.getDisabilityBalanceDays() == null || absenceBalanceJson.getDisabilityBalanceDays().isEmpty()) {
+//                    return prepareError(result, methodName, absenceBalanceData,
+//                            "no disabilityBalanceDays");
+//                }
 
                 Date dateFromJson = formatter.parse(absenceBalanceJson.getDate());
                 AbsenceBalance absenceBalance = absenceBalancesCommitList.stream().filter(filterAbsenceBalance ->
@@ -5079,29 +5276,36 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         absenceBalance.setDateFrom(formatter.parse(absenceBalanceJson.getDate()));
                         absenceBalance.setDateTo(formatter.parse(absenceBalanceJson.getDate()));
 
-                        Double annualDueDays = new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
+
+                        Double annualDueDays = Strings.isNullOrEmpty(absenceBalanceJson.getAnnualDueDays()) ? 0 : Double.valueOf(absenceBalanceJson.getAnnualDueDays()); //new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setBalanceDays(annualDueDays);
 
-                        Double additionalDueDays = new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double additionalDueDays = Strings.isNullOrEmpty(absenceBalanceJson.getAdditionalDueDays()) ? 0 : Double.valueOf(absenceBalanceJson.getAdditionalDueDays()); //new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setAdditionalBalanceDays(additionalDueDays);
 
-                        Double ecologicalDueDays = new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double ecologicalDueDays = Strings.isNullOrEmpty(absenceBalanceJson.getEcologicalDueDays()) ? 0 : Double.valueOf(absenceBalanceJson.getEcologicalDueDays()); //new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setEcologicalDueDays(ecologicalDueDays);
 
-                        Double disabilityDueDays = new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double disabilityDueDays = Strings.isNullOrEmpty(absenceBalanceJson.getDisabilityDueDays()) ? 0 : Double.valueOf(absenceBalanceJson.getDisabilityDueDays()); //new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setDisabilityDueDays(disabilityDueDays);
 
-                        Double annualBalanceDays = new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double annualBalanceDays = Strings.isNullOrEmpty(absenceBalanceJson.getAnnualBalanceDays()) ? 0 : Double.valueOf(absenceBalanceJson.getAnnualBalanceDays()); //new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setDaysLeft(annualBalanceDays);
 
-                        Double additionalBalanceDays = new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double additionalBalanceDays = Strings.isNullOrEmpty(absenceBalanceJson.getAdditionalBalanceDays()) ? 0 : Double.valueOf(absenceBalanceJson.getAdditionalBalanceDays()); //new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setExtraDaysLeft(additionalBalanceDays);
 
-                        Double ecologicalBalanceDays = new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double ecologicalBalanceDays = Strings.isNullOrEmpty(absenceBalanceJson.getEcologicalBalanceDays()) ? 0 : Double.valueOf(absenceBalanceJson.getEcologicalBalanceDays()); //new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setEcologicalDaysLeft(ecologicalBalanceDays);
 
-                        Double disabilityBalanceDays = new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double disabilityBalanceDays = Strings.isNullOrEmpty(absenceBalanceJson.getDisabilityBalanceDays()) ? 0 : Double.valueOf(absenceBalanceJson.getDisabilityBalanceDays()); //new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setDisabilityDaysLeft(disabilityBalanceDays);
+
+                        Double overallBalanceDays = absenceBalance.getBalanceDays()
+                                + absenceBalance.getAdditionalBalanceDays()
+                                + absenceBalance.getEcologicalDueDays()
+                                + absenceBalance.getDisabilityDueDays();
+                        absenceBalance.setOverallBalanceDays(overallBalanceDays);
 
                         absenceBalancesCommitList.add(absenceBalance);
                     } else {
@@ -5128,29 +5332,36 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         absenceBalance.setDateFrom(formatter.parse(absenceBalanceJson.getDate()));
                         absenceBalance.setDateTo(formatter.parse(absenceBalanceJson.getDate()));
 
-                        Double annualDueDays = new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
+
+                        Double annualDueDays = Strings.isNullOrEmpty(absenceBalanceJson.getAnnualDueDays()) ? 0 : Double.valueOf(absenceBalanceJson.getAnnualDueDays()); //new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setBalanceDays(annualDueDays);
 
-                        Double additionalDueDays = new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double additionalDueDays = Strings.isNullOrEmpty(absenceBalanceJson.getAdditionalDueDays()) ? 0 : Double.valueOf(absenceBalanceJson.getAdditionalDueDays()); //new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setAdditionalBalanceDays(additionalDueDays);
 
-                        Double ecologicalDueDays = new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double ecologicalDueDays = Strings.isNullOrEmpty(absenceBalanceJson.getEcologicalDueDays()) ? 0 : Double.valueOf(absenceBalanceJson.getEcologicalDueDays()); //new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setEcologicalDueDays(ecologicalDueDays);
 
-                        Double disabilityDueDays = new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double disabilityDueDays = Strings.isNullOrEmpty(absenceBalanceJson.getDisabilityDueDays()) ? 0 : Double.valueOf(absenceBalanceJson.getDisabilityDueDays()); //new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setDisabilityDueDays(disabilityDueDays);
 
-                        Double annualBalanceDays = new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double annualBalanceDays = Strings.isNullOrEmpty(absenceBalanceJson.getAnnualBalanceDays()) ? 0 : Double.valueOf(absenceBalanceJson.getAnnualBalanceDays()); //new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setDaysLeft(annualBalanceDays);
 
-                        Double additionalBalanceDays = new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double additionalBalanceDays = Strings.isNullOrEmpty(absenceBalanceJson.getAdditionalBalanceDays()) ? 0 : Double.valueOf(absenceBalanceJson.getAdditionalBalanceDays()); //new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setExtraDaysLeft(additionalBalanceDays);
 
-                        Double ecologicalBalanceDays = new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double ecologicalBalanceDays = Strings.isNullOrEmpty(absenceBalanceJson.getEcologicalBalanceDays()) ? 0 : Double.valueOf(absenceBalanceJson.getEcologicalBalanceDays()); //new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setEcologicalDaysLeft(ecologicalBalanceDays);
 
-                        Double disabilityBalanceDays = new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double disabilityBalanceDays = Strings.isNullOrEmpty(absenceBalanceJson.getDisabilityBalanceDays()) ? 0 : Double.valueOf(absenceBalanceJson.getDisabilityBalanceDays()); //new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setDisabilityDaysLeft(disabilityBalanceDays);
+
+                        Double overallBalanceDays = absenceBalance.getBalanceDays()
+                                + absenceBalance.getAdditionalBalanceDays()
+                                + absenceBalance.getEcologicalDueDays()
+                                + absenceBalance.getDisabilityDueDays();
+                        absenceBalance.setOverallBalanceDays(overallBalanceDays);
 
 
                         absenceBalancesCommitList.add(absenceBalance);
@@ -5176,29 +5387,36 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     absenceBalance.setDateFrom(formatter.parse(absenceBalanceJson.getDate()));
                     absenceBalance.setDateTo(formatter.parse(absenceBalanceJson.getDate()));
 
-                    Double annualDueDays = new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
+
+                    Double annualDueDays = Strings.isNullOrEmpty(absenceBalanceJson.getAnnualDueDays()) ? 0 : Double.valueOf(absenceBalanceJson.getAnnualDueDays()); //new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setBalanceDays(annualDueDays);
 
-                    Double additionalDueDays = new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
+                    Double additionalDueDays = Strings.isNullOrEmpty(absenceBalanceJson.getAdditionalDueDays()) ? 0 : Double.valueOf(absenceBalanceJson.getAdditionalDueDays()); //new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setAdditionalBalanceDays(additionalDueDays);
 
-                    Double ecologicalDueDays = new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
+                    Double ecologicalDueDays = Strings.isNullOrEmpty(absenceBalanceJson.getEcologicalDueDays()) ? 0 : Double.valueOf(absenceBalanceJson.getEcologicalDueDays()); //new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setEcologicalDueDays(ecologicalDueDays);
 
-                    Double disabilityDueDays = new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
+                    Double disabilityDueDays = Strings.isNullOrEmpty(absenceBalanceJson.getDisabilityDueDays()) ? 0 : Double.valueOf(absenceBalanceJson.getDisabilityDueDays()); //new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setDisabilityDueDays(disabilityDueDays);
 
-                    Double annualBalanceDays = new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                    Double annualBalanceDays = Strings.isNullOrEmpty(absenceBalanceJson.getAnnualBalanceDays()) ? 0 : Double.valueOf(absenceBalanceJson.getAnnualBalanceDays()); //new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setDaysLeft(annualBalanceDays);
 
-                    Double additionalBalanceDays = new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                    Double additionalBalanceDays = Strings.isNullOrEmpty(absenceBalanceJson.getAdditionalBalanceDays()) ? 0 : Double.valueOf(absenceBalanceJson.getAdditionalBalanceDays()); //new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setExtraDaysLeft(additionalBalanceDays);
 
-                    Double ecologicalBalanceDays = new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                    Double ecologicalBalanceDays = Strings.isNullOrEmpty(absenceBalanceJson.getEcologicalBalanceDays()) ? 0 : Double.valueOf(absenceBalanceJson.getEcologicalBalanceDays()); //new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setEcologicalDaysLeft(ecologicalBalanceDays);
 
-                    Double disabilityBalanceDays = new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                    Double disabilityBalanceDays = Strings.isNullOrEmpty(absenceBalanceJson.getDisabilityBalanceDays()) ? 0 : Double.valueOf(absenceBalanceJson.getDisabilityBalanceDays()); //new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setDisabilityDaysLeft(disabilityBalanceDays);
+
+                    Double overallBalanceDays = absenceBalance.getBalanceDays()
+                            + absenceBalance.getAdditionalBalanceDays()
+                            + absenceBalance.getEcologicalDueDays()
+                            + absenceBalance.getDisabilityDueDays();
+                    absenceBalance.setOverallBalanceDays(overallBalanceDays);
 
                 }
             }
