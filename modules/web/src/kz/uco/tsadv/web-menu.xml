@@ -176,6 +176,20 @@
             <item id="hrGradeRuleGroups"
                   screen="tsadv$GradeRule.browse"/>
         </menu>
+        <menu id="incentive">
+            <item id="organizationIncentives"
+                  screen="tsadv_IncentiveBrowse"
+                  caption="mainMsg://org.structure"
+                  openType="NEW_TAB">
+                <param name="ELEMENT_TYPE" value="ORGANIZATION"/>
+            </item>
+            <item id="positionIncentives"
+                  screen="tsadv_IncentiveBrowse"
+                  caption="mainMsg://positions"
+                  openType="NEW_TAB">
+                <param name="ELEMENT_TYPE" value="POSITION"/>
+            </item>
+        </menu>
         <menu id="hrCompetences"
               icon="font-icon:BRIEFCASE">
             <item id="hrCompetenceGroups"
@@ -806,7 +820,7 @@
     </menu>
     <menu id="help" icon="font-icon:QUESTION_CIRCLE">
         <item id="aboutWindow" openType="DIALOG"/>
-        <item id="printDomain"/>
+        <item id="printDomain" class="com.haulmont.cuba.web.app.domain.DomainProvider"/>
         <separator/>
         <item id="settings"/>
         <item id="logWindow"/>

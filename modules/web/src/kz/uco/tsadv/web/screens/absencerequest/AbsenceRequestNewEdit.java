@@ -106,6 +106,8 @@ public class AbsenceRequestNewEdit extends AbstractBprocEditor<AbsenceRequest> {
     protected DateField<Date> newStartDateField;
     @Inject
     protected DateField<Date> newEndDateField;
+    @Inject
+    private Form form2;
 
     @Subscribe
     public void onInit(InitEvent event) {
@@ -137,6 +139,7 @@ public class AbsenceRequestNewEdit extends AbstractBprocEditor<AbsenceRequest> {
     public void onBeforeShow(AfterShowEvent event) {
         if (!hasStatus("DRAFT")) {
             form.setEditable(false);
+            form2.setEditable(false);
         }
 
         if (hasStatus("DRAFT")) {

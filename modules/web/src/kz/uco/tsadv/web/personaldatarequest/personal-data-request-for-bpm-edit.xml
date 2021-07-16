@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.personaldatarequest">
+    <data>
+        <instance id="personalDataRequestDs"
+                  class="kz.uco.tsadv.modules.personal.model.PersonalDataRequest"
+                  view="personalDataRequest-view">
+            <loader/>
+            <collection id="attachmentsDs"
+                        property="attachments"/>
+        </instance>
+        <collection id="dicMaritalStatusesDs"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus"
+                    view="_local">
+            <loader id="dicMaritalStatusesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicMaritalStatus e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="tasksDc"
+                    class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
+    </data>
+    <dialogMode height="AUTO"
+                width="600"/>
+    <layout spacing="true"
+            expand="scrollBox">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <form id="form"
+                  dataContainer="personalDataRequestDs">
+                <column width="250px">
+                    <textField editable="false"
+                               property="requestNumber"/>
+                    <textField property="lastName"/>
+                    <textField property="firstName"/>
+                    <textField property="middleName"/>
+                    <textField property="lastNameLatin"/>
+                    <textField property="firstNameLatin"/>
+                    <textField property="middleNameLatin"/>
+                    <lookupField optionsContainer="dicMaritalStatusesDs"
+                                 property="maritalStatus"/>
+                    <dateField property="dateOfBirth"/>
+                    <lookupField editable="false"
+                                 property="status"/>
+                </column>
+            </form>
+            <groupBox id="groupBox">
+                <table id="fileDescriptorsTable" width="100%" dataContainer="attachmentsDs">
+                    <actions>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <buttonsPanel alwaysVisible="true">
+                        <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                                stylename="primary"/>
+                        <button id="fileDescriptorsTableRemoveBtn" action="fileDescriptorsTable.remove"/>
+                    </buttonsPanel>
+                    <columns>
+                        <column id="name" generator="generatorName" caption="mainMsg://fileName"/>
+                    </columns>
+                </table>
+            </groupBox>
+            <vbox id="bpmActorsVBox"
+                  width="1300px"
+                  spacing="true">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://kz.uco.tsadv.bproc/bproc.participants"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           height="100%"
+                           showSelection="false"
+                           dataContainer="tasksDc"
+                           width="100%">
+                        <columns>
+                            <column id="hrRole"/>
+                            <column id="assignee" generator="generateAssignee"/>
+                            <column id="createTime"/>
+                            <column id="endTime"/>
+                            <column id="outcome" generator="generateOutcome"/>
+                            <column id="comment"/>
+                        </columns>
+                    </table>
+                </groupBox>
+            </vbox>
+        </scrollBox>
+        <hbox id="procActionsBox"
+              align="BOTTOM_LEFT"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
