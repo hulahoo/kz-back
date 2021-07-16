@@ -23,7 +23,7 @@
                 <textField id="absenceDaysField" property="absenceDays" editable="false"/>
                 <textField id="balanceField" property="balance" editable="false"/>
                 <textArea id="commentField" property="comment" rows="5"/>
-                <checkBox id="sentToOracleField" property="sentToOracle" editable="false"/>
+                <textField id="sentToOracleField" property="sentToOracle" editable="false"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">
