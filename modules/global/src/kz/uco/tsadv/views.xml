@@ -13472,6 +13472,7 @@
           name="person.browse">
         <property name="nonresidentType" view="_local"/>
         <property name="group" view="_minimal">
+            <property name="image" view="_local"/>
             <property name="list" view="_minimal">
                 <property name="group" view="_minimal"/>
                 <property name="startDate"/>
