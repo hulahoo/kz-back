@@ -1874,10 +1874,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 //                    return prepareError(result, methodName, personDocumentData,
 //                            "no expiredDate");
 //                }
-                if (personDocumentJson.getIssueAuthorityId() == null || personDocumentJson.getIssueAuthorityId().isEmpty()) {
-                    return prepareError(result, methodName, personDocumentData,
-                            "no issueAuthority");
-                }
+//                if (personDocumentJson.getIssueAuthorityId() == null || personDocumentJson.getIssueAuthorityId().isEmpty()) {
+//                    return prepareError(result, methodName, personDocumentData,
+//                            "no issueAuthority");
+//                }
 //                if (personDocumentJson.getStatus() == null || personDocumentJson.getStatus().isEmpty()) {
 //                    return prepareError(result, methodName, personDocumentData,
 //                            "no status");
@@ -1938,20 +1938,23 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             : null);
                     personDocument.setIssuedBy(personDocumentJson.getIssueByForExpat());
 
-                    DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
-                            .query("select e from tsadv_DicIssuingAuthority e " +
-                                    " where e.legacyId = :legacyId " +
-                                    " and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getIssueAuthorityId(),
-                                    "companyCode", personDocumentJson.getCompanyCode()))
-                            .view("dicIssuingAuthority.for.integration")
-                            .list().stream().findFirst().orElse(null);
-                    if (dicIssuingAuthority != null) {
-                        personDocument.setIssuingAuthority(dicIssuingAuthority);
-                    } else {
-                        return prepareError(result, methodName, personDocumentData,
-                                "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
-                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    if (personDocumentJson.getIssueAuthorityId() != null && !personDocumentJson.getIssueAuthorityId().isEmpty()) {
+                        DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
+                                .query("select e from tsadv_DicIssuingAuthority e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :companyCode")
+                                .setParameters(ParamsMap.of("legacyId", personDocumentJson.getIssueAuthorityId(),
+                                        "companyCode", personDocumentJson.getCompanyCode()))
+                                .view("dicIssuingAuthority.for.integration")
+                                .list().stream().findFirst().orElse(null);
+                        if (dicIssuingAuthority != null) {
+                            personDocument.setIssuingAuthority(dicIssuingAuthority);
+                        }
+//                        else {
+//                            return prepareError(result, methodName, personDocumentData,
+//                                    "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
+//                                            + " and company legacyId " + personDocumentJson.getCompanyCode());
+//                        }
                     }
                     if (personDocumentJson.getStatus() != null && !personDocumentJson.getStatus().isEmpty()) {
                         DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
@@ -2017,20 +2020,23 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             : null);
                     personDocument.setIssuedBy(personDocumentJson.getIssueByForExpat());
 
-                    DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
-                            .query("select e from tsadv_DicIssuingAuthority e " +
-                                    " where e.legacyId = :legacyId " +
-                                    " and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getIssueAuthorityId(),
-                                    "companyCode", personDocumentJson.getCompanyCode()))
-                            .view("dicIssuingAuthority.for.integration")
-                            .list().stream().findFirst().orElse(null);
-                    if (dicIssuingAuthority != null) {
-                        personDocument.setIssuingAuthority(dicIssuingAuthority);
-                    } else {
-                        return prepareError(result, methodName, personDocumentData,
-                                "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
-                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    if (personDocumentJson.getIssueAuthorityId() != null && !personDocumentJson.getIssueAuthorityId().isEmpty()) {
+                        DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
+                                .query("select e from tsadv_DicIssuingAuthority e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :companyCode")
+                                .setParameters(ParamsMap.of("legacyId", personDocumentJson.getIssueAuthorityId(),
+                                        "companyCode", personDocumentJson.getCompanyCode()))
+                                .view("dicIssuingAuthority.for.integration")
+                                .list().stream().findFirst().orElse(null);
+                        if (dicIssuingAuthority != null) {
+                            personDocument.setIssuingAuthority(dicIssuingAuthority);
+                        }
+//                        else {
+//                            return prepareError(result, methodName, personDocumentData,
+//                                    "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
+//                                            + " and company legacyId " + personDocumentJson.getCompanyCode());
+//                        }
                     }
                     if (personDocumentJson.getStatus() != null && !personDocumentJson.getStatus().isEmpty()) {
                         DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
