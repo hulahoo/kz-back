@@ -172,7 +172,7 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
                 while (CollectionUtils.isEmpty(managerList) && manager != null) {
                     managerList = getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(manager.getId(), null));
                     if (CollectionUtils.isEmpty(managerList))
-                        manager = positionService.getManager(positionGroup.getId());
+                        manager = positionService.getManager(manager.getId());
                 }
                 return managerList;
             }
