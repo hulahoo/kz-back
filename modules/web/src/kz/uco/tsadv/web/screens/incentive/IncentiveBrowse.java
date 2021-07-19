@@ -3,10 +3,7 @@ package kz.uco.tsadv.web.screens.incentive;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.entity.Entity;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.MessageTools;
-import com.haulmont.cuba.core.global.Messages;
-import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.*;
 import com.haulmont.cuba.gui.actions.list.AddAction;
 import com.haulmont.cuba.gui.components.*;
@@ -20,11 +17,12 @@ import kz.uco.tsadv.api.Null;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.HierarchyService;
-import kz.uco.tsadv.web.screens.organizationincentiveindicators.OrganizationIncentiveIndicatorsEdit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -75,6 +73,8 @@ public class IncentiveBrowse extends Screen {
 
     protected String ELEMENT_TYPE_SCREEN_PARAM = "ELEMENT_TYPE";
     protected String ELEMENT_TYPE_SCREEN_VALUE = "";
+    protected String PERIOD_DATE_FORMAT = "MMM yyyy";
+
     @Named("organizationIncentiveIndicatorsTable.add")
     private AddAction<OrganizationIncentiveIndicators> organizationIncentiveIndicatorsTableAdd;
     @Inject
@@ -102,11 +102,37 @@ public class IncentiveBrowse extends Screen {
     @Inject
     private MessageTools messageTools;
 
+    protected class LocalizedDateFormatter implements Function<Object, String>{
+
+        protected String format;
+
+        LocalizedDateFormatter(String format){
+            this.format = format;
+        }
+
+        public String getFormat() {
+            return format;
+        }
+
+        public void setFormat(String format) {
+            this.format = format;
+        }
+
+        @Override
+        public String apply(Object value) {
+            Date date = (Date) value;
+            UserSessionSource us = AppBeans.get(UserSessionSource.NAME);
+            Locale currentLocale = us.getLocale();
+            if(currentLocale.getLanguage().equals("kz")) currentLocale = new Locale("ru");
+            DateFormat df = new SimpleDateFormat(format,currentLocale);
+            return df.format(date);
+        }
+
+    }
 
     @Subscribe
     protected void onInit(InitEvent event) {
         MapScreenOptions screenOptions = (MapScreenOptions) event.getOptions();
-
         if(screenOptions == null || !screenOptions.getParams().containsKey(ELEMENT_TYPE_SCREEN_PARAM)){
             notifications.create().withCaption("No screen params").show();
             closeWithDefaultAction();
@@ -135,6 +161,8 @@ public class IncentiveBrowse extends Screen {
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
         initHierarchiesDc();
+        LocalizedDateFormatter localizedDateFormatter = new LocalizedDateFormatter(PERIOD_DATE_FORMAT);
+        organizationIncentiveResultsTable.getColumn("periodDate").setFormatter(localizedDateFormatter);
     }
 
     @Subscribe(id = "hierarchiesDc", target = Target.DATA_CONTAINER)

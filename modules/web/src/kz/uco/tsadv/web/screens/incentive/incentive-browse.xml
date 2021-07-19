@@ -168,9 +168,7 @@
                                </buttonsPanel>
                                <columns>
                                    <group>
-                                       <column id="periodDate">
-                                           <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" format="MMM yyyy"/>
-                                       </column>
+                                       <column id="periodDate"/>
                                    </group>
                                    <column id="total" generator="totalColumnGenerator" caption="msg://incentive.total"/>
                                    <column id="weight"/>

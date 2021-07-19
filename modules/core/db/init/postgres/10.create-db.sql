@@ -5873,6 +5873,7 @@ create table TSADV_DIC_DOCUMENT_TYPE (
     ORDER_ integer,
     --
     FOREIGNER Boolean default false,
+    IS_ID_OR_PASSPORT boolean not null,
     --
     primary key (ID)
 )^
