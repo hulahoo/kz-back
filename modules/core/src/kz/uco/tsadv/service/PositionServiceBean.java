@@ -91,4 +91,18 @@ public class PositionServiceBean implements PositionService {
                         .setParameter("systemDate", CommonUtils.getSystemDate())
                         .getFirstResult());
     }
+
+    @Nullable
+    @Override
+    public PositionGroupExt getFunctionalManager(UUID positionGroupId) {
+        return dataManager.load(PositionGroupExt.class)
+                .query("select l.functionalManagerPositionGroup from base$PositionGroupExt e" +
+                        "   join e.list l " +
+                        "   where e.id = :positionGroupId" +
+                        "       and current_date between l.startDate and l.endDate")
+                .parameter("positionGroupId", positionGroupId)
+                .view(View.MINIMAL)
+                .optional()
+                .orElse(null);
+    }
 }
