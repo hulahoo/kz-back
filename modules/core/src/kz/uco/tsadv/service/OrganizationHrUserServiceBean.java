@@ -190,6 +190,12 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
                 if (manager == null) return new ArrayList<>();
                 return assistantService.getAssistantList(manager.getId());
             }
+            case HR_ROLE_FUN_MANAGER: {
+                PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL);
+                PositionGroupExt functionalManager = positionService.getFunctionalManager(positionGroup.getId());
+                if (functionalManager == null) return new ArrayList<>();
+                return getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(functionalManager.getId(), null));
+            }
             default: {
                 OrganizationGroupExt organizationGroup = employeeService.getOrganizationGroupByPersonGroupId(personGroupId, View.MINIMAL);
                 if (organizationGroup != null)
