@@ -443,7 +443,6 @@ public class IncentiveBrowse extends Screen {
         String totalPlanString = String.format("%s-%s",localizedPlanField,Null.nullReplace(incentiveResult.getPlan(),BigDecimal.ZERO));
         String totalFactString = String.format("%s-%s",localizedFactField,Null.nullReplace(incentiveResult.getFact(),BigDecimal.ZERO));
 
-        Label totalLabel = uiComponents.create(Label.TYPE_STRING);
         return (indicatorLangValue + "\n" + totalPlanString + ";" + totalFactString);
     }
 }
