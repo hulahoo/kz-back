@@ -4396,7 +4396,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .view(View.LOCAL).list().stream().findFirst().orElse(null);
                         if (dicCountry != null) {
                             address.setCountry(dicCountry);
-                            addressText = dicCountry.getLangValue();
+                            addressText = dicCountry.getLangValue() + ", ";
                         }
 
                         DicKato dicKato = dataManager.load(DicKato.class)
@@ -4407,7 +4407,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .list().stream().findFirst().orElse(null);
                         if (dicKato != null) {
                             address.setKato(dicKato);
-                            addressText = addressText + ", " + dicKato.getLangValue();
+                            addressText = addressText + dicKato.getLangValue() + ", ";
                         }
 
                         DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
@@ -4419,7 +4419,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         if (dicStreetType != null) {
                             address.setStreetType(dicStreetType);
-                            addressText = addressText + ", " + dicAddressType.getLangValue();
+                            addressText = addressText + dicStreetType.getLangValue() + " ";
                         }
 
                         address.setStreetName(personAddressJson.getStreetName());
@@ -4430,10 +4430,19 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         address.setNotes(personAddressJson.getNotes());
                         address.setAddressKazakh(personAddressJson.getAddressKazakh());
                         address.setAddressEnglish(personAddressJson.getAddressEnglish());
-                        address.setAddress(addressText + ", "
-                                + personAddressJson.getStreetName() + ", "
-                                + personAddressJson.getBuilding() + ", "
-                                + personAddressJson.getBlock() + ", "
+                        address.setAddress(addressText
+                                + (personAddressJson.getStreetName() != null
+                                && !personAddressJson.getStreetName().isEmpty()
+                                ? personAddressJson.getStreetName() + ", "
+                                : "")
+                                + (personAddressJson.getBuilding() != null
+                                && !personAddressJson.getBuilding().isEmpty()
+                                ? ", " + personAddressJson.getBuilding()
+                                : "")
+                                + (personAddressJson.getBlock() != null
+                                && !personAddressJson.getBlock().isEmpty()
+                                ? ", " + personAddressJson.getBlock()
+                                : "")
                                 + personAddressJson.getFlat());
 
                         personAddressesCommitList.add(address);
@@ -4488,7 +4497,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .view(View.LOCAL).list().stream().findFirst().orElse(null);
                         if (dicCountry != null) {
                             address.setCountry(dicCountry);
-                            addressText = dicCountry.getLangValue();
+                            addressText = dicCountry.getLangValue() + ", ";
                         }
 
                         DicKato dicKato = dataManager.load(DicKato.class)
@@ -4499,7 +4508,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .list().stream().findFirst().orElse(null);
                         if (dicKato != null) {
                             address.setKato(dicKato);
-                            addressText = addressText + ", " + dicKato.getLangValue();
+                            addressText = addressText + dicKato.getLangValue() + ", ";
                         }
 
                         DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
@@ -4511,7 +4520,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         if (dicStreetType != null) {
                             address.setStreetType(dicStreetType);
-                            addressText = addressText + ", " + dicAddressType.getLangValue();
+                            addressText = addressText + dicStreetType.getLangValue() + " ";
                         }
 
                         address.setStreetName(personAddressJson.getStreetName());
@@ -4522,11 +4531,23 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         address.setNotes(personAddressJson.getNotes());
                         address.setAddressKazakh(personAddressJson.getAddressKazakh());
                         address.setAddressEnglish(personAddressJson.getAddressEnglish());
-                        address.setAddress(addressText + ", "
-                                + personAddressJson.getStreetName() + ", "
-                                + personAddressJson.getBuilding() + ", "
-                                + personAddressJson.getBlock() + ", "
-                                + personAddressJson.getFlat());
+                        address.setAddress(addressText
+                                + (personAddressJson.getStreetName() != null
+                                && !personAddressJson.getStreetName().isEmpty()
+                                ? personAddressJson.getStreetName()
+                                : "")
+                                + (personAddressJson.getBuilding() != null
+                                && !personAddressJson.getBuilding().isEmpty()
+                                ? ", " + personAddressJson.getBuilding()
+                                : "")
+                                + (personAddressJson.getBlock() != null
+                                && !personAddressJson.getBlock().isEmpty()
+                                ? ", " + personAddressJson.getBlock()
+                                : "")
+                                + (personAddressJson.getFlat() != null
+                                && !personAddressJson.getFlat().isEmpty()
+                                ? ", " + personAddressJson.getFlat()
+                                : ""));
 
                         personAddressesCommitList.add(address);
                     }
@@ -4614,11 +4635,23 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     address.setNotes(personAddressJson.getNotes());
                     address.setAddressKazakh(personAddressJson.getAddressKazakh());
                     address.setAddressEnglish(personAddressJson.getAddressEnglish());
-                    address.setAddress(addressText + ", "
-                            + personAddressJson.getStreetName() + ", "
-                            + personAddressJson.getBuilding() + ", "
-                            + personAddressJson.getBlock() + ", "
-                            + personAddressJson.getFlat());
+                    address.setAddress(addressText
+                            + (personAddressJson.getStreetName() != null
+                            && !personAddressJson.getStreetName().isEmpty()
+                            ? personAddressJson.getStreetName()
+                            : "")
+                            + (personAddressJson.getBuilding() != null
+                            && !personAddressJson.getBuilding().isEmpty()
+                            ? ", " + personAddressJson.getBuilding()
+                            : "")
+                            + (personAddressJson.getBlock() != null
+                            && !personAddressJson.getBlock().isEmpty()
+                            ? ", " + personAddressJson.getBlock()
+                            : "")
+                            + (personAddressJson.getFlat() != null
+                            && !personAddressJson.getFlat().isEmpty()
+                            ? ", " + personAddressJson.getFlat()
+                            : ""));
 
                     personAddressesCommitList.add(address);
                 }
