@@ -1891,16 +1891,17 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "pgLegacyId", personDocumentJson.getPersonId(),
                                 "companyCode", personDocumentJson.getCompanyCode()))
                         .view("personDocument.edit").list().stream().findFirst().orElse(null);
+                Date nullDate = null;
                 if (personDocument != null) {
                     personDocument.setLegacyId(personDocumentJson.getLegacyId());
                     personDocument.setStartDate(personDocumentJson.getStartDate() != null
                             && !personDocumentJson.getStartDate().isEmpty()
                             ? formatter.parse(personDocumentJson.getStartDate())
-                            : null);
+                            : nullDate);
                     personDocument.setEndDate(personDocumentJson.getEndDate() != null
                             && !personDocumentJson.getEndDate().isEmpty()
                             ? formatter.parse(personDocumentJson.getEndDate())
-                            : null);
+                            : nullDate);
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query("select e from base$PersonGroupExt e " +
                                     " where e.legacyId = :legacyId " +
@@ -1935,7 +1936,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDocument.setExpiredDate(personDocumentJson.getExpiredDate() != null
                             && !personDocumentJson.getExpiredDate().isEmpty()
                             ? formatter.parse(personDocumentJson.getExpiredDate())
-                            : null);
+                            : nullDate);
                     personDocument.setIssuedBy(personDocumentJson.getIssueByForExpat());
 
                     if (personDocumentJson.getIssueAuthorityId() != null && !personDocumentJson.getIssueAuthorityId().isEmpty()) {
@@ -1978,11 +1979,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDocument.setStartDate(personDocumentJson.getStartDate() != null
                             && !personDocumentJson.getStartDate().isEmpty()
                             ? formatter.parse(personDocumentJson.getStartDate())
-                            : null);
+                            : nullDate);
                     personDocument.setEndDate(personDocumentJson.getEndDate() != null
                             && !personDocumentJson.getEndDate().isEmpty()
                             ? formatter.parse(personDocumentJson.getEndDate())
-                            : null);
+                            : nullDate);
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query("select e from base$PersonGroupExt e " +
                                     " where e.legacyId = :legacyId " +
@@ -2017,7 +2018,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDocument.setExpiredDate(personDocumentJson.getExpiredDate() != null
                             && !personDocumentJson.getExpiredDate().isEmpty()
                             ? formatter.parse(personDocumentJson.getExpiredDate())
-                            : null);
+                            : nullDate);
                     personDocument.setIssuedBy(personDocumentJson.getIssueByForExpat());
 
                     if (personDocumentJson.getIssueAuthorityId() != null && !personDocumentJson.getIssueAuthorityId().isEmpty()) {
