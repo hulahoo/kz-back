@@ -2858,6 +2858,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     absence.setDateTo(formatter.parse(absenceJson.getEndDate()));
                     absence.setAbsenceDays(Integer.valueOf(absenceJson.getAbsenceDuration()));
                     absence.setOrderNum(absenceJson.getOrderNumber());
+                    absence.setTotalHours(!Strings.isNullOrEmpty(absenceJson.getAbsenceHours())
+                            ? Integer.parseInt(absenceJson.getAbsenceHours())
+                            : null);
                     absence.setOrderDate(absenceJson.getOrderDate() != null && !absenceJson.getOrderDate().isEmpty()
                             ? formatter.parse(absenceJson.getOrderDate())
                             : null);
@@ -2901,6 +2904,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     absence.setDateTo(formatter.parse(absenceJson.getEndDate()));
                     absence.setAbsenceDays(Integer.valueOf(absenceJson.getAbsenceDuration()));
                     absence.setOrderNum(absenceJson.getOrderNumber());
+                    absence.setTotalHours(!Strings.isNullOrEmpty(absenceJson.getAbsenceHours())
+                            ? Integer.parseInt(absenceJson.getAbsenceHours())
+                            : null);
                     absence.setOrderDate(absenceJson.getOrderDate() != null && !absenceJson.getOrderDate().isEmpty()
                             ? formatter.parse(absenceJson.getOrderDate())
                             : null);
