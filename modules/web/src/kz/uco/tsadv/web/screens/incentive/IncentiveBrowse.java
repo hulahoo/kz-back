@@ -2,12 +2,15 @@ package kz.uco.tsadv.web.screens.incentive;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.model.MetaClass;
+import com.haulmont.chile.core.model.MetaPropertyPath;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.*;
 import com.haulmont.cuba.gui.actions.list.AddAction;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.export.ExcelExporter;
+import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -17,6 +20,8 @@ import kz.uco.tsadv.api.Null;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.HierarchyService;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.ss.usermodel.Cell;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -101,6 +106,10 @@ public class IncentiveBrowse extends Screen {
     private UiComponents uiComponents;
     @Inject
     private MessageTools messageTools;
+    
+    protected WrapCellExcelExporter excelExporter = new WrapCellExcelExporter();
+    @Inject
+    private ExportDisplay exportDisplay;
 
     protected class LocalizedDateFormatter implements Function<Object, String>{
 
@@ -128,6 +137,19 @@ public class IncentiveBrowse extends Screen {
             return df.format(date);
         }
 
+    }
+
+    protected class WrapCellExcelExporter extends ExcelExporter{
+
+        @Override
+        protected void formatValueCell(Cell cell,  Object cellValue, MetaPropertyPath metaPropertyPath, int sizersIndex, int notificationRequired, int level,  Integer groupChildCount) {
+            super.formatValueCell(cell, cellValue, metaPropertyPath, sizersIndex, notificationRequired, level, groupChildCount);
+
+            if (cellValue instanceof String) {
+                HSSFCellStyle style = (HSSFCellStyle) cell.getCellStyle();
+                style.setWrapText(true);
+            }
+        }
     }
 
     @Subscribe
@@ -163,7 +185,14 @@ public class IncentiveBrowse extends Screen {
         initHierarchiesDc();
         LocalizedDateFormatter localizedDateFormatter = new LocalizedDateFormatter(PERIOD_DATE_FORMAT);
         organizationIncentiveResultsTable.getColumn("periodDate").setFormatter(localizedDateFormatter);
+        organizationIncentiveResultsTable.addPrintable("total", incentiveResult -> getOrganizationIncentiveResultTotal(incentiveResult));
     }
+
+    @Subscribe("organizationIncentiveResultsTable.excel")
+    public void onOrganizationIncentiveResultsTableExcel(Action.ActionPerformedEvent event) {
+        excelExporter.exportTable(organizationIncentiveResultsTable,exportDisplay);
+    }
+
 
     @Subscribe(id = "hierarchiesDc", target = Target.DATA_CONTAINER)
     public void onHierarchiesDcItemChange(InstanceContainer.ItemChangeEvent<Hierarchy> event) {
@@ -397,6 +426,14 @@ public class IncentiveBrowse extends Screen {
 
     public Component totalColumnGenerator(Entity entity) {
         OrganizationIncentiveResult incentiveResult = (OrganizationIncentiveResult) entity;
+
+        Label totalLabel = uiComponents.create(Label.TYPE_STRING);
+        totalLabel.setValue(getOrganizationIncentiveResultTotal(incentiveResult));
+
+        return totalLabel;
+    }
+
+    protected String getOrganizationIncentiveResultTotal(OrganizationIncentiveResult incentiveResult){
         MetaClass incentiveResultMetaClass = metadata.getClass(OrganizationIncentiveResult.class);
 
         String indicatorLangValue = incentiveResult.getIndicator() == null ? "" : Null.nullReplace(incentiveResult.getIndicator().getLangValue(),"");
@@ -407,8 +444,6 @@ public class IncentiveBrowse extends Screen {
         String totalFactString = String.format("%s-%s",localizedFactField,Null.nullReplace(incentiveResult.getFact(),BigDecimal.ZERO));
 
         Label totalLabel = uiComponents.create(Label.TYPE_STRING);
-        totalLabel.setValue(indicatorLangValue + "\n" + totalPlanString + ";" + totalFactString);
-
-        return totalLabel;
+        return (indicatorLangValue + "\n" + totalPlanString + ";" + totalFactString);
     }
 }
