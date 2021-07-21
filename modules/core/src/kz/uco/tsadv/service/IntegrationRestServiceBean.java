@@ -1874,10 +1874,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 //                    return prepareError(result, methodName, personDocumentData,
 //                            "no expiredDate");
 //                }
-                if (personDocumentJson.getIssueAuthorityId() == null || personDocumentJson.getIssueAuthorityId().isEmpty()) {
-                    return prepareError(result, methodName, personDocumentData,
-                            "no issueAuthority");
-                }
+//                if (personDocumentJson.getIssueAuthorityId() == null || personDocumentJson.getIssueAuthorityId().isEmpty()) {
+//                    return prepareError(result, methodName, personDocumentData,
+//                            "no issueAuthority");
+//                }
 //                if (personDocumentJson.getStatus() == null || personDocumentJson.getStatus().isEmpty()) {
 //                    return prepareError(result, methodName, personDocumentData,
 //                            "no status");
@@ -1891,16 +1891,17 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "pgLegacyId", personDocumentJson.getPersonId(),
                                 "companyCode", personDocumentJson.getCompanyCode()))
                         .view("personDocument.edit").list().stream().findFirst().orElse(null);
+                Date nullDate = null;
                 if (personDocument != null) {
                     personDocument.setLegacyId(personDocumentJson.getLegacyId());
                     personDocument.setStartDate(personDocumentJson.getStartDate() != null
                             && !personDocumentJson.getStartDate().isEmpty()
                             ? formatter.parse(personDocumentJson.getStartDate())
-                            : null);
+                            : nullDate);
                     personDocument.setEndDate(personDocumentJson.getEndDate() != null
                             && !personDocumentJson.getEndDate().isEmpty()
                             ? formatter.parse(personDocumentJson.getEndDate())
-                            : null);
+                            : nullDate);
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query("select e from base$PersonGroupExt e " +
                                     " where e.legacyId = :legacyId " +
@@ -1935,23 +1936,26 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDocument.setExpiredDate(personDocumentJson.getExpiredDate() != null
                             && !personDocumentJson.getExpiredDate().isEmpty()
                             ? formatter.parse(personDocumentJson.getExpiredDate())
-                            : null);
+                            : nullDate);
                     personDocument.setIssuedBy(personDocumentJson.getIssueByForExpat());
 
-                    DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
-                            .query("select e from tsadv_DicIssuingAuthority e " +
-                                    " where e.legacyId = :legacyId " +
-                                    " and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getIssueAuthorityId(),
-                                    "companyCode", personDocumentJson.getCompanyCode()))
-                            .view("dicIssuingAuthority.for.integration")
-                            .list().stream().findFirst().orElse(null);
-                    if (dicIssuingAuthority != null) {
-                        personDocument.setIssuingAuthority(dicIssuingAuthority);
-                    } else {
-                        return prepareError(result, methodName, personDocumentData,
-                                "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
-                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    if (personDocumentJson.getIssueAuthorityId() != null && !personDocumentJson.getIssueAuthorityId().isEmpty()) {
+                        DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
+                                .query("select e from tsadv_DicIssuingAuthority e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :companyCode")
+                                .setParameters(ParamsMap.of("legacyId", personDocumentJson.getIssueAuthorityId(),
+                                        "companyCode", personDocumentJson.getCompanyCode()))
+                                .view("dicIssuingAuthority.for.integration")
+                                .list().stream().findFirst().orElse(null);
+                        if (dicIssuingAuthority != null) {
+                            personDocument.setIssuingAuthority(dicIssuingAuthority);
+                        }
+//                        else {
+//                            return prepareError(result, methodName, personDocumentData,
+//                                    "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
+//                                            + " and company legacyId " + personDocumentJson.getCompanyCode());
+//                        }
                     }
                     if (personDocumentJson.getStatus() != null && !personDocumentJson.getStatus().isEmpty()) {
                         DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
@@ -1975,11 +1979,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDocument.setStartDate(personDocumentJson.getStartDate() != null
                             && !personDocumentJson.getStartDate().isEmpty()
                             ? formatter.parse(personDocumentJson.getStartDate())
-                            : null);
+                            : nullDate);
                     personDocument.setEndDate(personDocumentJson.getEndDate() != null
                             && !personDocumentJson.getEndDate().isEmpty()
                             ? formatter.parse(personDocumentJson.getEndDate())
-                            : null);
+                            : nullDate);
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query("select e from base$PersonGroupExt e " +
                                     " where e.legacyId = :legacyId " +
@@ -2014,23 +2018,26 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDocument.setExpiredDate(personDocumentJson.getExpiredDate() != null
                             && !personDocumentJson.getExpiredDate().isEmpty()
                             ? formatter.parse(personDocumentJson.getExpiredDate())
-                            : null);
+                            : nullDate);
                     personDocument.setIssuedBy(personDocumentJson.getIssueByForExpat());
 
-                    DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
-                            .query("select e from tsadv_DicIssuingAuthority e " +
-                                    " where e.legacyId = :legacyId " +
-                                    " and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getIssueAuthorityId(),
-                                    "companyCode", personDocumentJson.getCompanyCode()))
-                            .view("dicIssuingAuthority.for.integration")
-                            .list().stream().findFirst().orElse(null);
-                    if (dicIssuingAuthority != null) {
-                        personDocument.setIssuingAuthority(dicIssuingAuthority);
-                    } else {
-                        return prepareError(result, methodName, personDocumentData,
-                                "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
-                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    if (personDocumentJson.getIssueAuthorityId() != null && !personDocumentJson.getIssueAuthorityId().isEmpty()) {
+                        DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
+                                .query("select e from tsadv_DicIssuingAuthority e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :companyCode")
+                                .setParameters(ParamsMap.of("legacyId", personDocumentJson.getIssueAuthorityId(),
+                                        "companyCode", personDocumentJson.getCompanyCode()))
+                                .view("dicIssuingAuthority.for.integration")
+                                .list().stream().findFirst().orElse(null);
+                        if (dicIssuingAuthority != null) {
+                            personDocument.setIssuingAuthority(dicIssuingAuthority);
+                        }
+//                        else {
+//                            return prepareError(result, methodName, personDocumentData,
+//                                    "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
+//                                            + " and company legacyId " + personDocumentJson.getCompanyCode());
+//                        }
                     }
                     if (personDocumentJson.getStatus() != null && !personDocumentJson.getStatus().isEmpty()) {
                         DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
