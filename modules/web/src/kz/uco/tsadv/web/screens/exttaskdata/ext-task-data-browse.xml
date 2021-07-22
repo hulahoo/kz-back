@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://TransferRequest.approvalProcess.actors"
+        focusComponent="procTasksTable"
+        messagesPack="kz.uco.tsadv.web.screens.exttaskdata">
+    <data readOnly="true">
+        <collection id="extTaskDatasDc"
+                    class="kz.uco.tsadv.entity.bproc.ExtTaskData">
+        </collection>
+    </data>
+    <dialogMode height="500"
+                resizable="true"
+                forceDialog="true"
+                width="AUTO"/>
+    <layout expand="procTasksTable"
+            spacing="true">
+        <table id="procTasksTable"
+               showSelection="false"
+               dataContainer="extTaskDatasDc"
+               width="100%">
+            <columns>
+                <column id="hrRole"/>
+                <column id="assignee" generator="generateAssignee"/>
+                <column id="createTime"/>
+                <column id="endTime"/>
+                <column id="outcome" generator="generateOutcome"/>
+                <column id="comment"/>
+            </columns>
+        </table>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

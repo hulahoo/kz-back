@@ -55,7 +55,7 @@ public class SurChargeEdit extends AbstractEditor<SurCharge> {
         typeEnum.setOrientation(OptionsGroup.Orientation.HORIZONTAL);
         typeEnum.setDatasource(surChargeDs, "type");
         typeEnum.addValueChangeListener(valueChangeEvent -> {
-            SurChargeType surChargeType = (SurChargeType) valueChangeEvent;
+            SurChargeType surChargeType = (SurChargeType) ((HasValue.ValueChangeEvent) valueChangeEvent).getValue();
             if (surChargeType != null) {
                 FieldGroup.FieldConfig fieldConfig = fieldGroup.getFieldNN("calculate");
 

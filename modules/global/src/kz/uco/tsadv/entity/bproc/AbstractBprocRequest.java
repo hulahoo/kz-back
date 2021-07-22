@@ -21,6 +21,8 @@ public abstract class AbstractBprocRequest extends AbstractParentEntity {
 
     public static final String OUTCOME_START = "START";
 
+    public static final String OUTCOME_CANCEL = "CANCEL";
+
     public static final String OUTCOME_APPROVE = "APPROVE";
 
     public static final String OUTCOME_REJECT = "REJECT";
@@ -30,6 +32,8 @@ public abstract class AbstractBprocRequest extends AbstractParentEntity {
     public static final String OUTCOME_REASSIGN = "REASSIGN";
 
     public static final String OUTCOME_SEND_FOR_APPROVAL = "SEND_FOR_APPROVAL";
+
+    public static final String OUTCOME_AUTO_REDIRECT = "AUTO_REDIRECT";
 
     public static final String INITIATOR_TASK_CODE = "initiator_task";
 

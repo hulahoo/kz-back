@@ -43,17 +43,6 @@
                     <property name="endDate"/>
                     <property name="code"/>
                 </property>
-                <property name="file" view="_minimal"/>
-                <property name="requestStatus" view="_minimal">
-                    <property name="langValue1"/>
-                    <property name="langValue2"/>
-                    <property name="langValue3"/>
-                    <property name="langValue4"/>
-                    <property name="langValue5"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="code"/>
-                </property>
                 <property name="attachments" view="_minimal"/>
             </view>
             <loader/>
@@ -75,7 +64,8 @@
                 </query>
             </loader>
         </collection>
-
+        <collection id="tasksDc"
+                    class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -91,12 +81,12 @@
                     </pickerField>
                     <dateField id="issueDateField" property="issueDate"/>
                     <dateField id="expiredDateField" property="expiredDate"/>
-                    <lookupField id="issuingAuthorityField" property="issuingAuthority" optionsDatasource=""
+                    <lookupField id="issuingAuthorityField" property="issuingAuthority"
                                  optionsContainer="dicIssuingAuthoritiesDc"/>
                     <lookupField id="documentTypeField" property="documentType" optionsContainer="dicDocumentTypesDc">
                     </lookupField>
                     <textField id="documentNumberField" property="documentNumber"/>
-                    <pickerField id="requestStatusField" property="requestStatus" editable="false">
+                    <pickerField id="requestStatusField" property="status" editable="false">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>
                             <action id="clear" type="picker_clear"/>
@@ -119,10 +109,35 @@
                     </columns>
                 </table>
             </groupBox>
+            <vbox id="bpmActorsVBox"
+                  width="1300px"
+                  spacing="true">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://kz.uco.tsadv.bproc/bproc.participants"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           height="100%"
+                           showSelection="false"
+                           dataContainer="tasksDc"
+                           width="100%">
+                        <columns>
+                            <column id="hrRole"/>
+                            <column id="assignee" generator="generateAssignee"/>
+                            <column id="createTime"/>
+                            <column id="endTime"/>
+                            <column id="outcome" generator="generateOutcome"/>
+                            <column id="comment"/>
+                        </columns>
+                    </table>
+                </groupBox>
+            </vbox>
         </scrollBox>
 
-        <hbox id="editActions" spacing="true">
-            <button action="windowCommitAndClose"/>
+        <hbox id="procActionsBox"
+              align="BOTTOM_LEFT"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
             <button action="windowClose"/>
         </hbox>
     </layout>

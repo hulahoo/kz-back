@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.service.common.CommonService;
@@ -38,6 +39,10 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
     private EmployeeService employeeService;
     @Inject
     private PositionService positionService;
+    @Inject
+    protected UserSessionSource userSessionSource;
+    @Inject
+    private ExecutiveAssistantService assistantService;
 
     @Override
     public List<OrganizationHrUser> getHrUsers(@Nonnull UUID organizationGroupId, @Nonnull String roleCode, @Nullable Integer counter) {
@@ -162,9 +167,14 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
         switch (roleCode) {
             case HR_ROLE_MANAGER: {
                 PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL);
+                List<? extends User> managerList = new ArrayList<>();
                 PositionGroupExt manager = positionService.getManager(positionGroup.getId());
-                if (manager == null) return new ArrayList<>();
-                return getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(manager.getId(), null));
+                while (CollectionUtils.isEmpty(managerList) && manager != null) {
+                    managerList = getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(manager.getId(), null));
+                    if (CollectionUtils.isEmpty(managerList))
+                        manager = positionService.getManager(manager.getId());
+                }
+                return managerList;
             }
             case HR_ROLE_SUP_MANAGER: {
                 PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL);
@@ -173,6 +183,18 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
                 PositionGroupExt supManager = positionService.getManager(manager.getId());
                 if (supManager == null) return new ArrayList<>();
                 return getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(supManager.getId(), null));
+            }
+            case HR_ROLE_MANAGER_ASSISTANT: {
+                PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL);
+                PositionGroupExt manager = positionService.getManager(positionGroup.getId());
+                if (manager == null) return new ArrayList<>();
+                return assistantService.getAssistantList(manager.getId());
+            }
+            case HR_ROLE_FUN_MANAGER: {
+                PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL);
+                PositionGroupExt functionalManager = positionService.getFunctionalManager(positionGroup.getId());
+                if (functionalManager == null) return new ArrayList<>();
+                return getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(functionalManager.getId(), null));
             }
             default: {
                 OrganizationGroupExt organizationGroup = employeeService.getOrganizationGroupByPersonGroupId(personGroupId, View.MINIMAL);
@@ -193,6 +215,19 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
 
         List<? extends User> supManagers = getHrUsersForPerson(employeePersonGroupId, "SUP_MANAGER");
         return supManagers.stream().anyMatch(user -> user.getId().equals(userId));
+    }
+
+    @Override
+    public List<OrganizationGroupExt> getOrganizationList(@Nonnull UUID userId, @Nonnull String roleCode) {
+        return dataManager.load(OrganizationGroupExt.class)
+                .query("select e.organizationGroup from tsadv$OrganizationHrUser e " +
+                        "   where e.user.id = :userId " +
+                        "   and current_date between e.dateFrom and e.dateTo" +
+                        "   and e.hrRole.code = :roleCode")
+                .parameter("userId", userId)
+                .parameter("roleCode", roleCode)
+                .view(View.MINIMAL)
+                .list();
     }
 
     protected List<? extends User> getUsersByPersonGroups(List<? extends PersonGroupExt> personGroups) {

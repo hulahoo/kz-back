@@ -81,7 +81,13 @@ public class PositionExtListener implements AfterDeleteEntityListener<PositionEx
             String jobGroupIdKey = "job_group_id";
             String gradeGroupIdKey = "grade_group_id";
             String companyIdKey = "company_id";
-            String selectPositionDataSql = "select organization_group_ext_id , job_group_id , grade_group_id from base_position bp where group_id = '" + positionGroupId +"' order by start_date desc limit 1;";
+            String functionalManagerIdKey = "functional_manager_position_group_id";
+            String selectPositionDataSql = " select organization_group_ext_id ," +
+                                           "       job_group_id , " +
+                                           "       grade_group_id, " +
+                                           "       functional_manager_position_group_id " +
+                                           " from base_position bp " +
+                                           " where group_id = '" + positionGroupId +"' order by start_date desc limit 1;";
             try {
                 positionDataMap = queryRunner.query(connection,
                         selectPositionDataSql,
@@ -91,6 +97,7 @@ public class PositionExtListener implements AfterDeleteEntityListener<PositionEx
                                 resultMap.put(organizationGroupIdKey,rs.getString(organizationGroupIdKey));
                                 resultMap.put(jobGroupIdKey,rs.getString(jobGroupIdKey));
                                 resultMap.put(gradeGroupIdKey,rs.getString(gradeGroupIdKey));
+                                resultMap.put(functionalManagerIdKey,rs.getString(functionalManagerIdKey));
                             }
                             return resultMap;
                         });
@@ -113,12 +120,18 @@ public class PositionExtListener implements AfterDeleteEntityListener<PositionEx
                 String gradeGroupIdFromMap = positionDataMap.get(gradeGroupIdKey);
                 String gradeGroupIdFormatted = ( (gradeGroupIdFromMap == null || gradeGroupIdFromMap.isEmpty()) ? "null" : "'" + gradeGroupIdFromMap + "'");
                 String organizationGroupCompanyIdFormatted = ( (organizationGroupCompanyId==null || organizationGroupCompanyId.isEmpty()) ? "null" : "'" + organizationGroupCompanyId +"'");
+                String functionalManagerIdFromMap = positionDataMap.get(functionalManagerIdKey);
+                String functionalManagerIdFormatted = ((functionalManagerIdFromMap == null
+                        || functionalManagerIdFromMap.isEmpty())
+                        ? "null"
+                        : "'" + functionalManagerIdFromMap + "'");
 
                 String updatePositionGroupSql = "update base_position_group \n" +
                         "set organization_group_id = " + organizationGroupIdFormatted + ",\n" +
                         "job_group_id = " + jobGroupIdFormatted + ",\n" +
                         "grade_group_id = " + gradeGroupIdFormatted + ",\n" +
-                        "company_id = " + organizationGroupCompanyIdFormatted + "\n" +
+                        "company_id = " + organizationGroupCompanyIdFormatted + ",\n" +
+                        "functional_manager_position_group_id = " + functionalManagerIdFormatted + "\n" +
                         "where id = '" + positionGroupId + "';";
 
                 queryRunner.update(connection,updatePositionGroupSql);

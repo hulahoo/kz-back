@@ -157,6 +157,19 @@ public class EventHandler {
             em.persist(windowProperty);
             em.persist(activityType);
         }
+        if (getCount(em, "ORG_STRUCTURE_REQUEST_APPROVE") == 0) {
+            ActivityType activityType = metadata.create(ActivityType.class);
+            activityType.setCode("ORG_STRUCTURE_REQUEST_APPROVE");
+            activityType.setScreen("tsadv_OrgStructureRequest.edit");
+            activityType.setLangValue1("Утверждение / отклонение заявление на изменение орг.структуры");
+            WindowProperty windowProperty = metadata.create(WindowProperty.class);
+            windowProperty.setEntityName("tsadv_OrgStructureRequest");
+            windowProperty.setScreenName("tsadv_OrgStructureRequest.edit");
+            windowProperty.setViewName("tsadv_OrgStructureRequest.edit");
+            activityType.setWindowProperty(windowProperty);
+            em.persist(windowProperty);
+            em.persist(activityType);
+        }
         if (getCount(em, "NOTIFICATION") == 0) {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("NOTIFICATION");
@@ -220,11 +233,11 @@ public class EventHandler {
         if (getCount(em, "PERSONAL_DATA_REQUEST_APPROVE") == 0) {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("PERSONAL_DATA_REQUEST_APPROVE");
-            activityType.setScreen("tsadv$PersonalDataRequest.bpm");
+            activityType.setScreen("tsadv$PersonalDataRequestForBPM.edit");
             activityType.setLangValue1("Утверждение / отклонение измененных данных");
             WindowProperty windowProperty = metadata.create(WindowProperty.class);
             windowProperty.setEntityName("tsadv$PersonalDataRequest");
-            windowProperty.setScreenName("tsadv$PersonalDataRequest.bpm");
+            windowProperty.setScreenName("tsadv$PersonalDataRequestForBPM.edit");
             windowProperty.setViewName("personalDataRequest-view");
             activityType.setWindowProperty(windowProperty);
             em.persist(windowProperty);

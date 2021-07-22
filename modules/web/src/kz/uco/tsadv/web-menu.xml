@@ -176,6 +176,20 @@
             <item id="hrGradeRuleGroups"
                   screen="tsadv$GradeRule.browse"/>
         </menu>
+        <menu id="incentive">
+            <item id="organizationIncentives"
+                  screen="tsadv_IncentiveBrowse"
+                  caption="mainMsg://org.structure"
+                  openType="NEW_TAB">
+                <param name="ELEMENT_TYPE" value="ORGANIZATION"/>
+            </item>
+            <item id="positionIncentives"
+                  screen="tsadv_IncentiveBrowse"
+                  caption="mainMsg://positions"
+                  openType="NEW_TAB">
+                <param name="ELEMENT_TYPE" value="POSITION"/>
+            </item>
+        </menu>
         <menu id="hrCompetences"
               icon="font-icon:BRIEFCASE">
             <item id="hrCompetenceGroups"
@@ -729,6 +743,7 @@
         <item screen="bproc_DecisionTableModelerScreen"/>
         <!--        <item screen="tsadv$BpmRolesDefiner.browse"/>-->
         <item screen="tsadv_BpmRolesDefinerCompany" caption="mainMsg://menu_config.tsadv_BpmRolesDefinerCompany"/>
+        <item screen="tsadv$ProcInstanceV.browse" caption="mainMsg://menu_config.tsadv$ProcInstanceV.browse"/>
     </menu>
     <menu id="application-uactivity" insertBefore="administration">
         <menu id="Tasks">
@@ -802,10 +817,12 @@
         </menu>
         <item screen="tsadv_News.browse"/>
         <item screen="base$AppNameAndLogo.browse"/>
+        <item screen="tsadv_PortalMenuCustomization.browse"
+              caption="mainMsg://menu_config.tsadv_PortalMenuCustomization.browse"/>
     </menu>
     <menu id="help" icon="font-icon:QUESTION_CIRCLE">
         <item id="aboutWindow" openType="DIALOG"/>
-        <item id="printDomain"/>
+        <item id="printDomain" class="com.haulmont.cuba.web.app.domain.DomainProvider"/>
         <separator/>
         <item id="settings"/>
         <item id="logWindow"/>
@@ -937,7 +954,6 @@
     <!--        <item id="bpm$ProcModel.lookup"/>-->
     <!--        <item id="bpm$ProcDefinition.lookup"/>-->
     <!--        <item id="bpm$ProcInstance.lookup"/>-->
-    <!--        <item screen="tsadv$ProcInstanceV.browse" id="tsadv$ProcInstanceV.browse"/>-->
     <!--        <item id="bpm$ProcTask.lookup"/>-->
     <!--        <item id="bpm$ProcAttachmentType.lookup"/>-->
     <!--        <item id="stencilSetEditor"/>-->

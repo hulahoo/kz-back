@@ -3,6 +3,7 @@ package kz.uco.tsadv.modules.personal.model;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicApprovalStatus;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_PERSON_DOCUMENT_REQUEST")
 @Entity(name = "tsadv_PersonDocumentRequest")
 @NamePattern("%s %s|personGroup,documentType")
@@ -34,8 +36,7 @@ public class PersonDocumentRequest extends AbstractBprocRequest {
     @Column(name = "ISSUED_BY", length = 500)
     protected String issuedBy;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ISSUING_AUTHORITY_ID")
     protected DicIssuingAuthority issuingAuthority;
 

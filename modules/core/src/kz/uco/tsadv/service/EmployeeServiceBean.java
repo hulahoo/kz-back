@@ -53,7 +53,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service(EmployeeService.NAME)
 public class EmployeeServiceBean implements EmployeeService {
@@ -122,6 +121,7 @@ public class EmployeeServiceBean implements EmployeeService {
                 .parameter("personGroupId", personGroupId)
                 .parameter("date", CommonUtils.getSystemDate())
                 .view(new View(AssignmentExt.class)
+                        .addProperty("group", new View(AssignmentGroupExt.class))
                         .addProperty("organizationGroup", new View(OrganizationGroupExt.class)
                                 .addProperty("organizationName")
                                 .addProperty("list", viewRepository.getView(OrganizationExt.class, View.LOCAL)))
@@ -166,6 +166,7 @@ public class EmployeeServiceBean implements EmployeeService {
         dto.setCitizenship(person.getCitizenship() != null ? person.getCitizenship().getLangValue() : "");
         dto.setNationality(person.getNationality() != null ? person.getNationality().getLangValue() : "");
         dto.setImageId(person.getImage() != null ? person.getImage().getId() : null);
+        dto.setAssignmentGroupId(assignment.getGroup().getId());
 
         PositionGroupExt positionGroup = this.getPositionGroupByPersonGroupId(personGroupId, new View(PositionGroupExt.class)
                 .addProperty("list", new View(PositionExt.class).addProperty("startDate").addProperty("endDate")));
@@ -2512,5 +2513,10 @@ public class EmployeeServiceBean implements EmployeeService {
                 .setParameters(ParamsMap.of("positionGroupId", positionGroupId, "systemDate", CommonUtils.getSystemDate()))
                 .view(viewName != null ? viewName : View.MINIMAL)
                 .list();
+    }
+
+    @Override
+    public boolean hasHrRole(String dicHrCode) {
+        return !AppBeans.get(OrganizationHrUserService.class).getOrganizationList(userSessionSource.getUserSession().getUser().getId(), dicHrCode).isEmpty();
     }
 }

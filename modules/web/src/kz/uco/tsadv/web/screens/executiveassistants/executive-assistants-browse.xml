@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
         caption="msg://executiveAssistantsBrowse.caption"
         focusComponent="executiveAssistantsesTable"
         messagesPack="kz.uco.tsadv.web.screens.executiveassistants">
@@ -35,6 +34,10 @@
             <columns>
                 <column id="managerPositionGroup"/>
                 <column id="assistancePositionGroup"/>
+                <column id="managerPositionGroup.position.organizationGroupExt" caption="msg://manager.organization"/>
+                <column id="assistancePositionGroup.position.organizationGroupExt" caption="msg://assistance.organization"/>
+                <column id="managerPositionGroup.company" caption="msg://manager.company"/>
+                <column id="assistancePositionGroup.company" caption="msg://assistance.company"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
             </columns>

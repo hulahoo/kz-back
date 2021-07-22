@@ -1912,10 +1912,10 @@
             template="kz/uco/tsadv/web/modules/selfservice/salaryrequest/salary-request-edit.xml"/>
     <screen id="tsadv$PersonalDataRequest.show"
             template="kz/uco/tsadv/web/personaldatarequest/personal-data-request.xml"/>
-    <screen id="tsadv$PersonalDataRequest.bpm"
-            template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-bpm.xml"/>
-    <screen id="tsadv$AddressRequest.edit"
-            template="kz/uco/tsadv/web/addressrequest/address-request-edit.xml"/>
+<!--    <screen id="tsadv$PersonalDataRequest.bpm"-->
+<!--            template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-bpm.xml"/>-->
+<!--    <screen id="tsadv$AddressRequest.edit"-->
+    <!--            template="kz/uco/tsadv/web/addressrequest/address-request-edit.xml"/>-->
     <screen id="tsadv$PersonalDataRequest.browse"
             template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-browse.xml"/>
     <!--    <screen id="tsadv$PersonalDataRequest.edit"-->
@@ -2194,8 +2194,6 @@
             template="kz/uco/tsadv/web/recognitionprovider/recognition-provider-edit.xml"/>
     <screen id="report$Report.run"
             template="kz/uco/tsadv/web/report/ext-report-run.xml"/>
-    <screen id="tsadv$ProcInstanceV.browse"
-            template="kz/uco/tsadv/web/procinstancev/proc-instance-v-browse.xml"/>
     <screen id="tsadv$Book.browse"
             template="kz/uco/tsadv/web/book/book-browse.xml"/>
     <screen id="tsadv$Book.edit"
