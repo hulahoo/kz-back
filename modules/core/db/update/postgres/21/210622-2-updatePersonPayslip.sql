@@ -1,3 +1,4 @@
+drop table if exists TSADV_PERSON_PAYSLIP;
 create table TSADV_PERSON_PAYSLIP (
     ID uuid,
     VERSION integer not null,

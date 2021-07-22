@@ -5522,6 +5522,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, personPayslipDataJson,
                             "no file");
                 }
+                if (personPayslipJson.getExtension() == null || personPayslipJson.getExtension().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no extension");
+                }
 
                 PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                         .query("select e from base$PersonGroupExt e " +
@@ -5547,12 +5551,16 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "companyCode", personPayslipJson.getCompanyCode()))
                         .view("personPayslip.edit")
                         .list().stream().findFirst().orElse(null);
+                SimpleDateFormat year = new SimpleDateFormat("yyyy");
+                SimpleDateFormat month = new SimpleDateFormat("MM");
                 if (personPayslip != null) {
                     byte[] decoder = Base64.getDecoder().decode(personPayslipJson.getFile());
                     FileDescriptor file = metadata.create(FileDescriptor.class);
                     file.setCreateDate(BaseCommonUtils.getSystemDate());
-                    file.setName("Расчетный лист" + "." + "pdf");
-                    file.setExtension("pdf");
+                    file.setName("Расчетный_лист_за_" + month.format(personPayslip.getPeriod())
+                            + "_" + year.format(personPayslip.getPeriod())
+                            + "." + personPayslipJson.getExtension());
+                    file.setExtension(personPayslipJson.getExtension());
                     file.setSize((long) decoder.length);
                     fileStorageAPI.saveFile(file, decoder);
                     personPayslip.setFile(file);
@@ -5564,8 +5572,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     byte[] decoder = Base64.getDecoder().decode(personPayslipJson.getFile());
                     FileDescriptor file = metadata.create(FileDescriptor.class);
                     file.setCreateDate(BaseCommonUtils.getSystemDate());
-                    file.setName("Расчетный лист" + "." + "pdf");
-                    file.setExtension("pdf");
+                    file.setName("Расчетный_лист_за_" + month.format(personPayslip.getPeriod())
+                            + "_" + year.format(personPayslip.getPeriod())
+                            + "." + personPayslipJson.getExtension());
+                    file.setExtension(personPayslipJson.getExtension());
                     file.setSize((long) decoder.length);
                     fileStorageAPI.saveFile(file, decoder);
                     personPayslip.setUuid(UUID.randomUUID());

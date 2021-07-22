@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 public class PersonPayslipJson implements Serializable {
-    private String personId;
-    private String period;
-    private String file;
-    private String companyCode;
+    protected String personId;
+    protected String period;
+    protected String file;
+    protected String extension;
+    protected String companyCode;
 
     @JsonProperty
     public String getPersonId() {
@@ -38,6 +39,16 @@ public class PersonPayslipJson implements Serializable {
     @JsonProperty
     public void setFile(String file) {
         this.file = file;
+    }
+
+    @JsonProperty
+    public String getExtension() {
+        return extension;
+    }
+
+    @JsonProperty
+    public void setExtension(String extension) {
+        this.extension = extension;
     }
 
     @JsonProperty
