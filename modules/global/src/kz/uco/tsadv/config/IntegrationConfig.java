@@ -70,6 +70,14 @@ public interface IntegrationConfig extends Config {
     @DefaultString("http://10.2.200.101:8290/api/ahruco/personinfo/request")
     String getPersonalDataRequestUrl();
 
+    @Property("tsadv.integration.absenceRequest.off")
+    @DefaultBoolean(false)
+    boolean getAbsenceRequestOff();
+
+    @Property("tsadv.integration.absenceRequest.url")
+    @DefaultString("http://10.2.200.101:8290/api/ahruco/absence/request")
+    String getAbsenceRequestRestUrl();
+
     @Property("tsadv.integration.activeDirectory.on")
     @DefaultBoolean(true)
     boolean getIsIntegrationActiveDirectory();
