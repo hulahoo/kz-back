@@ -7,6 +7,7 @@ import com.haulmont.cuba.core.global.View;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kz.uco.tsadv.api.BaseResult;
+import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.modules.integration.jsonobject.PersonDocumentRequestDataJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.PersonDocumentRequest;
@@ -30,7 +31,8 @@ public class PersonDocumentRequestChangedListener {
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     @Inject
     protected IntegrationRestService integrationRestService;
-    protected String personinfoRequestUrl = "http://10.2.200.101:8290/api/ahruco/document/request";
+    @Inject
+    protected IntegrationConfig integrationConfig;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void afterCommit(EntityChangedEvent<PersonDocumentRequest, UUID> event) {
@@ -53,7 +55,7 @@ public class PersonDocumentRequestChangedListener {
                         .view("personDocumentRequest-for-integration").one();
                 DicRequestStatus requestStatus = personDocumentRequest.getStatus();
                 if (APPROVED_STATUS.equals(requestStatus.getCode()) && !APPROVED_STATUS.equals(oldStatus != null
-                        ? oldStatus.getCode() : "")) {
+                        ? oldStatus.getCode() : "") && !integrationConfig.getPersonDocumentRequestOff()) {
                     personDocumentRequestDataJson.setPersonId(personDocumentRequest.getPersonGroup().getLegacyId());
                     personDocumentRequestDataJson.setRequestNumber(personDocumentRequest.getRequestNumber().toString());
                     personDocumentRequestDataJson.setLegacyId(personDocumentRequest.getEditedPersonDocument() != null
@@ -73,7 +75,7 @@ public class PersonDocumentRequestChangedListener {
                             : "");
                     setupUnirest();
                     HttpResponse<String> response = Unirest
-                            .post(personinfoRequestUrl)
+                            .post(getApiUrl())
                             .body(personDocumentRequestDataJson)
                             .asString();
 
@@ -100,6 +102,10 @@ public class PersonDocumentRequestChangedListener {
             }
 
         }
+    }
+
+    protected String getApiUrl() {
+        return integrationConfig.getPersonDocumentRequestUrl();
     }
 
     protected void setupUnirest() {
