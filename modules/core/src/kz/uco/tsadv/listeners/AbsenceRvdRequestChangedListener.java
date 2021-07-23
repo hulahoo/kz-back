@@ -172,7 +172,7 @@ public class AbsenceRvdRequestChangedListener {
 
                         setupUnirest();
                         HttpResponse<String> response = Unirest
-                                .post(getApiUrl())
+                                .post(getHolidayApiUrl())
                                 .body(absenceRvdRequestJson)
                                 .asString();
 
@@ -192,7 +192,7 @@ public class AbsenceRvdRequestChangedListener {
 
                         setupUnirest();
                         HttpResponse<String> response = Unirest
-                                .post(getApiUrl())
+                                .post(getNightApiUrl())
                                 .body(absenceRvdRequestJson)
                                 .asString();
 
@@ -278,7 +278,11 @@ public class AbsenceRvdRequestChangedListener {
         return absenceRvdRequestDataJson;
     }
 
-    protected String getApiUrl() {
-        return integrationConfig.getAbsenceRvdRequestUrl();
+    protected String getHolidayApiUrl() {
+        return integrationConfig.getAbsenceRvdRequestHolidayUrl();
+    }
+
+    protected String getNightApiUrl() {
+        return integrationConfig.getAbsenceRvdRequestNightUrl();
     }
 }
