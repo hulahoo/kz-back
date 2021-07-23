@@ -2815,10 +2815,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, absenceData,
                             "no endDate");
                 }
-                if (absenceJson.getAbsenceDuration() == null || absenceJson.getAbsenceDuration().isEmpty()) {
-                    return prepareError(result, methodName, absenceData,
-                            "no absenceDuration");
-                }
+//                if (absenceJson.getAbsenceDuration() == null || absenceJson.getAbsenceDuration().isEmpty()) {
+//                    return prepareError(result, methodName, absenceData,
+//                            "no absenceDuration");
+//                }
 //                if (absenceJson.getOrderNumber() == null || absenceJson.getOrderNumber().isEmpty()) {
 //                    return prepareError(result, methodName, absenceData,
 //                            "no orderNumber");
@@ -2856,7 +2856,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     absence.setDateFrom(formatter.parse(absenceJson.getStartDate()));
                     absence.setDateTo(formatter.parse(absenceJson.getEndDate()));
-                    absence.setAbsenceDays(Integer.valueOf(absenceJson.getAbsenceDuration()));
+                    absence.setAbsenceDays(!Strings.isNullOrEmpty(absenceJson.getAbsenceDuration())
+                            ? Integer.parseInt(absenceJson.getAbsenceDuration())
+                            : 0);
                     absence.setOrderNum(absenceJson.getOrderNumber());
                     absence.setTotalHours(!Strings.isNullOrEmpty(absenceJson.getAbsenceHours())
                             ? Integer.parseInt(absenceJson.getAbsenceHours())
@@ -2902,7 +2904,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     absence.setDateFrom(formatter.parse(absenceJson.getStartDate()));
                     absence.setDateTo(formatter.parse(absenceJson.getEndDate()));
-                    absence.setAbsenceDays(Integer.valueOf(absenceJson.getAbsenceDuration()));
+                    absence.setAbsenceDays(!Strings.isNullOrEmpty(absenceJson.getAbsenceDuration())
+                            ? Integer.parseInt(absenceJson.getAbsenceDuration())
+                            : 0);
                     absence.setOrderNum(absenceJson.getOrderNumber());
                     absence.setTotalHours(!Strings.isNullOrEmpty(absenceJson.getAbsenceHours())
                             ? Integer.parseInt(absenceJson.getAbsenceHours())
