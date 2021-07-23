@@ -94,6 +94,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     protected BprocEntityBeanAdapter<AbstractBprocRequest> bprocEntityBeanAdapter;
     @Inject
     protected ViewRepository viewRepository;
+    @Inject
+    protected BpmRolesDefinerService definerService;
 
     @Override
     public List<? extends User> getTaskCandidates(String executionId, String viewName) {
@@ -226,11 +228,17 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         if (initiatorTask != null) tasks.add(initiatorTask);
 
         List<BpmRolesLink> rolesLinks = getProcessVariable(processInstanceData.getId(), "rolesLinks");
-        List<BpmRolesLink> links = rolesLinks == null
+        List<BpmRolesLink> links = CollectionUtils.isEmpty(rolesLinks)
+                ? initiatorTask == null
                 ? null
+                : definerService.getBpmRolesDefiner(
+                processInstanceData.getProcessDefinitionKey(),
+                initiatorTask.getAssigneeOrCandidates().get(0).getPersonGroup().getId())
+                .getLinks()
                 : dataManager.load(BpmRolesLink.class)
                 .query("select e from tsadv$BpmRolesLink e where e.id in :links ")
                 .setParameters(ParamsMap.of("links", rolesLinks))
+                .softDeletion(false)
                 .view(new View(BpmRolesLink.class)
                         .addProperty("bprocUserTaskCode")
                         .addProperty("hrRole", new View(DicHrRole.class)
