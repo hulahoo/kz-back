@@ -9,6 +9,7 @@ import kong.unirest.Unirest;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.api.Null;
+import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.modules.integration.jsonobject.AbsenceRequestDataJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
@@ -28,15 +29,17 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
 
     @Inject
     protected IntegrationRestService integrationRestService;
+    @Inject
+    private IntegrationConfig integrationConfig;
 
     @Override
     public void onBeforeUpdate(AbsenceRequest entity, EntityManager entityManager) {
-        if (isApproved(entity, entityManager)) {
+        if (isApproved(entity, entityManager) && !integrationConfig.getAbsenceRequestOff()) {
             AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity, entityManager);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
-                    .post("http://10.2.200.101:8290/api/ahruco/absence/request")
+                    .post(getApiUrl())
                     .body(absenceJson)
                     .asString();
 
@@ -58,12 +61,12 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
 
     @Override
     public void onBeforeInsert(AbsenceRequest entity, EntityManager entityManager) {
-        if (isApproved(entity, entityManager)) {
+        if (isApproved(entity, entityManager) && !integrationConfig.getAbsenceRequestOff()) {
             AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity, entityManager);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
-                    .post("http://10.2.200.101:8290/api/ahruco/absence/request")
+                    .post(getApiUrl())
                     .body(absenceJson)
                     .asString();
 
@@ -122,6 +125,10 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
 
     protected String getFormattedDateString(Date date) {
         return date != null ? formatter.format(date) : "";
+    }
+
+    protected String getApiUrl() {
+        return integrationConfig.getAbsenceRequestRestUrl();
     }
 
     protected void setupUnirest() {
