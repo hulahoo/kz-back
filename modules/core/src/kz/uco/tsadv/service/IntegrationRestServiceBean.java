@@ -528,7 +528,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 positionExt.setEndDate(positionJson.getEndDate() != null
                         ? formatter.parse(positionJson.getEndDate()) : null);
                 positionExt.setFte(positionJson.getFte() != null && !positionJson.getFte().isEmpty()
-                        ? Double.parseDouble(positionJson.getFte()) : null);
+                        ? Double.parseDouble(positionJson.getFte()) : 0);
                 positionExt.setMaxPersons(positionJson.getMaxPerson() != null && !positionJson.getMaxPerson().isEmpty()
                         ? Integer.parseInt(positionJson.getMaxPerson()) : null);
                 positionExt.setGroup(positionGroupExt);
