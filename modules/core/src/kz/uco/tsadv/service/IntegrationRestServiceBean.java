@@ -1144,10 +1144,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     List<HierarchyElementExt> parentList = dataManager.load(HierarchyElementExt.class).query(
                             "select e from base$HierarchyElementExt e " +
                                     " where e.positionGroup.legacyId = :legacyId " +
-                                    " and e.positionGroup.company.legacyId  = :companyCode ")
+                                    " and e.positionGroup.company.legacyId  = :companyCode " +
+                                    " and :startDate between coalesce(e.startDate, :beginDate) " +
+                                    " and coalesce(e.endDate, :finishDate) ")
                             .setParameters(ParamsMap.of("legacyId"
                                     , positionHierarchyElementJson.getParentPositionId()
-                                    , "companyCode", positionHierarchyElementJson.getCompanyCode()))
+                                    , "companyCode", positionHierarchyElementJson.getCompanyCode()
+                                    , "beginDate", CommonUtils.getBeginOfTime()
+                                    , "finishDate", CommonUtils.getEndOfTime()
+                                    , "startDate", formatter.parse(positionHierarchyElementJson.getStartDate())))
                             .view("hierarchyElementExt-for-integration-rest").list();
                     if (parentList.size() > 1) {
                         return prepareError(result, methodName, hierarchyElementData,
@@ -1157,7 +1162,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     parent = parentList.stream().findFirst().orElse(null);
                     if (parent != null) {
                         hierarchyElementExt.setParent(parent);
-                        hierarchyElementExt.setParentGroup(parent != null ? parent.getGroup() : null);
+                        hierarchyElementExt.setParentGroup(parent.getGroup());
                     }
                 } else {
                     hierarchyElementExt.setParent(null);
