@@ -1,10 +1,14 @@
 package kz.uco.tsadv.web.modules.learning.coursefeedbackpersonanswer;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.data.GroupDatasource;
+import com.haulmont.reports.entity.Report;
+import com.haulmont.reports.gui.ReportGuiManager;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswer;
 import kz.uco.tsadv.web.coursefeedbackpersonanswerdetail.CourseFeedbackPersonAnswerDetailSimple;
 
@@ -15,10 +19,14 @@ import java.util.UUID;
 public class CourseFeedbackPersonAnswerBrowse extends AbstractLookup {
 
     @Inject
-    private Button showAnswersBtn;
+    protected Button showAnswersBtn;
 
     @Inject
-    private GroupDatasource<CourseFeedbackPersonAnswer, UUID> courseFeedbackPersonAnswersDs;
+    protected GroupDatasource<CourseFeedbackPersonAnswer, UUID> courseFeedbackPersonAnswersDs;
+    @Inject
+    protected ReportGuiManager reportGuiManager;
+    @Inject
+    protected DataManager dataManager;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -38,5 +46,18 @@ public class CourseFeedbackPersonAnswerBrowse extends AbstractLookup {
             showNotification("CourseFeedbackPersonAnswer not selected!", NotificationType.TRAY);
         }
 
+    }
+
+    public void report() {
+        CourseFeedbackPersonAnswer item = courseFeedbackPersonAnswersDs.getItem();
+        if (item != null) {
+            Report report = dataManager.load(Report.class)
+                    .query("select e from report$Report e where e.code = :code")
+                    .parameter("code", "COURSE_FEEDBACK_PERSON_ANSWER").view(View.MINIMAL)
+                    .list().stream().findFirst().orElse(null);
+            if (report != null) {
+                reportGuiManager.printReport(report, ParamsMap.of("courseFeedbackPersonAnswer", item));
+            }
+        }
     }
 }
