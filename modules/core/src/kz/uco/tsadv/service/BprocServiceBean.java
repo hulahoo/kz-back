@@ -667,4 +667,5 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     public void approveAssignedPerformancePlan(AssignedPerformancePlan request) {
         this.approve(request);
     }
+
 }
