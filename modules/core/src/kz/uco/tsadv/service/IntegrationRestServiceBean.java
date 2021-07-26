@@ -4443,7 +4443,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         address.setAddress(addressText
                                 + (personAddressJson.getStreetName() != null
                                 && !personAddressJson.getStreetName().isEmpty()
-                                ? personAddressJson.getStreetName() + ", "
+                                ? personAddressJson.getStreetName()
                                 : "")
                                 + (personAddressJson.getBuilding() != null
                                 && !personAddressJson.getBuilding().isEmpty()
@@ -4453,7 +4453,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 && !personAddressJson.getBlock().isEmpty()
                                 ? ", " + personAddressJson.getBlock()
                                 : "")
-                                + personAddressJson.getFlat());
+                                + (personAddressJson.getFlat() != null
+                                && !personAddressJson.getFlat().isEmpty()
+                                ? ", " + personAddressJson.getFlat()
+                                : ""));
 
                         personAddressesCommitList.add(address);
                     } else {
