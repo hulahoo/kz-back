@@ -61,6 +61,9 @@
             <property name="endDate"/>
         </property>
         <property name="stepStageStatus"/>
+        <property name="stage" view="_minimal">
+            <property name="code"/>
+        </property>
         <property name="extraPoint"/>
         <property name="finalScore"/>
         <property name="purpose"/>
