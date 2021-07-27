@@ -8111,20 +8111,18 @@
           extends="_local"
           name="person.full"
           systemProperties="true">
-        <property name="group"
-                  view="_minimal"/>
-        <property name="maritalStatus"
-                  view="_minimal"/>
-        <property name="type"
-                  view="_minimal"/>
-        <property name="nationality"
-                  view="_minimal"/>
-        <property name="citizenship"
-                  view="_minimal"/>
-        <property name="sex"
-                  view="_minimal"/>
-        <property name="image"
-                  view="_minimal"/>
+        <property name="group" view="_minimal">
+            <property name="company" view="_minimal"/>
+            <property name="socStatus" view="_minimal"/>
+            <property name="driverCategory" view="_minimal"/>
+            <property name="requestNumber"/>
+        </property>
+        <property name="maritalStatus" view="_minimal"/>
+        <property name="type" view="_minimal"/>
+        <property name="nationality" view="_minimal"/>
+        <property name="citizenship" view="_minimal"/>
+        <property name="image" view="_minimal"/>
+        <property name="sex" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.Job"
           extends="_local"
@@ -8746,9 +8744,6 @@
                 <property name="image" view="_minimal">
                     <property name="size"/>
                 </property>
-                <property name="firstNameLatin"/>
-                <property name="middleNameLatin"/>
-                <property name="lastNameLatin"/>
                 <property name="hireDate"/>
                 <property name="nationalIdentifier"/>
                 <property name="dateOfBirth"/>
@@ -8798,9 +8793,6 @@
                 <property name="image" view="_minimal">
                     <property name="size"/>
                 </property>
-                <property name="firstNameLatin"/>
-                <property name="middleNameLatin"/>
-                <property name="lastNameLatin"/>
                 <property name="hireDate"/>
                 <property name="nationalIdentifier"/>
                 <property name="dateOfBirth"/>
@@ -8823,6 +8815,14 @@
             <property name="langValue5"/>
             <property name="startDate"/>
             <property name="endDate"/>
+        </property>
+        <property name="socStatus" view="_minimal">
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
@@ -23917,5 +23917,95 @@
             <property name="legacyId"/>
             <property name="code"/>
         </property>
+    </view>
+    <view entity="tsadv_DicSocStatus" name="dicSocStatus.edit" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
+    <view entity="tsadv_DicDriverCategory" name="dicDriverCategory.edit" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
+    <view entity="tsadv_DicFieldOfActivity" name="dicFieldOfActivity.edit" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
+    <view entity="tsadv_DicGuardianType" name="dicGuardianType.edit" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
+    <view entity="tsadv_Guardian" name="guardian.edit" extends="_local">
+        <property name="guardianType" view="_minimal"/>
+        <property name="fieldOfActivity" view="_minimal"/>
+        <property name="personGroup" view="_minimal"/>
+    </view>
+    <view entity="tsadv_ListOfDocument" name="listOfDocument.edit" extends="_local">
+        <property name="personGroup" view="_minimal"/>
+        <property name="type" view="_minimal">
+            <property name="legacyId"/>
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="file" view="_minimal"/>
+    </view>
+    <view entity="tsadv_GranteesAgreement" name="granteesAgreement.edit" extends="_local">
+        <property name="status" view="_minimal">
+            <property name="legacyId"/>
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="personGroup" view="_minimal"/>
+    </view>
+    <view entity="tsadv_Payments" name="payments.edit" extends="_local">
+        <property name="granteesAgreement" view="_minimal">
+            <property name="contractNumber"/>
+            <property name="contractDate"/>
+            <property name="university"/>
+            <property name="agreementNumber"/>
+            <property name="agreementDate"/>
+            <property name="startYear"/>
+            <property name="status" view="_minimal"/>
+            <property name="personGroup" view="_minimal"/>
+        </property>
+        <property name="personGroup" view="_minimal"/>
+    </view>
+    <view entity="tsadv_LearningResult" name="learningResult.edit" extends="_local">
+        <property name="granteesAgreement" view="_minimal">
+            <property name="contractNumber"/>
+            <property name="contractDate"/>
+            <property name="university"/>
+            <property name="agreementNumber"/>
+            <property name="agreementDate"/>
+            <property name="startYear"/>
+            <property name="status" view="_minimal"/>
+            <property name="personGroup" view="_minimal"/>
+        </property>
+        <property name="personGroup" view="_minimal"/>
+    </view>
+    <view entity="tsadv_LearningResultPerSubject" name="learningResultPerSubject.edit" extends="_local">
+        <property name="learningResult" view="_minimal">
+            <property name="studyYear"/>
+            <property name="semester"/>
+        </property>
+    </view>
+    <view entity="tsadv_Scholarship" name="scholarship.edit" extends="_local">
+        <property name="granteesAgreement" view="_minimal"/>
     </view>
 </views>

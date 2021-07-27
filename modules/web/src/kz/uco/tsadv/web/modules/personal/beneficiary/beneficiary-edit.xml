@@ -85,14 +85,18 @@
                     <field datasource="personDs"
                            property="nationality"/>
                     <field id="dateOfBirth"
+                           required="true"
                            datasource="personDs"
                            property="dateOfBirth"/>
                     <field id="sex"
                            datasource="personDs"
+                           required="true"
                            property="sex"/>
                     <field id="personType"
                            datasource="personDs"
                            property="type"/>
+                    <field id="beneficiaryAddress"
+                           property="beneficiaryAddress"/>
                 </column>
                 <column id="column2">
                     <field id="employeeNumber"
@@ -110,6 +114,8 @@
                            datasource="personDs"
                            maxLength="12"
                            property="nationalIdentifier"/>
+                    <field id="beneficiaryJob"
+                           property="beneficiaryJob"/>
                 </column>
             </fieldGroup>
             <fieldGroup id="beneficiaryFieldGroup"
@@ -132,6 +138,10 @@
                     <field id="getAlimony"
                            caption="msg://getAlimony"
                            property="getAlimony"/>
+                    <field id="socStatus"
+                           property="socStatus"/>
+                    <field id="beneficiaryPlaceOfWork"
+                           property="beneficiaryPlaceOfWork"/>
                 </column>
             </fieldGroup>
         </hbox>

@@ -665,5 +665,16 @@
         <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveIndicators</class>
         <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult</class>
         <class>kz.uco.tsadv.modules.bpm.BprocReassignment</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicSocStatus</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicDriverCategory</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicFieldOfActivity</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicGuardianType</class>
+        <class>kz.uco.tsadv.modules.personal.model.Guardian</class>
+        <class>kz.uco.tsadv.modules.personal.model.ListOfDocument</class>
+        <class>kz.uco.tsadv.modules.personal.model.GranteesAgreement</class>
+        <class>kz.uco.tsadv.modules.personal.model.Payments</class>
+        <class>kz.uco.tsadv.modules.personal.model.LearningResult</class>
+        <class>kz.uco.tsadv.modules.personal.model.LearningResultPerSubject</class>
+        <class>kz.uco.tsadv.modules.personal.model.Scholarship</class>
     </persistence-unit>
 </persistence>

@@ -7,6 +7,7 @@ import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.base.entity.dictionary.DicEducationType;
+import kz.uco.base.entity.dictionary.DicLanguage;
 import kz.uco.tsadv.modules.learning.dictionary.DicEducationDegree;
 import kz.uco.tsadv.modules.learning.dictionary.DicEducationLevel;
 import kz.uco.tsadv.modules.learning.dictionary.DicEducationalEstablishment;
@@ -16,6 +17,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -100,6 +102,73 @@ public class PersonEducation extends AbstractParentEntity {
             inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
     @ManyToMany
     private List<FileDescriptor> attachments;
+
+    @Column(name = "SHL_TEST")
+    protected Integer shlTest;
+
+    @Column(name = "CITY")
+    protected String city;
+
+    @Column(name = "ENT_EXAM_SCORE")
+    protected Integer entExamScore;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LEARNING_LANGUAGE_ID")
+    protected DicLanguage learningLanguage;
+
+    @Column(name = "GRA")
+    protected BigDecimal gra;
+
+    @Column(name = "SPECIALTY_CODE")
+    protected String specialtyCode;
+
+    public String getSpecialtyCode() {
+        return specialtyCode;
+    }
+
+    public void setSpecialtyCode(String specialtyCode) {
+        this.specialtyCode = specialtyCode;
+    }
+
+    public BigDecimal getGra() {
+        return gra;
+    }
+
+    public void setGra(BigDecimal gra) {
+        this.gra = gra;
+    }
+
+    public DicLanguage getLearningLanguage() {
+        return learningLanguage;
+    }
+
+    public void setLearningLanguage(DicLanguage learningLanguage) {
+        this.learningLanguage = learningLanguage;
+    }
+
+    public Integer getEntExamScore() {
+        return entExamScore;
+    }
+
+    public void setEntExamScore(Integer entExamScore) {
+        this.entExamScore = entExamScore;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Integer getShlTest() {
+        return shlTest;
+    }
+
+    public void setShlTest(Integer shlTest) {
+        this.shlTest = shlTest;
+    }
 
     public List<FileDescriptor> getAttachments() {
         return attachments;

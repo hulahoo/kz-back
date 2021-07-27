@@ -418,6 +418,30 @@
                     order by e.startDate desc]]>
             </query>
         </collectionDatasource>
+        <collectionDatasource id="granteesAgreementDs"
+                              class="kz.uco.tsadv.modules.personal.model.GranteesAgreement"
+                              view="granteesAgreement.edit">
+            <query>
+                <![CDATA[select e from tsadv_GranteesAgreement e where e.personGroup.id = :ds$personGroupDs.id
+                    order by e.createTs desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="guardianDs"
+                              class="kz.uco.tsadv.modules.personal.model.Guardian"
+                              view="guardian.edit">
+            <query>
+                <![CDATA[select e from tsadv_Guardian e where e.personGroup.id = :ds$personGroupDs.id
+                    order by e.createTs desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="listOfDocumentDs"
+                              class="kz.uco.tsadv.modules.personal.model.ListOfDocument"
+                              view="listOfDocument.edit">
+            <query>
+                <![CDATA[select e from tsadv_ListOfDocument e where e.personGroup.id = :ds$personGroupDs.id
+                    order by e.createTs desc]]>
+            </query>
+        </collectionDatasource>
     </dsContext>
     <dialogMode height="600"
                 width="1000"/>
