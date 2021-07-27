@@ -42,9 +42,13 @@ public interface IntegrationConfig extends Config {
     @DefaultBoolean(false)
     boolean getAbsenceRvdRequestOff();
 
-    @Property("tsadv.integration.absenceRvdRequest.url")
+    @Property("tsadv.integration.absenceRvdRequest.holidayUrl")
     @DefaultString("http://10.2.200.101:8290/api/ahruco/work/holiday/request")
-    String getAbsenceRvdRequestUrl();
+    String getAbsenceRvdRequestHolidayUrl();
+
+    @Property("tsadv.integration.absenceRvdRequest.nightUrl")
+    @DefaultString("http://10.2.200.101:8290/api/ahruco/work/night/request")
+    String getAbsenceRvdRequestNightUrl();
 
     @Property("tsadv.integration.addressRequest.off")
     @DefaultBoolean(false)

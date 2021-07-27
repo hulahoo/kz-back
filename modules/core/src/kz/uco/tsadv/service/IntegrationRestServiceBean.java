@@ -528,7 +528,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 positionExt.setEndDate(positionJson.getEndDate() != null
                         ? formatter.parse(positionJson.getEndDate()) : null);
                 positionExt.setFte(positionJson.getFte() != null && !positionJson.getFte().isEmpty()
-                        ? Double.parseDouble(positionJson.getFte()) : null);
+                        ? Double.parseDouble(positionJson.getFte()) : 0);
                 positionExt.setMaxPersons(positionJson.getMaxPerson() != null && !positionJson.getMaxPerson().isEmpty()
                         ? Integer.parseInt(positionJson.getMaxPerson()) : null);
                 positionExt.setGroup(positionGroupExt);
@@ -1181,10 +1181,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     List<HierarchyElementExt> parentList = dataManager.load(HierarchyElementExt.class).query(
                             "select e from base$HierarchyElementExt e " +
                                     " where e.positionGroup.legacyId = :legacyId " +
-                                    " and e.positionGroup.company.legacyId  = :companyCode ")
+                                    " and e.positionGroup.company.legacyId  = :companyCode " +
+                                    " and :startDate between coalesce(e.startDate, :beginDate) " +
+                                    " and coalesce(e.endDate, :finishDate) ")
                             .setParameters(ParamsMap.of("legacyId"
                                     , positionHierarchyElementJson.getParentPositionId()
-                                    , "companyCode", positionHierarchyElementJson.getCompanyCode()))
+                                    , "companyCode", positionHierarchyElementJson.getCompanyCode()
+                                    , "beginDate", CommonUtils.getBeginOfTime()
+                                    , "finishDate", CommonUtils.getEndOfTime()
+                                    , "startDate", formatter.parse(positionHierarchyElementJson.getStartDate())))
                             .view("hierarchyElementExt-for-integration-rest").list();
                     if (parentList.size() > 1) {
                         return prepareError(result, methodName, hierarchyElementData,
@@ -1194,7 +1199,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     parent = parentList.stream().findFirst().orElse(null);
                     if (parent != null) {
                         hierarchyElementExt.setParent(parent);
-                        hierarchyElementExt.setParentGroup(parent != null ? parent.getGroup() : null);
+                        hierarchyElementExt.setParentGroup(parent.getGroup());
                     }
                 } else {
                     hierarchyElementExt.setParent(null);
@@ -2815,10 +2820,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, absenceData,
                             "no endDate");
                 }
-                if (absenceJson.getAbsenceDuration() == null || absenceJson.getAbsenceDuration().isEmpty()) {
-                    return prepareError(result, methodName, absenceData,
-                            "no absenceDuration");
-                }
+//                if (absenceJson.getAbsenceDuration() == null || absenceJson.getAbsenceDuration().isEmpty()) {
+//                    return prepareError(result, methodName, absenceData,
+//                            "no absenceDuration");
+//                }
 //                if (absenceJson.getOrderNumber() == null || absenceJson.getOrderNumber().isEmpty()) {
 //                    return prepareError(result, methodName, absenceData,
 //                            "no orderNumber");
@@ -2856,7 +2861,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     absence.setDateFrom(formatter.parse(absenceJson.getStartDate()));
                     absence.setDateTo(formatter.parse(absenceJson.getEndDate()));
-                    absence.setAbsenceDays(Integer.valueOf(absenceJson.getAbsenceDuration()));
+                    absence.setAbsenceDays(!Strings.isNullOrEmpty(absenceJson.getAbsenceDuration())
+                            ? Integer.parseInt(absenceJson.getAbsenceDuration())
+                            : 0);
                     absence.setOrderNum(absenceJson.getOrderNumber());
                     absence.setTotalHours(!Strings.isNullOrEmpty(absenceJson.getAbsenceHours())
                             ? Integer.parseInt(absenceJson.getAbsenceHours())
@@ -2902,7 +2909,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     absence.setDateFrom(formatter.parse(absenceJson.getStartDate()));
                     absence.setDateTo(formatter.parse(absenceJson.getEndDate()));
-                    absence.setAbsenceDays(Integer.valueOf(absenceJson.getAbsenceDuration()));
+                    absence.setAbsenceDays(!Strings.isNullOrEmpty(absenceJson.getAbsenceDuration())
+                            ? Integer.parseInt(absenceJson.getAbsenceDuration())
+                            : 0);
                     absence.setOrderNum(absenceJson.getOrderNumber());
                     absence.setTotalHours(!Strings.isNullOrEmpty(absenceJson.getAbsenceHours())
                             ? Integer.parseInt(absenceJson.getAbsenceHours())
@@ -4439,7 +4448,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         address.setAddress(addressText
                                 + (personAddressJson.getStreetName() != null
                                 && !personAddressJson.getStreetName().isEmpty()
-                                ? personAddressJson.getStreetName() + ", "
+                                ? personAddressJson.getStreetName()
                                 : "")
                                 + (personAddressJson.getBuilding() != null
                                 && !personAddressJson.getBuilding().isEmpty()
@@ -4449,7 +4458,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 && !personAddressJson.getBlock().isEmpty()
                                 ? ", " + personAddressJson.getBlock()
                                 : "")
-                                + personAddressJson.getFlat());
+                                + (personAddressJson.getFlat() != null
+                                && !personAddressJson.getFlat().isEmpty()
+                                ? ", " + personAddressJson.getFlat()
+                                : ""));
 
                         personAddressesCommitList.add(address);
                     } else {
