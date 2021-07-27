@@ -4,7 +4,7 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators;
 import kz.uco.tsadv.modules.personal.enums.OrganizationIncentiveIndicatorType;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -43,17 +43,17 @@ public class OrganizationIncentiveIndicators extends StandardEntity {
     @Column(name = "WEIGHT", nullable = false)
     protected Double weight;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "RESPONSIBLE_PERSON_ID")
-    protected PersonGroupExt responsiblePerson;
+    @JoinColumn(name = "RESPONSIBLE_POSITION_ID")
+    @NotNull
+    protected PositionGroupExt responsiblePosition;
 
-    public PersonGroupExt getResponsiblePerson() {
-        return responsiblePerson;
+    public void setResponsiblePosition(PositionGroupExt responsiblePosition) {
+        this.responsiblePosition = responsiblePosition;
     }
 
-    public void setResponsiblePerson(PersonGroupExt responsiblePerson) {
-        this.responsiblePerson = responsiblePerson;
+    public PositionGroupExt getResponsiblePosition() {
+        return responsiblePosition;
     }
 
     public Double getWeight() {
