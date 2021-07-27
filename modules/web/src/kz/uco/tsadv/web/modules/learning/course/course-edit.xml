@@ -87,6 +87,9 @@
     </data>
     <dialogMode height="600"
                 width="800"/>
+    <facets>
+        <notification id="notification"/>
+    </facets>
     <layout expand="tabSheet"
             spacing="true">
         <tabSheet id="tabSheet">
