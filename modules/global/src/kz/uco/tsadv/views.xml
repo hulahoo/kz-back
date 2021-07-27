@@ -1877,7 +1877,7 @@
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.PersonExt"
-          extends="_minimal"
+          extends="_local"
           name="person-edit"
           systemProperties="true">
         <property name="category"/>
@@ -1954,13 +1954,7 @@
                 </property>
             </property>
         </property>
-        <property name="legacyId"/>
         <property name="nonresidentType"/>
-        <property name="dateOfDeath"/>
-        <property name="writeHistory"/>
-        <property name="firstNameLatin"/>
-        <property name="middleNameLatin"/>
-        <property name="lastNameLatin"/>
         <property name="sex"
                   view="_local"/>
     </view>

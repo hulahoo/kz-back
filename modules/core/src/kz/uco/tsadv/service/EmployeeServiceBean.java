@@ -25,10 +25,7 @@ import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.enums.MatrixType;
 import kz.uco.tsadv.modules.performance.model.CalibrationMember;
 import kz.uco.tsadv.modules.performance.model.CalibrationSession;
-import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
-import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
-import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
-import kz.uco.tsadv.modules.personal.dictionary.DicPhoneType;
+import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.dto.OrgChartNode;
 import kz.uco.tsadv.modules.personal.dto.PersonProfileDto;
 import kz.uco.tsadv.modules.personal.group.*;
@@ -148,6 +145,7 @@ public class EmployeeServiceBean implements EmployeeService {
                         "   and :date between e.startDate and e.endDate ")
                 .view(new View(viewRepository.getView(Address.class, View.LOCAL), "", false)
                         .addProperty("city", new View(DicCity.class))
+                        .addProperty("kato", new View(DicKato.class))
                         .addProperty("addressType", new View(DicAddressType.class)))
                 .parameter("personGroupId", personGroupId)
                 .parameter("date", CommonUtils.getSystemDate())
@@ -194,7 +192,13 @@ public class EmployeeServiceBean implements EmployeeService {
 
         //set address
         //todo
-        addresses.stream().map(address -> address.getCityName() != null ? address.getCityName() : address.getCity() != null ? address.getCity().getLangValue() : null)
+        addresses.stream().map(address -> address.getCityName() != null
+                ? address.getCityName()
+                : address.getCity() != null
+                ? address.getCity().getLangValue()
+                : address.getKato() != null
+                ? address.getKato().getLangValue()
+                : null)
                 .filter(Objects::nonNull)
                 .findFirst()
                 .ifPresent(dto::setCityOfResidence);
