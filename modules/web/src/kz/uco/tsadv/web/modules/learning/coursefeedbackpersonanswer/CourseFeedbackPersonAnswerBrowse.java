@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Button;
+import com.haulmont.cuba.gui.components.DataGrid;
 import com.haulmont.cuba.gui.data.GroupDatasource;
 import com.haulmont.reports.entity.Report;
 import com.haulmont.reports.gui.ReportGuiManager;
@@ -13,8 +14,10 @@ import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswer;
 import kz.uco.tsadv.web.coursefeedbackpersonanswerdetail.CourseFeedbackPersonAnswerDetailSimple;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CourseFeedbackPersonAnswerBrowse extends AbstractLookup {
 
@@ -27,6 +30,8 @@ public class CourseFeedbackPersonAnswerBrowse extends AbstractLookup {
     protected ReportGuiManager reportGuiManager;
     @Inject
     protected DataManager dataManager;
+    @Inject
+    protected DataGrid<CourseFeedbackPersonAnswer> courseFeedbackPersonAnswersTable;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -49,14 +54,16 @@ public class CourseFeedbackPersonAnswerBrowse extends AbstractLookup {
     }
 
     public void report() {
-        CourseFeedbackPersonAnswer item = courseFeedbackPersonAnswersDs.getItem();
-        if (item != null) {
+        List<CourseFeedbackPersonAnswer> courseFeedbackPersonAnswers = courseFeedbackPersonAnswersTable.getSelected()
+                .stream().collect(Collectors.toList());
+        if (courseFeedbackPersonAnswers != null && !courseFeedbackPersonAnswers.isEmpty()) {
             Report report = dataManager.load(Report.class)
                     .query("select e from report$Report e where e.code = :code")
                     .parameter("code", "COURSE_FEEDBACK_PERSON_ANSWER").view(View.MINIMAL)
                     .list().stream().findFirst().orElse(null);
             if (report != null) {
-                reportGuiManager.printReport(report, ParamsMap.of("courseFeedbackPersonAnswer", item));
+                reportGuiManager.printReport(report, ParamsMap.of("courseFeedbackPersonAnswer",
+                        courseFeedbackPersonAnswers));
             }
         }
     }
