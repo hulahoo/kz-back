@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
         caption="msg://browseCaption"
         focusComponent="learningResultPerSubjectsTable"
-        messagesPack="kz.uco.tsadv.web.screens.learningresultpersubject">
+        messagesPack="kz.uco.tsadv.web.screens.learningresultspersubject">
     <data readOnly="true">
         <collection id="learningResultPerSubjectsDc"
-                    class="kz.uco.tsadv.modules.personal.model.LearningResultPerSubject"
-                    view="learningResultPerSubject.edit">
+                    class="kz.uco.tsadv.modules.personal.model.LearningResultsPerSubject"
+                    view="learningResultsPerSubject.edit">
             <loader id="learningResultPerSubjectsDl">
                 <query>
-                    <![CDATA[select e from tsadv_LearningResultPerSubject e]]>
+                    <![CDATA[select e from tsadv_LearningResultsPerSubject e]]>
                 </query>
             </loader>
         </collection>

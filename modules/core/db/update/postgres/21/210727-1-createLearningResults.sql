@@ -1,4 +1,4 @@
-create table TSADV_LEARNING_RESULT_PER_SUBJECT (
+create table TSADV_LEARNING_RESULTS (
     ID uuid,
     VERSION integer not null,
     CREATE_TS timestamp,
@@ -11,9 +11,12 @@ create table TSADV_LEARNING_RESULT_PER_SUBJECT (
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
     --
-    LEARNING_RESULT_ID uuid not null,
-    SUBJECT varchar(255) not null,
-    SCORE decimal(19, 2) not null,
+    GRANTEES_AGREEMENT_ID uuid not null,
+    PERSON_GROUP_ID uuid not null,
+    STUDY_YEAR integer not null,
+    SEMESTER varchar(255) not null,
+    AVERAGE_SCORE double precision,
+    SCHOLARSHIP decimal(19, 2) not null,
     --
     primary key (ID)
 );

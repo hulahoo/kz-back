@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="listOfDocumentsTable"
+        messagesPack="kz.uco.tsadv.web.screens.listofdocuments">
+    <data readOnly="true">
+        <collection id="listOfDocumentsDc"
+                    class="kz.uco.tsadv.modules.personal.model.ListOfDocuments"
+                    view="listOfDocuments.edit">
+            <loader id="listOfDocumentsDl">
+                <query>
+                    <![CDATA[select e from tsadv_ListOfDocuments e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="listOfDocumentsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="listOfDocumentsTable"
+                dataLoader="listOfDocumentsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="listOfDocumentsTable"
+                    width="100%"
+                    dataContainer="listOfDocumentsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="personGroup"/>
+                <column id="type"/>
+                <column id="file"/>
+                <column id="date"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="listOfDocumentsTable.create"/>
+                <button id="editBtn" action="listOfDocumentsTable.edit"/>
+                <button id="removeBtn" action="listOfDocumentsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

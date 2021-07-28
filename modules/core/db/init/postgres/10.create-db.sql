@@ -18571,8 +18571,8 @@ create table TSADV_SCHOLARSHIP (
     primary key (ID)
 )^
 -- end TSADV_SCHOLARSHIP
--- begin TSADV_LIST_OF_DOCUMENT
-create table TSADV_LIST_OF_DOCUMENT (
+-- begin TSADV_LIST_OF_DOCUMENTS
+create table TSADV_LIST_OF_DOCUMENTS (
     ID uuid,
     VERSION integer not null,
     CREATE_TS timestamp,
@@ -18592,9 +18592,9 @@ create table TSADV_LIST_OF_DOCUMENT (
     --
     primary key (ID)
 )^
--- end TSADV_LIST_OF_DOCUMENT
--- begin TSADV_LEARNING_RESULT
-create table TSADV_LEARNING_RESULT (
+-- end TSADV_LIST_OF_DOCUMENTS
+-- begin TSADV_LEARNING_RESULTS
+create table TSADV_LEARNING_RESULTS (
     ID uuid,
     VERSION integer not null,
     CREATE_TS timestamp,
@@ -18616,9 +18616,9 @@ create table TSADV_LEARNING_RESULT (
     --
     primary key (ID)
 )^
--- end TSADV_LEARNING_RESULT
--- begin TSADV_LEARNING_RESULT_PER_SUBJECT
-create table TSADV_LEARNING_RESULT_PER_SUBJECT (
+-- end TSADV_LEARNING_RESULTS
+-- begin TSADV_LEARNING_RESULTS_PER_SUBJECT
+create table TSADV_LEARNING_RESULTS_PER_SUBJECT (
     ID uuid,
     VERSION integer not null,
     CREATE_TS timestamp,
@@ -18637,7 +18637,7 @@ create table TSADV_LEARNING_RESULT_PER_SUBJECT (
     --
     primary key (ID)
 )^
--- end TSADV_LEARNING_RESULT_PER_SUBJECT
+-- end TSADV_LEARNING_RESULTS_PER_SUBJECT
 -- begin TSADV_PAYMENTS
 create table TSADV_PAYMENTS (
     ID uuid,

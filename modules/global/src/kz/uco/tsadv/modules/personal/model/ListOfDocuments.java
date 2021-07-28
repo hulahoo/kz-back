@@ -9,9 +9,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Table(name = "TSADV_LIST_OF_DOCUMENT")
-@Entity(name = "tsadv_ListOfDocument")
-public class ListOfDocument extends AbstractParentEntity {
+@Table(name = "TSADV_LIST_OF_DOCUMENTS")
+@Entity(name = "tsadv_ListOfDocuments")
+public class ListOfDocuments extends AbstractParentEntity {
     private static final long serialVersionUID = -326858449844428734L;
 
     @NotNull

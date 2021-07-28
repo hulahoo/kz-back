@@ -7,9 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@Table(name = "TSADV_LEARNING_RESULT")
-@Entity(name = "tsadv_LearningResult")
-public class LearningResult extends AbstractParentEntity {
+@Table(name = "TSADV_LEARNING_RESULTS")
+@Entity(name = "tsadv_LearningResults")
+public class LearningResults extends AbstractParentEntity {
     private static final long serialVersionUID = -9032775256708090170L;
 
     @NotNull

@@ -2,21 +2,23 @@
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://editorCaption"
         focusComponent="form"
-        messagesPack="kz.uco.tsadv.web.screens.learningresultpersubject">
+        messagesPack="kz.uco.tsadv.web.screens.learningresults">
     <data>
-        <instance id="learningResultPerSubjectDc"
-                  class="kz.uco.tsadv.modules.personal.model.LearningResultPerSubject"
-                  view="learningResultPerSubject.edit">
+        <instance id="learningResultsDc"
+                  class="kz.uco.tsadv.modules.personal.model.LearningResults"
+                  view="learningResults.edit">
             <loader/>
         </instance>
     </data>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="editActions" spacing="true">
-        <form id="form" dataContainer="learningResultPerSubjectDc">
+        <form id="form" dataContainer="learningResultsDc">
             <column width="350px">
-                <textField id="subjectField" property="subject"/>
-                <textField id="scoreField" property="score" required="true"/>
+                <textField id="studyYearField" property="studyYear"/>
+                <textField id="semesterField" property="semester"/>
+                <textField id="averageScoreField" property="averageScore" enable="false"/>
+                <textField id="scholarshipField" property="scholarship"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

@@ -1,4 +1,4 @@
-create table TSADV_LIST_OF_DOCUMENT (
+create table TSADV_LEARNING_RESULTS_PER_SUBJECT (
     ID uuid,
     VERSION integer not null,
     CREATE_TS timestamp,
@@ -11,10 +11,9 @@ create table TSADV_LIST_OF_DOCUMENT (
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
     --
-    PERSON_GROUP_ID uuid not null,
-    TYPE_ID uuid not null,
-    FILE_ID uuid,
-    DATE date not null,
+    LEARNING_RESULT_ID uuid not null,
+    SUBJECT varchar(255) not null,
+    SCORE decimal(19, 2) not null,
     --
     primary key (ID)
 );

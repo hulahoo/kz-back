@@ -23927,7 +23927,7 @@
         <property name="fieldOfActivity" view="_minimal"/>
         <property name="personGroup" view="_minimal"/>
     </view>
-    <view entity="tsadv_ListOfDocument" name="listOfDocument.edit" extends="_local">
+    <view entity="tsadv_ListOfDocuments" name="listOfDocuments.edit" extends="_local">
         <property name="personGroup" view="_minimal"/>
         <property name="type" view="_minimal">
             <property name="legacyId"/>
@@ -23970,7 +23970,7 @@
         </property>
         <property name="personGroup" view="_minimal"/>
     </view>
-    <view entity="tsadv_LearningResult" name="learningResult.edit" extends="_local">
+    <view entity="tsadv_LearningResults" name="learningResults.edit" extends="_local">
         <property name="granteesAgreement" view="_minimal">
             <property name="contractNumber"/>
             <property name="contractDate"/>
@@ -23983,7 +23983,7 @@
         </property>
         <property name="personGroup" view="_minimal"/>
     </view>
-    <view entity="tsadv_LearningResultPerSubject" name="learningResultPerSubject.edit" extends="_local">
+    <view entity="tsadv_LearningResultsPerSubject" name="learningResultsPerSubject.edit" extends="_local">
         <property name="learningResult" view="_minimal">
             <property name="studyYear"/>
             <property name="semester"/>

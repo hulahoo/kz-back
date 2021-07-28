@@ -5,15 +5,15 @@ import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Table(name = "TSADV_LEARNING_RESULT_PER_SUBJECT")
-@Entity(name = "tsadv_LearningResultPerSubject")
-public class LearningResultPerSubject extends AbstractParentEntity {
+@Table(name = "TSADV_LEARNING_RESULTS_PER_SUBJECT")
+@Entity(name = "tsadv_LearningResultsPerSubject")
+public class LearningResultsPerSubject extends AbstractParentEntity {
     private static final long serialVersionUID = 3199742697245902961L;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "LEARNING_RESULT_ID")
-    protected LearningResult learningResult;
+    protected LearningResults learningResult;
 
     @NotNull
     @Column(name = "SUBJECT", nullable = false)
@@ -39,11 +39,11 @@ public class LearningResultPerSubject extends AbstractParentEntity {
         this.subject = subject;
     }
 
-    public LearningResult getLearningResult() {
+    public LearningResults getLearningResult() {
         return learningResult;
     }
 
-    public void setLearningResult(LearningResult learningResult) {
+    public void setLearningResult(LearningResults learningResult) {
         this.learningResult = learningResult;
     }
 }

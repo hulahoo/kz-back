@@ -4,7 +4,7 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.ButtonsPanel;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
-import kz.uco.tsadv.modules.personal.model.ListOfDocument;
+import kz.uco.tsadv.modules.personal.model.ListOfDocuments;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -17,7 +17,7 @@ public class PcfListOfDocument extends EditableFrame {
     @Inject
     protected ButtonsPanel buttonsPanel;
 
-    public CollectionDatasource<ListOfDocument, UUID> listOfDocumentDs;
+    public CollectionDatasource<ListOfDocuments, UUID> listOfDocumentDs;
 
     @Named("listOfDocumentTable.create")
     protected CreateAction listOfDocumentTableCreate;
@@ -39,6 +39,6 @@ public class PcfListOfDocument extends EditableFrame {
 
     @Override
     public void initDatasource() {
-        listOfDocumentDs = (CollectionDatasource<ListOfDocument, UUID>) getDsContext().get("listOfDocumentDs");
+        listOfDocumentDs = (CollectionDatasource<ListOfDocuments, UUID>) getDsContext().get("listOfDocumentDs");
     }
 }

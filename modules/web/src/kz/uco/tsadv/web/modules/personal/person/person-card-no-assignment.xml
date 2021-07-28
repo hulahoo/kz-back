@@ -435,10 +435,10 @@
             </query>
         </collectionDatasource>
         <collectionDatasource id="listOfDocumentDs"
-                              class="kz.uco.tsadv.modules.personal.model.ListOfDocument"
-                              view="listOfDocument.edit">
+                              class="kz.uco.tsadv.modules.personal.model.ListOfDocuments"
+                              view="listOfDocuments.edit">
             <query>
-                <![CDATA[select e from tsadv_ListOfDocument e where e.personGroup.id = :ds$personGroupDs.id
+                <![CDATA[select e from tsadv_ListOfDocuments e where e.personGroup.id = :ds$personGroupDs.id
                     order by e.createTs desc]]>
             </query>
         </collectionDatasource>

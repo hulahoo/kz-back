@@ -1,49 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
         caption="msg://browseCaption"
-        focusComponent="listOfDocumentsTable"
-        messagesPack="kz.uco.tsadv.web.screens.listofdocument">
+        focusComponent="learningResultsTable"
+        messagesPack="kz.uco.tsadv.web.screens.learningresults">
     <data readOnly="true">
-        <collection id="listOfDocumentsDc"
-                    class="kz.uco.tsadv.modules.personal.model.ListOfDocument"
-                    view="listOfDocument.edit">
-            <loader id="listOfDocumentsDl">
+        <collection id="learningResultsDc"
+                    class="kz.uco.tsadv.modules.personal.model.LearningResults"
+                    view="learningResults.edit">
+            <loader id="learningResultsDl">
                 <query>
-                    <![CDATA[select e from tsadv_ListOfDocument e]]>
+                    <![CDATA[select e from tsadv_LearningResults e]]>
                 </query>
             </loader>
         </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="listOfDocumentsTable"
+    <layout expand="learningResultsTable"
             spacing="true">
         <filter id="filter"
-                applyTo="listOfDocumentsTable"
-                dataLoader="listOfDocumentsDl">
+                applyTo="learningResultsTable"
+                dataLoader="learningResultsDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="listOfDocumentsTable"
+        <groupTable id="learningResultsTable"
                     width="100%"
-                    dataContainer="listOfDocumentsDc">
+                    dataContainer="learningResultsDc">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
+                <column id="granteesAgreement"/>
                 <column id="personGroup"/>
-                <column id="type"/>
-                <column id="file"/>
-                <column id="date"/>
+                <column id="studyYear"/>
+                <column id="semester"/>
+                <column id="averageScore"/>
+                <column id="scholarship"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="createBtn" action="listOfDocumentsTable.create"/>
-                <button id="editBtn" action="listOfDocumentsTable.edit"/>
-                <button id="removeBtn" action="listOfDocumentsTable.remove"/>
+                <button id="createBtn" action="learningResultsTable.create"/>
+                <button id="editBtn" action="learningResultsTable.edit"/>
+                <button id="removeBtn" action="learningResultsTable.remove"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">

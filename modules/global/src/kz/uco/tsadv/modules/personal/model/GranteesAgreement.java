@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicAgreementStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@NamePattern("%s|agreementNumber")
 @Table(name = "TSADV_GRANTEES_AGREEMENT")
 @Entity(name = "tsadv_GranteesAgreement")
 public class GranteesAgreement extends AbstractParentEntity {

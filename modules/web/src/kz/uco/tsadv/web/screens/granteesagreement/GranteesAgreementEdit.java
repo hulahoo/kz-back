@@ -8,7 +8,6 @@ import com.haulmont.cuba.gui.components.GroupTable;
 import com.haulmont.cuba.gui.components.TabSheet;
 import com.haulmont.cuba.gui.model.*;
 import com.haulmont.cuba.gui.screen.*;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.base.cuba.actions.CreateActionExt;
 import kz.uco.tsadv.modules.personal.model.*;
 
@@ -24,9 +23,9 @@ public class GranteesAgreementEdit extends StandardEditor<GranteesAgreement> {
     @Inject
     protected InstanceContainer<GranteesAgreement> granteesAgreementDc;
     @Inject
-    protected CollectionContainer<LearningResult> learningResultsDc;
+    protected CollectionContainer<LearningResults> learningResultsDc;
     @Inject
-    protected CollectionContainer<LearningResultPerSubject> learningResultsPerSubjectDc;
+    protected CollectionContainer<LearningResultsPerSubject> learningResultsPerSubjectDc;
     @Inject
     protected CollectionContainer<Payments> paymentsDc;
     @Inject
@@ -34,29 +33,27 @@ public class GranteesAgreementEdit extends StandardEditor<GranteesAgreement> {
     @Inject
     protected CollectionLoader<Payments> paymentsDl;
     @Inject
-    protected CollectionLoader<LearningResultPerSubject> learningResultsPerSubjectDl;
+    protected CollectionLoader<LearningResultsPerSubject> learningResultsPerSubjectDl;
     @Inject
     protected CollectionContainer<Scholarship> scholarshipDc;
     @Inject
-    protected CollectionLoader<LearningResult> learningResultsDl;
+    protected CollectionLoader<LearningResults> learningResultsDl;
     @Inject
     private InstanceLoader<GranteesAgreement> granteesAgreementDl;
     @Inject
-    private GroupTable<LearningResult> learningResultTable;
+    private GroupTable<LearningResults> learningResultTable;
     @Inject
     private ScreenBuilders screenBuilders;
     @Inject
     private GroupTable<Payments> paymentsTable;
     @Inject
-    private GroupTable<LearningResultPerSubject> learningResultPerSubjectTable;
+    private GroupTable<LearningResultsPerSubject> learningResultPerSubjectTable;
     @Inject
     private GroupTable<Scholarship> scholarshipTable;
     @Inject
     private TabSheet tabSheet;
     @Named("learningResultPerSubjectTable.create")
     private CreateActionExt learningResultPerSubjectTableCreate;
-    @Inject
-    private ComponentsFactory componentsFactory;
     @Inject
     private DataManager dataManager;
 
@@ -92,12 +89,12 @@ public class GranteesAgreementEdit extends StandardEditor<GranteesAgreement> {
         });
         learningResultsPerSubjectDc.addItemPropertyChangeListener(learningResultsPerSubjectItemPropertyChangeEvent -> {
             if ("score".equals(learningResultsPerSubjectItemPropertyChangeEvent.getProperty())) {
-                List<LearningResultPerSubject> list = learningResultsPerSubjectDc.getItems().stream().filter(learningResultsPerSubject -> {
+                List<LearningResultsPerSubject> list = learningResultsPerSubjectDc.getItems().stream().filter(learningResultsPerSubject -> {
                     return learningResultsPerSubject.getLearningResult().equals(learningResultTable.getSingleSelected());
                 }).collect(Collectors.toList());
-                double averageScore = list.stream().mapToDouble(LearningResultPerSubject::getScore).sum();
+                double averageScore = list.stream().mapToDouble(LearningResultsPerSubject::getScore).sum();
                 averageScore = averageScore / list.size();
-                LearningResult learningResults = learningResultTable.getSingleSelected();
+                LearningResults learningResults = learningResultTable.getSingleSelected();
                 learningResults.setAverageScore(averageScore);
                 dataManager.commit(learningResults);
                 learningResultsDl.load();
@@ -107,12 +104,12 @@ public class GranteesAgreementEdit extends StandardEditor<GranteesAgreement> {
             if (learningResultsPerSubjectCollectionChangeEvent != null &&
                     (learningResultsPerSubjectCollectionChangeEvent.getChangeType().equals(CollectionChangeType.ADD_ITEMS)
                             || learningResultsPerSubjectCollectionChangeEvent.getChangeType().equals(CollectionChangeType.REMOVE_ITEMS))) {
-                List<LearningResultPerSubject> list = learningResultsPerSubjectDc.getItems().stream().filter(learningResultsPerSubject -> {
+                List<LearningResultsPerSubject> list = learningResultsPerSubjectDc.getItems().stream().filter(learningResultsPerSubject -> {
                     return learningResultsPerSubject.getLearningResult().equals(learningResultTable.getSingleSelected());
                 }).collect(Collectors.toList());
-                double averageScore = list.stream().mapToDouble(LearningResultPerSubject::getScore).sum();
+                double averageScore = list.stream().mapToDouble(LearningResultsPerSubject::getScore).sum();
                 averageScore = averageScore / list.size();
-                LearningResult learningResults = learningResultTable.getSingleSelected();
+                LearningResults learningResults = learningResultTable.getSingleSelected();
                 learningResults.setAverageScore(averageScore);
                 dataManager.commit(learningResults);
                 learningResultsDl.load();

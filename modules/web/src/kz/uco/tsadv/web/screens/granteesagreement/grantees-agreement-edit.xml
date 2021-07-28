@@ -19,20 +19,20 @@
             </loader>
         </collection>
         <collection id="learningResultsDc"
-                    class="kz.uco.tsadv.modules.personal.model.LearningResult"
-                    view="learningResult.edit">
+                    class="kz.uco.tsadv.modules.personal.model.LearningResults"
+                    view="learningResults.edit">
             <loader id="learningResultsDl">
                 <query>
-                    <![CDATA[select e from tsadv_LearningResult e where e.granteesAgreement = :granteesAgreement]]>
+                    <![CDATA[select e from tsadv_LearningResults e where e.granteesAgreement = :granteesAgreement]]>
                 </query>
             </loader>
         </collection>
         <collection id="learningResultsPerSubjectDc"
-                    class="kz.uco.tsadv.modules.personal.model.LearningResultPerSubject"
-                    view="learningResultPerSubject.edit">
+                    class="kz.uco.tsadv.modules.personal.model.LearningResultsPerSubject"
+                    view="learningResultsPerSubject.edit">
             <loader id="learningResultsPerSubjectDl">
                 <query>
-                    <![CDATA[select e from tsadv_LearningResultPerSubject e where e.learningResult = :learningResult]]>
+                    <![CDATA[select e from tsadv_LearningResultsPerSubject e where e.learningResult = :learningResult]]>
                 </query>
             </loader>
         </collection>

@@ -2017,7 +2017,7 @@
         <entity class="kz.uco.tsadv.modules.personal.model.Guardian">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.modules.personal.model.ListOfDocument">
+        <entity class="kz.uco.tsadv.modules.personal.model.ListOfDocuments">
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.personal.model.GranteesAgreement">
@@ -2026,10 +2026,10 @@
         <entity class="kz.uco.tsadv.modules.personal.model.Payments">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.modules.personal.model.LearningResult">
+        <entity class="kz.uco.tsadv.modules.personal.model.LearningResults">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.modules.personal.model.LearningResultPerSubject">
+        <entity class="kz.uco.tsadv.modules.personal.model.LearningResultsPerSubject">
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.personal.model.Scholarship">

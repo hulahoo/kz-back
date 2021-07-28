@@ -1,4 +1,4 @@
-create table TSADV_LEARNING_RESULT (
+create table TSADV_LIST_OF_DOCUMENTS (
     ID uuid,
     VERSION integer not null,
     CREATE_TS timestamp,
@@ -11,12 +11,10 @@ create table TSADV_LEARNING_RESULT (
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
     --
-    GRANTEES_AGREEMENT_ID uuid not null,
     PERSON_GROUP_ID uuid not null,
-    STUDY_YEAR integer not null,
-    SEMESTER varchar(255) not null,
-    AVERAGE_SCORE double precision,
-    SCHOLARSHIP decimal(19, 2) not null,
+    TYPE_ID uuid not null,
+    FILE_ID uuid,
+    DATE date not null,
     --
     primary key (ID)
 );

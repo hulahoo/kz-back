@@ -670,11 +670,11 @@
         <class>kz.uco.tsadv.modules.personal.dictionary.DicFieldOfActivity</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicGuardianType</class>
         <class>kz.uco.tsadv.modules.personal.model.Guardian</class>
-        <class>kz.uco.tsadv.modules.personal.model.ListOfDocument</class>
+        <class>kz.uco.tsadv.modules.personal.model.ListOfDocuments</class>
         <class>kz.uco.tsadv.modules.personal.model.GranteesAgreement</class>
         <class>kz.uco.tsadv.modules.personal.model.Payments</class>
-        <class>kz.uco.tsadv.modules.personal.model.LearningResult</class>
-        <class>kz.uco.tsadv.modules.personal.model.LearningResultPerSubject</class>
+        <class>kz.uco.tsadv.modules.personal.model.LearningResults</class>
+        <class>kz.uco.tsadv.modules.personal.model.LearningResultsPerSubject</class>
         <class>kz.uco.tsadv.modules.personal.model.Scholarship</class>
     </persistence-unit>
 </persistence>
