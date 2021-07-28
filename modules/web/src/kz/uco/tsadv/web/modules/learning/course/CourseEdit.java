@@ -9,15 +9,13 @@ import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.components.Action;
-import com.haulmont.cuba.gui.components.DataGrid;
-import com.haulmont.cuba.gui.components.GroupTable;
-import com.haulmont.cuba.gui.components.Table;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.web.gui.facets.NotificationFacetProvider;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.cuba.actions.CreateActionExt;
@@ -99,6 +97,10 @@ public class CourseEdit extends StandardEditor<Course> {
     protected CollectionLoader<CoursePreRequisition> preRequisitionDl;
     @Inject
     protected ExtAppPropertiesConfig extAppPropertiesConfig;
+    @Inject
+    protected NotificationFacetProvider notificationFacetProvider;
+    @Inject
+    protected NotificationFacet notification;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -409,34 +411,67 @@ public class CourseEdit extends StandardEditor<Course> {
 
     @Subscribe("enrollmentsTable.generateCertificate")
     protected void onEnrollmentsTableGenerateCertificate(Action.ActionPerformedEvent event) {
+        List<Enrollment> completedEnrollment = new ArrayList<>();
+        List<Enrollment> unCompletedEnrollment = new ArrayList<>();
         CommitContext commitContext = new CommitContext();
         enrollmentsTable.getSelected().forEach(enrollment -> {
-            CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
-                    && !enrollment.getCourse().getCertificate().isEmpty()
-                    ? enrollment.getCourse().getCertificate().get(0)
-                    : null;
-            if (courseCertificate != null) {
+            if (EnrollmentStatus.COMPLETED.equals(enrollment.getStatus())) {
+                completedEnrollment.add(enrollment);
+                CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
+                        && !enrollment.getCourse().getCertificate().isEmpty()
+                        ? enrollment.getCourse().getCertificate().get(0)
+                        : null;
+                if (courseCertificate != null) {
 
-                FileDescriptor fd = reportService.createAndSaveReport(courseCertificate.getCertificate(),
-                        ParamsMap.of("enrollment", enrollment), enrollment.getCourse().getName());
+                    FileDescriptor fd = reportService.createAndSaveReport(courseCertificate.getCertificate(),
+                            ParamsMap.of("enrollment", enrollment), enrollment.getCourse().getName());
 
-                if (fd != null) {
-                    List<EnrollmentCertificateFile> ecfList = dataManager.load(EnrollmentCertificateFile.class)
-                            .query("select e from tsadv$EnrollmentCertificateFile e " +
-                                    " where e.enrollment = :enrollment ")
-                            .parameter("enrollment", enrollment)
-                            .view("enrollmentCertificateFile.with.certificateFile")
-                            .list();
-                    ecfList.forEach(commitContext::addInstanceToRemove);
+                    if (fd != null) {
+                        List<EnrollmentCertificateFile> ecfList = dataManager.load(EnrollmentCertificateFile.class)
+                                .query("select e from tsadv$EnrollmentCertificateFile e " +
+                                        " where e.enrollment = :enrollment ")
+                                .parameter("enrollment", enrollment)
+                                .view("enrollmentCertificateFile.with.certificateFile")
+                                .list();
+                        ecfList.forEach(commitContext::addInstanceToRemove);
 
-                    EnrollmentCertificateFile ecf = metadata.create(EnrollmentCertificateFile.class);
-                    ecf.setCertificateFile(fd);
-                    ecf.setEnrollment(enrollment);
-                    commitContext.addInstanceToCommit(ecf);
+                        EnrollmentCertificateFile ecf = metadata.create(EnrollmentCertificateFile.class);
+                        ecf.setCertificateFile(fd);
+                        ecf.setEnrollment(enrollment);
+                        commitContext.addInstanceToCommit(ecf);
+                    }
                 }
+            } else {
+                unCompletedEnrollment.add(enrollment);
             }
         });
         dataManager.commit(commitContext);
+        if (!completedEnrollment.isEmpty()) {
+            StringBuilder result = new StringBuilder();
+            for (Enrollment enrollment : completedEnrollment) {
+                result.append(enrollment.getPersonGroup().getFullName()).append(", ");
+
+            }
+            result.append(";");
+            notification.setCaption(String.format(messageBundle.getMessage("certificateGenerated"),
+                    result.toString().replaceAll(", ;", "")));
+            notification.setType(Notifications.NotificationType.HUMANIZED);
+            notification.setPosition(Notifications.Position.BOTTOM_RIGHT);
+            notification.show();
+        }
+        if (!unCompletedEnrollment.isEmpty()) {
+            StringBuilder result = new StringBuilder();
+            for (Enrollment enrollment : unCompletedEnrollment) {
+                result.append(enrollment.getPersonGroup().getFullName()).append(", ");
+
+            }
+            result.append(";");
+            notification.setCaption(String.format(messageBundle.getMessage("uncompletedEnrollmentedPerson"),
+                    result.toString().replaceAll(", ;", "")));
+            notification.setType(Notifications.NotificationType.WARNING);
+            notification.setPosition(Notifications.Position.MIDDLE_CENTER);
+            notification.show();
+        }
     }
 
 //    @Subscribe("imageUpload")
