@@ -291,7 +291,7 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
     }
 
     protected boolean isDraft() {
-        return hasStatus("DRAFT");
+        return hasStatus("DRAFT") || hasStatus("TO_BE_REVISED");
     }
 
     protected boolean hasStatus(String requestStatus) {

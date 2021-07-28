@@ -27,6 +27,11 @@ public class BprocEntityBeanAdapter<T extends AbstractBprocRequest> implements I
     }
 
     @Override
+    public void revision(T entity) {
+        this.getEntityBean(entity).revision(entity);
+    }
+
+    @Override
     public void reject(AbstractBprocRequest entity) {
         this.getEntityBean(entity).reject(entity);
     }
