@@ -263,8 +263,8 @@ public class AbsenceRvdRequestChangedListener {
         absenceRvdRequestDataJson.setStartTime(startTime);
         String endTime = getFormattedDateString(entity.getTimeOfFinishing(), timeFormatter);
         absenceRvdRequestDataJson.setEndTime(endTime);
-        absenceRvdRequestDataJson.setShift(entity.getShift() != null ? entity.getShift().getCode() : "");
-        absenceRvdRequestDataJson.setShift(entity.getOverrideAllHoursByDay() != null
+        absenceRvdRequestDataJson.setShift(entity.getShift() != null ? entity.getShift().getLangValue1() : "");
+        absenceRvdRequestDataJson.setOverridebyallhours(entity.getOverrideAllHoursByDay() != null
                 ? entity.getOverrideAllHoursByDay().getId() : "");
         String companyCode = "";
         if (entity.getPersonGroup() != null && entity.getPersonGroup().getCompany() != null) {
