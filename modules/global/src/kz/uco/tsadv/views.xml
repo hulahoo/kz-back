@@ -1877,7 +1877,7 @@
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.PersonExt"
-          extends="_minimal"
+          extends="_local"
           name="person-edit"
           systemProperties="true">
         <property name="category"/>
@@ -1954,13 +1954,7 @@
                 </property>
             </property>
         </property>
-        <property name="legacyId"/>
         <property name="nonresidentType"/>
-        <property name="dateOfDeath"/>
-        <property name="writeHistory"/>
-        <property name="firstNameLatin"/>
-        <property name="middleNameLatin"/>
-        <property name="lastNameLatin"/>
         <property name="sex"
                   view="_local"/>
     </view>
@@ -17440,52 +17434,42 @@
     <view class="kz.uco.tsadv.modules.personal.model.AddressRequest"
           extends="_local"
           name="addressRequest-view">
-        <property name="addressType"
-                  view="_minimal">
-            <property name="code"/>
+        <property name="addressType" view="_minimal">
             <property name="langValue1"/>
             <property name="langValue2"/>
             <property name="langValue3"/>
             <property name="langValue4"/>
             <property name="langValue5"/>
-        </property>
-        <property name="country"
-                  view="_minimal">
             <property name="code"/>
-            <property name="legacyId"/>
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
         </property>
-        <property name="attachments"
-                  view="_minimal"/>
-        <property name="status" view="_local"/>
-        <property name="baseAddress"
-                  view="_minimal">
+        <property name="country" view="_minimal">
             <property name="legacyId"/>
-            <property name="personGroup"
-                      view="_minimal"/>
-            <property name="addressType"
-                      view="_minimal">
+            <property name="code"/>
+        </property>
+        <property name="baseAddress" view="_minimal">
+            <property name="personGroup" view="_minimal"/>
+            <property name="addressType" view="_minimal">
                 <property name="code"/>
             </property>
-            <property name="country"
-                      view="_minimal">
+            <property name="country" view="_minimal">
                 <property name="code"/>
             </property>
             <property name="postalCode"/>
             <property name="cityName"/>
             <property name="startDate"/>
             <property name="endDate"/>
-        </property>
-        <property name="personGroup"
-                  view="_minimal">
             <property name="legacyId"/>
+        </property>
+        <property name="personGroup" view="_minimal">
             <property name="company" view="_local"/>
+            <property name="legacyId"/>
+        </property>
+        <property name="attachments" view="_minimal"/>
+        <property name="kato" view="_minimal">
+            <property name="code"/>
         </property>
         <property name="streetType" view="_local"/>
+        <property name="status" view="_local"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.PersonExt"
           extends="_local"

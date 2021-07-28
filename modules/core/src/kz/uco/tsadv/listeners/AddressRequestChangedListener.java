@@ -70,7 +70,8 @@ public class AddressRequestChangedListener {
                     addressRequestDataJson.setPostal(addressRequest.getPostalCode());
                     addressRequestDataJson.setCountryId(addressRequest.getCountry() != null
                             ? addressRequest.getCountry().getLegacyId() : "");
-                    addressRequestDataJson.setAddressKATOCode(addressRequest.getKato().getCode());
+                    addressRequestDataJson.setAddressKATOCode(addressRequest.getKato() != null
+                            ? addressRequest.getKato().getCode() : "");
                     addressRequestDataJson.setStreetTypeId(addressRequest.getStreetType() != null
                             ? addressRequest.getStreetType().getLegacyId() : "");
                     addressRequestDataJson.setStreetName(addressRequest.getStreetName());
