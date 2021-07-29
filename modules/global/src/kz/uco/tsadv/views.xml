@@ -23841,12 +23841,6 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
-        <property name="status" view="_minimal">
-            <property name="legacyId"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="code"/>
-        </property>
         <property name="personGroup" view="_minimal">
             <property name="list" view="_minimal">
                 <property name="commitmentsLoan"/>
@@ -23854,6 +23848,9 @@
                 <property name="commitmentsNotSurMatValues"/>
                 <property name="haveNDA"/>
                 <property name="haveConviction"/>
+            </property>
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
             </property>
             <property name="legacyId"/>
         </property>
@@ -23875,6 +23872,12 @@
             <property name="langValue3"/>
             <property name="langValue4"/>
             <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="status" view="_minimal">
+            <property name="legacyId"/>
             <property name="startDate"/>
             <property name="endDate"/>
             <property name="code"/>
