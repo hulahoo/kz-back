@@ -14,7 +14,7 @@
                     view="dicRequestStatus-edit">
             <loader id="statusDl">
                 <query>
-                    <![CDATA[select e from tsadv$DicRequestStatus e]]>
+                    <![CDATA[select e from tsadv$DicRequestStatus e where e.code <> 'CANCELLED' ]]>
                 </query>
             </loader>
         </collection>
