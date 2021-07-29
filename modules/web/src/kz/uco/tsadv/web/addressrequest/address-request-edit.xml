@@ -112,6 +112,7 @@
                     <textField property="building"/>
                     <textField property="addressEnglish"/>
                     <textField property="addressKazakh"/>
+                    <textField property="flat"/>
                 </column>
             </form>
             <groupBox id="groupBox">
