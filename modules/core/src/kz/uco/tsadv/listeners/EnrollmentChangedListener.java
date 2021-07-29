@@ -73,17 +73,6 @@ public class EnrollmentChangedListener {
                 for (EnrollmentValidation enrollmentValidation : enrollmentValidations) {
                     enrollmentValidation.validate(enrollmentFront);
                 }
-            }
-        }
-    }
-
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void afterCommit(EntityChangedEvent<Enrollment, UUID> event) {
-        AttributeChanges changes = event.getChanges();
-        Id<Enrollment, UUID> entityId = event.getEntityId();
-        Enrollment enrollment;
-        if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
-            enrollment = dataManager.load(entityId).view("enrollment.for.course").one();
 
                 for (String attribute : changes.getAttributes()) {
 
@@ -262,7 +251,6 @@ public class EnrollmentChangedListener {
                 }
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
-            enrollment = dataManager.load(entityId).view("enrollment.for.course").one();
 
             enrollment = transactionalDataManager.load(event.getEntityId()).view("enrollment.for.course").one();
 

@@ -72,7 +72,7 @@
                 <textField id="adjustedBonus" property="adjustedBonus"/>
             </column>
             <column id="column2" width="300px">
-                <lookupField id="stage" property="stage" optionsContainer="dicPerformanceStageDc"/>
+                <lookupField id="stage" property="stage" optionsContainer="dicPerformanceStageDc" editable="false"/>
                 <!--                <lookupField id="stepStageStatus" property="stepStageStatus"/>-->
                 <lookupField id="status" property="status" editable="false"/>
                 <dateField id="startDate" property="startDate"/>

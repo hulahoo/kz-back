@@ -74,19 +74,31 @@
             <property name="performancePlanNameKz"/>
             <property name="performancePlanNameEn"/>
         </property>
-        <property name="assignedPerson" view="_local" fetch="AUTO">
+        <property name="assignedPerson" fetch="AUTO" view="_local">
             <property name="person" view="_local"/>
-            <property name="assignments" view="assignedPerformancePlan-assignment" fetch="AUTO"/>
-        </property>
-        <property name="stepStageStatus"/>
-        <property name="stage" view="_minimal">
-            <property name="code"/>
+            <property name="assignments" fetch="AUTO" view="assignedPerformancePlan-assignment">
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="legacyId"/>
+                <property name="organizationBin"/>
+                <property name="integrationUserLogin"/>
+            </property>
         </property>
         <property name="extraPoint"/>
         <property name="finalScore"/>
         <property name="purpose"/>
         <property name="file" view="_local"/>
         <property name="lineManager" view="_minimal"/>
+        <property name="stage" view="_minimal">
+            <property name="code"/>
+        </property>
         <property name="status" view="_minimal">
             <property name="code"/>
         </property>
