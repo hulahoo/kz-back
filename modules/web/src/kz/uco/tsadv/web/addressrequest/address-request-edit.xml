@@ -1,56 +1,84 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://editorCaption"
-        class="kz.uco.tsadv.web.addressrequest.AddressRequestEdit"
-        datasource="addressRequestDs"
-        focusComponent="fieldGroup"
+        focusComponent="form"
         messagesPack="kz.uco.tsadv.web.addressrequest">
-    <dsContext>
-        <datasource id="addressRequestDs"
-                    class="kz.uco.tsadv.modules.personal.model.AddressRequest"
-                    view="addressRequest-view"/>
-        <collectionDatasource id="dicAddressTypesDs"
-                              class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType">
-            <query>
-                <![CDATA[select e from tsadv$DicAddressType e]]>
-            </query>
-        </collectionDatasource>
-        <!--<collectionDatasource id="procTasksDs"
-                              class="com.haulmont.bpm.entity.ProcTask"
-                              view="procTask-frame">
-            <query>
-                <![CDATA[select e from bpm$ProcTask e
-                          where e.procInstance.entity.entityId = :ds$addressRequestDs
-                       order by e.startDate]]>
-            </query>
-        </collectionDatasource>-->
-        <collectionDatasource id="dicCountriesDs"
-                              class="kz.uco.base.entity.dictionary.DicCountry">
-            <query>
-                <![CDATA[select e from base$DicCountry e]]>
-            </query>
-        </collectionDatasource>
-        <collectionDatasource id="countriesDs"
-                              class="kz.uco.base.entity.dictionary.DicCountry"
+    <data>
+        <instance id="addressRequestDs"
+                  class="kz.uco.tsadv.modules.personal.model.AddressRequest">
+            <view extends="_local">
+                <property name="addressType"
+                          view="_minimal">
+                    <property name="code"/>
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                </property>
+                <property name="country"
+                          view="_minimal">
+                    <property name="code"/>
+                    <property name="legacyId"/>
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                </property>
+                <property name="attachments"
+                          view="_minimal"/>
+                <property name="status" view="_local"/>
+                <property name="baseAddress"
+                          view="_minimal">
+                    <property name="legacyId"/>
+                    <property name="personGroup"
+                              view="_minimal"/>
+                    <property name="addressType"
                               view="_minimal">
-            <query>
-                <![CDATA[select e from base$DicCountry e]]>
-            </query>
-        </collectionDatasource>
-        <datasource id="addressDs"
-                    class="kz.uco.tsadv.modules.personal.model.Address"
-                    view="address.view"/>
-        <collectionDatasource id="bpmRequestMessagesDs"
-                              class="kz.uco.tsadv.modules.personal.model.BpmRequestMessage"
-                              view="bpmRequestMessage-view">
-            <query>
-                <![CDATA[select e from tsadv$BpmRequestMessage e
-                    where e.entityId = :ds$addressRequestDs
-                           and ( e.assignedUser.userExt.id = :session$user or e.assignedBy.userExt.id = :session$user )
-                    order by e.sendDate desc]]>
-            </query>
-        </collectionDatasource>
-    </dsContext>
+                        <property name="code"/>
+                    </property>
+                    <property name="country"
+                              view="_minimal">
+                        <property name="code"/>
+                    </property>
+                    <property name="postalCode"/>
+                    <property name="cityName"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                </property>
+                <property name="personGroup"
+                          view="_minimal">
+                    <property name="legacyId"/>
+                    <property name="company" view="_local"/>
+                </property>
+                <property name="streetType" view="_local"/>
+                <property name="kato" view="dicKato.edit"/>
+            </view>
+            <loader/>
+            <collection id="attachmentsDc" property="attachments"/>
+        </instance>
+        <collection id="dicAddressTypesDs"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType"
+                    view="dicAddressType-edit">
+            <loader id="dicAddressTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicAddressType e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="dicCountriesDs"
+                    class="kz.uco.base.entity.dictionary.DicCountry"
+                    view="dicCountry.full.edit">
+            <loader id="dicCountriesDl">
+                <query>
+                    <![CDATA[select e from base$DicCountry e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="tasksDc"
+                    class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
+    </data>
     <dialogMode height="400"
                 width="AUTO"/>
     <layout spacing="true"
@@ -59,46 +87,68 @@
         <scrollBox id="scrollBox"
                    width="100%"
                    spacing="true">
-            <groupBox id="fieldGroupGroupBox">
-                <fieldGroup id="fieldGroup"
-                            datasource="addressRequestDs">
-                    <column width="250px">
-                        <field editable="false"
-                               property="requestNumber"/>
-                        <field optionsDatasource="dicAddressTypesDs"
-                               property="addressType"
-                               required="true"/>
-                        <field property="address"
-                               required="true"/>
-                        <field optionsDatasource="countriesDs"
-                               property="country"/>
-                        <field property="postalCode"/>
-                        <field property="city"/>
-                        <field property="attachment"/>
-                        <field editable="false"
-                               property="status"/>
-                    </column>
-                </fieldGroup>
+            <form id="form"
+                  dataContainer="addressRequestDs">
+                <column width="250px">
+                    <textField editable="false"
+                               property="requestNumber"
+                               caption="msg://kz.uco.tsadv.entity.bproc/AbstractBprocRequest.requestNumber"/>
+                    <lookupField optionsContainer="dicAddressTypesDs"
+                                 property="addressType"
+                                 required="true"/>
+                    <pickerField property="address"
+                                 required="true"/>
+                    <lookupField optionsContainer="dicCountriesDs"
+                                 property="country"/>
+                    <textField property="postalCode"/>
+                    <textField property="city"/>
+                    <lookupField editable="false"
+                                 property="status"/>
+                    <lookupField property="kato"/>
+                    <lookupField property="streetType"/>
+                    <textField property="streetName"/>
+                    <textField property="addressForExpats"/>
+                    <textField property="block"/>
+                    <textField property="building"/>
+                    <textField property="addressEnglish"/>
+                    <textField property="addressKazakh"/>
+                    <textField property="flat"/>
+                </column>
+            </form>
+            <groupBox id="groupBox">
+                <table id="fileDescriptorsTable" width="100%" dataContainer="attachmentsDc">
+                    <actions>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <buttonsPanel alwaysVisible="true">
+                        <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                                stylename="primary"/>
+                        <button id="fileDescriptorsTableRemoveBtn" action="fileDescriptorsTable.remove"/>
+                    </buttonsPanel>
+                    <columns>
+                        <column id="name" generator="generatorName" caption="mainMsg://fileName"/>
+                    </columns>
+                </table>
             </groupBox>
             <vbox id="bpmActorsVBox"
+                  width="1300px"
                   spacing="true">
                 <groupBox id="bpmActorsBox"
-                          caption="mainMsg://bproc.participants"
+                          caption="msg://kz.uco.tsadv.bproc/bproc.participants"
                           spacing="true">
                     <table id="procTasksTable"
+                           height="100%"
+                           showSelection="false"
+                           dataContainer="tasksDc"
                            width="100%">
                         <columns>
-                            <column id="locName"
-                                    caption="msg://ProcActor.role"/>
-                            <column id="procActor.user"/>
-                            <column id="startDate"/>
-                            <column id="endDate"/>
-                            <column id="locOutcome"
-                                    caption="msg://ProcActor.decision"/>
-                            <column id="comment"
-                                    maxTextLength="50"/>
+                            <column id="hrRole"/>
+                            <column id="assignee" generator="generateAssignee"/>
+                            <column id="createTime"/>
+                            <column id="endTime"/>
+                            <column id="outcome" generator="generateOutcome"/>
+                            <column id="comment"/>
                         </columns>
-                        <rows datasource="procTasksDs"/>
                     </table>
                 </groupBox>
             </vbox>
@@ -108,18 +158,11 @@
                       spacing="true"/>
         </scrollBox>
         <hbox id="procActionsBox"
+              align="BOTTOM_LEFT"
               spacing="true">
             <hbox id="procActionButtonHBox"
                   spacing="true"/>
-            <!--<button id="buttonCancelId"
-                    caption="msg://cancel"
-                    invoke="closeButton"/>
-            <button id="askQuestionBtn"
-                    caption="mainMsg://askQuestion"
-                    invoke="onAskQuestion"/>-->
-            <frame id="procActionsFrame"
-                   screen="procActionsFrame"
-                   width="AUTO"/>
+            <button action="windowClose"/>
         </hbox>
     </layout>
 </window>

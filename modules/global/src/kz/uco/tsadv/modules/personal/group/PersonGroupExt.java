@@ -17,6 +17,8 @@ import kz.uco.tsadv.modules.learning.model.Enrollment;
 import kz.uco.tsadv.modules.learning.model.IndividualDevelopmentPlan;
 import kz.uco.tsadv.modules.learning.model.Internship;
 import kz.uco.tsadv.modules.performance.model.Assessment;
+import kz.uco.tsadv.modules.personal.dictionary.DicDriverCategory;
+import kz.uco.tsadv.modules.personal.dictionary.DicSocStatus;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.recruitment.model.*;
 import org.eclipse.persistence.annotations.Customizer;
@@ -204,6 +206,41 @@ public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonEx
     @JoinColumn(name = "COMPANY_ID")
     protected DicCompany company;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SOC_STATUS_ID")
+    protected DicSocStatus socStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DRIVER_CATEGORY_ID")
+    protected DicDriverCategory driverCategory;
+
+    @Column(name = "REQUEST_NUMBER")
+    protected String requestNumber;
+
+    public String getRequestNumber() {
+        return requestNumber;
+    }
+
+    public void setRequestNumber(String requestNumber) {
+        this.requestNumber = requestNumber;
+    }
+
+    public DicDriverCategory getDriverCategory() {
+        return driverCategory;
+    }
+
+    public void setDriverCategory(DicDriverCategory driverCategory) {
+        this.driverCategory = driverCategory;
+    }
+
+    public DicSocStatus getSocStatus() {
+        return socStatus;
+    }
+
+    public void setSocStatus(DicSocStatus socStatus) {
+        this.socStatus = socStatus;
+    }
+
     public DicCompany getCompany() {
         return company;
     }
@@ -306,6 +343,7 @@ public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonEx
     public Long getTotalExperience() {
         Long dateDiff = 0L; //TODO Сделать поле startDate в сущности Assignment обязательным или проверить на null
         Date curDate = new Date();
+        if (assignments == null || !PersistenceHelper.isLoaded(this, "assignments")) return dateDiff;
         for (AssignmentExt assignment : getAssignments()) {
             if (assignment.getEndDate() == null || assignment.getEndDate().after(curDate)) {
                 dateDiff += curDate.getTime() - assignment.getStartDate().getTime();

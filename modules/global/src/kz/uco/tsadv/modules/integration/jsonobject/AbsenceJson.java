@@ -11,6 +11,7 @@ public class AbsenceJson implements Serializable {
     private String absenceDuration;
     private String orderNumber;
     private String orderDate;
+    private String absenceHours;
     private String companyCode;
 
     public String getPersonId() {
@@ -75,6 +76,14 @@ public class AbsenceJson implements Serializable {
 
     public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public String getAbsenceHours() {
+        return absenceHours;
+    }
+
+    public void setAbsenceHours(String absenceHours) {
+        this.absenceHours = absenceHours;
     }
 
     public String getCompanyCode() {

@@ -3,19 +3,18 @@ package kz.uco.tsadv.web.screens.insurancecontract;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.GlobalConfig;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
-import com.haulmont.cuba.gui.components.Action;
-import com.haulmont.cuba.gui.components.Button;
-import com.haulmont.cuba.gui.components.DataGrid;
-import com.haulmont.cuba.gui.components.LinkButton;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.model.InstanceContainer;
+import com.haulmont.cuba.gui.screen.LookupComponent;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.service.NotificationService;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
-import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -29,6 +28,8 @@ import java.util.Map;
 public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
     @Inject
     protected GlobalConfig globalConfig;
+    @Inject
+    protected FrontConfig frontConfig;
     @Inject
     private ScreenBuilders screenBuilders;
     @Inject
@@ -44,42 +45,18 @@ public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
     @Inject
     protected NotificationService notificationService;
 
-    @Subscribe
-    public void onInit(InitEvent event) {
-        DataGrid.Column column = insuranceContractsTable.addGeneratedColumn("contractField", new DataGrid.ColumnGenerator<InsuranceContract, LinkButton>() {
-            @Override
-            public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuranceContract> event) {
-                LinkButton linkButton = uiComponents.create(LinkButton.class);
-                linkButton.setCaption(event.getItem().getContract());
-                linkButton.setAction(new BaseAction("contractField").withHandler(e -> {
-                    screenBuilders.editor(insuranceContractsTable)
-                            .withScreenClass(InsuranceContractEdit.class)
-                            .editEntity(event.getItem())
-                            .build().show();
-                }));
-                return linkButton;
-            }
-
-            @Override
-            public Class<LinkButton> getType() {
-                return LinkButton.class;
-            }
-
-        }, 0);
-        column.setRenderer(insuranceContractsTable.createRenderer(DataGrid.ComponentRenderer.class));
-    }
-
-
     @Subscribe(id = "insuranceContractsDc", target = Target.DATA_CONTAINER)
     protected void onInsuranceContractsDcItemChange(InstanceContainer.ItemChangeEvent<InsuranceContract> event) {
         if (event.getItem() != null) {
-            InsuredPerson person = dataManager.load(InsuredPerson.class)
-                    .query("select e from tsadv$InsuredPerson e " +
-                            "where e.insuranceContract.id = :contractId")
+            InsuranceContract insuranceContract = dataManager.load(InsuranceContract.class)
+                    .query("select e from tsadv$InsuranceContract e " +
+                            "   join tsadv$InsuredPerson p on p.insuranceContract = e " +
+                            "where e.id = :contractId")
                     .parameter("contractId", event.getItem().getId())
-                    .view("insuredPerson-editView")
+                    .view(View.MINIMAL)
                     .list().stream().findFirst().orElse(null);
-            removeBtn.setEnabled(person == null);
+
+            removeBtn.setEnabled(insuranceContract == null);
         }
     }
 
@@ -107,11 +84,24 @@ public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
             tsadvUsers.forEach(tsadvUser -> {
                 Map<String, Object> params = new HashMap<>();
                 params.put("fio", tsadvUser.getPersonGroup().getFullName());
-                params.put("linkRu", "<a href=\"" + globalConfig.getWebAppUrl() + "\">ссылке</a>");
+                params.put("linkRu", "<a href=\"" + frontConfig.getFrontAppUrl() + "\" target=\"_blank\">ссылке</a>");
                 notificationService.sendParametrizedNotification("insurance.contract.dms",
                         tsadvUser, params);
             });
         }
+    }
+
+    @Install(to = "insuranceContractsTable.contractField", subject = "columnGenerator")
+    protected Component insuranceContractsTableContractFieldColumnGenerator(DataGrid.ColumnGeneratorEvent<InsuranceContract> event) {
+        LinkButton linkButton = uiComponents.create(LinkButton.class);
+        linkButton.setCaption(event.getItem().getContract());
+        linkButton.setAction(new BaseAction("contractField").withHandler(e -> {
+            screenBuilders.editor(insuranceContractsTable)
+                    .withScreenClass(InsuranceContractEdit.class)
+                    .editEntity(event.getItem())
+                    .build().show();
+        }));
+        return linkButton;
     }
 
 //

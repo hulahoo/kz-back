@@ -17,8 +17,7 @@
             </query>
         </collectionDatasource>
     </dsContext>
-    <dialogMode forceDialog="true"
-                height="AUTO"
+    <dialogMode height="AUTO"
                 width="600"/>
     <layout expand="windowActions"
             spacing="true">
@@ -32,8 +31,22 @@
                 <field property="country"/>
                 <field property="postalCode"/>
                 <field property="cityName"/>
+                <field property="factAddress"/>
+                <field property="registrationAddress"/>
                 <field property="startDate"/>
                 <field property="endDate"/>
+            </column>
+            <column width="350px" fieldCaptionWidth="163px">
+                <field property="kato"/>
+                <field property="streetType"/>
+                <field property="streetName"/>
+                <field property="building"/>
+                <field property="block"/>
+                <field property="flat"/>
+                <field property="addressForExpats"/>
+                <field property="notes"/>
+                <field property="addressKazakh"/>
+                <field property="addressEnglish"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

@@ -27,7 +27,7 @@ import java.util.List;
 
 @Table(name = "TSADV_JOB_GROUP")
 @Entity(name = "tsadv$JobGroup")
-@NamePattern("%s|jobNameDefault")
+@NamePattern("%s|jobNameDefault,list")
 public class JobGroup extends AbstractGroup implements IEntityGroup<Job> {
     private static final long serialVersionUID = 5049424103149725592L;
 

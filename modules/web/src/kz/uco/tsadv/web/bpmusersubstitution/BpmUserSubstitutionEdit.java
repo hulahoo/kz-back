@@ -5,10 +5,9 @@ import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.gui.components.*;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.tb.BpmUserSubstitution;
-import kz.uco.tsadv.exceptions.ItemNotFoundException;
+import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.service.BpmUserSubstitutionService;
-import org.springframework.util.StringUtils;
 
 import javax.inject.Inject;
 import java.util.Date;
@@ -35,8 +34,8 @@ public class BpmUserSubstitutionEdit extends AbstractEditor<BpmUserSubstitution>
         super.init(params);
         user.setVisible(!params.containsKey("isUserEditable") || ((boolean) params.get("isUserEditable")));
 
-        startDate.addValueChangeListener(e -> endDate.setRangeStart((Date) e.getValue()));
-        endDate.addValueChangeListener(e -> startDate.setRangeEnd((Date) e.getValue()));
+        startDate.addValueChangeListener(e -> endDate.setRangeStart(e.getValue()));
+        endDate.addValueChangeListener(e -> startDate.setRangeEnd(e.getValue()));
 
         substitutedUserPickerField.getLookupAction().setLookupScreenParamsSupplier(() -> ParamsMap.of("EMPLOYEE", true));
         userPickerField.getLookupAction().setLookupScreenParamsSupplier(() -> ParamsMap.of("EMPLOYEE", true));
@@ -55,20 +54,12 @@ public class BpmUserSubstitutionEdit extends AbstractEditor<BpmUserSubstitution>
     @Override
     protected void postValidate(ValidationErrors errors) {
         super.postValidate(errors);
-        if (getItem().getUser() == null || getItem().getSubstitutedUser() == null) return;
-        StringBuilder mes = new StringBuilder();
-        if (getItem().getSubstitutedUser().getId().equals(getItem().getUser().getId())) {
-            mes.append(getMessage("sameUser"));
-        }
-        if (getItem().getStartDate() == null || getItem().getEndDate() == null) return;
-        if (bpmUserSubstitutionService.hasBpmUserSubstitution(getItem().getId(), getItem().getUser(), getItem().getStartDate(), getItem().getEndDate())) {
-            mes.append(getMessage("haveBpmUserSubstitution"));
-        }
-        if (bpmUserSubstitutionService.isCycle(getItem())) {
-            mes.append(!StringUtils.isEmpty(mes.toString()) ? '\n' : '\0').append(getMessage("cycle"));
-        }
-        if (!StringUtils.isEmpty(mes.toString())) {
-            throw new ItemNotFoundException(mes.toString());
+        if (errors.isEmpty()) {
+            try {
+                bpmUserSubstitutionService.validate(getItem());
+            } catch (PortalException e) {
+                errors.add(e.getMessage());
+            }
         }
     }
 }

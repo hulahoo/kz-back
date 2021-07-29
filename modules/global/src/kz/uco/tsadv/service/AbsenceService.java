@@ -19,11 +19,11 @@ public interface AbsenceService {
 
     List<Absence> getAllAbsencesForPerson(PersonGroupExt personGroup);
 
-    void fillNextTaskIdRestForAA();
-
     int countBusinessDays(Date dateFrom, Date dateTo, DicAbsenceType absenceType, AssignmentGroupExt assignmentGroup);
 
     int countDays(Date dateFrom, Date dateTo, UUID absenceTypeId, UUID personGroupId);
+
+    int countDaysWithoutHolidays(Date dateFrom, Date dateTo, UUID personGroupId);
 
     int countWeekendDays(Date dateFrom, Date dateTo);
 
@@ -41,4 +41,21 @@ public interface AbsenceService {
     void createAbsenceFromRequest(String entityId);
 
     VacationDurationType getVacationDurationType(UUID personGroupId, UUID absenceTypeId, Date date);
+
+    /**
+     * @return отпускных дней, полученных за год по типу absenceTypeId
+     */
+    Long getReceivedVacationDaysOfYear(UUID personGroupId, UUID absenceTypeId, Date date);
+
+    /**
+     * @return остаток дни по РВД
+     */
+    Long getRemainingDaysWeekendWork(UUID personGroupId);
+
+    void sendNotifyForEmployee();
+
+    void sendNotificationForEmployeeEveryYear();
+
+    @Nullable
+    Integer scheduleOffsetDaysBeforeAbsence();
 }

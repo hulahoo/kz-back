@@ -1,7 +1,10 @@
 package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.Persistence;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.core.global.ViewRepository;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
@@ -9,6 +12,7 @@ import kz.uco.tsadv.modules.personal.model.Job;
 import kz.uco.tsadv.modules.personal.model.PositionExt;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.*;
 
@@ -16,9 +20,39 @@ import java.util.*;
 public class PositionServiceBean implements PositionService {
 
     @Inject
+    protected DataManager dataManager;
+    @Inject
     private CommonService commonService;
     @Inject
     protected Persistence persistence;
+    @Inject
+    protected UserSessionSource userSessionSource;
+    @Inject
+    protected ViewRepository viewRepository;
+
+    @Override
+    public PositionExt getPosition(@Nullable View view) {
+        return this.getPosition(userSessionSource.getUserSession().getUser().getId(), view);
+    }
+
+    @Override
+    public PositionExt getPosition(UUID userId, @Nullable View view) {
+        if (view == null) view = viewRepository.getView(PositionExt.class, View.MINIMAL);
+
+        return dataManager.load(PositionExt.class)
+                .query("select l from tsadv$UserExt e " +
+                        "   join e.personGroup p " +
+                        "   join p.assignments a " +
+                        "   join a.positionGroup.list l " +
+                        " where e.id = :userId" +
+                        "   and a.primaryFlag = 'TRUE' " +
+                        "   and a.assignmentStatus.code in ('ACTIVE', 'SUSPENDED') " +
+                        "   and current_date between a.startDate and a.endDate " +
+                        "   and current_date between l.startDate and l.endDate ")
+                .parameter("userId", userId)
+                .view(view)
+                .one();
+    }
 
     @Override
     public List<Job> getExistingJobsInactiveInNearFuture(PositionExt position) {
@@ -56,5 +90,19 @@ public class PositionServiceBean implements PositionService {
                         .setParameter("positionGroupId", positionGroupId)
                         .setParameter("systemDate", CommonUtils.getSystemDate())
                         .getFirstResult());
+    }
+
+    @Nullable
+    @Override
+    public PositionGroupExt getFunctionalManager(UUID positionGroupId) {
+        return dataManager.load(PositionGroupExt.class)
+                .query("select l.functionalManagerPositionGroup from base$PositionGroupExt e" +
+                        "   join e.list l " +
+                        "   where e.id = :positionGroupId" +
+                        "       and current_date between l.startDate and l.endDate")
+                .parameter("positionGroupId", positionGroupId)
+                .view(View.MINIMAL)
+                .optional()
+                .orElse(null);
     }
 }

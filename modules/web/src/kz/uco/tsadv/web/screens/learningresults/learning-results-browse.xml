@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="learningResultsTable"
+        messagesPack="kz.uco.tsadv.web.screens.learningresults">
+    <data readOnly="true">
+        <collection id="learningResultsDc"
+                    class="kz.uco.tsadv.modules.personal.model.LearningResults"
+                    view="learningResults.edit">
+            <loader id="learningResultsDl">
+                <query>
+                    <![CDATA[select e from tsadv_LearningResults e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="learningResultsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="learningResultsTable"
+                dataLoader="learningResultsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="learningResultsTable"
+                    width="100%"
+                    dataContainer="learningResultsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="granteesAgreement"/>
+                <column id="personGroup"/>
+                <column id="studyYear"/>
+                <column id="semester"/>
+                <column id="averageScore"/>
+                <column id="scholarship"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="learningResultsTable.create"/>
+                <button id="editBtn" action="learningResultsTable.edit"/>
+                <button id="removeBtn" action="learningResultsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

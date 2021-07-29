@@ -33,7 +33,7 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
     private Date endDate;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "EXPIRED_DATE", nullable = false)
+    @Column(name = "EXPIRED_DATE")
     protected Date expiredDate;
 
     @Column(name = "ISSUED_BY", length = 500)
@@ -45,7 +45,6 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
 
     @Column(name = "DESCRIPTION", length = 2000)
     protected String description;
-
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DOCUMENT_TYPE_ID")
@@ -113,7 +112,6 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
         this.issuingAuthority = issuingAuthority;
     }
 
-
     public void setSeries(String series) {
         this.series = series;
     }
@@ -121,7 +119,6 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
     public String getSeries() {
         return series;
     }
-
 
     public void setFile(FileDescriptor file) {
         this.file = file;
@@ -131,7 +128,6 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
         return file;
     }
 
-
     public void setStatus(DicApprovalStatus status) {
         this.status = status;
     }
@@ -139,7 +135,6 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
     public DicApprovalStatus getStatus() {
         return status;
     }
-
 
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
@@ -149,7 +144,6 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
         return documentNumber;
     }
 
-
     public void setPersonGroup(PersonGroupExt personGroup) {
         this.personGroup = personGroup;
     }
@@ -158,7 +152,6 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
         return personGroup;
     }
 
-
     public void setDocumentType(DicDocumentType documentType) {
         this.documentType = documentType;
     }
@@ -166,7 +159,6 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
     public DicDocumentType getDocumentType() {
         return documentType;
     }
-
 
     public void setIssueDate(Date issueDate) {
         this.issueDate = issueDate;
@@ -192,7 +184,6 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
         return issuedBy;
     }
 
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -200,6 +191,4 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
     public String getDescription() {
         return description;
     }
-
-
 }

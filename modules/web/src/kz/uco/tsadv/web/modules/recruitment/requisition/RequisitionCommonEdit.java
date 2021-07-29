@@ -516,7 +516,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
         if (displayAllEmployees.getDisplayAllEmployees()) {
             Utils.customizeLookup(substitutablePersonGroupConfig.getComponent(), "base$PersonGroup.browse", WindowManager.OpenType.DIALOG, null);
         } else {
-            substitutablePersonGroupsDs.setQuery("select e.personGroupId from base$AssignmentExt e\n" +
+            substitutablePersonGroupsDs.setQuery("select e.personGroup from base$AssignmentExt e\n" +
                     "where e.positionGroup.id = :ds$requisitionDs.positionGroup.id");
             Utils.customizeLookup(substitutablePersonGroupConfig.getComponent(), "base$PersonGroup.browse", WindowManager.OpenType.DIALOG, Collections.singletonMap("commonFilter", (getItem().getPositionGroup() != null ? " and (a.positionGroup.id = '" + getItem().getPositionGroup().getId() + "')" : " and 1=0 ")));
 
@@ -760,7 +760,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
         if (displayAllEmployees.getDisplayAllEmployees()) {
             Utils.customizeLookup(substitutablePersonGroupConfig.getComponent(), "base$PersonGroup.browse", WindowManager.OpenType.DIALOG, null);
         } else {
-            substitutablePersonGroupsDs.setQuery("select e.personGroupId from base$AssignmentExt e\n" +
+            substitutablePersonGroupsDs.setQuery("select e.personGroup from base$AssignmentExt e\n" +
                     "where e.positionGroup.id = :ds$requisitionDs.positionGroup.id");
             Utils.customizeLookup(substitutablePersonGroupConfig.getComponent(), "base$PersonGroup.browse", WindowManager.OpenType.DIALOG, Collections.singletonMap("commonFilter", (getItem().getPositionGroup() != null ? " and (a.positionGroup.id = '" + getItem().getPositionGroup().getId() + "')" : " and 1=0 ")));
         }

@@ -61,7 +61,7 @@ public interface LmsService {
 
     List<LearningFeedbackQuestion> loadFeedbackData(UUID feedbackTemplateId);
 
-    void finishFeedback(AnsweredFeedback answeredFeedback);
+    void finishFeedback(AnsweredFeedback answeredFeedback, UUID personGroupId);
 
     CourseSection loadCourseSectionData(UUID enrollmentId, UUID courseSectionId);
 

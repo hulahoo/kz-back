@@ -4,7 +4,10 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowManager;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.ButtonsPanel;
+import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.DialogAction;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.components.actions.EditAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
@@ -47,6 +50,9 @@ public class PcfBeneficiary extends EditableFrame {
                 getDsContext().get("personGroupDs") != null
                         ? ParamsMap.of("personGroupParent", getDsContext().get("personGroupDs").getItem())
                         : null);
+        beneficiariesDs.addCollectionChangeListener(e -> {
+            beneficiariesDs.refresh();
+        });
     }
 
 

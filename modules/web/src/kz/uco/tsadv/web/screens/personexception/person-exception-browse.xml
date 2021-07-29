@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://browseCaption"
+        focusComponent="personExceptionsTable"
+        messagesPack="kz.uco.tsadv.web.screens.personexception">
+    <data readOnly="true">
+        <collection id="personExceptionsDc"
+                    class="kz.uco.tsadv.modules.performance.model.PersonException"
+                    view="personException.edit">
+            <loader id="personExceptionsDl">
+                <query>
+                    <![CDATA[select e from tsadv_PersonException e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personExceptionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personExceptionsTable"
+                dataLoader="personExceptionsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personExceptionsTable"
+                    width="100%"
+                    dataContainer="personExceptionsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="personGroup"/>
+                <column id="maxBonus"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="personExceptionsTable.create"/>
+                <button id="editBtn" action="personExceptionsTable.edit"/>
+                <button id="removeBtn" action="personExceptionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

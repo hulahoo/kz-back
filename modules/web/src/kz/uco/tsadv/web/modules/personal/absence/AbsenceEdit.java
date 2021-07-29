@@ -65,13 +65,13 @@ public class AbsenceEdit extends AbstractEditor<Absence> {
     @Inject
     protected EmployeeService employeeService;
     @Inject
-    @Named("fieldGroup.dateFrom")
+    @Named("fieldGroup2.dateFrom")
     protected DateField<Date> dateFrom;
     @Inject
-    @Named("fieldGroup.dateTo")
+    @Named("fieldGroup2.dateTo")
     protected DateField<Date> dateTo;
     @Inject
-    @Named("fieldGroup.absenceDays")
+    @Named("fieldGroup2.absenceDays")
     protected TextField absenceDaysField;
     @Named("fieldGroup1.file")
     protected FileUploadField fileField;

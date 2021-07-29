@@ -634,14 +634,15 @@
         <method name="loadFeedbackData">
             <param name="feedbackTemplateId"/>
         </method>
-        <method name="finishFeedback">
-            <param name="answeredFeedback"/>
-        </method>
         <method name="loadCourseSectionData">
             <param name="enrollmentId"/>
             <param name="courseSectionId"/>
         </method>
         <method name="loadBooks"/>
+        <method name="finishFeedback">
+            <param name="answeredFeedback" type="kz.uco.tsadv.lms.pojo.AnsweredFeedback"/>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="tsadv_UserSettingService">
         <method name="getTimeZones"/>
@@ -811,6 +812,22 @@
         </method>
         <method name="createOrUpdateUser">
             <param name="userData" type="kz.uco.tsadv.modules.integration.jsonobject.UserDataJson"/>
+        </method>
+        <method name="createOrUpdatePersonAbsenceBalance">
+            <param name="absenceBalanceData" type="kz.uco.tsadv.modules.integration.jsonobject.AbsenceBalanceDataJson"/>
+        </method>
+    </service>
+    <service name="tsadv_AbsenceRvdService">
+        <method name="countTotalHours">
+            <param name="dateFrom" type="java.util.Date"/>
+            <param name="dateTo" type="java.util.Date" />
+            <param name="absenceTypeId" type="java.util.UUID" />
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_EnrollmentService">
+        <method name="searchEnrollment">
+            <param name="personGroupId" type="java.util.UUID"/>
         </method>
     </service>
 </services>

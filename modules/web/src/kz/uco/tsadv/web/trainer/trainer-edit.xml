@@ -29,6 +29,7 @@
                 <field property="orderDate"/>
                 <field captionProperty="name"
                        property="party"/>
+                <field property="company"/>
             </column>
         </fieldGroup>
         <tabSheet>

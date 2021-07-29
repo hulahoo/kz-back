@@ -15,7 +15,7 @@
     </data>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="editActions" spacing="true">
+    <layout expand="linksBox" spacing="true">
         <form id="form" dataContainer="bpmRolesDefinerDc">
             <column width="250px">
                 <pickerField id="companyField" property="company" editable="false"/>
@@ -23,10 +23,12 @@
                              captionProperty="key"
                              caption="msg://kz.uco.tsadv.modules.bpm/BpmRolesDefiner.procModel"
                              optionsContainer="processDefinitionsDc"/>
+                <checkBox property="managerLaunches" visible="false"/>
+                <checkBox property="activeSupManagerExclusion"/>
             </column>
         </form>
-        <groupBox id="linksBox" caption="msg://kz.uco.tsadv.modules.bpm/BpmRolesDefiner.links">
-            <table id="linksTable" dataContainer="linksDc" width="100%" height="200px">
+        <groupBox id="linksBox" caption="msg://kz.uco.tsadv.modules.bpm/BpmRolesDefiner.links" expand="linksTable">
+            <table id="linksTable" dataContainer="linksDc" width="100%">
                 <actions>
                     <action id="create" type="create"/>
                     <action id="edit" type="edit"/>
@@ -38,6 +40,8 @@
                     <column id="required"/>
                     <column id="isAddableApprover"/>
                     <column id="order"/>
+                    <column id="priority"/>
+                    <column id="forAssistant"/>
                 </columns>
                 <buttonsPanel>
                     <button action="linksTable.create"/>

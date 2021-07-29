@@ -39,5 +39,17 @@
 
     <bean id="bproc_BprocRuntimeService" class="kz.uco.tsadv.bproc.beans.ExtBprocRuntimeServiceBean"/>
 
-    <bean class="com.google.gson.Gson" />
+    <bean id="base_NotificationSenderAPIService"
+          class="kz.uco.tsadv.service.portal.NotificationSenderAPIServiceBeanExt"/>
+
+    <bean class="com.google.gson.Gson"/>
+    <bean id="tsadv_MBeanExporter" lazy-init="false"
+          class="com.haulmont.cuba.core.sys.jmx.MBeanExporter">
+        <property name="beans">
+            <map>
+                <entry key="${cuba.webContextName}.tsadv:type=Course"
+                       value-ref="tsadv_CourseMBean"/>
+            </map>
+        </property>
+    </bean>
 </beans>

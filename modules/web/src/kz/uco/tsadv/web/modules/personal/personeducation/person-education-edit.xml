@@ -46,6 +46,10 @@
                        property="graduationDate"/>
                 <field id="foreignEducation"
                        property="foreignEducation"/>
+                <field id="specialtyCode"
+                       property="specialtyCode"/>
+                <field id="learningLanguage"
+                       property="learningLanguage"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

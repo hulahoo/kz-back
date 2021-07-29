@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.BeanLocator;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.service.EmployeeNumberService;
 
@@ -20,6 +21,8 @@ public abstract class AbstractBprocRequest extends AbstractParentEntity {
 
     public static final String OUTCOME_START = "START";
 
+    public static final String OUTCOME_CANCEL = "CANCEL";
+
     public static final String OUTCOME_APPROVE = "APPROVE";
 
     public static final String OUTCOME_REJECT = "REJECT";
@@ -29,6 +32,10 @@ public abstract class AbstractBprocRequest extends AbstractParentEntity {
     public static final String OUTCOME_REASSIGN = "REASSIGN";
 
     public static final String OUTCOME_SEND_FOR_APPROVAL = "SEND_FOR_APPROVAL";
+
+    public static final String OUTCOME_AUTO_REDIRECT = "AUTO_REDIRECT";
+
+    public static final String INITIATOR_TASK_CODE = "initiator_task";
 
     @Column(name = "REQUEST_NUMBER", nullable = false)
     @NotNull
@@ -85,7 +92,7 @@ public abstract class AbstractBprocRequest extends AbstractParentEntity {
 
         this.setStatus(beanLocator.get(CommonService.class).getEntity(DicRequestStatus.class, "DRAFT"));
         this.setRequestNumber(beanLocator.get(EmployeeNumberService.class).generateNextRequestNumber());
-        this.setRequestDate(new Date());
+        this.setRequestDate(CommonUtils.getSystemDate());
     }
 
     public abstract String getProcessDefinitionKey();

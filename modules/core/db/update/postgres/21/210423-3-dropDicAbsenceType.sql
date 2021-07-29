@@ -1,0 +1,1 @@
+alter table TSADV_DIC_ABSENCE_TYPE drop column ecological_absence__u48134;

@@ -18,6 +18,18 @@ public class DicDocumentType extends AbstractDictionary {
     @Column(name = "FOREIGNER", nullable = false, columnDefinition = "Boolean default false")
     private Boolean foreigner = false;
 
+    @NotNull
+    @Column(name = "IS_ID_OR_PASSPORT", nullable = false)
+    private Boolean isIdOrPassport = false;
+
+    public Boolean getIsIdOrPassport() {
+        return isIdOrPassport;
+    }
+
+    public void setIsIdOrPassport(Boolean isIdOrPassport) {
+        this.isIdOrPassport = isIdOrPassport;
+    }
+
     public Boolean getForeigner() {
         return foreigner;
     }

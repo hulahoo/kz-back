@@ -976,9 +976,9 @@
         <entity class="kz.uco.tsadv.modules.personal.model.Analytics">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.global.entity.UserExtPersonGroup">
-            <include re=".*"/>
-        </entity>
+<!--        <entity class="kz.uco.tsadv.global.entity.UserExtPersonGroup">-->
+<!--            <include re=".*"/>-->
+<!--        </entity>-->
         <entity class="kz.uco.tsadv.modules.personal.model.OrganizationProperties">
             <include re=".*"/>
         </entity>
@@ -1684,9 +1684,6 @@
         <entity class="kz.uco.tsadv.modules.performance.model.InstructionsKpi">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.entity.VacationSchedule">
-            <include re=".*"/>
-        </entity>
         <entity class="kz.uco.tsadv.entity.VacationScheduleRequest">
             <include re=".*"/>
         </entity>
@@ -1738,9 +1735,6 @@
         <entity class="kz.uco.tsadv.modules.performance.model.InstructionsKpi">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.entity.VacationSchedule">
-            <include re=".*"/>
-        </entity>
         <entity class="kz.uco.tsadv.entity.VacationScheduleRequest">
             <include re=".*"/>
         </entity>
@@ -1753,7 +1747,7 @@
         <entity class="kz.uco.tsadv.modules.personal.model.CertificateRequest">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicLangaugeLevel">
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicLanguageLevel">
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.personal.model.PersonLanguage">
@@ -1946,6 +1940,99 @@
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.learning.model.CourseSectionScormResult">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.ScormSuspendData">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.BookView">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicEarningPolicy">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.performance.model.PersonException">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicStreetType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicKato">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.DicShift">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.ResizedImage">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.ImageSize">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.ExecutiveAssistants">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicTypeOfTraining">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicProgrammCode">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicAssessmentMethod">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.PositionCourse">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.administration.PortalMenuCustomization">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveFlag">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveIndicators">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.bpm.BprocReassignment">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicSocStatus">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicDriverCategory">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicFieldOfActivity">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicGuardianType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.Guardian">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.ListOfDocuments">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.GranteesAgreement">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.Payments">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.LearningResults">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.LearningResultsPerSubject">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.Scholarship">
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.performance.dictionary.DicPerformanceStage">

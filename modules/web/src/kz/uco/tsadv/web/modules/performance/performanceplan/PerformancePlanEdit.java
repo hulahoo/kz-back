@@ -26,6 +26,7 @@ import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicCurrency;
 import kz.uco.base.service.NotificationService;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
@@ -106,9 +107,12 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected DatesService datesService;
     @Inject
     protected Dialogs dialogs;
+    @Inject
+    protected FrontConfig frontConfig;
     private FileInputStream inputStream;
     @Inject
     protected NotificationService notificationService;
+
     protected SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     protected SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
     protected SimpleDateFormat monthTextFormatRu = new SimpleDateFormat("dd MMMM yyyy", Locale.forLanguageTag("ru"));
@@ -193,18 +197,19 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 .withScreenId("base$PersonForKpiCard.browse")
                 .withSelectHandler(personList -> {
                     CommitContext commitContext = new CommitContext();
+                    List<PersonExt> assignedPerformancePlanPersonList = dataManager.load(PersonExt.class)
+                            .query("select p from tsadv$AssignedPerformancePlan e " +
+                                    " join base$PersonExt p on e.assignedPerson = p.group " +
+                                    " and current_date between p.startDate and p.endDate " +
+                                    " where e.performancePlan = :performancePlan")
+                            .parameter("performancePlan", performancePlanDc.getItem())
+                            .view("person-view")
+                            .list();
                     personList.forEach(personExt -> {
                         boolean isNew = true;
-                        List<AssignedPerformancePlan> assignedPerformancePlanList =
-                                dataManager.load(AssignedPerformancePlan.class)
-                                        .query("select e from tsadv$AssignedPerformancePlan e " +
-                                                " where e.performancePlan = :performancePlan")
-                                        .parameter("performancePlan", performancePlanDc.getItem())
-                                        .view("assignedPerformancePlan.browse")
-                                        .list();
-                        if (!assignedPerformancePlanList.isEmpty()) {
-                            for (AssignedPerformancePlan item : assignedPerformancePlanList) {
-                                if (item.getAssignedPerson().equals(personExt.getGroup())) {
+                        if (!assignedPerformancePlanPersonList.isEmpty()) {
+                            for (PersonExt item : assignedPerformancePlanPersonList) {
+                                if (item.getGroup().equals(personExt.getGroup())) {
                                     isNew = false;
                                     break;
                                 }
@@ -249,40 +254,43 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
 
     @Subscribe("assignedPerformancePlanTable.massGoals")
     protected void onAssignedPerformancePlanTableMassGoals(Action.ActionPerformedEvent event) {
+        dialogs.createOptionDialog(Dialogs.MessageType.CONFIRMATION)
+                .withCaption(messageBundle.getMessage("confirmAction"))
+                .withMessage(messageBundle.getMessage("addMassGoalsConfirmation"))
+                .withActions(
+                        new DialogAction(DialogAction.Type.YES, Action.Status.PRIMARY).withHandler(e -> {
+                            doMassGoals();
+                        }),
+                        new DialogAction(DialogAction.Type.NO)
+                )
+                .show();
+    }
+
+    protected void doMassGoals() {
         Set<AssignedPerformancePlan> assignedPerformancePlans = assignedPerformancePlanTable.getSelected();
         CommitContext commitContext = new CommitContext();
         try {
             assignedPerformancePlans.forEach(assignedPerformancePlan -> {
                 AssignmentExt currentAssignment = assignedPerformancePlan.getAssignedPerson().getCurrentAssignment();
-                List<OrganizationGroupGoalLink> orgGoalList = currentAssignment.getOrganizationGroup() != null
-                        ? currentAssignment.getOrganizationGroup().getGoals()
-                        : Collections.emptyList();
                 List<PositionGroupGoalLink> positionGoalList = currentAssignment.getPositionGroup() != null
                         ? currentAssignment.getPositionGroup().getGoals()
                         : Collections.emptyList();
                 List<JobGroupGoalLink> jobGoalList = currentAssignment.getJobGroup() != null
                         ? currentAssignment.getJobGroup().getGoals()
                         : Collections.emptyList();
-                for (OrganizationGroupGoalLink organizationGoal : orgGoalList) {
-                    AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
-                    newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
-                    newAssignedGoal.setGoal(organizationGoal.getGoal());
-                    newAssignedGoal.setGoalString(organizationGoal.getGoal().getGoalName());
-                    newAssignedGoal.setWeight(Double.valueOf(organizationGoal.getWeight()));
-                    newAssignedGoal.setOrganizationGroup(organizationGoal.getOrganizationGroup());
-                    newAssignedGoal.setCategory(organizationGoal.getGoal() != null
-                            && organizationGoal.getGoal().getLibrary() != null
-                            ? organizationGoal.getGoal().getLibrary().getCategory()
-                            : null);
-                    newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
-                    newAssignedGoal.setGoalLibrary(organizationGoal.getGoal().getLibrary());
-                    commitContext.addInstanceToCommit(newAssignedGoal);
-                }
+                List<OrganizationGroupGoalLink> orgGoalList = currentAssignment.getOrganizationGroup() != null
+                        ? currentAssignment.getOrganizationGroup().getGoals()
+                        : Collections.emptyList();
+                List<OrganizationGroupGoalLink> orgStructureGoal =
+                        kpiService.getHierarchyGoals(currentAssignment.getOrganizationGroup() != null
+                                ? currentAssignment.getOrganizationGroup().getId()
+                                : null);
+                Set<Goal> processedGoals = new HashSet<>();
                 for (PositionGroupGoalLink positionGoal : positionGoalList) {
                     AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
                     newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
                     newAssignedGoal.setGoal(positionGoal.getGoal());
-                    newAssignedGoal.setGoalString(positionGoal.getGoal().getGoalName());
+//                    newAssignedGoal.setGoalString(positionGoal.getGoal().getGoalName());
                     newAssignedGoal.setWeight(Double.valueOf(positionGoal.getWeight()));
                     newAssignedGoal.setPositionGroup(positionGoal.getPositionGroup());
                     newAssignedGoal.setCategory(positionGoal.getGoal() != null
@@ -290,16 +298,21 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                             ? positionGoal.getGoal().getLibrary().getCategory()
                             : null);
                     newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
+                    newAssignedGoal.setCantDelete(true);
                     newAssignedGoal.setGoalLibrary(positionGoal.getGoal().getLibrary());
                     commitContext.addInstanceToCommit(newAssignedGoal);
+                    processedGoals.add(positionGoal.getGoal());
                 }
                 for (JobGroupGoalLink jobGoal : jobGoalList) {
+                    if (processedGoals.contains(jobGoal.getGoal())) continue;
+
                     AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
                     newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
                     newAssignedGoal.setGoal(jobGoal.getGoal());
-                    newAssignedGoal.setGoalString(jobGoal.getGoal().getGoalName());
+//                    newAssignedGoal.setGoalString(jobGoal.getGoal().getGoalName());
                     newAssignedGoal.setWeight(Double.valueOf(jobGoal.getWeight()));
                     newAssignedGoal.setJobGroup(jobGoal.getJobGroup());
+                    newAssignedGoal.setCantDelete(true);
                     newAssignedGoal.setCategory(jobGoal.getGoal() != null
                             && jobGoal.getGoal().getLibrary() != null
                             ? jobGoal.getGoal().getLibrary().getCategory()
@@ -307,12 +320,54 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
                     newAssignedGoal.setGoalLibrary(jobGoal.getGoal().getLibrary());
                     commitContext.addInstanceToCommit(newAssignedGoal);
+                    processedGoals.add(jobGoal.getGoal());
+                }
+                for (OrganizationGroupGoalLink organizationGoal : orgGoalList) {
+                    if (processedGoals.contains(organizationGoal.getGoal())) continue;
+
+                    AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                    newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                    newAssignedGoal.setGoal(organizationGoal.getGoal());
+//                    newAssignedGoal.setGoalString(organizationGoal.getGoal().getGoalName());
+                    newAssignedGoal.setWeight(Double.valueOf(organizationGoal.getWeight()));
+                    newAssignedGoal.setOrganizationGroup(organizationGoal.getOrganizationGroup());
+                    newAssignedGoal.setCategory(organizationGoal.getGoal() != null
+                            && organizationGoal.getGoal().getLibrary() != null
+                            ? organizationGoal.getGoal().getLibrary().getCategory()
+                            : null);
+                    newAssignedGoal.setCantDelete(true);
+                    newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
+                    newAssignedGoal.setGoalLibrary(organizationGoal.getGoal().getLibrary());
+                    commitContext.addInstanceToCommit(newAssignedGoal);
+                    processedGoals.add(organizationGoal.getGoal());
+                }
+                for (OrganizationGroupGoalLink structureGoal : orgStructureGoal) {
+                    structureGoal = dataManager.reload(structureGoal, "organizationGroupGoalLink-view");
+
+                    if (processedGoals.contains(structureGoal.getGoal())) continue;
+
+                    AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                    newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                    newAssignedGoal.setGoal(structureGoal.getGoal());
+//                    newAssignedGoal.setGoalString(structureGoal.getGoal().getGoalName());
+                    newAssignedGoal.setWeight(Double.valueOf(structureGoal.getWeight()));
+                    newAssignedGoal.setOrganizationGroup(structureGoal.getOrganizationGroup());
+                    newAssignedGoal.setCategory(structureGoal.getGoal() != null
+                            && structureGoal.getGoal().getLibrary() != null
+                            ? structureGoal.getGoal().getLibrary().getCategory()
+                            : null);
+                    newAssignedGoal.setCantDelete(true);
+                    newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
+                    newAssignedGoal.setGoalLibrary(structureGoal.getGoal().getLibrary());
+                    commitContext.addInstanceToCommit(newAssignedGoal);
+                    processedGoals.add(structureGoal.getGoal());
                 }
             });
             dataManager.commit(commitContext);
             notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                     .withCaption(messageBundle.getMessage("addMassGoalSuccess")).show();
         } catch (Exception e) {
+            e.printStackTrace();
             notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                     .withCaption(messageBundle.getMessage("addMassGoalNotSuccess")).show();
         }
@@ -347,14 +402,29 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                                         ? currentAssignment.getGroup()
                                         : null,
                                 performancePlanDc.getItem().getStartDate(), performancePlanDc.getItem().getEndDate())));
-                assignedPerformancePlan.setMaxBonus(assignedPerformancePlan.getGzp().multiply(
-                        BigDecimal.valueOf(assignedPerformancePlan.getMaxBonusPercent() != null
-                                ? assignedPerformancePlan.getMaxBonusPercent()
-                                : currentAssignment != null
-                                && currentAssignment.getGradeGroup() != null
-                                && currentAssignment.getGradeGroup().getGrade() != null
-                                ? currentAssignment.getGradeGroup().getGrade().getBonusPercent()
-                                : 0)).divide(BigDecimal.valueOf(100)));
+                PersonException exception = getPersonException(assignedPerformancePlan.getAssignedPerson());
+                if (assignedPerformancePlan.getMaxBonusPercent() != null || exception != null) {
+                    assignedPerformancePlan.setMaxBonus(assignedPerformancePlan.getGzp().multiply(
+                            BigDecimal.valueOf(assignedPerformancePlan.getMaxBonusPercent() != null
+                                    ? assignedPerformancePlan.getMaxBonusPercent()
+                                    : exception != null
+                                    ? exception.getMaxBonus()
+                                    : 0)).divide(BigDecimal.valueOf(100)));
+                } else {
+                    assignedPerformancePlan.setMaxBonus(
+                            extAppPropertiesConfig.getIncludeAbsence()
+                                    ? kpiService.getMaxBonus(currentAssignment != null
+                                            ? currentAssignment.getPersonGroup()
+                                            : null,
+                                    performancePlanDc.getItem().getStartDate(),
+                                    performancePlanDc.getItem().getEndDate())
+                                    : assignedPerformancePlan.getGzp().multiply(
+                                    BigDecimal.valueOf(currentAssignment != null
+                                            && currentAssignment.getGradeGroup() != null
+                                            && currentAssignment.getGradeGroup().getGrade() != null
+                                            ? currentAssignment.getGradeGroup().getGrade().getBonusPercent()
+                                            : 0)).divide(BigDecimal.valueOf(100)));
+                }
                 assignedPerformancePlan.setKpiScore(getFinalScore(assignedPerformancePlan.getResult()));
                 assignedPerformancePlan.setFinalScore(assignedPerformancePlan.getKpiScore()
                         + (assignedPerformancePlan.getExtraPoint() != null
@@ -366,6 +436,11 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                         , assignedPerformancePlan.getFinalScore()));
                 assignedPerformancePlan.setFinalBonus(assignedPerformancePlan.getCompanyBonus()
                         + assignedPerformancePlan.getPersonalBonus());
+                if (assignedPerformancePlan.getAdjustedScore() != null) {
+                    double personalBonus = BigDecimal.valueOf(calculatePersonalBonus(assignedPerformancePlan.getMaxBonus(),
+                            assignedPerformancePlan.getAdjustedScore())).doubleValue();
+                    assignedPerformancePlan.setAdjustedBonus(assignedPerformancePlan.getCompanyBonus() + personalBonus);
+                }
                 commitContext.addInstanceToCommit(assignedPerformancePlan);
             });
             dataManager.commit(commitContext);
@@ -374,6 +449,15 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     .withCaption(messageBundle.getMessage("calculatedSuccessfully")).show();
         } catch (Exception ignored) {
         }
+    }
+
+    protected PersonException getPersonException(PersonGroupExt assignedPerson) {
+        return dataManager.load(PersonException.class)
+                .query("select e from tsadv_PersonException e " +
+                        " where e.personGroup = :personGroup ")
+                .parameter("personGroup", assignedPerson)
+                .view("personException.edit")
+                .list().stream().findFirst().orElse(null);
     }
 
     private Double calculatePersonalBonus(BigDecimal maxBonus, Double finalScore) {
@@ -487,8 +571,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         HSSFSheet sheet = hssfWorkbook.getSheetAt(0);
 
         String assignedPerformancePlanId = String.valueOf(sheet.getRow(1).getCell(0).getColumnIndex());
-        int adjustedScore = sheet.getRow(1).getCell(12).getColumnIndex();
-        int adjustedBonus = sheet.getRow(1).getCell(13).getColumnIndex();
+        int adjustedScore = sheet.getRow(1).getCell(13).getColumnIndex();
+        int adjustedBonus = sheet.getRow(1).getCell(14).getColumnIndex();
         int rowCount = sheet.getLastRowNum();
 
         for (int i = 1; i <= rowCount; i++) {
@@ -526,9 +610,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     }
 
     private HSSFCell createStatusCell(HSSFRow row) {
-        return row.getCell(14) != null
-                ? row.getCell(14)
-                : row.createCell(14);
+        return row.getCell(17) != null
+                ? row.getCell(17)
+                : row.createCell(17);
     }
 
     private void xlsx(XSSFWorkbook xssfWorkbook) throws IOException {
@@ -543,8 +627,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         XSSFSheet sheet = xssfWorkbook.getSheetAt(0);
 
         String assignedPerformancePlanId = String.valueOf(sheet.getRow(1).getCell(0).getColumnIndex());
-        int adjustedScore = sheet.getRow(1).getCell(12).getColumnIndex();
-        int adjustedBonus = sheet.getRow(1).getCell(13).getColumnIndex();
+        int adjustedScore = sheet.getRow(1).getCell(13).getColumnIndex();
+        int adjustedBonus = sheet.getRow(1).getCell(14).getColumnIndex();
         int rowCount = sheet.getLastRowNum();
 
         for (int i = 1; i <= rowCount; i++) {
@@ -582,9 +666,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     }
 
     private Cell createStatusCell(XSSFRow row) {
-        return row.getCell(14) != null
-                ? row.getCell(14)
-                : row.createCell(14);
+        return row.getCell(17) != null
+                ? row.getCell(17)
+                : row.createCell(17);
     }
 
     private Boolean addToBase(String assignedPerformancePlanId, double adjustedScore,
@@ -615,6 +699,19 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
 
     @Subscribe("assignedPerformancePlanTable.sendLetterHappiness")
     protected void onAssignedPerformancePlanTableSendLetterHappiness(Action.ActionPerformedEvent event) {
+        dialogs.createOptionDialog(Dialogs.MessageType.CONFIRMATION)
+                .withCaption(messageBundle.getMessage("confirmAction"))
+                .withMessage(messageBundle.getMessage("sendLetterHappinessConfirmation"))
+                .withActions(
+                        new DialogAction(DialogAction.Type.YES, Action.Status.PRIMARY).withHandler(e -> {
+                            sendLetterHappiness();
+                        }),
+                        new DialogAction(DialogAction.Type.NO)
+                )
+                .show();
+    }
+
+    protected void sendLetterHappiness() {
         for (AssignedPerformancePlan assignedPerformancePlan : assignedPerformancePlanTable.getSelected()) {
             TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
                     .query("select e from tsadv$UserExt e " +
@@ -706,6 +803,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 notificationService.sendParametrizedNotification("kpi.letter.of.happiness", tsadvUser, params);
             }
         }
+        notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                .withCaption(messageBundle.getMessage("sendLetterHappinessSuccess")).show();
+
     }
 
     protected DicCurrency getSalaryCurrency(AssignmentExt currentAssignment) {
@@ -745,5 +845,52 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
             edit.setParameter(assignedPerformancePlans);
             edit.show();
         }
+    }
+
+    @Subscribe("assignedPerformancePlanTable.startLetters")
+    protected void onAssignedPerformancePlanTableStartLetters(Action.ActionPerformedEvent event) {
+        dialogs.createOptionDialog()
+                .withCaption(messageBundle.getMessage("confirmation"))
+                .withMessage(messageBundle.getMessage("aUSure"))
+                .withType(Dialogs.MessageType.CONFIRMATION)
+                .withActions(
+                        new DialogAction(DialogAction.Type.YES)
+                                .withHandler(actionPerformedEvent -> {
+                                            for (AssignedPerformancePlan assignedPerformancePlan : assignedPerformancePlanTable.getSelected()) {
+                                                TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                                                        .query("select e from tsadv$UserExt e " +
+                                                                " where e.personGroup = :personGroup")
+                                                        .parameter("personGroup", assignedPerformancePlan.getAssignedPerson())
+                                                        .view("userExt.edit")
+                                                        .list().stream().findFirst().orElse(null);
+                                                if (tsadvUser != null) {
+                                                    Map<String, Object> params = new HashMap<>();
+                                                    params.put("fullNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getLastName()
+                                                            + " "
+                                                            + assignedPerformancePlan.getAssignedPerson().getPerson().getFirstName());
+                                                    params.put("middleNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName() != null
+                                                            && !assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName().isEmpty()
+                                                            ? assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName()
+                                                            : "");
+                                                    params.put("fullNameEn", assignedPerformancePlan.getAssignedPerson().getPerson().getLastNameLatin()
+                                                            + " "
+                                                            + assignedPerformancePlan.getAssignedPerson().getPerson().getFirstNameLatin());
+                                                    params.put("middleNameEn", assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin() != null
+                                                            && !assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin().isEmpty()
+                                                            ? assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin()
+                                                            : "");
+                                                    String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                                                            + "/kpi/"
+                                                            + assignedPerformancePlan.getId().toString()
+                                                            + "\" target=\"_blank\">%s " + "</a>";
+                                                    params.put("requestLinkRu", String.format(requestLink, "ссылке"));
+                                                    params.put("requestLinkEn", String.format(requestLink, "link"));
+                                                    notificationService.sendParametrizedNotification("kpi.start.letter", tsadvUser, params);
+                                                }
+                                            }
+                                        }
+                                ),
+                        new DialogAction(DialogAction.Type.NO))
+                .show();
     }
 }

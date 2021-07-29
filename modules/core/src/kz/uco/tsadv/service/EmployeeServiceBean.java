@@ -25,10 +25,7 @@ import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.enums.MatrixType;
 import kz.uco.tsadv.modules.performance.model.CalibrationMember;
 import kz.uco.tsadv.modules.performance.model.CalibrationSession;
-import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
-import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
-import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
-import kz.uco.tsadv.modules.personal.dictionary.DicPhoneType;
+import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.dto.OrgChartNode;
 import kz.uco.tsadv.modules.personal.dto.PersonProfileDto;
 import kz.uco.tsadv.modules.personal.group.*;
@@ -53,7 +50,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service(EmployeeService.NAME)
 public class EmployeeServiceBean implements EmployeeService {
@@ -91,6 +87,9 @@ public class EmployeeServiceBean implements EmployeeService {
     @Inject
     private IncludeExternalExperienceConfig includeExternalExperienceConfig;
 
+    @Inject
+    private ViewRepository viewRepository;
+
     protected int languageIndex = 0;
 
     @Override
@@ -106,7 +105,8 @@ public class EmployeeServiceBean implements EmployeeService {
                 .view(new View(viewRepository.getView(PersonExt.class, View.LOCAL), "", false)
                         .addProperty("sex")
                         .addProperty("image")
-                        .addProperty("citizenship"))
+                        .addProperty("citizenship")
+                        .addProperty("nationality"))
                 .one();
 
         AssignmentExt assignment = dataManager.load(AssignmentExt.class)
@@ -118,6 +118,7 @@ public class EmployeeServiceBean implements EmployeeService {
                 .parameter("personGroupId", personGroupId)
                 .parameter("date", CommonUtils.getSystemDate())
                 .view(new View(AssignmentExt.class)
+                        .addProperty("group", new View(AssignmentGroupExt.class))
                         .addProperty("organizationGroup", new View(OrganizationGroupExt.class)
                                 .addProperty("organizationName")
                                 .addProperty("list", viewRepository.getView(OrganizationExt.class, View.LOCAL)))
@@ -143,8 +144,9 @@ public class EmployeeServiceBean implements EmployeeService {
                         " where e.personGroup.id = :personGroupId " +
                         "   and :date between e.startDate and e.endDate ")
                 .view(new View(viewRepository.getView(Address.class, View.LOCAL), "", false)
-                        .addProperty("city", new View(DicCity.class))
-                        .addProperty("addressType", new View(DicAddressType.class)))
+                        .addProperty("city", viewRepository.getView(DicCity.class, View.LOCAL))
+                        .addProperty("kato", viewRepository.getView(DicKato.class, View.LOCAL))
+                        .addProperty("addressType", viewRepository.getView(DicAddressType.class, View.LOCAL)))
                 .parameter("personGroupId", personGroupId)
                 .parameter("date", CommonUtils.getSystemDate())
                 .list();
@@ -153,12 +155,22 @@ public class EmployeeServiceBean implements EmployeeService {
 
         //set data from person
         dto.setId(person.getId());
+        dto.setFirstLastName(person.getFirstLastName());
+        dto.setId(person.getId());
         dto.setFullName(person.getFioWithEmployeeNumber());
         dto.setBirthDate(person.getDateOfBirth());
         dto.setHireDate(person.getHireDate());
         dto.setSex(person.getSex() != null ? person.getSex().getLangValue() : "");
         dto.setCitizenship(person.getCitizenship() != null ? person.getCitizenship().getLangValue() : "");
+        dto.setNationality(person.getNationality() != null ? person.getNationality().getLangValue() : "");
         dto.setImageId(person.getImage() != null ? person.getImage().getId() : null);
+        dto.setAssignmentGroupId(assignment.getGroup().getId());
+
+        PositionGroupExt positionGroup = this.getPositionGroupByPersonGroupId(personGroupId, new View(PositionGroupExt.class)
+                .addProperty("list", new View(PositionExt.class).addProperty("startDate").addProperty("endDate")));
+
+        dto.setPositionGroupId(positionGroup.getId());
+        dto.setPositionId(positionGroup.getPosition().getId());
 
         //set data from assignment
         dto.setOrganizationName(Optional.ofNullable(assignment.getOrganizationGroup())
@@ -167,6 +179,10 @@ public class EmployeeServiceBean implements EmployeeService {
                 .orElse(""));
         dto.setPositionName(Optional.ofNullable(assignment.getPositionGroup()).map(PositionGroupExt::getPositionName).orElse(""));
 
+        //set company
+        DicCompany company = this.getCompanyByPersonGroupId(personGroupId);
+        dto.setCompanyCode(company != null ? company.getCode() : null);
+
         //set contacts
         personContacts.forEach(personContact -> {
             //todo
@@ -174,14 +190,41 @@ public class EmployeeServiceBean implements EmployeeService {
             else if ("mobile".equals(personContact.getType().getCode())) dto.setPhone(personContact.getContactValue());
         });
 
-        //set address
-        //todo
-        addresses.stream().map(address -> address.getCityName() != null ? address.getCityName() : address.getCity() != null ? address.getCity().getLangValue() : null)
-                .filter(Objects::nonNull)
+        addresses.stream()
+                .sorted((o1, o2) -> o1.getAddressType() != null && "RESIDENCE".equals(o1.getAddressType().getCode()) ? 1
+                        : o2.getAddressType() != null && "RESIDENCE".equals(o2.getAddressType().getCode())
+                        ? -1
+                        : 0)
+                .map(address -> StringUtils.isNoneBlank(address.getCityName())
+                        ? address.getCityName()
+                        : address.getCity() != null
+                        ? address.getCity().getLangValue()
+                        : address.getKato() != null
+                        ? address.getKato().getLangValue()
+                        : null)
+                .filter(StringUtils::isNotBlank)
                 .findFirst()
                 .ifPresent(dto::setCityOfResidence);
 
         return dto;
+    }
+
+    @Override
+    public PersonProfileDto personGroupInfo(UUID userId) {
+        PersonGroupExt personGroup = dataManager.load(PersonGroupExt.class)
+                .query("select p\n" +
+                        "            from tsadv$UserExt u\n" +
+                        "                inner join u.personGroup p\n" +
+                        "                inner join p.assignments a\n" +
+                        "            where u.id = :userId\n" +
+                        "                and a.startDate <= CURRENT_DATE\n" +
+                        "                and a.endDate >= CURRENT_DATE\n" +
+                        "                and a.primaryFlag = true")
+                .parameter("userId", userId)
+                .view(View.MINIMAL)
+                .one();
+
+        return this.personProfile(personGroup.getId());
     }
 
     @Override
@@ -451,9 +494,6 @@ public class EmployeeServiceBean implements EmployeeService {
         }
     }
 
-    @Inject
-    private ViewRepository viewRepository;
-
     @Override
     public TsadvUser getUserByLogin(String login, @Nullable String view) {
         if (view != null && viewRepository.getView(TsadvUser.class, view) == null) {
@@ -605,6 +645,10 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public PositionGroupExt getPositionGroupByPersonGroupId(UUID personGroupId, String view) {
+        return getPositionGroupByPersonGroupId(personGroupId, viewRepository.getView(PositionGroupExt.class, view != null ? view : "_minimal"));
+    }
+
+    public PositionGroupExt getPositionGroupByPersonGroupId(UUID personGroupId, View view) {
         LoadContext<PositionGroupExt> loadContext = LoadContext.create(PositionGroupExt.class);
         loadContext.setQuery(LoadContext.createQuery(
                 " select a.positionGroup from base$AssignmentExt a " +
@@ -614,7 +658,7 @@ public class EmployeeServiceBean implements EmployeeService {
                         "       and a.assignmentStatus.code in ('ACTIVE', 'SUSPENDED') ")
                 .setParameter("personGroupId", personGroupId)
                 .setParameter("currentDate", CommonUtils.getSystemDate()))
-                .setView(view != null ? view : "_minimal");
+                .setView(view);
         return dataManager.load(loadContext);
     }
 
@@ -1875,157 +1919,6 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll) {
-        try (Transaction tx = persistence.createTransaction()) {
-            EntityManager em = persistence.getEntityManager();
-
-            String hierarchyId = recognitionConfig.getHierarchyId();
-
-            if (hierarchyId == null) {
-                return null;
-            }
-
-            Query query = em.createNativeQuery(
-                    "with a as (WITH RECURSIVE nodes(id,parent_id, position_group_id, path, pathName, level) AS (  " +
-                            "select he.id, " +
-                            "       he.parent_id, " +
-                            "       he.position_group_id, " +
-                            "       CAST(he.position_group_id AS VARCHAR (4000)), " +
-                            "       CAST(p.position_full_name_lang1 AS VARCHAR (4000)), " +
-                            "       1 " +
-                            "  from base_hierarchy_element he " +
-                            "  join base_hierarchy h on h.id = he.hierarchy_id " +
-                            "  join base_position p on p.group_id=he.position_group_id " +
-                            "  and current_date between p.start_date and p.end_date " +
-                            " WHERE he.delete_ts is null " +
-                            "   and he.parent_id is null  " +
-                            "   and he.hierarchy_id = '" + hierarchyId + "' " +
-                            " UNION " +
-                            " select he.id, he.parent_id, he.position_group_id, " +
-                            "       CAST(s1.PATH ||'->'|| he.position_group_id AS VARCHAR(4000)), " +
-                            "       CAST(s1.pathName ||'->'|| p.position_full_name_lang1 AS VARCHAR(4000)), " +
-                            "       LEVEL + 1 " +
-                            "  from base_hierarchy_element he " +
-                            "  join nodes s1 on he.parent_id = s1.id " +
-                            "  join base_position p on p.group_id=he.position_group_id " +
-                            "  and current_date between p.start_date and p.end_date " +
-                            ") " +
-                            "SELECT " +
-                            " n1.level, " +
-                            "  pg.id position_group_id, " +
-                            "  a.person_group_id " +
-                            "  FROM nodes n " +
-                            "  join base_position_group pg " +
-                            "  on n.path like concat('%', concat(pg.id, '%')) " +
-                            "  join nodes n1 " +
-                            "  on n1.position_group_id=pg.id " +
-                            "  join base_assignment a " +
-                            "  on a.position_group_id=pg.id " +
-                            "  and current_date between a.start_date and a.end_date " +
-                            "  and a.primary_flag=true " +
-                            "  join tsadv_dic_assignment_status das " +
-                            "  on das.id=a.assignment_status_id " +
-                            "  and das.code='ACTIVE' " +
-                            "  where n.path like " + "'%" + positionGroupId.toString() + "' " +
-                            "  and pg.id <> ?1 " +
-                            "  and pg.delete_ts is null " +
-                            "  and a.delete_ts is null " +
-                            "  and das.delete_ts is null ) " +
-                            " select * from a t " + (showAll ? "" : " where t.level = (select max(level) from a)"));
-            query.setParameter(1, positionGroupId);
-
-            List<Object[]> rows = query.getResultList();
-            if (!rows.isEmpty()) {
-                List<PersonGroupExt> personGroupExtList = new ArrayList<>();
-                for (Object[] row : rows) {
-                    PersonGroupExt personGroupExt = metadata.create(PersonGroupExt.class);
-                    personGroupExt.setId((UUID) row[2]);
-                    personGroupExtList.add(personGroupExt);
-                }
-                return personGroupExtList;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public List<PositionGroupExt> findManagerListByPositionGroupReturnListPosition(UUID positionGroupId, boolean showAll) {
-        try (Transaction tx = persistence.createTransaction()) {
-            EntityManager em = persistence.getEntityManager();
-
-            String hierarchyId = recognitionConfig.getHierarchyId();
-
-            if (hierarchyId == null) {
-                return null;
-            }
-
-            Query query = em.createNativeQuery(
-                    "with a as (WITH RECURSIVE nodes(id,parent_id, position_group_id, path, pathName, level) AS (  " +
-                            "select he.id, " +
-                            "       he.parent_id, " +
-                            "       he.position_group_id, " +
-                            "       CAST(he.position_group_id AS VARCHAR (4000)), " +
-                            "       CAST(p.position_full_name_lang1 AS VARCHAR (4000)), " +
-                            "       1 " +
-                            "  from base_hierarchy_element he " +
-                            "  join base_hierarchy h on h.id = he.hierarchy_id " +
-                            "  join base_position p on p.group_id=he.position_group_id " +
-                            "  and current_date between p.start_date and p.end_date " +
-                            " WHERE he.delete_ts is null " +
-                            "   and he.parent_id is null  " +
-                            "   and he.hierarchy_id = '" + hierarchyId + "' " +
-                            " UNION " +
-                            " select he.id, he.parent_id, he.position_group_id, " +
-                            "       CAST(s1.PATH ||'->'|| he.position_group_id AS VARCHAR(4000)), " +
-                            "       CAST(s1.pathName ||'->'|| p.position_full_name_lang1 AS VARCHAR(4000)), " +
-                            "       LEVEL + 1 " +
-                            "  from base_hierarchy_element he " +
-                            "  join nodes s1 on he.parent_id = s1.id " +
-                            "  join base_position p on p.group_id=he.position_group_id " +
-                            "  and current_date between p.start_date and p.end_date " +
-                            ") " +
-                            "SELECT " +
-                            " n1.level, " +
-                            "  pg.id position_group_id " +
-                            "  FROM nodes n " +
-                            "  join base_position_group pg " +
-                            "  on n.path like concat('%', concat(pg.id, '%')) " +
-                            "  join nodes n1 " +
-                            "  on n1.position_group_id=pg.id " +
-                            "  join base_assignment a " +
-                            "  on a.position_group_id=pg.id " +
-                            "  and current_date between a.start_date and a.end_date " +
-                            "  and a.primary_flag=true " +
-                            "  join tsadv_dic_assignment_status das " +
-                            "  on das.id=a.assignment_status_id " +
-                            "  and das.code='ACTIVE' " +
-                            "  where n.path like " + "'%" + positionGroupId.toString() + "' " +
-                            "  and pg.id <> ?1 " +
-                            "  and pg.delete_ts is null " +
-                            "  and a.delete_ts is null " +
-                            "  and das.delete_ts is null ) " +
-                            " select * from a t " + (showAll ? "" : " where t.level = (select max(level) from a) " +
-                            " group by " +
-                            " level," +
-                            " position_group_id "));
-            query.setParameter(1, positionGroupId);
-
-            List<Object[]> rows = query.getResultList();
-            if (!rows.isEmpty()) {
-                List<PositionGroupExt> positionGroupExtList = new ArrayList<>();
-                for (Object[] row : rows) {
-                    PositionGroupExt positionGroupExt = metadata.create(PositionGroupExt.class);
-                    positionGroupExt.setId((UUID) row[1]);
-                    positionGroupExtList.add(positionGroupExt);
-                }
-                return positionGroupExtList;
-            }
-        }
-        return null;
-    }
-
-
-    @Override
     public List<TsadvUser> recursiveFindManager(UUID positionGroupId) {
         return persistence.callInTransaction(em -> {
             List<TsadvUser> userList = new ArrayList<>();
@@ -2261,7 +2154,7 @@ public class EmployeeServiceBean implements EmployeeService {
             birthDateLocalDate = new java.sql.Date(birthDate.getTime()).toLocalDate();
         }
         LocalDate currentDateLocalDate = new java.sql.Date(currentDate.getTime()).toLocalDate();
-        if ((birthDate != null) && (currentDate != null)) {
+        if (birthDate != null) {
             return Period.between(birthDateLocalDate, currentDateLocalDate).getYears();
         } else {
             return 0;
@@ -2610,7 +2503,6 @@ public class EmployeeServiceBean implements EmployeeService {
                         "   where e.personGroup.id = :personGroupId" +
                         "   and :systemDate between e.startDate and e.endDate " +
                         "   and e.assignmentStatus.code <> 'TERMINATED' " +
-//                        "   and :systemDate between o.startDate and o.endDate  " +
                         "   and e.primaryFlag = 'TRUE' ", DicCompany.class)
                         .setParameter("systemDate", CommonUtils.getSystemDate())
                         .setParameter("personGroupId", personGroupId)
@@ -2631,19 +2523,7 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll, String viewName) {
-        return Optional.ofNullable(this.findManagerListByPositionGroup(positionGroupId, showAll)).orElse(Collections.emptyList())
-                .stream()
-                .map(p -> dataManager.reload(p, viewName))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PositionGroupExt> findManagerListByPositionGroupReturnListPosition(UUID positionGroupId, boolean showAll, String viewName) {
-        return Optional.ofNullable(this.findManagerListByPositionGroupReturnListPosition(positionGroupId, showAll))
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(p -> dataManager.reload(p, viewName))
-                .collect(Collectors.toList());
+    public boolean hasHrRole(String dicHrCode) {
+        return !AppBeans.get(OrganizationHrUserService.class).getOrganizationList(userSessionSource.getUserSession().getUser().getId(), dicHrCode).isEmpty();
     }
 }

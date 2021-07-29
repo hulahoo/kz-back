@@ -20,6 +20,7 @@ import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,10 @@ public class PositionExt extends Position implements IGroupedEntity<PositionGrou
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COST_CENTER_ID")
     protected DicCostCenter costCenter;
+
+    @NotNull
+    @Column(name = "SUP_MANAGER_EXCLUSION", nullable = false)
+    private Boolean supManagerExclusion = false;
 
     @Lob
     @Column(name = "CANDIDATE_REQUIREMENTS_LANG1")
@@ -117,6 +122,26 @@ public class PositionExt extends Position implements IGroupedEntity<PositionGrou
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EMPLOYEE_CATEGORY_ID")
     protected DicEmployeeCategory employeeCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FUNCTIONAL_MANAGER_POSITION_GROUP_ID")
+    protected PositionGroupExt functionalManagerPositionGroup;
+
+    public PositionGroupExt getFunctionalManagerPositionGroup() {
+        return functionalManagerPositionGroup;
+    }
+
+    public void setFunctionalManagerPositionGroup(PositionGroupExt functionalManagerPositionGroup) {
+        this.functionalManagerPositionGroup = functionalManagerPositionGroup;
+    }
+
+    public Boolean getSupManagerExclusion() {
+        return supManagerExclusion;
+    }
+
+    public void setSupManagerExclusion(Boolean supManagerExclusion) {
+        this.supManagerExclusion = supManagerExclusion;
+    }
 
     @SuppressWarnings("all")
     @MetaProperty(related = "positionFullNameLang1")

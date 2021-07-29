@@ -41,7 +41,12 @@
                         <field property="endDate"/>
                         <field property="useInBalance"/>
                         <field property="availableForTimecard"/>
+                        <field property="numDaysCalendarYear"/>
+                        <field id="isEcologicalAbsence"
+                               property="isEcologicalAbsence"/>
+                        <field property="isFileRequired"/>
                         <field property="company"/>
+                        <field property="isScheduleOffsetsRequest"/>
                     </column>
                 </fieldGroup>
                 <fieldGroup id="fieldGroup2"

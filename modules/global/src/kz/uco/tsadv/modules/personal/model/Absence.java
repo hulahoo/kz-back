@@ -159,6 +159,41 @@ public class Absence extends AbstractParentCategorizedEntity {
     @Column(name = "TRANSFER_PERIOD_END")
     protected Date transferPeriodEnd;
 
+    @Temporal(TemporalType.TIME)
+    @Column(name = "TIME_START")
+    protected Date timeStart;
+
+    @Temporal(TemporalType.TIME)
+    @Column(name = "TIME_END")
+    protected Date timeEnd;
+
+    @Column(name = "ADDITIONAL_TIME")
+    protected Integer additionalTime;
+
+    public void setAdditionalTime(Integer additionalTime) {
+        this.additionalTime = additionalTime;
+    }
+
+    public Integer getAdditionalTime() {
+        return additionalTime;
+    }
+
+    public Date getTimeEnd() {
+        return timeEnd;
+    }
+
+    public void setTimeEnd(Date timeEnd) {
+        this.timeEnd = timeEnd;
+    }
+
+    public Date getTimeStart() {
+        return timeStart;
+    }
+
+    public void setTimeStart(Date timeStart) {
+        this.timeStart = timeStart;
+    }
+
     public Date getTransferPeriodEnd() {
         return transferPeriodEnd;
     }

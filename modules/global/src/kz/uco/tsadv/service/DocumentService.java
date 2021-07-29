@@ -17,6 +17,8 @@ public interface DocumentService {
 
     List<InsuredPerson> getInsuredPersonMembers(UUID insuredPersonId);
 
+    List<InsuredPerson> getInsuredPersonMembersWithNewContract(UUID insuredPersonId, UUID contractId);
+
     Boolean checkPersonInsure(UUID personGroupId, UUID contractId);
 
     BigDecimal calcAmount(UUID insuranceContractId,
@@ -29,4 +31,6 @@ public interface DocumentService {
     ScheduleOffsetsRequest getOffsetRequestsNew();
 
     BigDecimal calcTotalAmount(UUID insuredPersonId);
+
+    InsuredPerson commitFromPortal(InsuredPerson insuredPerson);
 }

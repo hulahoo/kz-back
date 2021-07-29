@@ -14,6 +14,15 @@ public class AbsenceRequestDataJson implements Serializable {
     protected boolean isProvideSheetOfTemporary;
     protected boolean isOnRotation;
     protected String companyCode;
+    protected String requestDate;
+
+    public String getRequestDate() {
+        return requestDate;
+    }
+
+    public void setRequestDate(String requestDate) {
+        this.requestDate = requestDate;
+    }
 
     public String getPersonId() {
         return personId;

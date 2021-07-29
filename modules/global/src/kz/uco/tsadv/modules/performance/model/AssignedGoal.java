@@ -14,6 +14,7 @@ import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @NamePattern("%s|goalString")
@@ -108,6 +109,40 @@ public class AssignedGoal extends AbstractParentEntity {
 
     @Column(name = "MANAGER_ASSESSMENT")
     private Double managerAssessment;
+
+    @Column(name = "EMPLOYEE_COMMENT", length = 2000)
+    private String employeeComment;
+
+    @Column(name = "MANAGER_COMMENT", length = 2000)
+    private String managerComment;
+
+    @NotNull
+    @Column(name = "CANT_DELETE", nullable = false)
+    protected Boolean cantDelete = false;
+
+    public Boolean getCantDelete() {
+        return cantDelete;
+    }
+
+    public void setCantDelete(Boolean cantDelete) {
+        this.cantDelete = cantDelete;
+    }
+
+    public String getManagerComment() {
+        return managerComment;
+    }
+
+    public void setManagerComment(String managerComment) {
+        this.managerComment = managerComment;
+    }
+
+    public String getEmployeeComment() {
+        return employeeComment;
+    }
+
+    public void setEmployeeComment(String employeeComment) {
+        this.employeeComment = employeeComment;
+    }
 
     public Double getManagerAssessment() {
         return managerAssessment;
