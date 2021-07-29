@@ -5581,6 +5581,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     commitContext.addInstanceToCommit(personPayslip);
                 } else {
                     personPayslip = metadata.create(PersonPayslip.class);
+                    personPayslip.setPeriod(formatter.parse(personPayslipJson.getPeriod()));
                     byte[] decoder = Base64.getDecoder().decode(personPayslipJson.getFile());
                     FileDescriptor file = metadata.create(FileDescriptor.class);
                     file.setCreateDate(BaseCommonUtils.getSystemDate());
@@ -5592,7 +5593,6 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     fileStorageAPI.saveFile(file, decoder);
                     personPayslip.setUuid(UUID.randomUUID());
                     personPayslip.setPersonGroup(personGroupExt);
-                    personPayslip.setPeriod(formatter.parse(personPayslipJson.getPeriod()));
                     personPayslip.setFile(file);
 
                     commitContext.addInstanceToCommit(file);
