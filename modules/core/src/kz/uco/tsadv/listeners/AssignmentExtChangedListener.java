@@ -19,17 +19,13 @@ public class AssignmentExtChangedListener {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<AssignmentExt, UUID> event) {
-        if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
+        if (event.getType().equals(EntityChangedEvent.Type.CREATED)
+        || event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
             AssignmentExt assignmentExt = transactionalDataManager.load(event.getEntityId()).view("assignment.full").one();
             AssignmentGroupExt assignmentGroupExt = assignmentExt.getGroup();
             if (assignmentGroupExt != null) {
-                repeatCheck(assignmentExt, assignmentGroupExt);
-                transactionalDataManager.save(assignmentGroupExt);
-            }
-        } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
-            AssignmentExt assignmentExt = transactionalDataManager.load(event.getEntityId()).view("assignment.full").one();
-            AssignmentGroupExt assignmentGroupExt = assignmentExt.getGroup();
-            if (assignmentGroupExt != null) {
+                assignmentGroupExt = transactionalDataManager.load(AssignmentGroupExt.class).id(assignmentExt.getGroup().getId())
+                        .view("assignmentGroup.view").optional().orElse(null);
                 repeatCheck(assignmentExt, assignmentGroupExt);
                 transactionalDataManager.save(assignmentGroupExt);
             }
@@ -45,7 +41,7 @@ public class AssignmentExtChangedListener {
                 && !assignmentGroupExt.getOrganizationGroup().equals(assignmentExt.getOrganizationGroup()))) {
             assignmentGroupExt.setOrganizationGroup(assignmentExt.getOrganizationGroup());
         }
-        if (assignmentGroupExt.getOrganizationGroup() == null || (assignmentGroupExt.getPositionGroup() != null
+        if (assignmentGroupExt.getPositionGroup() == null || (assignmentGroupExt.getPositionGroup() != null
                 && !assignmentGroupExt.getPositionGroup().equals(assignmentExt.getPositionGroup()))) {
             assignmentGroupExt.setPositionGroup(assignmentExt.getPositionGroup());
         }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfGranteesAgreement">
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="vBox"
+            height="100%"
+            width="100%">
+        <vbox id="vBox">
+            <hbox height="100%"
+                  margin="true, false, false ,false"
+                  width="100%">
+                <table id="granteesAgreementTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="contractNumber"/>
+                        <column id="contractDate"/>
+                        <column id="university"/>
+                        <column id="agreementNumber"/>
+                        <column id="agreementDate"/>
+                        <column id="startYear"/>
+                        <column id="status"/>
+                    </columns>
+                    <rows datasource="granteesAgreementDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanel">
+                        <button id="createBtn"
+                                action="granteesAgreementTable.create"/>
+                        <button id="editBtn"
+                                action="granteesAgreementTable.edit"/>
+                        <button id="removeBtn"
+                                action="granteesAgreementTable.remove"/>
+                        <button id="excelBtn"
+                                action="granteesAgreementTable.excel"/>
+                    </buttonsPanel>
+                </table>
+            </hbox>
+        </vbox>
+    </layout>
+</window>

@@ -9,6 +9,7 @@ import kong.unirest.Unirest;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.modules.integration.jsonobject.PersonDocumentRequestDataJson;
+import kz.uco.tsadv.modules.integration.jsonobject.PersonDocumentRequestJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.PersonDocumentRequest;
 import kz.uco.tsadv.service.IntegrationRestService;
@@ -18,6 +19,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
@@ -40,6 +42,8 @@ public class PersonDocumentRequestChangedListener {
             String methodName = "PersonDocumentRequestChangedListener.afterCommit";
             BaseResult baseResult = new BaseResult();
             PersonDocumentRequestDataJson personDocumentRequestDataJson = new PersonDocumentRequestDataJson();
+            ArrayList<PersonDocumentRequestJson> personDocumentRequestJsons = new ArrayList<>();
+            PersonDocumentRequestJson personDocumentRequestJson = new PersonDocumentRequestJson();
             try {
                 DicRequestStatus oldStatus = null;
                 if (event.getChanges().getOldValue("status") != null
@@ -56,23 +60,25 @@ public class PersonDocumentRequestChangedListener {
                 DicRequestStatus requestStatus = personDocumentRequest.getStatus();
                 if (APPROVED_STATUS.equals(requestStatus.getCode()) && !APPROVED_STATUS.equals(oldStatus != null
                         ? oldStatus.getCode() : "") && !integrationConfig.getPersonDocumentRequestOff()) {
-                    personDocumentRequestDataJson.setPersonId(personDocumentRequest.getPersonGroup().getLegacyId());
-                    personDocumentRequestDataJson.setRequestNumber(personDocumentRequest.getRequestNumber().toString());
-                    personDocumentRequestDataJson.setLegacyId(personDocumentRequest.getEditedPersonDocument() != null
+                    personDocumentRequestJson.setPersonId(personDocumentRequest.getPersonGroup().getLegacyId());
+                    personDocumentRequestJson.setRequestNumber(personDocumentRequest.getRequestNumber().toString());
+                    personDocumentRequestJson.setLegacyId(personDocumentRequest.getEditedPersonDocument() != null
                             ? personDocumentRequest.getEditedPersonDocument().getLegacyId() : "");
-                    personDocumentRequestDataJson.setDocumentTypeId(personDocumentRequest.getDocumentType() != null
+                    personDocumentRequestJson.setDocumentTypeId(personDocumentRequest.getDocumentType() != null
                             ? personDocumentRequest.getDocumentType().getLegacyId() : "");
-                    personDocumentRequestDataJson.setIssuedBy(personDocumentRequest.getIssuedBy());
-                    personDocumentRequestDataJson.setDocumentNumber(personDocumentRequest.getDocumentNumber());
-                    personDocumentRequestDataJson.setIssueDate(getFormattedDateString(personDocumentRequest.getIssueDate()));
-                    personDocumentRequestDataJson.setExpiredDate(getFormattedDateString(personDocumentRequest.getExpiredDate()));
-                    personDocumentRequestDataJson.setIssueAuthorityId(personDocumentRequest.getIssuingAuthority() != null
+                    personDocumentRequestJson.setIssuedBy(personDocumentRequest.getIssuedBy());
+                    personDocumentRequestJson.setDocumentNumber(personDocumentRequest.getDocumentNumber());
+                    personDocumentRequestJson.setIssueDate(getFormattedDateString(personDocumentRequest.getIssueDate()));
+                    personDocumentRequestJson.setExpiredDate(getFormattedDateString(personDocumentRequest.getExpiredDate()));
+                    personDocumentRequestJson.setIssueAuthorityId(personDocumentRequest.getIssuingAuthority() != null
                             ? personDocumentRequest.getIssuingAuthority().getLegacyId()
                             : personDocumentRequest.getIssuedBy());
-                    personDocumentRequestDataJson.setCompanyCode(personDocumentRequest.getPersonGroup() != null
+                    personDocumentRequestJson.setCompanyCode(personDocumentRequest.getPersonGroup() != null
                             && personDocumentRequest.getPersonGroup().getCompany() != null
                             ? personDocumentRequest.getPersonGroup().getCompany().getLegacyId()
                             : "");
+                    personDocumentRequestJsons.add(personDocumentRequestJson);
+                    personDocumentRequestDataJson.setPersonDocumentRequestJsons(personDocumentRequestJsons);
                     setupUnirest();
                     HttpResponse<String> response = Unirest
                             .post(getApiUrl())

@@ -20,11 +20,10 @@
                 <field property="langValue1"/>
                 <field property="langValue2"/>
                 <field property="langValue3"/>
-                <field property="langValue4"/>
-                <field property="langValue5"/>
                 <field property="startDate"/>
                 <field property="endDate"/>
                 <field property="code"/>
+                <field property="active"/>
                 <field property="company"/>
                 </column>
         </fieldGroup>
