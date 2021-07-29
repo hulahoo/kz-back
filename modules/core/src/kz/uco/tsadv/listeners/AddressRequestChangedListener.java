@@ -9,6 +9,7 @@ import kong.unirest.Unirest;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.modules.integration.jsonobject.AddressRequestDataJson;
+import kz.uco.tsadv.modules.integration.jsonobject.AddressRequestJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AddressRequest;
 import kz.uco.tsadv.service.IntegrationRestService;
@@ -20,6 +21,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
@@ -45,6 +47,8 @@ public class AddressRequestChangedListener {
             String methodName = "AddressRequestChangedListener.afterCommit";
             BaseResult baseResult = new BaseResult();
             AddressRequestDataJson addressRequestDataJson = new AddressRequestDataJson();
+            ArrayList<AddressRequestJson> addressRequestJsons = new ArrayList<>();
+            AddressRequestJson addressRequestJson = new AddressRequestJson();
             try {
                 DicRequestStatus oldStatus = null;
                 if (event.getChanges().getOldValue("status") != null
@@ -61,32 +65,34 @@ public class AddressRequestChangedListener {
                 DicRequestStatus requestStatus = addressRequest.getStatus();
                 if (APPROVED_STATUS.equals(requestStatus.getCode()) && !APPROVED_STATUS.equals(oldStatus != null
                         ? oldStatus.getCode() : "") && !integrationConfig.getAddressRequestOff()) {
-                    addressRequestDataJson.setPersonId(addressRequest.getPersonGroup().getLegacyId());
-                    addressRequestDataJson.setRequestNumber(addressRequest.getRequestNumber().toString());
-                    addressRequestDataJson.setLegacyId(addressRequest.getBaseAddress() != null
+                    addressRequestJson.setPersonId(addressRequest.getPersonGroup().getLegacyId());
+                    addressRequestJson.setRequestNumber(addressRequest.getRequestNumber().toString());
+                    addressRequestJson.setLegacyId(addressRequest.getBaseAddress() != null
                             ? addressRequest.getBaseAddress().getLegacyId() : "");
-                    addressRequestDataJson.setAddressType(addressRequest.getAddressType() != null
+                    addressRequestJson.setAddressType(addressRequest.getAddressType() != null
                             ? addressRequest.getAddressType().getCode() : "");
-                    addressRequestDataJson.setPostal(addressRequest.getPostalCode());
-                    addressRequestDataJson.setCountryId(addressRequest.getCountry() != null
+                    addressRequestJson.setPostal(addressRequest.getPostalCode());
+                    addressRequestJson.setCountryId(addressRequest.getCountry() != null
                             ? addressRequest.getCountry().getLegacyId() : "");
-                    addressRequestDataJson.setAddressKATOCode(addressRequest.getKato() != null
+                    addressRequestJson.setAddressKATOCode(addressRequest.getKato() != null
                             ? addressRequest.getKato().getCode() : "");
-                    addressRequestDataJson.setStreetTypeId(addressRequest.getStreetType() != null
+                    addressRequestJson.setStreetTypeId(addressRequest.getStreetType() != null
                             ? addressRequest.getStreetType().getLegacyId() : "");
-                    addressRequestDataJson.setStreetName(addressRequest.getStreetName());
-                    addressRequestDataJson.setBuilding(addressRequest.getBuilding());
-                    addressRequestDataJson.setBlock(addressRequest.getBlock());
-                    addressRequestDataJson.setFlat(addressRequest.getFlat());
-                    addressRequestDataJson.setAddressForExpats(addressRequest.getAddressForExpats());
-                    addressRequestDataJson.setAddressKazakh(addressRequest.getAddressKazakh());
-                    addressRequestDataJson.setAddressEnglish(addressRequest.getAddressEnglish());
-                    addressRequestDataJson.setStartDate(getFormattedDateString(addressRequest.getStartDate()));
-                    addressRequestDataJson.setEndDate(getFormattedDateString(addressRequest.getEndDate()));
-                    addressRequestDataJson.setCompanyCode(addressRequest.getPersonGroup() != null
+                    addressRequestJson.setStreetName(addressRequest.getStreetName());
+                    addressRequestJson.setBuilding(addressRequest.getBuilding());
+                    addressRequestJson.setBlock(addressRequest.getBlock());
+                    addressRequestJson.setFlat(addressRequest.getFlat());
+                    addressRequestJson.setAddressForExpats(addressRequest.getAddressForExpats());
+                    addressRequestJson.setAddressKazakh(addressRequest.getAddressKazakh());
+                    addressRequestJson.setAddressEnglish(addressRequest.getAddressEnglish());
+                    addressRequestJson.setStartDate(getFormattedDateString(addressRequest.getStartDate()));
+                    addressRequestJson.setEndDate(getFormattedDateString(addressRequest.getEndDate()));
+                    addressRequestJson.setCompanyCode(addressRequest.getPersonGroup() != null
                             && addressRequest.getPersonGroup().getCompany() != null
                             ? addressRequest.getPersonGroup().getCompany().getLegacyId()
                             : "");
+                    addressRequestJsons.add(addressRequestJson);
+                    addressRequestDataJson.setAddressRequestJsons(addressRequestJsons);
                     setupUnirest();
                     HttpResponse<String> response = Unirest
                             .post(getApiUrl())
