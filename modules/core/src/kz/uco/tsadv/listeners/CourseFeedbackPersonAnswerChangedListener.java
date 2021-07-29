@@ -9,10 +9,12 @@ import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.service.NotificationSenderAPIService;
+import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswer;
+import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswerDetail;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LearningService;
 import kz.uco.tsadv.service.OrganizationHrUserService;
@@ -38,19 +40,21 @@ public class CourseFeedbackPersonAnswerChangedListener {
     @Inject
     protected TransactionalDataManager transactionalDataManager;
     @Inject
-    private NotificationSenderAPIService notificationSenderAPIService;
+    protected NotificationSenderAPIService notificationSenderAPIService;
     @Inject
-    private OrganizationHrUserService organizationHrUserService;
+    protected OrganizationHrUserService organizationHrUserService;
     @Inject
-    private FileStorageAPI fileStorageAPI;
+    protected FileStorageAPI fileStorageAPI;
     @Inject
-    private FrontConfig frontConfig;
+    protected FrontConfig frontConfig;
     @Inject
-    private ReportService reportService;
+    protected ReportService reportService;
     @Inject
-    private Metadata metadata;
+    protected Metadata metadata;
     @Inject
-    private ActivityService activityService;
+    protected ActivityService activityService;
+    @Inject
+    protected ExtAppPropertiesConfig extAppPropertiesConfig;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<CourseFeedbackPersonAnswer, UUID> event) {
@@ -110,6 +114,66 @@ public class CourseFeedbackPersonAnswerChangedListener {
 //                    sendNotifyForLineManager(enrollment);
 //                }
 //            }
+        }
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void afterCommit(EntityChangedEvent<CourseFeedbackPersonAnswer, UUID> event) {
+        UUID defaultQuestionForFeedback = extAppPropertiesConfig.getDefaultQuestionForFeedback();
+        if (defaultQuestionForFeedback != null) {
+
+            if (EntityChangedEvent.Type.CREATED.equals(event.getType())) {
+                CourseFeedbackPersonAnswer courseFeedbackPersonAnswer =
+                        dataManager.load(event.getEntityId()).view("courseFeedbackPersonAnswer.edit").one();
+                if (courseFeedbackPersonAnswer.getAvgScore() != null) {
+                    CourseReview courseReview = metadata.create(CourseReview.class);
+                    courseReview.setRate(courseFeedbackPersonAnswer.getAvgScore());
+                    courseReview.setPersonGroup(courseFeedbackPersonAnswer.getPersonGroup());
+                    courseReview.setCourse(courseFeedbackPersonAnswer.getCourse());
+                    courseReview.setFromCourseFeedbackPersonAnswer(courseFeedbackPersonAnswer);
+                    CourseFeedbackPersonAnswerDetail defaultCourseFeedbackPersonAnswerDetail =
+                            courseFeedbackPersonAnswer.getDetails().stream().filter(courseFeedbackPersonAnswerDetail ->
+                                    defaultQuestionForFeedback.equals(courseFeedbackPersonAnswerDetail.getQuestion().getId()))
+                                    .findFirst().orElse(null);
+                    if (defaultCourseFeedbackPersonAnswerDetail != null
+                            && defaultCourseFeedbackPersonAnswerDetail.getTextAnswer() != null) {
+                        courseReview.setText(defaultCourseFeedbackPersonAnswerDetail.getTextAnswer());
+                    } else {
+                        courseReview.setText("");
+                    }
+                    dataManager.commit(courseReview);
+                }
+            } else if (EntityChangedEvent.Type.UPDATED.equals(event.getType())) {
+                if (event.getChanges().isChanged("avgScore")) {
+                    CourseFeedbackPersonAnswer courseFeedbackPersonAnswer =
+                            dataManager.load(event.getEntityId()).view("courseFeedbackPersonAnswer.edit").one();
+                    CourseReview courseReview = dataManager.load(CourseReview.class)
+                            .query("select e from tsadv$CourseReview e " +
+                                    " where e.fromCourseFeedbackPersonAnswer.id = :courseFeedbackPersonAnswerId")
+                            .parameter("courseFeedbackPersonAnswerId", courseFeedbackPersonAnswer.getId())
+                            .view("courseReview.browse").list().stream().findFirst().orElse(null);
+                    if (courseReview != null) {
+                        courseReview.setRate(courseFeedbackPersonAnswer.getAvgScore());
+                    } else {
+                        courseReview = metadata.create(CourseReview.class);
+                        courseReview.setRate(courseFeedbackPersonAnswer.getAvgScore());
+                        courseReview.setPersonGroup(courseFeedbackPersonAnswer.getPersonGroup());
+                        courseReview.setCourse(courseFeedbackPersonAnswer.getCourse());
+                        courseReview.setFromCourseFeedbackPersonAnswer(courseFeedbackPersonAnswer);
+                        CourseFeedbackPersonAnswerDetail defaultCourseFeedbackPersonAnswerDetail =
+                                courseFeedbackPersonAnswer.getDetails().stream().filter(courseFeedbackPersonAnswerDetail ->
+                                        defaultQuestionForFeedback.equals(courseFeedbackPersonAnswerDetail.getQuestion().getId()))
+                                        .findFirst().orElse(null);
+                        if (defaultCourseFeedbackPersonAnswerDetail != null
+                                && defaultCourseFeedbackPersonAnswerDetail.getTextAnswer() != null) {
+                            courseReview.setText(defaultCourseFeedbackPersonAnswerDetail.getTextAnswer());
+                        } else {
+                            courseReview.setText("");
+                        }
+                    }
+                    dataManager.commit(courseReview);
+                }
+            }
         }
     }
 
