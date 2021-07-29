@@ -498,7 +498,9 @@
         <property name="addressType"
                   view="_minimal"/>
         <property name="country"
-                  view="_minimal"/>
+                  view="_minimal">
+            <property name="code"/>
+        </property>
         <property name="attachments"
                   view="_minimal"/>
         <property name="status"
