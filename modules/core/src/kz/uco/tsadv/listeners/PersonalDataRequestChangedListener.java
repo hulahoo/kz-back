@@ -32,7 +32,7 @@ public class PersonalDataRequestChangedListener {
     @Inject
     protected DataManager dataManager;
     protected String APPROVED_STATUS = "APPROVED";
-    protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     @Inject
     protected IntegrationRestService integrationRestService;
     @Inject
