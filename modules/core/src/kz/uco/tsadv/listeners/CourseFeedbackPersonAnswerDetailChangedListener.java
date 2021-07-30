@@ -32,17 +32,26 @@ public class CourseFeedbackPersonAnswerDetailChangedListener {
                         .load(event.getEntityId()).view("courseFeedbackPersonAnswerDetail.edit").one();
                 if (courseFeedbackPersonAnswerDetail.getQuestion() != null
                         && defaultQuestionForFeedback.equals(courseFeedbackPersonAnswerDetail.getQuestion().getId())) {
-                    CourseReview courseReview = metadata.create(CourseReview.class);
+                    CourseReview courseReview = null;
                     if (courseFeedbackPersonAnswerDetail.getCourseFeedbackPersonAnswer() != null) {
+                        courseReview = dataManager.load(CourseReview.class)
+                                .query("select e from tsadv$CourseReview e " +
+                                        " where e.fromCourseFeedbackPersonAnswer.id = :fromCourseFeedbackPersonAnswerId")
+                                .parameter("fromCourseFeedbackPersonAnswerId",
+                                        courseFeedbackPersonAnswerDetail.getCourseFeedbackPersonAnswer().getId())
+                                .view("courseReview.browse").list().stream().findFirst().orElse(null);
+                        if (courseReview == null) {
+                            courseReview = metadata.create(CourseReview.class);
+                            courseReview.setFromCourseFeedbackPersonAnswer(courseFeedbackPersonAnswerDetail.getCourseFeedbackPersonAnswer());
+                            courseReview.setPersonGroup(courseFeedbackPersonAnswerDetail.getPersonGroup());
+                            courseReview.setCourse(courseFeedbackPersonAnswerDetail.getCourse());
+                        }
                         courseReview.setRate(courseFeedbackPersonAnswerDetail.getCourseFeedbackPersonAnswer().getAvgScore());
-                        courseReview.setFromCourseFeedbackPersonAnswer(courseFeedbackPersonAnswerDetail.getCourseFeedbackPersonAnswer());
+                        if (courseFeedbackPersonAnswerDetail.getTextAnswer() != null) {
+                            courseReview.setText(courseFeedbackPersonAnswerDetail.getTextAnswer());
+                        }
+                        dataManager.commit(courseReview);
                     }
-                    courseReview.setPersonGroup(courseFeedbackPersonAnswerDetail.getPersonGroup());
-                    courseReview.setCourse(courseFeedbackPersonAnswerDetail.getCourse());
-                    if (courseFeedbackPersonAnswerDetail.getTextAnswer() != null) {
-                        courseReview.setText(courseFeedbackPersonAnswerDetail.getTextAnswer());
-                    }
-                    dataManager.commit(courseReview);
                 }
             } else if (EntityChangedEvent.Type.UPDATED.equals(event.getType())) {
                 CourseFeedbackPersonAnswerDetail courseFeedbackPersonAnswerDetail = dataManager

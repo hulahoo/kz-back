@@ -125,8 +125,25 @@ public class CourseFeedbackPersonAnswerChangedListener {
             if (EntityChangedEvent.Type.CREATED.equals(event.getType())) {
                 CourseFeedbackPersonAnswer courseFeedbackPersonAnswer =
                         dataManager.load(event.getEntityId()).view("courseFeedbackPersonAnswer.edit").one();
-                if (courseFeedbackPersonAnswer.getAvgScore() != null) {
-                    CourseReview courseReview = metadata.create(CourseReview.class);
+                CourseReview courseReview = dataManager.load(CourseReview.class)
+                        .query("select e from tsadv$CourseReview e " +
+                                " where e.fromCourseFeedbackPersonAnswer.id = :courseFeedbackPersonAnswerId")
+                        .parameter("courseFeedbackPersonAnswerId", courseFeedbackPersonAnswer.getId())
+                        .view("courseReview.browse").list().stream().findFirst().orElse(null);
+                if (courseReview != null) {
+                    courseReview.setRate(courseFeedbackPersonAnswer.getAvgScore());
+                    CourseFeedbackPersonAnswerDetail defaultCourseFeedbackPersonAnswerDetail =
+                            courseFeedbackPersonAnswer.getDetails().stream().filter(courseFeedbackPersonAnswerDetail ->
+                                    defaultQuestionForFeedback.equals(courseFeedbackPersonAnswerDetail.getQuestion().getId()))
+                                    .findFirst().orElse(null);
+                    if (defaultCourseFeedbackPersonAnswerDetail != null
+                            && defaultCourseFeedbackPersonAnswerDetail.getTextAnswer() != null) {
+                        courseReview.setText(defaultCourseFeedbackPersonAnswerDetail.getTextAnswer());
+                    } else {
+                        courseReview.setText("");
+                    }
+                } else {
+                    courseReview = metadata.create(CourseReview.class);
                     courseReview.setRate(courseFeedbackPersonAnswer.getAvgScore());
                     courseReview.setPersonGroup(courseFeedbackPersonAnswer.getPersonGroup());
                     courseReview.setCourse(courseFeedbackPersonAnswer.getCourse());
@@ -141,8 +158,8 @@ public class CourseFeedbackPersonAnswerChangedListener {
                     } else {
                         courseReview.setText("");
                     }
-                    dataManager.commit(courseReview);
                 }
+                dataManager.commit(courseReview);
             } else if (EntityChangedEvent.Type.UPDATED.equals(event.getType())) {
                 if (event.getChanges().isChanged("avgScore")) {
                     CourseFeedbackPersonAnswer courseFeedbackPersonAnswer =
