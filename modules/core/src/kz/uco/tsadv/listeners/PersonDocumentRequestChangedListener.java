@@ -1,5 +1,6 @@
 package kz.uco.tsadv.listeners;
 
+import com.google.gson.Gson;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
@@ -58,9 +59,11 @@ public class PersonDocumentRequestChangedListener {
                         ? oldStatus.getCode() : "") && !integrationConfig.getPersonDocumentRequestOff()) {
                     personDocumentRequestDataJson = getPersonDocumentRequestDataJson(personDocumentRequest);
                     setupUnirest();
+
+                    Gson gson = new Gson();
                     HttpResponse<String> response = Unirest
                             .post(getApiUrl())
-                            .body(personDocumentRequestDataJson)
+                            .body(String.format("[%s]", gson.toJson(personDocumentRequestDataJson)))
                             .asString();
 
                     String responseBody = response.getBody();
