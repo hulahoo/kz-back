@@ -11,6 +11,7 @@ import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.abstraction.IEntityGroup;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.shared.PositionGroup;
+import kz.uco.tsadv.modules.hr.JobDescription;
 import kz.uco.tsadv.modules.performance.model.PerformancePlan;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.model.*;
@@ -104,6 +105,18 @@ public class PositionGroupExt extends PositionGroup implements IEntityGroup<Posi
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADMIN_APPROVE_ID")
     protected DicHrRole adminApprove;
+
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "positionGroup")
+    private JobDescription jobDescription;
+
+    public JobDescription getJobDescription() {
+        return jobDescription;
+    }
+
+    public void setJobDescription(JobDescription jobDescription) {
+        this.jobDescription = jobDescription;
+    }
 
     public DicCompany getCompany() {
         return company;

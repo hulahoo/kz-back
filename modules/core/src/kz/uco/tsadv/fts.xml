@@ -1987,5 +1987,11 @@
         <entity class="kz.uco.tsadv.modules.administration.PortalMenuCustomization">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.hr.JobDescription">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.hr.JobDescriptionRequest">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

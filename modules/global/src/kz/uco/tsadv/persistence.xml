@@ -660,5 +660,7 @@
         <class>kz.uco.tsadv.modules.learning.dictionary.DicAssessmentMethod</class>
         <class>kz.uco.tsadv.modules.learning.model.PositionCourse</class>
         <class>kz.uco.tsadv.modules.administration.PortalMenuCustomization</class>
+        <class>kz.uco.tsadv.modules.hr.JobDescription</class>
+        <class>kz.uco.tsadv.modules.hr.JobDescriptionRequest</class>
     </persistence-unit>
 </persistence>
