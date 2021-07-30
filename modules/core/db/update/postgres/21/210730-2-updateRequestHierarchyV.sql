@@ -112,15 +112,27 @@ FROM (SELECT rd.org_structure_request_id                     AS r_id,
                       rd.organization_name_ru)               AS p_name_ru,
              COALESCE(fh.position_name_lang3, rd.position_name_en, fh.organization_name_lang3,
                       rd.organization_name_en)               AS p_name_en,
-             COALESCE(rd.position_name_ru, fh.position_name_lang1, rd.organization_name_ru,
-                      fh.organization_name_lang1)            AS name_ru,
-             COALESCE(rd.position_name_en, fh.position_name_lang3, rd.organization_name_en,
-                      fh.organization_name_lang3)            AS name_en,
+             CASE
+                 WHEN rd.* IS NULL OR rd.parent_organization_group_id = fh.organization_group_id THEN COALESCE(
+                         rd.position_name_ru, fh.position_name_lang1, rd.organization_name_ru,
+                         fh.organization_name_lang1)
+                 ELSE NULL::character varying(1000)
+                 END                                         AS name_ru,
+             CASE
+                 WHEN rd.* IS NULL OR rd.parent_organization_group_id = fh.organization_group_id THEN COALESCE(
+                         rd.position_name_en, fh.position_name_lang3, rd.organization_name_en,
+                         fh.organization_name_lang3)
+                 ELSE NULL::character varying(1000)
+                 END                                         AS name_en,
              COALESCE(rd.grade_group_id, fh.grade_group_id)  AS grade_group_id,
              fh.grade_rule_id,
              fh.p_grade,
              COALESCE(fh.head_count::numeric, rd.head_count) AS p_head_count,
-             COALESCE(rd.head_count, fh.head_count::numeric) AS head_count,
+             CASE
+                 WHEN rd.parent_organization_group_id = fh.organization_group_id
+                     THEN COALESCE(rd.head_count, fh.head_count::numeric)
+                 ELSE 0::numeric
+                 END                                         AS head_count,
              COALESCE(fh.max_salary::numeric, rd.max_salary) AS p_max_salary,
              COALESCE(rd.max_salary, fh.max_salary::numeric) AS max_salary,
              COALESCE(fh.min_salary::numeric, rd.min_salary) AS p_min_salary,
@@ -192,8 +204,11 @@ FROM (SELECT rd.org_structure_request_id                     AS r_id,
                LEFT JOIN base_hierarchy_element he
                          ON he.delete_ts IS NULL AND now() >= he.start_date AND now() <= he.end_date AND
                             he.organization_group_id = rd.parent_organization_group_id AND he.element_type = 1
+               LEFT JOIN base_position p ON p.group_id = rd.position_group_id AND CURRENT_DATE >= p.start_date AND
+                                            CURRENT_DATE <= p.end_date AND p.delete_ts IS NULL
       WHERE rd.delete_ts IS NULL
-        AND (rd.change_type::text = 'NEW'::text OR rd.change_type::text = 'CLOSE'::text)) t
+        AND (rd.change_type::text = 'NEW'::text OR
+             rd.change_type::text = 'EDIT'::text AND p.organization_group_ext_id <> rd.parent_organization_group_id)) t
          LEFT JOIN tsadv_grade g ON t.element_type = 2 AND g.group_id = t.grade_group_id AND g.delete_ts IS NULL AND
                                     now() >= g.start_date AND now() <= g.end_date;
 
