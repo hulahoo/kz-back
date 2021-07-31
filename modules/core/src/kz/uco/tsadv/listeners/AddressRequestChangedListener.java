@@ -1,5 +1,6 @@
 package kz.uco.tsadv.listeners;
 
+import com.google.gson.Gson;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
@@ -70,7 +71,8 @@ public class AddressRequestChangedListener {
                     addressRequestDataJson.setPostal(addressRequest.getPostalCode());
                     addressRequestDataJson.setCountryId(addressRequest.getCountry() != null
                             ? addressRequest.getCountry().getLegacyId() : "");
-                    addressRequestDataJson.setAddressKATOCode(addressRequest.getKato().getCode());
+                    addressRequestDataJson.setAddressKATOCode(addressRequest.getKato() != null
+                            ? addressRequest.getKato().getCode() : "");
                     addressRequestDataJson.setStreetTypeId(addressRequest.getStreetType() != null
                             ? addressRequest.getStreetType().getLegacyId() : "");
                     addressRequestDataJson.setStreetName(addressRequest.getStreetName());
@@ -87,9 +89,11 @@ public class AddressRequestChangedListener {
                             ? addressRequest.getPersonGroup().getCompany().getLegacyId()
                             : "");
                     setupUnirest();
+
+                    Gson gson = new Gson();
                     HttpResponse<String> response = Unirest
                             .post(getApiUrl())
-                            .body(addressRequestDataJson)
+                            .body(String.format("[%s]", gson.toJson(addressRequestDataJson)))
                             .asString();
 
                     String responseBody = response.getBody();

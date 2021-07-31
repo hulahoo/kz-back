@@ -1,5 +1,6 @@
 package kz.uco.tsadv.listeners;
 
+import com.google.gson.Gson;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
@@ -31,7 +32,7 @@ public class PersonalDataRequestChangedListener {
     @Inject
     protected DataManager dataManager;
     protected String APPROVED_STATUS = "APPROVED";
-    protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     @Inject
     protected IntegrationRestService integrationRestService;
     @Inject
@@ -85,10 +86,17 @@ public class PersonalDataRequestChangedListener {
                             .getPerson().getHaveConviction() != null && YesNoEnum.YES.equals(personalDataRequest.getPersonGroup()
                             .getPerson().getHaveConviction()) ? true : false);
                     personalDataRequestDataJson.setEffectiveDate(getFormattedDateString(BaseCommonUtils.getSystemDate()));
+                    personalDataRequestDataJson.setCompanyCode(personalDataRequest.getPersonGroup() != null
+                            && personalDataRequest.getPersonGroup().getCompany() != null
+                            ? personalDataRequest.getPersonGroup().getCompany().getLegacyId()
+                            : "");
+
                     setupUnirest();
+
+                    Gson gson = new Gson();
                     HttpResponse<String> response = Unirest
                             .post(getApiUrl())
-                            .body(personalDataRequestDataJson)
+                            .body(String.format("[%s]", gson.toJson(personalDataRequestDataJson)))
                             .asString();
 
                     String responseBody = response.getBody();

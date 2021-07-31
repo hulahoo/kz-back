@@ -172,7 +172,7 @@ public class AbsenceRvdRequestChangedListener {
 
                         setupUnirest();
                         HttpResponse<String> response = Unirest
-                                .post(getApiUrl())
+                                .post(getHolidayApiUrl())
                                 .body(absenceRvdRequestJson)
                                 .asString();
 
@@ -192,7 +192,7 @@ public class AbsenceRvdRequestChangedListener {
 
                         setupUnirest();
                         HttpResponse<String> response = Unirest
-                                .post(getApiUrl())
+                                .post(getNightApiUrl())
                                 .body(absenceRvdRequestJson)
                                 .asString();
 
@@ -258,13 +258,14 @@ public class AbsenceRvdRequestChangedListener {
         absenceRvdRequestDataJson.setEmployeeAgree(isEmployeeAgree);
         boolean isEmployeeInformed = Null.nullReplace(entity.getAcquainted(), false);
         absenceRvdRequestDataJson.setEmployeeInformed(isEmployeeInformed);
-        absenceRvdRequestDataJson.setShiftCode(entity.getShiftCode());
+        absenceRvdRequestDataJson.setShiftCode(entity.getShiftCode() != null && !entity.getShiftCode().isEmpty()
+                ? entity.getShiftCode() : "");
         String startTime = getFormattedDateString(entity.getTimeOfStarting(), timeFormatter);
         absenceRvdRequestDataJson.setStartTime(startTime);
         String endTime = getFormattedDateString(entity.getTimeOfFinishing(), timeFormatter);
         absenceRvdRequestDataJson.setEndTime(endTime);
-        absenceRvdRequestDataJson.setShift(entity.getShift() != null ? entity.getShift().getCode() : "");
-        absenceRvdRequestDataJson.setShift(entity.getOverrideAllHoursByDay() != null
+        absenceRvdRequestDataJson.setShift(entity.getShift() != null ? entity.getShift().getLangValue1() : "");
+        absenceRvdRequestDataJson.setOverridebyallhours(entity.getOverrideAllHoursByDay() != null
                 ? entity.getOverrideAllHoursByDay().getId() : "");
         String companyCode = "";
         if (entity.getPersonGroup() != null && entity.getPersonGroup().getCompany() != null) {
@@ -278,7 +279,11 @@ public class AbsenceRvdRequestChangedListener {
         return absenceRvdRequestDataJson;
     }
 
-    protected String getApiUrl() {
-        return integrationConfig.getAbsenceRvdRequestUrl();
+    protected String getHolidayApiUrl() {
+        return integrationConfig.getAbsenceRvdRequestHolidayUrl();
+    }
+
+    protected String getNightApiUrl() {
+        return integrationConfig.getAbsenceRvdRequestNightUrl();
     }
 }

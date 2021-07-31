@@ -1,5 +1,6 @@
 package kz.uco.tsadv.listeners;
 
+import com.google.gson.Gson;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
@@ -7,6 +8,7 @@ import com.haulmont.cuba.core.global.View;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kz.uco.tsadv.api.BaseResult;
+import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.modules.integration.jsonobject.PersonDocumentRequestDataJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.PersonDocumentRequest;
@@ -30,7 +32,8 @@ public class PersonDocumentRequestChangedListener {
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     @Inject
     protected IntegrationRestService integrationRestService;
-    protected String personinfoRequestUrl = "http://10.2.200.101:8290/api/ahruco/document/request";
+    @Inject
+    protected IntegrationConfig integrationConfig;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void afterCommit(EntityChangedEvent<PersonDocumentRequest, UUID> event) {
@@ -53,28 +56,14 @@ public class PersonDocumentRequestChangedListener {
                         .view("personDocumentRequest-for-integration").one();
                 DicRequestStatus requestStatus = personDocumentRequest.getStatus();
                 if (APPROVED_STATUS.equals(requestStatus.getCode()) && !APPROVED_STATUS.equals(oldStatus != null
-                        ? oldStatus.getCode() : "")) {
-                    personDocumentRequestDataJson.setPersonId(personDocumentRequest.getPersonGroup().getLegacyId());
-                    personDocumentRequestDataJson.setRequestNumber(personDocumentRequest.getRequestNumber().toString());
-                    personDocumentRequestDataJson.setLegacyId(personDocumentRequest.getEditedPersonDocument() != null
-                            ? personDocumentRequest.getEditedPersonDocument().getLegacyId() : "");
-                    personDocumentRequestDataJson.setDocumentTypeId(personDocumentRequest.getDocumentType() != null
-                            ? personDocumentRequest.getDocumentType().getLegacyId() : "");
-                    personDocumentRequestDataJson.setIssuedBy(personDocumentRequest.getIssuedBy());
-                    personDocumentRequestDataJson.setDocumentNumber(personDocumentRequest.getDocumentNumber());
-                    personDocumentRequestDataJson.setIssueDate(getFormattedDateString(personDocumentRequest.getIssueDate()));
-                    personDocumentRequestDataJson.setExpiredDate(getFormattedDateString(personDocumentRequest.getExpiredDate()));
-                    personDocumentRequestDataJson.setIssueAuthorityId(personDocumentRequest.getIssuingAuthority() != null
-                            ? personDocumentRequest.getIssuingAuthority().getLegacyId()
-                            : personDocumentRequest.getIssuedBy());
-                    personDocumentRequestDataJson.setCompanyCode(personDocumentRequest.getPersonGroup() != null
-                            && personDocumentRequest.getPersonGroup().getCompany() != null
-                            ? personDocumentRequest.getPersonGroup().getCompany().getLegacyId()
-                            : "");
+                        ? oldStatus.getCode() : "") && !integrationConfig.getPersonDocumentRequestOff()) {
+                    personDocumentRequestDataJson = getPersonDocumentRequestDataJson(personDocumentRequest);
                     setupUnirest();
+
+                    Gson gson = new Gson();
                     HttpResponse<String> response = Unirest
-                            .post(personinfoRequestUrl)
-                            .body(personDocumentRequestDataJson)
+                            .post(getApiUrl())
+                            .body(String.format("[%s]", gson.toJson(personDocumentRequestDataJson)))
                             .asString();
 
                     String responseBody = response.getBody();
@@ -102,8 +91,34 @@ public class PersonDocumentRequestChangedListener {
         }
     }
 
+    protected PersonDocumentRequestDataJson getPersonDocumentRequestDataJson(PersonDocumentRequest personDocumentRequest) {
+        PersonDocumentRequestDataJson personDocumentRequestDataJson = new PersonDocumentRequestDataJson();
+        personDocumentRequestDataJson.setPersonId(personDocumentRequest.getPersonGroup().getLegacyId());
+        personDocumentRequestDataJson.setRequestNumber(personDocumentRequest.getRequestNumber().toString());
+        personDocumentRequestDataJson.setLegacyId(personDocumentRequest.getEditedPersonDocument() != null
+                ? personDocumentRequest.getEditedPersonDocument().getLegacyId() : "");
+        personDocumentRequestDataJson.setDocumentTypeId(personDocumentRequest.getDocumentType() != null
+                ? personDocumentRequest.getDocumentType().getLegacyId() : "");
+        personDocumentRequestDataJson.setIssuedBy(personDocumentRequest.getIssuedBy());
+        personDocumentRequestDataJson.setDocumentNumber(personDocumentRequest.getDocumentNumber());
+        personDocumentRequestDataJson.setIssueDate(getFormattedDateString(personDocumentRequest.getIssueDate()));
+        personDocumentRequestDataJson.setExpiredDate(getFormattedDateString(personDocumentRequest.getExpiredDate()));
+        personDocumentRequestDataJson.setIssueAuthorityId(personDocumentRequest.getIssuingAuthority() != null
+                ? personDocumentRequest.getIssuingAuthority().getLegacyId()
+                : personDocumentRequest.getIssuedBy());
+        personDocumentRequestDataJson.setCompanyCode(personDocumentRequest.getPersonGroup() != null
+                && personDocumentRequest.getPersonGroup().getCompany() != null
+                ? personDocumentRequest.getPersonGroup().getCompany().getLegacyId()
+                : "");
+        return personDocumentRequestDataJson;
+    }
+
+    protected String getApiUrl() {
+        return integrationConfig.getPersonDocumentRequestUrl();
+    }
+
     protected void setupUnirest() {
-        Unirest.config().setDefaultBasicAuth("ahruco", "ahruco");
+        Unirest.config().setDefaultBasicAuth(integrationConfig.getBasicAuthLogin(), integrationConfig.getBasicAuthPassword());
         Unirest.config().addDefaultHeader("Content-Type", "application/json");
         Unirest.config().addDefaultHeader("Accept", "*/*");
         Unirest.config().addDefaultHeader("Accept-Encoding", "gzip, deflate, br");

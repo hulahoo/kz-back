@@ -42,9 +42,13 @@ public interface IntegrationConfig extends Config {
     @DefaultBoolean(false)
     boolean getAbsenceRvdRequestOff();
 
-    @Property("tsadv.integration.absenceRvdRequest.url")
+    @Property("tsadv.integration.absenceRvdRequest.holidayUrl")
     @DefaultString("http://10.2.200.101:8290/api/ahruco/work/holiday/request")
-    String getAbsenceRvdRequestUrl();
+    String getAbsenceRvdRequestHolidayUrl();
+
+    @Property("tsadv.integration.absenceRvdRequest.nightUrl")
+    @DefaultString("http://10.2.200.101:8290/api/ahruco/work/night/request")
+    String getAbsenceRvdRequestNightUrl();
 
     @Property("tsadv.integration.addressRequest.off")
     @DefaultBoolean(false)
@@ -69,6 +73,22 @@ public interface IntegrationConfig extends Config {
     @Property("tsadv.integration.personalDataRequest.url")
     @DefaultString("http://10.2.200.101:8290/api/ahruco/personinfo/request")
     String getPersonalDataRequestUrl();
+
+    @Property("tsadv.integration.absenceRequest.off")
+    @DefaultBoolean(false)
+    boolean getAbsenceRequestOff();
+
+    @Property("tsadv.integration.absenceRequest.url")
+    @DefaultString("http://10.2.200.101:8290/api/ahruco/absence/request")
+    String getAbsenceRequestRestUrl();
+
+    @Property("tsadv.integration.personDocumentRequest.off")
+    @DefaultBoolean(false)
+    boolean getPersonDocumentRequestOff();
+
+    @Property("tsadv.integration.personDocumentRequest.url")
+    @DefaultString("http://10.2.200.101:8290/api/ahruco/absence/request")
+    String getPersonDocumentRequestUrl();
 
     @Property("tsadv.integration.activeDirectory.on")
     @DefaultBoolean(true)

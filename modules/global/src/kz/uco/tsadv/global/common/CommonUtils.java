@@ -9,6 +9,8 @@ import kz.uco.tsadv.modules.personal.model.PersonContact;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -164,4 +166,10 @@ public class CommonUtils extends BaseCommonUtils {
         returnStr.append("\"" + node.getChildren().size() + " подчиненных\"");
     }
 
+    public static Date getBeginOfTime() {
+        Calendar cal = java.util.Calendar.getInstance();
+        cal.set(1950, Calendar.JANUARY, 1);
+        cal.set(1950, Calendar.JANUARY, 1);
+        return cal.getTime();
+    }
 }

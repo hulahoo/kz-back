@@ -140,6 +140,10 @@
                   caption="mainMsg://menu_config.tsadv_DicCriminalLiabilityType.browse"/>
             <item screen="tsadv$DicMICAttachmentStatus.browse"
                   caption="mainMsg://dms"/>
+            <item screen="tsadv_DicSocStatus.browse"/>
+            <item screen="tsadv_DicDriverCategory.browse"/>
+            <item screen="tsadv_DicFieldOfActivity.browse"/>
+            <item screen="tsadv_DicGuardianType.browse"/>
         </menu>
         <menu id="hrPerson"
               icon="font-icon:USERS">
@@ -147,6 +151,7 @@
                   screen="base$Person.browse"/>
             <item id="hrAssignmentGroups"
                   screen="base$AssignmentGroup.browse"/>
+            <item id="grantees" screen="base$PersonExt.browse"/>
         </menu>
         <item id="hrJobs"
               icon="font-icon:TASKS"

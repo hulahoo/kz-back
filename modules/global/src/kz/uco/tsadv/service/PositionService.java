@@ -27,4 +27,7 @@ public interface PositionService {
     List<Job> getExistingJobsInactiveInNearFuture(PositionExt position);
 
     PositionGroupExt getManager(UUID positionGroupId);
+
+    @Nullable
+    PositionGroupExt getFunctionalManager(UUID positionGroupId);
 }

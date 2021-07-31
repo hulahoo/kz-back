@@ -572,6 +572,12 @@
             template="/kz/uco/tsadv/web/modules/personal/person/frames/pcf-trip.xml"/>
     <screen id="pcf-leave"
             template="/kz/uco/tsadv/web/modules/personal/person/frames/pcf-leave.xml"/>
+    <screen id="pcf-grantees-agreement"
+            template="/kz/uco/tsadv/web/modules/personal/person/frames/pcf-grantees-agreement.xml"/>
+    <screen id="pcf-guardian"
+            template="/kz/uco/tsadv/web/modules/personal/person/frames/pcf-guardian.xml"/>
+    <screen id="pcf-list-of-document"
+            template="/kz/uco/tsadv/web/modules/personal/person/frames/pcf-list-of-document.xml"/>
     <screen id="base$Assignment.historyEdit"
             template="/kz/uco/tsadv/web/modules/personal/assignment/assignment-history-edit.xml"/>
     <screen id="tsadv$SurChargeName.browse"

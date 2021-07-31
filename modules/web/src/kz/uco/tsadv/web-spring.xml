@@ -151,6 +151,7 @@
                 <entry key="tsadv_VacationScheduleRequestService"
                        value="kz.uco.tsadv.service.portal.VacationScheduleRequestService"/>
                 <entry key="tsadv_IncentiveService" value="kz.uco.tsadv.service.IncentiveService"/>
+                <entry key="tsadv_BpmRolesDefinerService" value="kz.uco.tsadv.service.BpmRolesDefinerService"/>
             </map>
         </property>
     </bean>
