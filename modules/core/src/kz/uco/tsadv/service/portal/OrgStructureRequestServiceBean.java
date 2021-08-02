@@ -2,8 +2,10 @@ package kz.uco.tsadv.service.portal;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
+import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.common.StaticVariable;
@@ -63,6 +65,9 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
 
     @Inject
     private DataManager dataManager;
+
+    @Inject
+    protected ViewRepository viewRepository;
 
     @SuppressWarnings("all")
     @Override
@@ -188,6 +193,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                     }
                 }
             }
+
             requestTreeData.setHeadCount(totalHeadCounts);
             requestTreeData.setBaseSalary(totalBaseSalary);
             requestTreeData.setMtPayrollPer(totalMtPayrollPer);
@@ -202,30 +208,6 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 requestTreeData.getNameRu()[2] = null;
                 requestTreeData.getNameEn()[2] = null;
                 requestTreeData.getGrade()[2] = null;
-
-                final BigDecimal[] headCount = requestTreeData.getHeadCount();
-                if (headCount != null) {
-                    headCount[1] = BigDecimal.ZERO;
-                    headCount[2] = BigDecimal.ZERO;
-                }
-
-                final BigDecimal[] baseSalary = requestTreeData.getBaseSalary();
-                if (baseSalary != null) {
-                    baseSalary[1] = BigDecimal.ZERO;
-                    baseSalary[2] = BigDecimal.ZERO;
-                }
-
-                final BigDecimal[] mtPayrollPer = requestTreeData.getMtPayrollPer();
-                if (mtPayrollPer != null) {
-                    mtPayrollPer[1] = BigDecimal.ZERO;
-                    mtPayrollPer[2] = BigDecimal.ZERO;
-                }
-
-                final BigDecimal[] mtPayroll = requestTreeData.getMtPayroll();
-                if (mtPayroll != null) {
-                    mtPayroll[1] = BigDecimal.ZERO;
-                    mtPayroll[2] = BigDecimal.ZERO;
-                }
             }
         }
     }
@@ -559,14 +541,44 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
     }
 
     @Override
+    public void exclude(UUID requestId, RequestTreeData data) {
+        try (Transaction transaction = persistence.getTransaction()) {
+
+            String groupIdS = ObjectUtils.firstNonNull(data.getPosGroupId(), data.getOrgGroupId());
+            UUID groupId = groupIdS != null ? UUID.fromString(groupIdS) : null;
+            this.exclude(requestId, data.getRdId() != null ? UUID.fromString(data.getRdId()) : null, groupId, data.getElementType());
+
+            if (CollectionUtils.isNotEmpty(data.getChildren())) {
+                data.getChildren().forEach(requestTreeData -> this.exclude(requestId, requestTreeData));
+            }
+
+            transaction.commit();
+        }
+    }
+
+    @Override
     public void exclude(UUID requestId, UUID requestDetailId, UUID elementGroupId, int elementType) {
-        persistence.runInTransaction(em -> {
+        try (Transaction transaction = persistence.getTransaction()) {
+            EntityManager em = persistence.getEntityManager();
+
             if (requestDetailId != null) {
-                OrgStructureRequestDetail foundRequestDetail = em.find(OrgStructureRequestDetail.class, requestDetailId, View.LOCAL);
+                OrgStructureRequestDetail foundRequestDetail = em.find(OrgStructureRequestDetail.class,
+                        requestDetailId,
+                        viewRepository.getView(OrgStructureRequestDetail.class, View.LOCAL)
+                                .addProperty("parentOrganizationGroup", viewRepository.getView(OrganizationGroupExt.class, View.MINIMAL))
+                );
                 if (foundRequestDetail == null) {
                     throw new PortalException(String.format("OrgStructureRequestDetail by ID: [%s] is not found!", requestDetailId));
                 }
+
+//                foundRequestDetail.getChildren()
+//                        .forEach(child -> exclude(requestId, child.getId(), elementGroupId, elementType));
+
+                foundRequestDetail.setHeadCount(BigDecimal.ZERO);
                 foundRequestDetail.setChangeType(OrgRequestChangeType.CLOSE);
+                foundRequestDetail.setParent(null);
+                foundRequestDetail.setParentOrganizationGroup(null);
+
                 em.merge(foundRequestDetail);
             } else if (elementGroupId != null) {
                 ElementType foundElementType = ElementType.fromId(elementType);
@@ -577,6 +589,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 OrgStructureRequestDetail requestDetail = metadata.create(OrgStructureRequestDetail.class);
                 requestDetail.setOrgStructureRequest(em.getReference(OrgStructureRequest.class, requestId));
                 requestDetail.setElementType(foundElementType);
+                requestDetail.setHeadCount(BigDecimal.ZERO);
                 requestDetail.setChangeType(OrgRequestChangeType.CLOSE);
 
                 if (foundElementType.equals(ElementType.ORGANIZATION)) {
@@ -586,7 +599,11 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 }
                 em.persist(requestDetail);
             }
-        });
+
+//            em.flush();
+
+            transaction.commit();
+        }
     }
 
     @Override
