@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators;
 import kz.uco.tsadv.modules.personal.enums.OrganizationIncentiveIndicatorType;
@@ -12,6 +13,7 @@ import java.util.Date;
 
 @Table(name = "TSADV_ORGANIZATION_INCENTIVE_INDICATORS")
 @Entity(name = "tsadv_OrganizationIncentiveIndicators")
+@NamePattern("%s|responsiblePosition")
 public class OrganizationIncentiveIndicators extends StandardEntity {
     private static final long serialVersionUID = -5141736109346347548L;
 

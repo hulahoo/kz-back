@@ -23835,7 +23835,9 @@
     </view>
     <view entity="tsadv_OrganizationIncentiveIndicators" name="organizationIncentiveIndicators-edit-view" extends="_local">
         <property name="indicator" view="_local"/>
-        <property name="responsiblePosition" view="_local"/>
+        <property name="responsiblePosition" view="_base">
+            <property name="list" view="_local"/>
+        </property>
 
     </view>
     <view entity="tsadv_OrganizationIncentiveResult" name="organizationIncentiveResults-edit-view" extends="_local">
