@@ -15583,6 +15583,16 @@ create table TSADV_BENEFICIARY (
     BENEFICIARY_ADDRESS varchar(2500),
     BENEFICIARY_PLACE_OF_WORK varchar(2500),
     BENEFICIARY_JOB varchar(2500),
+    ADDRESS_TYPE_ID uuid not null,
+    POSTAL_CODE varchar(2500),
+    COUNTRY_ID uuid not null,
+    ADDRESS_KATO_CODE_ID uuid,
+    STREET_TYPE_ID uuid not null,
+    STREET_NAME varchar(2500),
+    BUILDING varchar(2500),
+    BLOCK varchar(2500),
+    FLAT varchar(2500),
+    ADDRESS_FOR_EXPATS varchar(2500),
     --
     primary key (ID)
 )^
