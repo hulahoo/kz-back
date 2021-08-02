@@ -17435,6 +17435,7 @@
           extends="_local"
           name="addressRequest-view">
         <property name="addressType" view="_minimal">
+            <property name="legacyId"/>
             <property name="langValue1"/>
             <property name="langValue2"/>
             <property name="langValue3"/>
