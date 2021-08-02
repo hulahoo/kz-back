@@ -1,7 +1,8 @@
 alter table TSADV_BENEFICIARY add column STREET_NAME varchar(2500) ;
 alter table TSADV_BENEFICIARY add column BUILDING varchar(2500) ;
  alter table TSADV_BENEFICIARY add column COUNTRY_ID uuid ^
- update TSADV_BENEFICIARY set COUNTRY_ID = (SELECT id FROM public.base_dic_country WHERE code = '1') ;
+ --USED COUNTRY WITH CODE('KZ') AS DEFAULT VALUE IN NULL FIELDS
+update TSADV_BENEFICIARY set COUNTRY_ID = (SELECT id FROM public.base_dic_country WHERE code = 'KZ') where country_id is null;
  alter table TSADV_BENEFICIARY alter column COUNTRY_ID set not null ;
 --alter table TSADV_BENEFICIARY add column COUNTRY_ID uuid not null ;
  alter table TSADV_BENEFICIARY add column ADDRESS_TYPE_ID uuid ^
