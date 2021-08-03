@@ -38,6 +38,7 @@
                         caption="mainMsg://table.btn.empty"/>
                 <action id="excel"
                         caption="mainMsg://table.btn.empty"/>
+                <action id="report" caption="msg://reportOwn" invoke="report" trackSelection="true"/>
             </actions>
             <columns>
                 <column id="course" property="course"/>
@@ -59,6 +60,7 @@
                         action="courseFeedbackPersonAnswersTable.remove"/>
                 <button action="courseFeedbackPersonAnswersTable.excel"/>
                 <button id="showAnswersBtn" caption="msg://table.btn.answers" invoke="showAnswers" enable="false"/>
+                <button id="reportBtn" action="courseFeedbackPersonAnswersTable.report"/>
             </buttonsPanel>
         </dataGrid>
     </layout>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.granteesagreement">
+    <data>
+        <instance id="granteesAgreementDc"
+                  class="kz.uco.tsadv.modules.personal.model.GranteesAgreement"
+                  view="granteesAgreement.edit">
+            <loader id="granteesAgreementDl"/>
+        </instance>
+        <collection id="paymentsDc"
+                    class="kz.uco.tsadv.modules.personal.model.Payments"
+                    view="payments.edit">
+            <loader id="paymentsDl">
+                <query>
+                    <![CDATA[select e from tsadv_Payments e where e.granteesAgreement = :granteesAgreement]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="learningResultsDc"
+                    class="kz.uco.tsadv.modules.personal.model.LearningResults"
+                    view="learningResults.edit">
+            <loader id="learningResultsDl">
+                <query>
+                    <![CDATA[select e from tsadv_LearningResults e where e.granteesAgreement = :granteesAgreement]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="learningResultsPerSubjectDc"
+                    class="kz.uco.tsadv.modules.personal.model.LearningResultsPerSubject"
+                    view="learningResultsPerSubject.edit">
+            <loader id="learningResultsPerSubjectDl">
+                <query>
+                    <![CDATA[select e from tsadv_LearningResultsPerSubject e where e.learningResult = :learningResult]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="scholarshipDc"
+                    class="kz.uco.tsadv.modules.personal.model.Scholarship"
+                    view="scholarship.edit">
+            <loader id="scholarshipDl">
+                <query>
+                    <![CDATA[select e from tsadv_Scholarship e where e.granteesAgreement = :granteesAgreement]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="granteesAgreementDc">
+                <column width="350px">
+                    <pickerField id="personGroupField" property="personGroup" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <textField id="contractNumberField" property="contractNumber"/>
+                    <dateField id="contractDateField" property="contractDate"/>
+                    <textField id="universityField" property="university"/>
+                    <textField id="agreementNumberField" property="agreementNumber"/>
+                    <dateField id="agreementDateField" property="agreementDate"/>
+                    <textField id="startYearField" property="startYear"/>
+                    <pickerField id="statusField" property="status">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                </column>
+            </form>
+            <tabSheet id="tabSheet">
+                <tab id="paymentsTab" spacing="true" margin="true,false, false, false" caption="msg://payments">
+                    <groupTable dataContainer="paymentsDc" id="paymentsTable" width="100%" height="100%">
+                        <actions>
+                            <action id="create" type="create"/>
+                            <action id="edit" type="edit"/>
+                            <action id="remove" type="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="account"/>
+                            <column id="accountName"/>
+                            <column id="amount"/>
+                            <column id="note"/>
+                        </columns>
+                        <rows/>
+                        <buttonsPanel id="paymentsBtnPanel">
+                            <button id="paymentsCreateBtn" action="paymentsTable.create"/>
+                            <button id="paymentsEditBtn" action="paymentsTable.edit"/>
+                            <button id="paymentsRemoveBtn" action="paymentsTable.remove"/>
+                        </buttonsPanel>
+                    </groupTable>
+                </tab>
+                <tab id="resultsTab" spacing="true" margin="true,false, false, false" caption="msg://results"
+                     expand="hbox">
+                    <hbox id="hbox" spacing="true" width="100%">
+                        <groupTable id="learningResultTable" dataContainer="learningResultsDc" width="100%">
+                            <actions>
+                                <action id="create" type="create"/>
+                                <action id="edit" type="edit"/>
+                                <action id="remove" type="remove"/>
+                            </actions>
+                            <columns>
+                                <column id="studyYear"/>
+                                <column id="semester"/>
+                                <column id="averageScore"/>
+                                <column id="scholarship"/>
+                            </columns>
+                            <rows/>
+                            <buttonsPanel id="learningResultBtnPanel">
+                                <button id="learningResultCreateBtn" action="learningResultTable.create"/>
+                                <button id="learningResultEditBtn" action="learningResultTable.edit"/>
+                                <button id="learningResultRemoveBtn" action="learningResultTable.remove"/>
+                            </buttonsPanel>
+                        </groupTable>
+                        <groupTable id="learningResultPerSubjectTable" dataContainer="learningResultsPerSubjectDc"
+                                    width="100%">
+                            <actions>
+                                <action id="create" type="create" enable="false"/>
+                                <action id="edit" type="edit"/>
+                                <action id="remove" type="remove"/>
+                            </actions>
+                            <columns>
+                                <column id="subject"/>
+                                <column id="score"/>
+                            </columns>
+                            <rows/>
+                            <buttonsPanel id="learningResultPerSubjectBtnPanel">
+                                <button id="learningResultPerSubjectCreateBtn"
+                                        action="learningResultPerSubjectTable.create"/>
+                                <button id="learningResultPerSubjectEditBtn"
+                                        action="learningResultPerSubjectTable.edit"/>
+                                <button id="learningResultPerSubjectRemoveBtn"
+                                        action="learningResultPerSubjectTable.remove"/>
+                            </buttonsPanel>
+                        </groupTable>
+                    </hbox>
+                </tab>
+                <tab id="scholarshipTab" caption="msg://scholarship" spacing="true" margin="true,false, false, false">
+                    <groupTable id="scholarshipTable" dataContainer="scholarshipDc" width="100%" height="100%">
+                        <actions>
+                            <action id="create" type="create"/>
+                            <action id="edit" type="edit"/>
+                            <action id="remove" type="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="account"/>
+                            <column id="accountName"/>
+                            <column id="paymentDate"/>
+                            <column id="amount"/>
+                            <column id="note"/>
+                        </columns>
+                        <rows/>
+                        <buttonsPanel id="scholarshipBtnPanel">
+                            <button id="scholarshipCreateBtn"
+                                    action="scholarshipTable.create"/>
+                            <button id="scholarshipEditBtn"
+                                    action="scholarshipTable.edit"/>
+                            <button id="scholarshipRemoveBtn"
+                                    action="scholarshipTable.remove"/>
+                        </buttonsPanel>
+                    </groupTable>
+                </tab>
+            </tabSheet>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="commit" action="windowCommit"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

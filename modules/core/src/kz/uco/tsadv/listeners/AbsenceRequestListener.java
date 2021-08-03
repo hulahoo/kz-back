@@ -9,6 +9,7 @@ import kong.unirest.Unirest;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.api.Null;
+import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.modules.integration.jsonobject.AbsenceRequestDataJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
@@ -24,18 +25,21 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
 
     protected String APPROVED_STATUS = "APPROVED";
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    protected SimpleDateFormat formatterNoTime = new SimpleDateFormat("yyyy-MM-dd");
 
     @Inject
     protected IntegrationRestService integrationRestService;
+    @Inject
+    private IntegrationConfig integrationConfig;
 
     @Override
     public void onBeforeUpdate(AbsenceRequest entity, EntityManager entityManager) {
-        if (isApproved(entity, entityManager)) {
-            AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity,entityManager);
+        if (isApproved(entity, entityManager) && !integrationConfig.getAbsenceRequestOff()) {
+            AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity, entityManager);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
-                    .post("http://10.2.200.101:8290/api/ahruco/absence/request")
+                    .post(getApiUrl())
                     .body(absenceJson)
                     .asString();
 
@@ -57,12 +61,12 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
 
     @Override
     public void onBeforeInsert(AbsenceRequest entity, EntityManager entityManager) {
-        if (isApproved(entity, entityManager)) {
-            AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity,entityManager);
+        if (isApproved(entity, entityManager) && !integrationConfig.getAbsenceRequestOff()) {
+            AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity, entityManager);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
-                    .post("http://10.2.200.101:8290/api/ahruco/absence/request")
+                    .post(getApiUrl())
                     .body(absenceJson)
                     .asString();
 
@@ -88,12 +92,14 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
         return APPROVED_STATUS.equals(entityManager.reloadNN(status, View.LOCAL).getCode());
     }
 
-    protected AbsenceRequestDataJson getAbsenceRequestDataJson(AbsenceRequest entity,EntityManager entityManager) {
+    protected AbsenceRequestDataJson getAbsenceRequestDataJson(AbsenceRequest entity, EntityManager entityManager) {
         AbsenceRequestDataJson absenceJson = new AbsenceRequestDataJson();
         String personId = (entity.getPersonGroup() != null && entity.getPersonGroup().getLegacyId() != null) ? entity.getPersonGroup().getLegacyId() : "";
         absenceJson.setPersonId(personId);
         String requestNumber = (entity.getRequestNumber() != null) ? entity.getRequestNumber().toString() : "";
         absenceJson.setRequestNumber(requestNumber);
+        String requestDate = entity.getRequestDate() != null ? formatterNoTime.format(entity.getRequestDate()) : "";
+        absenceJson.setRequestDate(requestDate);
         String absenceTypeId = (entity.getType() != null && entity.getType().getLegacyId() != null) ? entity.getType().getLegacyId() : "";
         absenceJson.setAbsenceTypeId(absenceTypeId);
         String startDate = getFormattedDateString(entity.getDateFrom());
@@ -104,24 +110,28 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
         absenceJson.setAbsenceDuration(absenceDuration);
         String purpose = (entity.getReason() != null) ? entity.getReason() : "";
         absenceJson.setPurpose(purpose);
-        boolean isProvideSheetOfTemporary = Null.nullReplace(entity.getOriginalSheet(),false);
+        boolean isProvideSheetOfTemporary = Null.nullReplace(entity.getOriginalSheet(), false);
         absenceJson.setIsProvideSheetOfTemporary(isProvideSheetOfTemporary);
         absenceJson.setIsOnRotation(false);
         String companyCode = "";
-        if(entity.getPersonGroup() != null && entity.getPersonGroup().getCompany() != null){
+        if (entity.getPersonGroup() != null && entity.getPersonGroup().getCompany() != null) {
             DicCompany company = entity.getPersonGroup().getCompany();
-            companyCode = entityManager.reloadNN(company,View.LOCAL).getLegacyId();
-            companyCode = Null.nullReplace(companyCode,"");
+            companyCode = entityManager.reloadNN(company, View.LOCAL).getLegacyId();
+            companyCode = Null.nullReplace(companyCode, "");
         }
         absenceJson.setCompanyCode(companyCode);
         return absenceJson;
     }
 
-    protected String getFormattedDateString(Date date){
-        return date != null ? formatter.format(date) : "" ;
+    protected String getFormattedDateString(Date date) {
+        return date != null ? formatter.format(date) : "";
     }
 
-    protected void setupUnirest(){
+    protected String getApiUrl() {
+        return integrationConfig.getAbsenceRequestRestUrl();
+    }
+
+    protected void setupUnirest() {
         Unirest.config().setDefaultBasicAuth("ahruco", "ahruco");
         Unirest.config().addDefaultHeader("Content-Type", "application/json");
         Unirest.config().addDefaultHeader("Accept", "*/*");

@@ -252,6 +252,9 @@
                                            optionsDatasource="organizationGroupExtDs"
                                            property="organizationGroupExt"
                                            required="true"/>
+                                    <field id="functionalManagerPositionGroup"
+                                           captionProperty="positionName"
+                                           property="functionalManagerPositionGroup"/>
                                 </column>
                                 <column id="col2FieldGroup"
                                         fieldCaptionWidth="90px"

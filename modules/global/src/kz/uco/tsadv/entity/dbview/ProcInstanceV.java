@@ -1,35 +1,35 @@
 package kz.uco.tsadv.entity.dbview;
 
-//import com.haulmont.bpm.entity.ProcDefinition;
-//import com.haulmont.bpm.entity.ProcInstance;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
-import com.haulmont.cuba.core.entity.BaseUuidEntity;
-import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.DesignSupport;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.UserSessionSource;
+import kz.uco.base.common.MultiLanguageUtils;
+import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.administration.TsadvUser;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
-@NamePattern("%s %s|requestType,requestNumber")
+@NamePattern("%s %s|process,requestNumber")
 @DesignSupport("{'dbView':true,'generateDdl':false}")
 @Table(name = "tsadv_bpm_proc_instance_vw")
 @Entity(name = "tsadv$ProcInstanceV")
-public class ProcInstanceV extends StandardEntity {
+public class ProcInstanceV extends AbstractBprocRequest {
     private static final long serialVersionUID = -8264485652552694037L;
 
     @Transient
-    @MetaProperty(related = {"processEn", "processRu"})
-    protected String requestType;
+    @MetaProperty(related = {"processEn", "processKz", "processRu"})
+    protected String process;
 
     @Column(name = "PROCESS_RU")
     protected String processRu;
+
+    @Column(name = "PROCESS_KZ")
+    protected String processKz;
 
     @Column(name = "PROCESS_EN")
     protected String processEn;
@@ -37,243 +37,143 @@ public class ProcInstanceV extends StandardEntity {
     @Column(name = "ENTITY_NAME")
     protected String entityName;
 
+    @Column(name = "business_key_")
+    protected String businessKey;
+
     @Column(name = "ENTITY_ID")
     protected UUID entityId;
-
-    @Column(name = "REQUEST_NUMBER")
-    protected String requestNumber;
 
     @Column(name = "ACTIVE")
     protected Boolean active;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STARTED_BY_ID")
-    protected TsadvUser startedBy;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STARTED_BY_PERSON_GROUP_ID")
-    protected PersonGroupExt startedByPersonGroup;
+    @JoinColumn(name = "start_user_id")
+    protected TsadvUser startUser;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "START_DATE")
-    protected Date startDate;
+    @Column(name = "start_time")
+    protected Date startTime;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "END_DATE")
-    protected Date endDate;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "EFFECTIVE_DATE")
-    protected Date effectiveDate;
-
-    @Column(name = "CANCELLED")
-    protected Boolean cancelled;
+    @Column(name = "end_time")
+    protected Date endTime;
 
     @Transient
     @MetaProperty(related = {"entityName", "entityId"})
-    protected BaseUuidEntity entity;
+    protected AbstractBprocRequest entity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PERSON_GROUP_ID")
-    protected PersonGroupExt personGroup;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CURRENT_APPROVER_ID")
-    protected TsadvUser currentApprover;
-
-    @Column(name = "DETAIL_RU")
-    protected String detailRu;
-
-    @Column(name = "DETAIL_EN")
-    protected String detailEn;
-
-    @Transient
-    @MetaProperty(related = {"detailEn", "detailRu"})
-    protected String detail;
-
-    /*@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROC_DEFINITION_ID")
-    protected ProcDefinition procDefinition;*/
-
-    public void setStartedByPersonGroup(PersonGroupExt startedByPersonGroup) {
-        this.startedByPersonGroup = startedByPersonGroup;
+    public String getBusinessKey() {
+        return businessKey;
     }
 
-    public PersonGroupExt getStartedByPersonGroup() {
-        return startedByPersonGroup;
+    public void setBusinessKey(String businessKey) {
+        this.businessKey = businessKey;
     }
 
-
-    /*@MetaProperty(related = "id")
-    public ProcInstance getProcInstance() {
-        ProcInstance procInstance = AppBeans.get(Metadata.class).create(ProcInstance.class);
-        procInstance.setId(this.id);
-        return procInstance;
-    }*/
-
-    public void setCancelled(Boolean cancelled) {
-        this.cancelled = cancelled;
+    public void setEntity(AbstractBprocRequest entity) {
+        this.entity = entity;
     }
 
-    public Boolean getCancelled() {
-        return cancelled;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    /*public void setProcDefinition(ProcDefinition procDefinition) {
-        this.procDefinition = procDefinition;
-    }
-
-    public ProcDefinition getProcDefinition() {
-        return procDefinition;
-    }*/
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setEffectiveDate(Date effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    public Date getEffectiveDate() {
-        return effectiveDate;
-    }
-
-    public void setDetailRu(String detailRu) {
-        this.detailRu = detailRu;
-    }
-
-    public String getDetailRu() {
-        return detailRu;
-    }
-
-    public void setDetailEn(String detailEn) {
-        this.detailEn = detailEn;
-    }
-
-    public String getDetailEn() {
-        return detailEn;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
-    public String getDetail() {
-        if (detail == null) {
-            detail = "en".equals(AppBeans.get(UserSessionSource.class).getLocale().getLanguage())
-                    ? detailEn
-                    : detailRu;
+    public AbstractBprocRequest getEntity() {
+        if (entity == null) {
+            DataManager dataManager = AppBeans.get(DataManager.class);
+            Metadata metadata = AppBeans.get(Metadata.class);
+            entity = dataManager.getReference(metadata.getClassNN(entityName).getJavaClass(), entityId);
         }
-        return detail;
+        return entity;
     }
 
-    public void setProcessRu(String processRu) {
-        this.processRu = processRu;
+    @Override
+    public String getProcessDefinitionKey() {
+        return getEntity().getProcessDefinitionKey();
+    }
+
+    @Override
+    public String getProcessInstanceBusinessKey() {
+        return this.businessKey;
+    }
+
+    public void setProcess(String process) {
+        this.process = process;
     }
 
     public String getProcessRu() {
         return processRu;
     }
 
-    public void setProcessEn(String processEn) {
-        this.processEn = processEn;
+    public void setProcessRu(String processRu) {
+        this.processRu = processRu;
+    }
+
+    public String getProcessKz() {
+        return processKz;
+    }
+
+    public void setProcessKz(String processKz) {
+        this.processKz = processKz;
     }
 
     public String getProcessEn() {
         return processEn;
     }
 
-    public void setCurrentApprover(TsadvUser currentApprover) {
-        this.currentApprover = currentApprover;
-    }
-
-    public TsadvUser getCurrentApprover() {
-        return currentApprover;
-    }
-
-    public void setPersonGroup(PersonGroupExt personGroup) {
-        this.personGroup = personGroup;
-    }
-
-    public PersonGroupExt getPersonGroup() {
-        return personGroup;
-    }
-
-    public BaseUuidEntity getEntity() {
-        if (entity == null) {
-            entity = (BaseUuidEntity) AppBeans.get(Metadata.class).create(entityName);
-            entity.setId(entityId);
-        }
-        return entity;
-    }
-
-    public void setEntity(BaseUuidEntity entity) {
-        this.entity = entity;
-    }
-
-    public void setRequestNumber(String requestNumber) {
-        this.requestNumber = requestNumber;
-    }
-
-    public String getRequestNumber() {
-        return requestNumber;
-    }
-
-    public void setRequestType(String requestType) {
-        this.requestType = requestType;
-    }
-
-    public String getRequestType() {
-        if (requestType == null) {
-            requestType = "en".equals(AppBeans.get(UserSessionSource.class).getLocale().getLanguage())
-                    ? processEn
-                    : processRu;
-        }
-        return requestType;
-    }
-
-    public void setEntityName(String entityName) {
-        this.entityName = entityName;
+    public void setProcessEn(String processEn) {
+        this.processEn = processEn;
     }
 
     public String getEntityName() {
         return entityName;
     }
 
-    public void setEntityId(UUID entityId) {
-        this.entityId = entityId;
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public UUID getEntityId() {
         return entityId;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setEntityId(UUID entityId) {
+        this.entityId = entityId;
     }
 
     public Boolean getActive() {
         return active;
     }
 
-    public void setStartedBy(TsadvUser startedBy) {
-        this.startedBy = startedBy;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
-    public TsadvUser getStartedBy() {
-        return startedBy;
+    public TsadvUser getStartUser() {
+        return startUser;
     }
+
+    public void setStartUser(TsadvUser startUser) {
+        this.startUser = startUser;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getProcess() {
+        if (process == null) {
+            this.process = MultiLanguageUtils.getCurrentLanguageValue(processRu, processKz, processEn);
+        }
+        return process;
+    }
+
 }

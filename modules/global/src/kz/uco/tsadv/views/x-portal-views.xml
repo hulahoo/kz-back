@@ -482,7 +482,9 @@
         <property name="addressType"
                   view="_minimal"/>
         <property name="country"
-                  view="_minimal"/>
+                  view="_minimal">
+            <property name="code"/>
+        </property>
         <property name="attachments"
                   view="_minimal"/>
         <property name="status"
@@ -531,5 +533,13 @@
     </view>
     <view entity="base$PersonGroupExt" name="personGroup.currentAssignment" extends="_minimal">
         <property name="currentAssignment" view="_minimal"/>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveIndicators" name="portal-organizationIncentiveIndicators-view"
+          extends="_local">
+        <property name="indicator" view="_minimal"/>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveResult" name="portal-organizationIncentiveResult-view"
+          extends="_local">
+        <property name="indicator" view="_minimal"/>
     </view>
 </views>

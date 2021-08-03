@@ -33,7 +33,7 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
     private Date endDate;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "EXPIRED_DATE", nullable = false)
+    @Column(name = "EXPIRED_DATE")
     protected Date expiredDate;
 
     @Column(name = "ISSUED_BY", length = 500)

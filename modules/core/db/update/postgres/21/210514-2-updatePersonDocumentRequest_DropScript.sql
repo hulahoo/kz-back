@@ -1,0 +1,2 @@
+alter table TSADV_PERSON_DOCUMENT_REQUEST drop column STATUS_ID__U35103 cascade ;
+alter table TSADV_PERSON_DOCUMENT_REQUEST drop column REQUEST_STATUS_ID__U43942 cascade ;

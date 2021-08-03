@@ -10,6 +10,8 @@ import com.haulmont.addon.bproc.service.BprocFormService;
 import com.haulmont.addon.bproc.service.BprocHistoricService;
 import com.haulmont.addon.bproc.service.BprocRepositoryService;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.chile.core.datatypes.Datatype;
+import com.haulmont.chile.core.datatypes.Datatypes;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
@@ -19,7 +21,7 @@ import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.bproc.beans.BprocUserListProvider;
+import kz.uco.tsadv.bproc.beans.BprocUserListProviderWithoutRedirect;
 import kz.uco.tsadv.bproc.beans.entity.BprocEntityBeanAdapter;
 import kz.uco.tsadv.bproc.beans.helper.AbstractBprocHelper;
 import kz.uco.tsadv.config.FrontConfig;
@@ -27,6 +29,7 @@ import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.bpm.BpmRolesLink;
+import kz.uco.tsadv.modules.bpm.BprocReassignment;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
@@ -49,6 +52,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service(BprocService.NAME)
 public class BprocServiceBean extends AbstractBprocHelper implements BprocService {
@@ -72,8 +76,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Inject
     protected Resources resources;
     @Inject
-    protected BprocUserListProvider bprocUserListProvider;
-
+    protected BprocUserListProviderWithoutRedirect bprocUserListProvider;
     protected String templateFolder = "classpath:kz/uco/tsadv/templates/";
     @Inject
     protected GlobalConfig globalConfig;
@@ -89,6 +92,10 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     protected NotificationService notificationService;
     @Inject
     protected BprocEntityBeanAdapter<AbstractBprocRequest> bprocEntityBeanAdapter;
+    @Inject
+    protected ViewRepository viewRepository;
+    @Inject
+    protected BpmRolesDefinerService definerService;
 
     @Override
     public List<? extends User> getTaskCandidates(String executionId, String viewName) {
@@ -221,11 +228,17 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         if (initiatorTask != null) tasks.add(initiatorTask);
 
         List<BpmRolesLink> rolesLinks = getProcessVariable(processInstanceData.getId(), "rolesLinks");
-        List<BpmRolesLink> links = rolesLinks == null
+        List<BpmRolesLink> links = CollectionUtils.isEmpty(rolesLinks)
+                ? initiatorTask == null
                 ? null
+                : definerService.getBpmRolesDefiner(
+                processInstanceData.getProcessDefinitionKey(),
+                initiatorTask.getAssigneeOrCandidates().get(0).getPersonGroup().getId())
+                .getLinks()
                 : dataManager.load(BpmRolesLink.class)
                 .query("select e from tsadv$BpmRolesLink e where e.id in :links ")
                 .setParameters(ParamsMap.of("links", rolesLinks))
+                .softDeletion(false)
                 .view(new View(BpmRolesLink.class)
                         .addProperty("bprocUserTaskCode")
                         .addProperty("hrRole", new View(DicHrRole.class)
@@ -264,7 +277,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                     }
                 })
                 .peek(taskData -> {
-                    if (taskData.getTaskDefinitionKey().equals("initiator_task"))
+                    if (taskData.getTaskDefinitionKey().equals(AbstractBprocRequest.INITIATOR_TASK_CODE))
                         taskData.setHrRole(getInitiatorHrRole());
                     if (links != null)
                         links.stream()
@@ -273,9 +286,53 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                                 .map(BpmRolesLink::getHrRole)
                                 .ifPresent(taskData::setHrRole);
                 })
+                .peek(taskData -> {
+                    String taskId = taskData.getTaskDefinitionKey();
+                    if (taskId != null) {
+                        List<BprocReassignment> reassignments = getBprocReassignments(taskId, taskData.getProcessInstanceId())
+                                .stream()
+                                .filter(bprocReassignment -> !bprocReassignment.getStartTime().before(taskData.getCreateTime()))
+                                .filter(bprocReassignment -> taskData.getEndTime() == null || !bprocReassignment.getEndTime().after(taskData.getEndTime()))
+                                .collect(Collectors.toList());
+
+                        reassignments.stream()
+                                .map(reassignment -> parseToTaskData(taskData, reassignment))
+                                .forEach(tasks::add);
+                        if (!reassignments.isEmpty())
+                            taskData.setCreateTime(reassignments.stream().map(BprocReassignment::getEndTime).max(Date::compareTo).orElse(null));
+                    }
+                })
                 .forEach(tasks::add);
 
         return tasks;
+    }
+
+    public List<BprocReassignment> getBprocReassignments(String taskDefinitionKey, String processInstanceId) {
+        return transactionalDataManager.load(BprocReassignment.class)
+                .query("select e from tsadv_BprocReassignment e " +
+                        " where e.taskDefinitionKey = :taskDefinitionKey " +
+                        "   and e.processInstanceId = :processInstanceId " +
+                        "   order by e.order ")
+                .parameter("taskDefinitionKey", taskDefinitionKey)
+                .parameter("processInstanceId", processInstanceId)
+                .view(viewRepository.getView(BprocReassignment.class, View.LOCAL).addProperty("assignee", viewRepository.getView(TsadvUser.class, "user-fioWithLogin")))
+                .list();
+    }
+
+    protected ExtTaskData parseToTaskData(ExtTaskData taskData, BprocReassignment reassignment) {
+        ExtTaskData parsedTask = metadata.create(ExtTaskData.class);
+        parsedTask.setId(reassignment.getId().toString());
+        parsedTask.setName(taskData.getName());
+        parsedTask.setTaskDefinitionKey(taskData.getTaskDefinitionKey());
+        parsedTask.setHrRole(taskData.getHrRole());
+        parsedTask.setExecutionId(taskData.getExecutionId());
+        parsedTask.setOutcome(reassignment.getOutcome());
+        parsedTask.setAssignee(reassignment.getAssignee().getId().toString());
+        parsedTask.setAssigneeOrCandidates(Collections.singletonList(reassignment.getAssignee()));
+        parsedTask.setCreateTime(reassignment.getStartTime());
+        parsedTask.setEndTime(reassignment.getStartTime());
+        parsedTask.setComment(reassignment.getComment());
+        return parsedTask;
     }
 
     @Override
@@ -334,6 +391,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     public <T extends AbstractBprocRequest> void sendNotificationAndActivity(T entity, User user, ActivityType activityType, String notificationTemplateCode) {
 
         User sessionUser = userSessionSource.getUserSession().getUser();
+        Datatype<Long> datatype = Datatypes.getNN(Long.class);
 
         notificationTemplateCode = changeNotificationTemplateCode(notificationTemplateCode, entity);
 
@@ -352,8 +410,10 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         notificationParams.put("requestFrontLinkEn", "");
 
         String requestFrontLink = getRequestLinkFront(entity);
-        notificationParams.put("entityFrontLinkRu", String.format(requestFrontLink, "Открыть заявку " + entity.getRequestNumber()));
-        notificationParams.put("entityFrontLinkEn", String.format(requestFrontLink, "Open request " + entity.getRequestNumber()));
+        notificationParams.put("entityFrontLinkRu", String.format(requestFrontLink, "Открыть заявку " + datatype.format(entity.getRequestNumber())));
+        notificationParams.put("entityFrontLinkEn", String.format(requestFrontLink, "Open request " + datatype.format(entity.getRequestNumber())));
+
+        notificationParams.put("requestNumber", datatype.format(entity.getRequestNumber()));
 
         Activity activity = activityService.createActivity(
                 user,
@@ -451,9 +511,9 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     }
 
     protected <T extends AbstractBprocRequest> Map<String, Object> getDefaultNotificationParams(Map<String, Object> params, T entity) {
+
         params.put("item", entity);
         params.put("entity", entity);
-        params.put("requestNumber", entity.getRequestNumber());
 
         ProcessInstanceData processInstanceData = getProcessInstanceData(entity.getProcessInstanceBusinessKey(), entity.getProcessDefinitionKey());
         TsadvUser initiator = getProcessVariable(processInstanceData.getId(), "initiator");
@@ -607,4 +667,5 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     public void approveAssignedPerformancePlan(AssignedPerformancePlan request) {
         this.approve(request);
     }
+
 }

@@ -103,6 +103,10 @@
                         <field id="dateOfBirth"
                                datasource="personDs"
                                property="dateOfBirth"/>
+                        <field id="beneficiaryAddress"
+                               property="beneficiaryAddress"/>
+                        <field id="beneficiaryPlaceOfWork"
+                               property="beneficiaryPlaceOfWork"/>
                     </column>
                     <column id="column2">
                         <field id="firstNameLatin"
@@ -129,6 +133,10 @@
                         <field id="sex"
                                datasource="personDs"
                                property="sex"/>
+                        <field id="socStatus"
+                               property="socStatus"/>
+                        <field id="beneficiaryJob"
+                               property="beneficiaryJob"/>
                     </column>
                 </fieldGroup>
                 <fieldGroup id="beneficiaryFieldGroup"

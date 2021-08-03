@@ -2,7 +2,6 @@ package kz.uco.tsadv.service.portal;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
-import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.bpm.BpmRolesDefiner;
@@ -12,6 +11,7 @@ import kz.uco.tsadv.modules.bpm.NotPersisitBprocActors;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.PositionExt;
+import kz.uco.tsadv.service.BpmRolesDefinerService;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.OrganizationHrUserService;
 import kz.uco.tsadv.service.PositionService;
@@ -40,34 +40,12 @@ public class StartBprocServiceBean implements StartBprocService {
     protected Metadata metadata;
     @Inject
     protected PositionService positionService;
+    @Inject
+    protected BpmRolesDefinerService definerService;
 
     @Override
     public BpmRolesDefiner getBpmRolesDefiner(String processDefinitionKey, UUID employeePersonGroupId, boolean isAssistant) {
-        DicCompany dicCompany = employeeService.getCompanyByPersonGroupId(employeePersonGroupId);
-        UUID company = dicCompany != null ? dicCompany.getId() : null;
-
-        BpmRolesDefiner bpmRolesDefiner = null;
-
-        @SuppressWarnings("ConstantConditions") List<BpmRolesDefiner> bpmRolesDefiners = dataManager.load(BpmRolesDefiner.class)
-                .query("select e from tsadv$BpmRolesDefiner e where e.company.id = :companyId and e.processDefinitionKey = :processDefinitionKey ")
-                .parameter("companyId", company)
-                .parameter("processDefinitionKey", processDefinitionKey)
-                .view("bpmRolesDefiner-view")
-                .list();
-        if (!bpmRolesDefiners.isEmpty()) bpmRolesDefiner = bpmRolesDefiners.get(0);
-
-        if (bpmRolesDefiner == null)
-            bpmRolesDefiners = dataManager.load(BpmRolesDefiner.class)
-                    .query("select e from tsadv$BpmRolesDefiner e where e.processDefinitionKey = :processDefinitionKey")
-                    .parameter("processDefinitionKey", processDefinitionKey)
-                    .view("bpmRolesDefiner-view")
-                    .list()
-                    .stream()
-                    .filter(definer -> definer.getCompany() == null)
-                    .collect(Collectors.toList());
-
-        if (!bpmRolesDefiners.isEmpty()) bpmRolesDefiner = bpmRolesDefiners.get(0);
-        if (bpmRolesDefiner == null) throw new PortalException("bpmRolesDefiner not found!");
+        BpmRolesDefiner bpmRolesDefiner = definerService.getBpmRolesDefiner(processDefinitionKey, employeePersonGroupId);
 
         bpmRolesDefiner = excludeSupManager(employeePersonGroupId, bpmRolesDefiner);
         bpmRolesDefiner = filterAssistant(bpmRolesDefiner, isAssistant);

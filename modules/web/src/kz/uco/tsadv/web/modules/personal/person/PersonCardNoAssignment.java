@@ -257,12 +257,15 @@ public class PersonCardNoAssignment extends AbstractHrEditor<PersonExt> {
         frames.put("profile", new LinkedList<LinkWrapper>() {{
             add(new LinkWrapper("pcf-person-learning-history", "PersonLearningHistory",
                     "font-icon:GRADUATION_CAP"));
-            add(new LinkWrapper("pcf-person-learning-contract", "PersonLearningContract", ""));
+//            add(new LinkWrapper("pcf-person-learning-contract", "PersonLearningContract", ""));
             add(new LinkWrapper("pcf-education", "PersonEducation", "font-icon:BOOK", true));
+            add(new LinkWrapper("pcf-grantees-agreement", "granteesAgreement", ""));
 //            add(new LinkWrapper("pcf-competence", "Competences", "font-icon:ALIGN_LEFT"));
-            add(new LinkWrapper("pcf-assessment", "Assessments", "font-icon:STAR_O"));
+//            add(new LinkWrapper("pcf-assessment", "Assessments", "font-icon:STAR_O"));
 //            add(new LinkWrapper("pcf-succession", "SuccessionPlanning", "font-icon:BANK"));
-            add(new LinkWrapper("pcf-course", "coursesTab", "font-icon:GRADUATION_CAP"));
+//            add(new LinkWrapper("pcf-course", "coursesTab", "font-icon:GRADUATION_CAP"));
+            add(new LinkWrapper("pcf-guardian", "guardian", ""));
+            add(new LinkWrapper("pcf-list-of-document", "listOfDocument", ""));
         }});
     }
 

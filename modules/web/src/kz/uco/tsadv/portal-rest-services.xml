@@ -244,6 +244,10 @@
         </method>
         <method name="availableSalary"/>
         <method name="hasPermitToCreate"/>
+        <method name="exclude">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="data" type="kz.uco.tsadv.pojo.RequestTreeData"/>
+        </method>
     </service>
     <service name="tsadv_MyTeamService">
         <method name="getChildren">
@@ -302,6 +306,16 @@
         </method>
         <method name="getChildVacationSchedule">
             <param name="paginationPojo" type="kz.uco.tsadv.pojo.pagination.PaginationPojo"/>
+        </method>
+    </service>
+    <service name="tsadv_IncentiveService">
+        <method name="getIncentiveList">
+            <param name="paginationPojo" type="kz.uco.tsadv.pojo.pagination.PaginationPojo"/>
+        </method>
+    </service>
+    <service name="tsadv_BpmUserSubstitutionService">
+        <method name="save">
+            <param name="bpmUserSubstitution" type="kz.uco.tsadv.entity.tb.BpmUserSubstitution"/>
         </method>
     </service>
 </services>
