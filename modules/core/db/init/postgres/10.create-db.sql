@@ -18331,6 +18331,7 @@ create table TSADV_ORGANIZATION_INCENTIVE_INDICATORS (
     INDICATOR_ID uuid not null,
     WEIGHT double precision not null,
     RESPONSIBLE_POSITION_ID uuid not null,
+    APPROVING_POSITION_ID uuid not null,
     --
     primary key (ID)
 )^
