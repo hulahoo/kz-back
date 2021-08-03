@@ -2038,5 +2038,8 @@
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicatorType">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.DicIncentiveIndicatorScoreSetting">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
