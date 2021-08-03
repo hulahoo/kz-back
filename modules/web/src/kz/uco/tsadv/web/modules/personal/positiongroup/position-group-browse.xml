@@ -116,6 +116,8 @@
                             caption="msg://kz.uco.tsadv.modules.personal.model/Position.positionFullName"
                             captionProperty="fullName"/>
                     <column id="position.fte"/>
+                    <column id="jobDescriptionFile" generator="getJobDescriptionFile"
+                            caption="msg://jobDescription"/>
                     <column id="position.jobGroup.jobName"
                             caption="msg://kz.uco.tsadv.modules.personal.group/JobGroup.job"/>
                     <column id="position.organizationGroupExt.organizationName"

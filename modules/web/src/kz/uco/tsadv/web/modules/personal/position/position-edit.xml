@@ -19,6 +19,8 @@
                 <datasource id="analyticsDs" property="analytics"/>
             </datasource>
         </datasource>
+        <!--        <datasource id="jobDescriptionDs" class="kz.uco.tsadv.modules.hr.JobDescription"-->
+        <!--                    view="jobDescription-for-position-edit"/>-->
         <collectionDatasource id="posCompetenceElementsDs"
                               class="kz.uco.tsadv.modules.personal.model.CompetenceElement"
                               view="competenceElement-view">
@@ -159,8 +161,8 @@
             </query>
         </collectionDatasource>
         <collectionDatasource id="positionHarmfulConditionDs"
-                class="kz.uco.tsadv.entity.tb.PositionHarmfulCondition"
-                view="_local">
+                              class="kz.uco.tsadv.entity.tb.PositionHarmfulCondition"
+                              view="_local">
             <query>
                 <![CDATA[select e from tsadv_PositionHarmfulCondition e
                 where e.positionGroup.id = :ds$positionGroupDs.id]]>
@@ -169,7 +171,7 @@
         </collectionDatasource>
     </dsContext>
     <actions>
-        <action id="windowCommit"
+        <action id="windowCommit1"
                 caption="msg://table.btn.save"
                 icon="theme://actions.Editor.Ok.icon"
                 invoke="windowCommit"/>
@@ -334,12 +336,41 @@
                 </scrollBox>
                 <hbox id="windowActionsHBox"
                       spacing="true"
-                      stylename="c-edit-window-actions"
-                >
-                    <button id="windowCommit" action="windowCommit" icon="theme://actions.Editor.Ok.icon"
+                      stylename="c-edit-window-actions">
+                    <button id="windowCommit" action="windowCommit1" icon="theme://actions.Editor.Ok.icon"
                             caption="msg://table.btn.save"/>
                     <button id="windowClose" action="windowClose" icon="theme://actions.Editor.Cancel.icon"/>
                 </hbox>
+            </tab>
+            <tab id="jobDescriptionTab" caption="msg://jobDescriptionTab" expand="jobDescriptionVbox" spacing="true">
+                <vbox id="jobDescriptionVbox" height="100%" width="100%" expand="jobDescriptionFiesldVbox"
+                      spacing="true">
+                    <vbox id="jobDescriptionFiesldVbox" width="100%" height="100%" spacing="true">
+                        <groupBox id="positionDutiesGroupBox" width="100%" height="100%"
+                                  caption="msg://positionDutiesGroupBox">
+                            <textArea id="positionDutiesTextArea" height="100%" width="100%" required="false"/>
+                        </groupBox>
+                        <groupBox id="compulsoryQualificationRequirementsGroupBox" width="100%" height="100%"
+                                  caption="msg://compulsoryQualificationRequirementsGroupBox">
+                            <textArea id="compulsoryQualificationRequirementsTextArea" height="100%" width="100%"/>
+                        </groupBox>
+                        <groupBox id="generalAdditionalRequirementsGroupBox" width="100%" height="100%"
+                                  caption="msg://generalAdditionalRequirementsGroupBox">
+                            <textArea id="generalAdditionalRequirementsTextArea" height="100%" width="100%"/>
+                        </groupBox>
+                    </vbox>
+                    <hbox id="uploadField" spacing="true">
+                        <label id="jobDescriptionFileLabel" value="msg://jobDescriptionFile" align="MIDDLE_RIGHT"/>
+                        <upload id="jobDescriptionFile" fileStoragePutMode="IMMEDIATE" showClearButton="true"
+                                showFileName="true" clearButtonCaption="mainMsg://empty" clearButtonIcon="REMOVE"
+                                uploadButtonCaption="mainMsg://empty" uploadButtonIcon="DOWNLOAD"/>
+                    </hbox>
+                </vbox>
+                <buttonsPanel id="jobDescriptionBP">
+                    <button id="jobDescriptionSaveBtn" invoke="jobDescriptionSave" caption="msg://save"/>
+                    <button id="jobDescriptionCancelBtn" invoke="jobDescriptionCancel" caption="msg://cancel"/>
+                    <button id="request" invoke="createRequest" caption="Заявка"/>
+                </buttonsPanel>
             </tab>
             <tab id="additional"
                  caption="msg://edit.tab.additional"
@@ -607,70 +638,70 @@
                     </buttonsPanel>
                 </table>
             </tab>
-<!--            <tab id="flySurCharge"-->
-<!--                 caption="msg://flySurCharge.tab"-->
-<!--                 margin="true,false,false,false">-->
-<!--                <table id="flySurChargeTable"-->
-<!--                       height="100%"-->
-<!--                       width="100%">-->
-<!--                    <actions>-->
-<!--                        <action id="create"-->
-<!--                                caption="mainMsg://table.btn.empty"-->
-<!--                                icon="icons/plus-btn.png"/>-->
-<!--                        <action id="edit"-->
-<!--                                caption="mainMsg://table.btn.empty"/>-->
-<!--                        <action id="remove"-->
-<!--                                caption="mainMsg://table.btn.empty"/>-->
-<!--                    </actions>-->
-<!--                    <columns>-->
-<!--                        <column id="assignmentGroupId.assignmentPersonFioWithEmployeeNumber"/>-->
-<!--                        <column id="level"/>-->
-<!--                        <column id="flyingHours"/>-->
-<!--                        <column id="flyingSurcharge"/>-->
-<!--                        <column id="bonus"/>-->
-<!--                        <column id="ratePerHour"/>-->
-<!--                        <column id="dateFrom"/>-->
-<!--                        <column id="dateTo"/>-->
-<!--                    </columns>-->
-<!--                    <rows datasource="flySurChargeDs"/>-->
-<!--                    <buttonsPanel id="flySurChargeButtons">-->
-<!--                        <button action="flySurChargeTable.create"/>-->
-<!--                        <button action="flySurChargeTable.edit"/>-->
-<!--                        <button action="flySurChargeTable.remove"/>-->
-<!--                    </buttonsPanel>-->
-<!--                </table>-->
-<!--            </tab>-->
-<!--            <tab id="flightTimeRate"-->
-<!--                 caption="msg://flightTimeRate.tab"-->
-<!--                 margin="true,false,false,false">-->
-<!--                <table id="flightTimeRateTable"-->
-<!--                       height="100%"-->
-<!--                       width="100%">-->
-<!--                    <actions>-->
-<!--                        <action id="create"-->
-<!--                                caption="mainMsg://table.btn.empty"-->
-<!--                                icon="icons/plus-btn.png"/>-->
-<!--                        <action id="edit"-->
-<!--                                caption="mainMsg://table.btn.empty"/>-->
-<!--                        <action id="remove"-->
-<!--                                caption="mainMsg://table.btn.empty"/>-->
-<!--                    </actions>-->
-<!--                    <columns>-->
-<!--                        <column id="dicRateType"/>-->
-<!--                        <column id="value"/>-->
-<!--                        <column id="dateFrom"/>-->
-<!--                        <column id="dateTo"/>-->
-<!--                        <column id="hoursFrom"/>-->
-<!--                        <column id="hoursTo"/>-->
-<!--                    </columns>-->
-<!--                    <rows datasource="flightTimeRateDs"/>-->
-<!--                    <buttonsPanel id="flightTimeRateButtons">-->
-<!--                        <button action="flightTimeRateTable.create"/>-->
-<!--                        <button action="flightTimeRateTable.edit"/>-->
-<!--                        <button action="flightTimeRateTable.remove"/>-->
-<!--                    </buttonsPanel>-->
-<!--                </table>-->
-<!--            </tab>-->
+            <!--            <tab id="flySurCharge"-->
+            <!--                 caption="msg://flySurCharge.tab"-->
+            <!--                 margin="true,false,false,false">-->
+            <!--                <table id="flySurChargeTable"-->
+            <!--                       height="100%"-->
+            <!--                       width="100%">-->
+            <!--                    <actions>-->
+            <!--                        <action id="create"-->
+            <!--                                caption="mainMsg://table.btn.empty"-->
+            <!--                                icon="icons/plus-btn.png"/>-->
+            <!--                        <action id="edit"-->
+            <!--                                caption="mainMsg://table.btn.empty"/>-->
+            <!--                        <action id="remove"-->
+            <!--                                caption="mainMsg://table.btn.empty"/>-->
+            <!--                    </actions>-->
+            <!--                    <columns>-->
+            <!--                        <column id="assignmentGroupId.assignmentPersonFioWithEmployeeNumber"/>-->
+            <!--                        <column id="level"/>-->
+            <!--                        <column id="flyingHours"/>-->
+            <!--                        <column id="flyingSurcharge"/>-->
+            <!--                        <column id="bonus"/>-->
+            <!--                        <column id="ratePerHour"/>-->
+            <!--                        <column id="dateFrom"/>-->
+            <!--                        <column id="dateTo"/>-->
+            <!--                    </columns>-->
+            <!--                    <rows datasource="flySurChargeDs"/>-->
+            <!--                    <buttonsPanel id="flySurChargeButtons">-->
+            <!--                        <button action="flySurChargeTable.create"/>-->
+            <!--                        <button action="flySurChargeTable.edit"/>-->
+            <!--                        <button action="flySurChargeTable.remove"/>-->
+            <!--                    </buttonsPanel>-->
+            <!--                </table>-->
+            <!--            </tab>-->
+            <!--            <tab id="flightTimeRate"-->
+            <!--                 caption="msg://flightTimeRate.tab"-->
+            <!--                 margin="true,false,false,false">-->
+            <!--                <table id="flightTimeRateTable"-->
+            <!--                       height="100%"-->
+            <!--                       width="100%">-->
+            <!--                    <actions>-->
+            <!--                        <action id="create"-->
+            <!--                                caption="mainMsg://table.btn.empty"-->
+            <!--                                icon="icons/plus-btn.png"/>-->
+            <!--                        <action id="edit"-->
+            <!--                                caption="mainMsg://table.btn.empty"/>-->
+            <!--                        <action id="remove"-->
+            <!--                                caption="mainMsg://table.btn.empty"/>-->
+            <!--                    </actions>-->
+            <!--                    <columns>-->
+            <!--                        <column id="dicRateType"/>-->
+            <!--                        <column id="value"/>-->
+            <!--                        <column id="dateFrom"/>-->
+            <!--                        <column id="dateTo"/>-->
+            <!--                        <column id="hoursFrom"/>-->
+            <!--                        <column id="hoursTo"/>-->
+            <!--                    </columns>-->
+            <!--                    <rows datasource="flightTimeRateDs"/>-->
+            <!--                    <buttonsPanel id="flightTimeRateButtons">-->
+            <!--                        <button action="flightTimeRateTable.create"/>-->
+            <!--                        <button action="flightTimeRateTable.edit"/>-->
+            <!--                        <button action="flightTimeRateTable.remove"/>-->
+            <!--                    </buttonsPanel>-->
+            <!--                </table>-->
+            <!--            </tab>-->
             <tab id="parents"
                  caption="msg://HierarchyElement.parents"
                  margin="true,false,false,false">

@@ -4,6 +4,7 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
@@ -11,6 +12,8 @@ import com.haulmont.cuba.gui.components.actions.EditAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.GroupDatasource;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.OpenMode;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.entity.abstraction.AbstractDictionary;
@@ -18,6 +21,8 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.PositionConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.gui.components.AbstractHrEditor;
+import kz.uco.tsadv.modules.hr.JobDescription;
+import kz.uco.tsadv.modules.hr.JobDescriptionRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
 import kz.uco.tsadv.modules.personal.dictionary.DicPositionStatus;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
@@ -27,10 +32,10 @@ import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import kz.uco.tsadv.service.BusinessRuleService;
 import kz.uco.tsadv.service.PositionService;
-import kz.uco.tsadv.web.modules.performance.positiongroupgoallink.PositionGroupGoalLinkEdit;
 import kz.uco.tsadv.web.modules.personal.case_.Caseframe;
 import kz.uco.tsadv.web.modules.personal.common.Utils;
 import kz.uco.tsadv.web.modules.personal.jobgroup.JobGroupBrowse;
+import kz.uco.tsadv.web.screens.jobdescriptionrequest.JobDescriptionRequestEdit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -136,16 +141,16 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     protected EditAction hierarchyElementsTableEdit;
     @Named("competencePosTable.create")
     protected CreateAction competencePosTableCreate;
-//    @Named("flySurChargeTable.create")
+    //    @Named("flySurChargeTable.create")
 //    protected CreateAction flySurChargeTableCreate;
     @Inject
     protected Caseframe caseFrame;
-//    @Named("flightTimeRateTable.create")
+    //    @Named("flightTimeRateTable.create")
 //    protected CreateAction flightTimeRateTableCreate;
     @Named("goalsTable.create")
     protected CreateAction goalsTableCreate;
     @Named("goalsTable.edit")
-    private EditAction goalsTableEdit;
+    protected EditAction goalsTableEdit;
     //    protected int languageIndex = languageIndex();
     protected boolean isNewItem = false;
     protected List<Entity> commitInstances = new ArrayList<>();
@@ -156,9 +161,21 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     @Inject
     protected ScreenBuilders screenBuilders;
     @Named("harmFulConditionsTable.create")
-    private CreateAction harmFulConditionsTableCreate;
+    protected CreateAction harmFulConditionsTableCreate;
     @Named("harmFulConditionsTable.edit")
-    private EditAction harmFulConditionsTableEdit;
+    protected EditAction harmFulConditionsTableEdit;
+    @Inject
+    protected TextArea<String> positionDutiesTextArea;
+    @Inject
+    protected FileUploadField jobDescriptionFile;
+    @Inject
+    protected TextArea<String> compulsoryQualificationRequirementsTextArea;
+    @Inject
+    protected TextArea<String> generalAdditionalRequirementsTextArea;
+    protected boolean jobDescriptionChanged = false;
+    protected JobDescription jobDescription = null;
+    @Inject
+    protected Screens screens;
 
     @Override
     protected FieldGroup getStartEndDateFieldGroup() {
@@ -171,6 +188,45 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
         Table surChargeTable = (Table) getComponentNN("surChargeTable");
         ((CreateAction) surChargeTable.getActionNN("create")).setWindowId("tsadv$SurChargePosition.edit");
         ((EditAction) surChargeTable.getActionNN("edit")).setWindowId("tsadv$SurChargePosition.edit");
+        positionDs.addItemChangeListener(e -> {
+            if (e.getDs().getItem() != null && e.getDs().getItem().getGroup() != null) {
+                if (e.getDs().getItem().getGroup().getJobDescription() != null) {
+                    jobDescription = dataManager.reload(e.getDs().getItem().getGroup().getJobDescription(),
+                            "jobDescription-for-position-edit");
+                    positionDutiesTextArea.setRequired(true);
+                } else {
+                    jobDescription = metadata.create(JobDescription.class);
+                    jobDescription.setPositionGroup(e.getDs().getItem().getGroup());
+                    positionDutiesTextArea.setRequired(false);
+                }
+                positionDutiesTextArea.setValue(jobDescription.getPositionDuties());
+                compulsoryQualificationRequirementsTextArea.setValue(jobDescription.getCompulsoryQualificationRequirements());
+                generalAdditionalRequirementsTextArea.setValue(jobDescription.getGeneralAdditionalRequirements());
+                if (jobDescription.getFile() != null) {
+                    jobDescriptionFile.setValue(jobDescription.getFile());
+                }
+                positionDutiesTextArea.addTextChangeListener(textChangeEvent -> {
+                    jobDescription.setPositionDuties(textChangeEvent.getText());
+                    positionDutiesTextArea.setRequired(true);
+                    jobDescriptionChanged = true;
+                });
+                compulsoryQualificationRequirementsTextArea.addTextChangeListener(textChangeEvent -> {
+                    jobDescription.setCompulsoryQualificationRequirements(textChangeEvent.getText());
+                    positionDutiesTextArea.setRequired(true);
+                    jobDescriptionChanged = true;
+                });
+                generalAdditionalRequirementsTextArea.addTextChangeListener(textChangeEvent -> {
+                    jobDescription.setGeneralAdditionalRequirements(textChangeEvent.getText());
+                    positionDutiesTextArea.setRequired(true);
+                    jobDescriptionChanged = true;
+                });
+                jobDescriptionFile.addValueChangeListener(fileDescriptorValueChangeEvent -> {
+                    jobDescription.setFile(fileDescriptorValueChangeEvent.getValue());
+                    jobDescriptionChanged = true;
+                });
+            }
+        });
+
 
         tabSheet.addSelectedTabChangeListener(event -> {
             if (PersistenceHelper.isNew(getItem())) {
@@ -233,8 +289,8 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
 
         competencePosTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroup", getItem().getGroup()));
         goalsTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroup", getItem().getGroup()));
-        goalsTableCreate.setWindowParams(ParamsMap.of("goalsDs",goalsDs));
-        goalsTableEdit.setWindowParams(ParamsMap.of("goalsDs",goalsDs));
+        goalsTableCreate.setWindowParams(ParamsMap.of("goalsDs", goalsDs));
+        goalsTableEdit.setWindowParams(ParamsMap.of("goalsDs", goalsDs));
 //        flightTimeRateTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroupName", getItem().getGroup()));
 //        flySurChargeTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroupId", getItem().getGroup()));
 
@@ -275,7 +331,7 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
         if (positionDs.getItem().getGradeGroup() != null && positionDs.getItem().getGradeRule() != null) {
             refreshGradeRuleValue();
         }
-        harmFulConditionsTableCreate.setInitialValues(ParamsMap.of("positionGroup",getEditedEntity().getGroup()));
+        harmFulConditionsTableCreate.setInitialValues(ParamsMap.of("positionGroup", getEditedEntity().getGroup()));
     }
 
     @Override
@@ -782,6 +838,11 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     }
 
     public void windowCommit() {
+        if (jobDescriptionChanged) {
+            positionDutiesTextArea.setRequired(true);
+        } else {
+            getWindow().remove(getComponent("positionDutiesTextArea"));
+        }
         if (isNewItem) {
             if (validateAll()) {
                 commit();
@@ -842,5 +903,30 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
         AbstractEditor<HierarchyElementExt> hierarchyElementAbstractEditor = openEditor(item, openType, params);
         hierarchyElementAbstractEditor.addCloseListener(actionId -> hierarchyElementsDs.refresh());
         return hierarchyElementAbstractEditor;
+    }
+
+    public void jobDescriptionSave() {
+        if (jobDescriptionChanged) {
+            if (positionDutiesTextArea.getValue() == null) {
+                showNotification(getMessage("inputPositionDuties"), NotificationType.TRAY);
+                return;
+            } else {
+                dataManager.commit(jobDescription);
+            }
+        }
+        close("commit", true);
+    }
+
+    public void jobDescriptionCancel() {
+        close("cancel");
+    }
+
+    public void createRequest() {
+        JobDescriptionRequest jobDescriptionRequest = metadata.create(JobDescriptionRequest.class);
+        jobDescriptionRequest.setPositionGroup(getItem().getGroup());
+        JobDescriptionRequestEdit jobDescriptionRequestEdit = screens.create(JobDescriptionRequestEdit.class, OpenMode.THIS_TAB
+                , new MapScreenOptions(ParamsMap.of("from", "base$Position.edit")));
+        jobDescriptionRequestEdit.setEntityToEdit(jobDescriptionRequest);
+        jobDescriptionRequestEdit.show();
     }
 }
