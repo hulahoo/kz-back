@@ -679,5 +679,6 @@
         <class>kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicatorType</class>
         <class>kz.uco.tsadv.modules.personal.model.DicIncentiveIndicatorScoreSetting</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicIncentiveResultStatus</class>
+        <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult</class>
     </persistence-unit>
 </persistence>
