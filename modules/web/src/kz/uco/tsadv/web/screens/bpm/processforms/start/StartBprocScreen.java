@@ -145,7 +145,7 @@ public class StartBprocScreen extends Screen {
         List<NotPersisitBprocActors> notPersisitBprocActors = startBprocService.getNotPersisitBprocActors(
                 startBprocParams.getEmployeePersonGroupId(),
                 bpmRolesDefinerDc.getItem(),
-                false);
+                false, startBprocParams.getDefaultApprovers());
         notPersisitBprocActorsDc.setItems(notPersisitBprocActors);
     }
 
