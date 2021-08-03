@@ -166,7 +166,7 @@ public class StartBprocScreen extends Screen {
                 .addProcessVariable("approveNotificationTemplateCode", approveNotificationTemplateCode)
                 .addProcessVariable("initiatorNotificationTemplateCode", initiatorNotificationTemplateCode);
 
-        Map<String, Object> params = startBprocParams.getParams();
+        Map<String, List<TsadvUser>> params = startBprocParams.getDefaultApprovers();
         if (params != null && !params.isEmpty()) params.forEach(processStarting::addProcessVariable);
 
         processStarting.start();
