@@ -18310,6 +18310,9 @@ create table TSADV_DIC_INCENTIVE_INDICATORS (
     IS_DEFAULT boolean not null,
     ORDER_ integer,
     --
+    GENERAL boolean not null,
+    TYPE_ID uuid not null,
+    --
     primary key (ID)
 )^
 -- end TSADV_DIC_INCENTIVE_INDICATORS
