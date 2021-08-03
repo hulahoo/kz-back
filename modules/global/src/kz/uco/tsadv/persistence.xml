@@ -676,5 +676,6 @@
         <class>kz.uco.tsadv.modules.personal.model.LearningResults</class>
         <class>kz.uco.tsadv.modules.personal.model.LearningResultsPerSubject</class>
         <class>kz.uco.tsadv.modules.personal.model.Scholarship</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicatorType</class>
     </persistence-unit>
 </persistence>
