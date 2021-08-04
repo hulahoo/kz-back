@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
+import kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators;
 import kz.uco.tsadv.modules.personal.dictionary.DicIncentiveResultStatus;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 
@@ -29,10 +30,10 @@ public class OrganizationIncentiveMonthResult extends StandardEntity {
     @NotNull
     private OrganizationGroupExt department;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "INDICATOR_ID")
-    private OrganizationIncentiveIndicators indicator;
+    @NotNull
+    private DicIncentiveIndicators indicator;
 
     @NotNull
     @Column(name = "WEIGHT", nullable = false)
@@ -62,6 +63,14 @@ public class OrganizationIncentiveMonthResult extends StandardEntity {
     @NotNull
     @Column(name = "COMMENT_", nullable = false, length = 2500)
     private String comment;
+
+    public void setIndicator(DicIncentiveIndicators indicator) {
+        this.indicator = indicator;
+    }
+
+    public DicIncentiveIndicators getIndicator() {
+        return indicator;
+    }
 
     public String getComment() {
         return comment;
@@ -117,14 +126,6 @@ public class OrganizationIncentiveMonthResult extends StandardEntity {
 
     public void setWeight(Double weight) {
         this.weight = weight;
-    }
-
-    public OrganizationIncentiveIndicators getIndicator() {
-        return indicator;
-    }
-
-    public void setIndicator(OrganizationIncentiveIndicators indicator) {
-        this.indicator = indicator;
     }
 
     public OrganizationGroupExt getDepartment() {
