@@ -23823,6 +23823,9 @@
         <property name="responsiblePosition" view="_base">
             <property name="list" view="_local"/>
         </property>
+        <property name="approvingPosition" view="_local">
+            <property name="list" view="_local"/>
+        </property>
 
     </view>
     <view entity="tsadv_OrganizationIncentiveResult" name="organizationIncentiveResults-edit-view" extends="_local">

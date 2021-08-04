@@ -139,7 +139,8 @@
                                    <column id="indicatorType"/>
                                    <column id="indicator"/>
                                    <column id="weight"/>
-                                   <column id="responsiblePosition.position.positionName"/>
+                                   <column id="responsiblePosition.position.positionName" caption="msg://responsiblePosition"/>
+                                   <column id="approvingPosition.position.positionName" caption="msg://approvingPosition"/>
                                </columns>
                            </table>
                        </tab>
