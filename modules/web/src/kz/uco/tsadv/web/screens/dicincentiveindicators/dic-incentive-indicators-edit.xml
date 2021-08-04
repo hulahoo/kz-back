@@ -1,46 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://editorCaption"
-        focusComponent="form"
+        focusComponent="mainTabSheet"
         messagesPack="kz.uco.tsadv.web.screens.dicincentiveindicators">
     <data>
         <instance id="dicIncentiveIndicatorsDc"
                   class="kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators"
-                  view="_local">
+                  view="dicIncentiveIndicators.edit">
             <loader/>
+            <collection id="dicIncentiveIndicatorScoreSettingsDc" property="scoreSettings"/>
         </instance>
     </data>
     <dialogMode height="AUTO"
                 width="AUTO"
-                modal="true"
-                forceDialog="true"/>
-    <layout expand="scrollBox" spacing="true">
-        <scrollBox id="scrollBox" spacing="true">
-            <form id="form" dataContainer="dicIncentiveIndicatorsDc">
-                <column width="250px">
-                    <textField id="legacyIdField" property="legacyId"/>
-                    <textField id="organizationBinField" property="organizationBin"/>
-                    <textField id="integrationUserLoginField" property="integrationUserLogin"/>
-                    <textField id="langValue1Field" property="langValue1"/>
-                    <textField id="description1Field" property="description1"/>
-                    <textField id="langValue2Field" property="langValue2"/>
-                    <textField id="description2Field" property="description2"/>
-                    <textField id="langValue3Field" property="langValue3"/>
-                    <textField id="description3Field" property="description3"/>
-                    <textField id="langValue4Field" property="langValue4"/>
-                    <textField id="description4Field" property="description4"/>
-                    <textField id="langValue5Field" property="langValue5"/>
-                    <textField id="description5Field" property="description5"/>
-                    <dateField id="startDateField" property="startDate"/>
-                    <dateField id="endDateField" property="endDate"/>
-                    <textField id="codeField" property="code"/>
-                    <checkBox id="isSystemRecordField" property="isSystemRecord"/>
-                    <checkBox id="activeField" property="active"/>
-                    <checkBox id="isDefaultField" property="isDefault"/>
-                    <textField id="orderField" property="order"/>
-                </column>
-            </form>
-        </scrollBox>
+                modal="true"/>
+    <layout expand="mainTabSheet" spacing="true">
+        <tabSheet id="mainTabSheet">
+            <tab id="mainInfoTab"
+                 caption="msg://mainInformation"
+                 spacing="true"
+                 margin="true,false,false,false">
+                <form dataContainer="dicIncentiveIndicatorsDc" >
+                    <column>
+                        <textField property="langValue1"/>
+                        <textField property="langValue3"/>
+                        <checkBox property="general"/>
+                        <lookupField property="type"/>
+                        <dateField property="startDate"/>
+                        <dateField property="endDate"/>
+                    </column>
+                </form>
+            </tab>
+            <tab id="scoreSettingsTab"
+                 caption="msg://scoreSettings"
+                 spacing="true"
+                 expand="dicIncentiveIndicatorScoreSettingsTable"
+                 margin="true,false,false,false">
+                <table id="dicIncentiveIndicatorScoreSettingsTable"
+                            dataContainer="dicIncentiveIndicatorScoreSettingsDc"
+                            width="100%"
+                            height="100%">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <buttonsPanel alwaysVisible="true">
+                        <button id="dicIncentiveIndicatorScoreSettingsTableCreateBtn"
+                                action="dicIncentiveIndicatorScoreSettingsTable.create"/>
+                        <button id="dicIncentiveIndicatorScoreSettingsTableEditBtn"
+                                action="dicIncentiveIndicatorScoreSettingsTable.edit"/>
+                        <button id="dicIncentiveIndicatorScoreSettingsTableRemoveBtn"
+                                action="dicIncentiveIndicatorScoreSettingsTable.remove"/>
+                    </buttonsPanel>
+                    <columns>
+                        <column id="minPercent"/>
+                        <column id="maxPercent"/>
+                        <column id="totalScore"/>
+                    </columns>
+                </table>
+            </tab>
+        </tabSheet>
         <hbox id="editActions" spacing="true">
             <button action="windowCommitAndClose"/>
             <button action="windowClose"/>

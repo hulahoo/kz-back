@@ -24000,4 +24000,8 @@
     <view entity="tsadv_DicIncentiveIndicators" name="dicIncentiveIndicators.browse" extends="_local">
         <property name="type" view="_local"/>
     </view>
+    <view entity="tsadv_DicIncentiveIndicators" name="dicIncentiveIndicators.edit" extends="_local">
+        <property name="type" view="_local"/>
+        <property name="scoreSettings" view="_local"/>
+    </view>
 </views>
