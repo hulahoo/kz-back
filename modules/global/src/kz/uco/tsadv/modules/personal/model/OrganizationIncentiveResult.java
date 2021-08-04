@@ -19,6 +19,10 @@ public class OrganizationIncentiveResult extends StandardEntity {
     @JoinColumn(name = "ORGANIZATION_GROUP_ID")
     protected OrganizationGroupExt organizationGroup;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORGANIZATION_INCENTIVE_MONTH_RESULT_ID")
+    private OrganizationIncentiveMonthResult organizationIncentiveMonthResult;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "PERIOD_DATE")
     protected Date periodDate;
@@ -36,8 +40,27 @@ public class OrganizationIncentiveResult extends StandardEntity {
     @Column(name = "WEIGHT")
     protected Double weight;
 
+    @Column(name = "PREMIUM_PERCENT")
+    private Double premiumPercent;
+
     @Column(name = "RESULT_")
     protected Double result;
+
+    public OrganizationIncentiveMonthResult getOrganizationIncentiveMonthResult() {
+        return organizationIncentiveMonthResult;
+    }
+
+    public void setOrganizationIncentiveMonthResult(OrganizationIncentiveMonthResult organizationIncentiveMonthResult) {
+        this.organizationIncentiveMonthResult = organizationIncentiveMonthResult;
+    }
+
+    public Double getPremiumPercent() {
+        return premiumPercent;
+    }
+
+    public void setPremiumPercent(Double premiumPercent) {
+        this.premiumPercent = premiumPercent;
+    }
 
     public Double getResult() {
         return result;

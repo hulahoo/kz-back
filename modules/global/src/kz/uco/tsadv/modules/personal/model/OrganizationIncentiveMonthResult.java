@@ -7,6 +7,7 @@ import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "TSADV_ORGANIZATION_INCENTIVE_MONTH_RESULT")
 @Entity(name = "tsadv_OrganizationIncentiveMonthResult")
@@ -23,12 +24,23 @@ public class OrganizationIncentiveMonthResult extends StandardEntity {
     @NotNull
     private OrganizationGroupExt department;
 
+    @OneToMany(mappedBy = "organizationIncentiveMonthResult")
+    private List<OrganizationIncentiveResult> incentiveResults;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STATUS_ID")
     private DicIncentiveResultStatus status;
 
     @Column(name = "COMMENT_", length = 2500)
     private String comment;
+
+    public List<OrganizationIncentiveResult> getIncentiveResults() {
+        return incentiveResults;
+    }
+
+    public void setIncentiveResults(List<OrganizationIncentiveResult> incentiveResults) {
+        this.incentiveResults = incentiveResults;
+    }
 
     public String getComment() {
         return comment;
