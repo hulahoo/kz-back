@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://organizationIncentiveMonthResultBrowse.caption"
+        focusComponent="organizationIncentiveMonthResultsTable"
+        messagesPack="kz.uco.tsadv.web.screens.organizationincentivemonthresult">
+    <data readOnly="true">
+        <collection id="organizationIncentiveMonthResultsDc"
+                    class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult"
+                    view="organizationIncentiveMonthResult.browse">
+            <loader id="organizationIncentiveMonthResultsDl">
+                <query>
+                    <![CDATA[select e from tsadv_OrganizationIncentiveMonthResult e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="organizationIncentiveMonthResultsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="organizationIncentiveMonthResultsTable"
+                dataLoader="organizationIncentiveMonthResultsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="organizationIncentiveMonthResultsTable"
+                    width="100%"
+                    dataContainer="organizationIncentiveMonthResultsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="company"/>
+                <column id="period"/>
+                <column id="department"/>
+                <column id="indicator"/>
+                <column id="weight"/>
+                <column id="plan"/>
+                <column id="fact"/>
+                <column id="premiumPercent"/>
+                <column id="totalPremiumPercent"/>
+                <column id="status"/>
+                <column id="comment"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="organizationIncentiveMonthResultsTable.create"/>
+                <button id="editBtn" action="organizationIncentiveMonthResultsTable.edit"/>
+                <button id="removeBtn" action="organizationIncentiveMonthResultsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

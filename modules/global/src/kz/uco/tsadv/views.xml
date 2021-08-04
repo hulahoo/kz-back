@@ -24007,4 +24007,17 @@
         <property name="type" view="_local"/>
         <property name="scoreSettings" view="_local"/>
     </view>
+    <view entity="tsadv_OrganizationIncentiveMonthResult" name="organizationIncentiveMonthResult.browse"
+          extends="_local">
+        <property name="company" view="_minimal"/>
+        <property name="department" view="_minimal"/>
+        <property name="indicator" view="_minimal"/>
+        <property name="status" view="_local"/>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveMonthResult" name="organizationIncentiveMonthResult.edit" extends="_local">
+        <property name="company" view="_minimal"/>
+        <property name="department" view="_minimal"/>
+        <property name="indicator" view="_minimal"/>
+        <property name="status" view="_local"/>
+    </view>
 </views>

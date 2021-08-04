@@ -197,6 +197,9 @@
                   openType="NEW_TAB">
                 <param name="ELEMENT_TYPE" value="POSITION"/>
             </item>
+            <item id="organizationIncentiveMonthResults"
+                  screen="tsadv_OrganizationIncentiveMonthResult.browse"
+                  caption="mainMsg://menu_config.tsadv_OrganizationIncentiveMonthResult.browse"/>
         </menu>
         <menu id="hrCompetences"
               icon="font-icon:BRIEFCASE">
