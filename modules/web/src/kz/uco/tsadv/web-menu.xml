@@ -182,6 +182,9 @@
                   screen="tsadv$GradeRule.browse"/>
         </menu>
         <menu id="incentive">
+            <item id="indicators"
+                  screen="tsadv_DicIncentiveIndicators.browse"
+                  caption="mainMsg://incentiveIndicators"/>
             <item id="organizationIncentives"
                   screen="tsadv_IncentiveBrowse"
                   caption="mainMsg://org.structure"

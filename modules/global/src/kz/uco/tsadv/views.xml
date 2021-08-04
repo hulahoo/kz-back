@@ -23997,4 +23997,7 @@
     <view entity="tsadv_Scholarship" name="scholarship.edit" extends="_local">
         <property name="granteesAgreement" view="_minimal"/>
     </view>
+    <view entity="tsadv_DicIncentiveIndicators" name="dicIncentiveIndicators.browse" extends="_local">
+        <property name="type" view="_local"/>
+    </view>
 </views>
