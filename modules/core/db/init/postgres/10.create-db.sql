@@ -18351,11 +18351,13 @@ create table TSADV_ORGANIZATION_INCENTIVE_RESULT (
     DELETED_BY varchar(50),
     --
     ORGANIZATION_GROUP_ID uuid not null,
+    ORGANIZATION_INCENTIVE_MONTH_RESULT_ID uuid,
     PERIOD_DATE date,
     INDICATOR_ID uuid,
     PLAN_ decimal(19, 2),
     FACT decimal(19, 2),
     WEIGHT double precision,
+    PREMIUM_PERCENT double precision,
     RESULT_ double precision,
     --
     primary key (ID)
