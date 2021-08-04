@@ -17,12 +17,6 @@
         <scrollBox id="scrollBox" spacing="true">
             <form id="form" dataContainer="organizationIncentiveMonthResultDc">
                 <column width="350px">
-                    <pickerField id="companyField" property="company">
-                        <actions>
-                            <action id="lookup" type="picker_lookup"/>
-                            <action id="clear" type="picker_clear"/>
-                        </actions>
-                    </pickerField>
                     <dateField id="periodField" property="period"/>
                     <pickerField id="departmentField" property="department">
                         <actions>
@@ -30,17 +24,6 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
-                    <pickerField id="indicatorField" property="indicator">
-                        <actions>
-                            <action id="lookup" type="picker_lookup"/>
-                            <action id="clear" type="picker_clear"/>
-                        </actions>
-                    </pickerField>
-                    <textField id="weightField" property="weight"/>
-                    <textField id="planField" property="plan"/>
-                    <textField id="factField" property="fact"/>
-                    <textField id="premiumPercentField" property="premiumPercent"/>
-                    <textField id="totalPremiumPercentField" property="totalPremiumPercent"/>
                     <pickerField id="statusField" property="status">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>
