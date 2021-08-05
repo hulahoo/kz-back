@@ -18790,6 +18790,7 @@ create table TSADV_ORGANIZATION_INCENTIVE_MONTH_RESULT (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
+    COMPANY_ID uuid not null,
     PERIOD_ date not null,
     DEPARTMENT_ID uuid not null,
     STATUS_ID uuid,
