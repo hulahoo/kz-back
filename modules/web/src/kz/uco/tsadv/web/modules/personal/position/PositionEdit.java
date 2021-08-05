@@ -92,8 +92,8 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     protected PickerField costCenterField;
     @Named("fieldGroup.extra")
     protected TextField extraField;
-    @Inject
-    protected TabSheet jobReqTabSheet;
+//    @Inject
+//    protected TabSheet jobReqTabSheet;
     @Inject
     protected TabSheet jobDescTabSheet;
     //    protected OrgAnalytics orgAnalyticsNew = null;
@@ -269,12 +269,12 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
             }
         });
 
-        jobReqTabSheet.addSelectedTabChangeListener(event -> {
-            selectLangTab(jobDescTabSheet, jobReqTabSheet.getSelectedTab().getName().replaceAll("[^0-9]", ""), true);
-        });
-        jobDescTabSheet.addSelectedTabChangeListener(event -> {
-            selectLangTab(jobReqTabSheet, jobDescTabSheet.getSelectedTab().getName().replaceAll("[^0-9]", ""), false);
-        });
+//        jobReqTabSheet.addSelectedTabChangeListener(event -> {
+//            selectLangTab(jobDescTabSheet, jobReqTabSheet.getSelectedTab().getName().replaceAll("[^0-9]", ""), true);
+//        });
+//        jobDescTabSheet.addSelectedTabChangeListener(event -> {
+//            selectLangTab(jobReqTabSheet, jobDescTabSheet.getSelectedTab().getName().replaceAll("[^0-9]", ""), false);
+//        });
 
         positionDs.addItemPropertyChangeListener((e) -> {
             if (e.getProperty().equals("gradeGroup") || e.getProperty().equals("gradeRule")) {
