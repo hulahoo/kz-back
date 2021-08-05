@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_ORGANIZATION_INCENTIVE_RESULT")
 @Entity(name = "tsadv_OrganizationIncentiveResult")
 public class OrganizationIncentiveResult extends StandardEntity {
