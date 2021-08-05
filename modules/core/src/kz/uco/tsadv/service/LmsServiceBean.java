@@ -18,6 +18,7 @@ import com.haulmont.reports.entity.Report;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.core.notification.SendingNotification;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.entity.Book;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.lms.factory.*;
@@ -76,6 +77,8 @@ public class LmsServiceBean implements LmsService {
 
     @Inject
     protected FileStorageAPI fileStorageAPI;
+    @Inject
+    protected ExtAppPropertiesConfig extAppPropertiesConfig;
 
     @Inject
     private PasswordEncryption passwordEncryption;
@@ -773,7 +776,14 @@ public class LmsServiceBean implements LmsService {
                 }
             });
             feedbackPersonAnswer.setSumScore(details.stream().mapToInt(CourseFeedbackPersonAnswerDetail::getScore).mapToLong(v -> (long) v).reduce(0L, Long::sum));
-            feedbackPersonAnswer.setAvgScore(BigDecimal.valueOf(feedbackPersonAnswer.getSumScore()).divide(BigDecimal.valueOf(questions.size()), 2, RoundingMode.DOWN).doubleValue());
+            UUID defaultQuestionForFeedback = extAppPropertiesConfig.getDefaultQuestionForFeedback();
+            long count = questions.size();
+            if (defaultQuestionForFeedback != null) {
+                count = questions.stream().filter(learningFeedbackQuestion ->
+                        !defaultQuestionForFeedback.equals(learningFeedbackQuestion.getId())).count();
+
+            }
+            feedbackPersonAnswer.setAvgScore(BigDecimal.valueOf(feedbackPersonAnswer.getSumScore()).divide(BigDecimal.valueOf(count), 2, RoundingMode.DOWN).doubleValue());
 
             cc.addInstanceToCommit(feedbackPersonAnswer);
             details.forEach(cc::addInstanceToCommit);
