@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import kz.uco.base.entity.dictionary.DicCompany;
+import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult;
 import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult;
@@ -36,14 +37,15 @@ public class OrganizationIncentiveResultListener {
         //NOTIFICAION CONTENT: URL TO APPROVE: frontConfig.getFrontAppUrl() + "/incentive-approve/"+monthResul.id;
 
         //here will be conflict because OrganizationIncentiveResultListener implemented in KAZMIN-687
-        if(event.getType() == EntityChangedEvent.Type.CREATED){
+        if (event.getType() == EntityChangedEvent.Type.CREATED) {
             OrganizationIncentiveResult incentiveResult = loadEventEntity(event);
             OrganizationIncentiveMonthResult incentiveMonthResult = findOrganizationIncentiveMonthResult(
                     incentiveResult.getOrganizationGroup().getCompany(),
+                    incentiveResult.getOrganizationGroup(),
                     incentiveResult.getPeriodDate()
             );
 
-            if(incentiveMonthResult == null){
+            if (incentiveMonthResult == null) {
                 incentiveMonthResult = metadata.create(OrganizationIncentiveMonthResult.class);
                 incentiveMonthResult.setId(UUID.randomUUID());
                 incentiveMonthResult.setCompany(incentiveResult.getOrganizationGroup().getCompany());
@@ -52,50 +54,46 @@ public class OrganizationIncentiveResultListener {
                 incentiveMonthResult.setDepartment(incentiveResult.getOrganizationGroup());
 
                 transactionalDataManager.save(incentiveMonthResult);
-
-                incentiveResult.setOrganizationIncentiveMonthResult(incentiveMonthResult);
-                transactionalDataManager.save(incentiveResult);
-            }else {
-                incentiveResult.setOrganizationIncentiveMonthResult(incentiveMonthResult);
-                transactionalDataManager.save(incentiveResult);
             }
+
+            incentiveResult.setOrganizationIncentiveMonthResult(incentiveMonthResult);
+            transactionalDataManager.save(incentiveResult);
         }
 
     }
 
-    protected OrganizationIncentiveResult loadEventEntity(EntityChangedEvent<OrganizationIncentiveResult, UUID> event){
+    protected OrganizationIncentiveResult loadEventEntity(EntityChangedEvent<OrganizationIncentiveResult, UUID> event) {
         return transactionalDataManager
                 .load(event.getEntityId())
                 .view("organizationIncentiveResults-for-incentiveMonthResult")
                 .one();
     }
 
-    protected OrganizationIncentiveMonthResult findOrganizationIncentiveMonthResult(DicCompany company, Date period){
+    protected OrganizationIncentiveMonthResult findOrganizationIncentiveMonthResult(DicCompany company, OrganizationGroupExt organizationGroupExt, Date period) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(period);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         month++; // increment month - because java.util.Calendar bases on zero-index
 
-
         String query = " select e from tsadv_OrganizationIncentiveMonthResult e " +
-                       " where e.company = :company " +
-                       " and EXTRACT(YEAR from e.period) = :year " +
-                       " and EXTRACT(MONTH from e.period) = :month ";
+                " where e.company = :company " +
+                " and e.DEPARTMENT_ID = :organizationGroupId " +
+                " and EXTRACT(YEAR from e.period) = :year " +
+                " and EXTRACT(MONTH from e.period) = :month ";
 
-        OrganizationIncentiveMonthResult organizationIncentiveMonthResult = transactionalDataManager
+        return transactionalDataManager
                 .load(LoadContext.create(OrganizationIncentiveMonthResult.class)
                         .setQuery(
                                 new LoadContext.Query(query)
                                         .setParameters(ParamsMap.of(
-                                                "company",company,
-                                                "year",year,
-                                                "month",month)
+                                                "company", company,
+                                                "organizationGroupId", organizationGroupExt.getId(),
+                                                "year", year,
+                                                "month", month)
                                         )
                         )
                 );
-
-        return organizationIncentiveMonthResult;
     }
 
     protected Date formatDateToFirstDayOfMonth(Date date){

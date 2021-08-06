@@ -536,10 +536,20 @@
     </view>
     <view entity="tsadv_OrganizationIncentiveIndicators" name="portal-organizationIncentiveIndicators-view"
           extends="_local">
-        <property name="indicator" view="_minimal"/>
+        <property name="indicator" view="_minimal">
+            <property name="scoreSettings" view="_local"/>
+        </property>
     </view>
     <view entity="tsadv_OrganizationIncentiveResult" name="portal-organizationIncentiveResult-view"
           extends="_local">
-        <property name="indicator" view="_minimal"/>
+        <property name="indicator" view="_minimal">
+            <property name="scoreSettings" view="_local"/>
+        </property>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveMonthResult" name="portal-organizationIncentiveMonthResult-view"
+          extends="_local">
+        <property name="department" view="_minimal"/>
+        <property name="incentiveResults" view="portal-organizationIncentiveResult-view"/>
+        <property name="status" view="_local"/>
     </view>
 </views>
