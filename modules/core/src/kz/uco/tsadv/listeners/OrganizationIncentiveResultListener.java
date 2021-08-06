@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import kz.uco.base.entity.dictionary.DicCompany;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult;
 import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult;
 import org.springframework.stereotype.Component;
@@ -25,8 +26,15 @@ public class OrganizationIncentiveResultListener {
     @Inject
     private Metadata metadata;
 
+
+    @Inject
+    private FrontConfig frontConfig;
+
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<OrganizationIncentiveResult, UUID> event) {
+
+        //NOTIFICAION CONTENT: URL TO APPROVE: frontConfig.getFrontAppUrl() + "/incentive-approve/"+monthResul.id;
+
         //here will be conflict because OrganizationIncentiveResultListener implemented in KAZMIN-687
         if(event.getType() == EntityChangedEvent.Type.CREATED){
             OrganizationIncentiveResult incentiveResult = loadEventEntity(event);
