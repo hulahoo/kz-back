@@ -7,13 +7,17 @@ import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.security.entity.Role;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.entity.shared.PersonGroup;
+import kz.uco.base.service.NotificationSenderAPIService;
+import kz.uco.tsadv.config.FrontConfig;
+import kz.uco.tsadv.entity.dbview.ActivityTask;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service(UserService.NAME)
 public class UserServiceBean implements UserService {
@@ -23,6 +27,10 @@ public class UserServiceBean implements UserService {
 
     @Inject
     private UserSessionSource userSessionSource;
+    @Inject
+    private NotificationSenderAPIService notificationSenderAPIService;
+    @Inject
+    private FrontConfig frontConfig;
 
     @Override
     public boolean hasRole(String roleName) {
@@ -121,5 +129,80 @@ public class UserServiceBean implements UserService {
         return userSessionSource.getUserSession().getUser();
     }
 
+    @Override
+    public void sendNotifyByNotClosedTasks() {
+        List<TsadvUser> tsadvUserList = dataManager.load(TsadvUser.class)
+                .query("select distinct a.assignedUser from tsadv$ActivityTask e " +
+                        " join e.activity a " +
+                        " where a.status <> '20' " +
+                        " and a.type.code <> 'NOTIFICATION'")
+                .view("user.edit")
+                .list();
+        for (TsadvUser tsadvUser : tsadvUserList) {
+            List<ActivityTask> activityTasks = dataManager.load(ActivityTask.class)
+                    .query("select distinct e from tsadv$ActivityTask e " +
+                            " join e.activity a " +
+                            " where a.status <> '20' " +
+                            " and a.type.code <> 'NOTIFICATION' " +
+                            " and a.assignedUser.id = :tsadvUser")
+                    .parameter("tsadvUser", tsadvUser.getId())
+                    .view("activityTask.view")
+                    .list();
+            String tableRu = "<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:500px\">\n" +
+                    "    <tbody>\n" +
+                    "    <tr>\n" +
+                    "        <td>Код заявки</td>\n" +
+                    "        <td>Процесс</td>\n" +
+                    "        <td>Дата заявки</td>\n" +
+                    "    </tr>\n";
+            String tableEn = "<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:500px\">\n" +
+                    "    <tbody>\n" +
+                    "    <tr>\n" +
+                    "        <td>Request number</td>\n" +
+                    "        <td>Process</td>\n" +
+                    "        <td>Request date</td>\n" +
+                    "    </tr>\n";
+            StringBuilder stringBuilderRu = new StringBuilder();
+            StringBuilder stringBuilderEn = new StringBuilder();
+            String endTable = "    </tbody>\n" +
+                    "</table>";
+            activityTasks.forEach(activityTask -> {
+                stringBuilderRu.append("    <tr>\n" +
+                        "        <td>" +
+                        activityTask.getOrderCode() +
+                        "        </td>\n" +
+                        "        <td>" +
+                        activityTask.getProcessRu() +
+                        "        </td>\n" +
+                        "        <td>" +
+                        getRequestDate(activityTask.getOrderDate()) +
+                        "         </td>\n" +
+                        "    </tr>\n");
+                stringBuilderEn.append("    <tr>\n" +
+                        "        <td>" +
+                        activityTask.getOrderCode() +
+                        "        </td>\n" +
+                        "        <td>" +
+                        activityTask.getProcessEn() +
+                        "        </td>\n" +
+                        "        <td>" +
+                        getRequestDate(activityTask.getOrderDate()) +
+                        "         </td>\n" +
+                        "    </tr>\n");
+            });
+            Map<String, Object> maps = new HashMap<>();
+            String link = "<a href=\"" + frontConfig.getFrontAppUrl()
+                    + "\" target=\"_blank\">%s " + "</a>";
+            maps.put("tableRu", tableRu + stringBuilderRu + endTable);
+            maps.put("tableEn", tableEn + stringBuilderEn + endTable);
+            maps.put("linkRu", String.format(link, "ссылке"));
+            maps.put("linkEn", String.format(link, "link"));
+            notificationSenderAPIService.sendParametrizedNotification("notClosedTasks", tsadvUser, maps);
+        }
+    }
 
+    protected String getRequestDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        return date != null ? formatter.format(date) : "";
+    }
 }

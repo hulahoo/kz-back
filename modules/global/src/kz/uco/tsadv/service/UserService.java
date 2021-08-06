@@ -25,4 +25,6 @@ public interface UserService {
     PersonGroupExt getPersonGroup(User user);
 
     PersonGroupExt getPersonGroup(User user, String view);
+
+    void sendNotifyByNotClosedTasks();
 }

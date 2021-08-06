@@ -7279,6 +7279,7 @@ create table TSADV_COURSE_REVIEW (
     PERSON_GROUP_ID uuid not null,
     RATE double precision,
     TEXT varchar(2000) not null,
+    FROM_FEEDBACK boolean not null,
     --
     primary key (ID)
 )^
