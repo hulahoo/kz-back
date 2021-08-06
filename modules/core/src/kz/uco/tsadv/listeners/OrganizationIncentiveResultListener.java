@@ -39,7 +39,8 @@ public class OrganizationIncentiveResultListener {
                 incentiveMonthResult = metadata.create(OrganizationIncentiveMonthResult.class);
                 incentiveMonthResult.setId(UUID.randomUUID());
                 incentiveMonthResult.setCompany(incentiveResult.getOrganizationGroup().getCompany());
-                incentiveMonthResult.setPeriod(incentiveResult.getPeriodDate());
+                Date incentiveMonthResultPeriod = formatDateToFirstDayOfMonth(incentiveResult.getPeriodDate());
+                incentiveMonthResult.setPeriod(incentiveMonthResultPeriod);
                 incentiveMonthResult.setDepartment(incentiveResult.getOrganizationGroup());
 
                 transactionalDataManager.save(incentiveMonthResult);
@@ -87,5 +88,13 @@ public class OrganizationIncentiveResultListener {
                 );
 
         return organizationIncentiveMonthResult;
+    }
+
+    protected Date formatDateToFirstDayOfMonth(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_MONTH,1);
+
+        return calendar.getTime();
     }
 }
