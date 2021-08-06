@@ -25,7 +25,7 @@
                         <textField property="langValue1"/>
                         <textField property="langValue3"/>
                         <checkBox property="general"/>
-                        <lookupField property="type"/>
+                        <pickerField property="type"/>
                         <dateField property="startDate"/>
                         <dateField property="endDate"/>
                     </column>

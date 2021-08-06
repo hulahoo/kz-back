@@ -14,8 +14,8 @@ AS SELECT ir.id,
     ir.weight,
     ir.plan_,
     ir.fact,
-    ir.premium_percent,
-    ir.result_ AS total_premium_percent,
+    ir.result_ AS premium_percent,
+    ir.premium_percent AS total_premium_percent,
     mr.status_id,
     mr.comment_
    FROM tsadv_organization_incentive_month_result mr

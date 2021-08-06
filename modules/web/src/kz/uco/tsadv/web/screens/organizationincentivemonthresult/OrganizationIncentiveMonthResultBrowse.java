@@ -48,7 +48,10 @@ public class OrganizationIncentiveMonthResultBrowse extends StandardLookup<Organ
     protected class AggStrategy implements AggregationStrategy<DicIncentiveResultStatus,String>{
         @Override
         public String aggregate(Collection<DicIncentiveResultStatus> propertyValues) {
-            return propertyValues.stream().findAny().get().getLangValue();
+            if(propertyValues != null && !propertyValues.isEmpty()) {
+                return propertyValues.stream().findAny().get().getLangValue();
+            }
+            return "";
         }
 
         @Override
