@@ -6,11 +6,11 @@
         messagesPack="kz.uco.tsadv.web.screens.organizationincentivemonthresult">
     <data readOnly="true">
         <collection id="organizationIncentiveMonthResultsDc"
-                    class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult"
-                    view="organizationIncentiveMonthResult.browse">
+                    class="kz.uco.tsadv.entity.dbview.OrganizationIncentiveMonthResultView"
+                    view="organizationIncentiveMonthResultView.browse">
             <loader id="organizationIncentiveMonthResultsDl">
                 <query>
-                    <![CDATA[select e from tsadv_OrganizationIncentiveMonthResult e]]>
+                    <![CDATA[select e from tsadv_OrganizationIncentiveMonthResultView e]]>
                 </query>
             </loader>
         </collection>
@@ -33,22 +33,21 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="period"/>
+                <group>
+                    <column id="company"/>
+                    <column id="period"/>
+                </group>
                 <column id="department"/>
+                <column id="indicator"/>
+                <column id="weight"/>
+                <column id="plan"/>
+                <column id="fact"/>
+                <column id="premiumPercent"/>
+                <column id="totalPremiumPercent"/>
                 <column id="status"/>
                 <column id="comment"/>
             </columns>
             <rowsCount/>
-            <buttonsPanel id="buttonsPanel"
-                          alwaysVisible="true">
-                <button id="createBtn" action="organizationIncentiveMonthResultsTable.create"/>
-                <button id="editBtn" action="organizationIncentiveMonthResultsTable.edit"/>
-                <button id="removeBtn" action="organizationIncentiveMonthResultsTable.remove"/>
-            </buttonsPanel>
         </groupTable>
-        <hbox id="lookupActions" spacing="true" visible="false">
-            <button action="lookupSelectAction"/>
-            <button action="lookupCancelAction"/>
-        </hbox>
     </layout>
 </window>
