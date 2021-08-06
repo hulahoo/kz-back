@@ -8,7 +8,9 @@
                     class="kz.uco.tsadv.modules.administration.PortalMenuCustomization">
             <view extends="_local">
                 <property name="parent" view="_minimal"/>
+                <property name="companies" view="_local"/>
             </view>
+            <collection id="companiesDc" property="companies"/>
             <loader id="portalMenuCustomizationsDl">
                 <query>
                     <![CDATA[select e from tsadv_PortalMenuCustomization e where e.menuType = 'P' ]]>
@@ -35,9 +37,15 @@
             </treeTable>
 
             <vbox margin="false;false;false;true" height="100%">
-                <groupBox id="screensEditPane" height="100%"
+                <groupBox id="screensEditPane"
+                          expand="selectedScreenPanel"
+                          height="100%"
                           caption="msg://com.haulmont.cuba.gui.app.security.role.edit/permissions">
-                    <vbox id="selectedScreenPanel" width="100%" visible="false" spacing="true">
+                    <vbox id="selectedScreenPanel"
+                          expand="companiesTable"
+                          width="100%"
+                          visible="false"
+                          spacing="true">
                         <label id="menuName"
                                stylename="h2"
                                property="name"
@@ -52,6 +60,21 @@
                                      dataContainer="portalMenuCustomizationsDc"
                                      property="portalAvailability"
                                      caption="msg://kz.uco.tsadv.modules.administration/PortalMenuCustomization.portalAvailability"/>
+
+                        <table id="companiesTable" dataContainer="companiesDc" width="100%">
+                            <actions>
+                                <action id="add" type="add"/>
+                                <action id="exclude" type="exclude"/>
+                            </actions>
+                            <columns>
+                                <column id="langValue" caption="msg://kz.uco.tsadv.modules.administration/PortalMenuCustomization.companies"/>
+                            </columns>
+                            <buttonsPanel>
+                                <button action="companiesTable.add"/>
+                                <button action="companiesTable.exclude"/>
+                            </buttonsPanel>
+                            <rows/>
+                        </table>
                     </vbox>
                 </groupBox>
             </vbox>
