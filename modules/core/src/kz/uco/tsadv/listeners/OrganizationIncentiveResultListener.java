@@ -31,6 +31,8 @@ public class OrganizationIncentiveResultListener {
     @Inject
     private FrontConfig frontConfig;
 
+    //TODO ON_UPDATE INCENTIVE_RESULT.PERIOD - CHANGE INCENTIVE_RESULT.INCENTIVE_MONTH_RESULT_ID - IF NEED TRANSFER INCENTIVE_RESULT TO OTHER PERIOD
+
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<OrganizationIncentiveResult, UUID> event) {
 
@@ -78,7 +80,7 @@ public class OrganizationIncentiveResultListener {
 
         String query = " select e from tsadv_OrganizationIncentiveMonthResult e " +
                 " where e.company = :company " +
-                " and e.DEPARTMENT_ID = :organizationGroupId " +
+                " and e.department = :organizationGroup " +
                 " and EXTRACT(YEAR from e.period) = :year " +
                 " and EXTRACT(MONTH from e.period) = :month ";
 
@@ -88,7 +90,7 @@ public class OrganizationIncentiveResultListener {
                                 new LoadContext.Query(query)
                                         .setParameters(ParamsMap.of(
                                                 "company", company,
-                                                "organizationGroupId", organizationGroupExt.getId(),
+                                                "organizationGroup", organizationGroupExt,
                                                 "year", year,
                                                 "month", month)
                                         )
