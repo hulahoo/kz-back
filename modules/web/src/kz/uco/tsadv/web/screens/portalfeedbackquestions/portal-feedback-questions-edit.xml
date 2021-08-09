@@ -7,12 +7,13 @@
         <instance id="portalFeedbackQuestionsDc"
                   class="kz.uco.tsadv.modules.learning.model.PortalFeedbackQuestions"
                   view="portalFeedbackQuestions.edit">
+            <collection id="fileDc" property="files"/>
             <loader/>
         </instance>
     </data>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="editActions" spacing="true">
+    <layout expand="fileTable" spacing="true">
         <form id="form" dataContainer="portalFeedbackQuestionsDc">
             <column width="250px">
                 <pickerField id="userField" property="user">
@@ -27,10 +28,22 @@
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
+                <pickerField id="portalFeedbackTypeField" property="type">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
                 <textField id="topicField" property="topic"/>
                 <textArea id="textField" property="text" rows="5"/>
             </column>
         </form>
+        <table id="fileTable" dataContainer="fileDc" width="100%">
+            <columns>
+                <column id="name" link="true" linkInvoke="downloadFile" caption="msg://kz.uco.tsadv.modules.learning.model/PortalFeedbackQuestions.files"/>
+            </columns>
+            <rows/>
+        </table>
         <hbox id="editActions" spacing="true">
             <button action="windowCommitAndClose"/>
             <button action="windowClose"/>

@@ -23633,7 +23633,8 @@
             <property name="category" view="_minimal"/>
             <property name="email"/>
         </property>
-        <property name="createTs"/>
+        <property name="files"/>
+        <property name="type"/>
     </view>
     <view entity="tsadv_CoursePersonNote" name="coursePersonNote-view" extends="_local">
         <property name="course" view="_minimal"/>
