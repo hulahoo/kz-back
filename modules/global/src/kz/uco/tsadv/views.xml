@@ -23820,6 +23820,9 @@
     <view entity="tsadv_OrganizationIncentiveResult" name="organizationIncentiveResults-edit-view" extends="_local">
         <property name="indicator" view="_local"/>
     </view>
+    <view entity="tsadv_OrganizationIncentiveResult" name="organizationIncentiveResults-notification-view" extends="_local">
+        <property name="organizationIncentiveMonthResult" view="_local"/>
+    </view>
     <view entity="tsadv_OrganizationIncentiveResult" name="organizationIncentiveResults-for-incentiveMonthResult" extends="_local">
         <property name="indicator" view="_local"/>
         <property name="organizationGroup" view="_local">

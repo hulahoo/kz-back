@@ -28,10 +28,14 @@
                     width="100%"
                     dataContainer="organizationIncentiveMonthResultsDc">
             <actions>
-                <action id="create" type="create"/>
-                <action id="edit" type="edit"/>
-                <action id="remove" type="remove"/>
+                <action id="sendNotification"
+                        caption="msg://sendNotification"
+                        trackSelection="true"
+                        invoke="sendNotification"/>
             </actions>
+            <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
+                <button id="sendNotificationBtn" action="organizationIncentiveMonthResultsTable.sendNotification"/>
+            </buttonsPanel>
             <columns>
                 <group>
                     <column id="company"/>
