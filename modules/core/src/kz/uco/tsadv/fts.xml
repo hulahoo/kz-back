@@ -2050,5 +2050,8 @@
         <entity class="kz.uco.tsadv.entity.dbview.OrganizationIncentiveMonthResultView">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.entity.dbview.OrganizationIncentiveMonthResultShortView">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

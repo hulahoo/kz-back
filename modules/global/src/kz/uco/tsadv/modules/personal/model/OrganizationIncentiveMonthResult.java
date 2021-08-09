@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicIncentiveResultStatus;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_ORGANIZATION_INCENTIVE_MONTH_RESULT")
 @Entity(name = "tsadv_OrganizationIncentiveMonthResult")
 public class OrganizationIncentiveMonthResult extends StandardEntity {

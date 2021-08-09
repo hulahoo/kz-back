@@ -184,6 +184,8 @@
         <menu id="incentive">
             <item screen="tsadv_DicIncentiveIndicatorType.browse"
                   caption="mainMsg://menu_config.tsadv_DicIncentiveIndicatorType.browse"/>
+            <item screen="tsadv_DicIncentiveResultStatus.browse"
+                  caption="mainMsg://DicIncentiveResultStatuses"/>
             <item id="indicators"
                   screen="tsadv_DicIncentiveIndicators.browse"
                   caption="mainMsg://incentiveIndicators"/>
