@@ -34,6 +34,15 @@ public interface IntegrationConfig extends Config {
     @DefaultBoolean(false)
     boolean getChangeAbsenceDaysRequestOff();
 
+    @Property("tsadv.integration.incentive.organizationIncentiveResult.off")
+    @DefaultBoolean(false)
+    boolean getIsOrganizationincentiveResultIntegrationOff();
+    boolean getOrganizationincentiveResultIntegrationIsOff();
+
+    @Property("tsadv.integration.incentive.organizationIncentiveResult.url")
+    @DefaultString("http://10.2.200.101:8290/api/ahruco/incentive/request")
+    String getOrganizationIncentiveResultIntegrationUrl();
+
     @Property("tsadv.integration.changeAbsenceDaysRequest.url")
     @DefaultString("http://10.2.200.101:8290/api/ahruco/absence/change/request")
     String getChangeAbsenceDaysRequestUrl();

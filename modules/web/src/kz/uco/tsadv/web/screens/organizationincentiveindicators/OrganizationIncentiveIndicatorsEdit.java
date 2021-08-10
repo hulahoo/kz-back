@@ -60,6 +60,7 @@ public class OrganizationIncentiveIndicatorsEdit extends StandardEditor<Organiza
 
     private OrganizationIncentiveIndicators copyIndicator(OrganizationGroupExt organizationGroupExt) {
         OrganizationIncentiveIndicators organizationIncentiveIndicators = metadataTools.copy(getEditedEntity());
+        organizationIncentiveIndicators.setId(UUID.randomUUID());
         organizationIncentiveIndicators.setOrganizationGroup(organizationGroupExt);
         return organizationIncentiveIndicators;
     }
