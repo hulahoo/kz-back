@@ -6,8 +6,6 @@ import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import kz.uco.base.entity.dictionary.DicCompany;
-import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
-import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult;
 import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult;
 import org.springframework.stereotype.Component;
@@ -27,23 +25,13 @@ public class OrganizationIncentiveResultListener {
     @Inject
     private Metadata metadata;
 
-
-    @Inject
-    private FrontConfig frontConfig;
-
-    //TODO ON_UPDATE INCENTIVE_RESULT.PERIOD - CHANGE INCENTIVE_RESULT.INCENTIVE_MONTH_RESULT_ID - IF NEED TRANSFER INCENTIVE_RESULT TO OTHER PERIOD
-
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<OrganizationIncentiveResult, UUID> event) {
 
-        //NOTIFICAION CONTENT: URL TO APPROVE: frontConfig.getFrontAppUrl() + "/incentive-approve/"+monthResul.id;
-
-        //here will be conflict because OrganizationIncentiveResultListener implemented in KAZMIN-687
         if (event.getType() == EntityChangedEvent.Type.CREATED) {
             OrganizationIncentiveResult incentiveResult = loadEventEntity(event);
             OrganizationIncentiveMonthResult incentiveMonthResult = findOrganizationIncentiveMonthResult(
                     incentiveResult.getOrganizationGroup().getCompany(),
-                    incentiveResult.getOrganizationGroup(),
                     incentiveResult.getPeriodDate()
             );
 
@@ -53,9 +41,6 @@ public class OrganizationIncentiveResultListener {
                 incentiveMonthResult.setCompany(incentiveResult.getOrganizationGroup().getCompany());
                 Date incentiveMonthResultPeriod = formatDateToFirstDayOfMonth(incentiveResult.getPeriodDate());
                 incentiveMonthResult.setPeriod(incentiveMonthResultPeriod);
-                incentiveMonthResult.setDepartment(incentiveResult.getOrganizationGroup());
-
-                transactionalDataManager.save(incentiveMonthResult);
             }
 
             incentiveResult.setOrganizationIncentiveMonthResult(incentiveMonthResult);
@@ -71,7 +56,7 @@ public class OrganizationIncentiveResultListener {
                 .one();
     }
 
-    protected OrganizationIncentiveMonthResult findOrganizationIncentiveMonthResult(DicCompany company, OrganizationGroupExt organizationGroupExt, Date period) {
+    protected OrganizationIncentiveMonthResult findOrganizationIncentiveMonthResult(DicCompany company, Date period) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(period);
         int year = calendar.get(Calendar.YEAR);
@@ -80,17 +65,15 @@ public class OrganizationIncentiveResultListener {
 
         String query = " select e from tsadv_OrganizationIncentiveMonthResult e " +
                 " where e.company = :company " +
-                " and e.department = :organizationGroup " +
                 " and EXTRACT(YEAR from e.period) = :year " +
                 " and EXTRACT(MONTH from e.period) = :month ";
 
         return transactionalDataManager
                 .load(LoadContext.create(OrganizationIncentiveMonthResult.class)
                         .setQuery(
-                                new LoadContext.Query(query)
+                                LoadContext.createQuery(query)
                                         .setParameters(ParamsMap.of(
                                                 "company", company,
-                                                "organizationGroup", organizationGroupExt,
                                                 "year", year,
                                                 "month", month)
                                         )
@@ -98,10 +81,10 @@ public class OrganizationIncentiveResultListener {
                 );
     }
 
-    protected Date formatDateToFirstDayOfMonth(Date date){
+    protected Date formatDateToFirstDayOfMonth(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.set(Calendar.DAY_OF_MONTH,1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
 
         return calendar.getTime();
     }

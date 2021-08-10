@@ -3,7 +3,6 @@ package kz.uco.tsadv.modules.personal.model;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicIncentiveResultStatus;
-import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,11 +23,6 @@ public class OrganizationIncentiveMonthResult extends StandardEntity {
     @NotNull
     @Column(name = "PERIOD_", nullable = false)
     private Date period;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "DEPARTMENT_ID")
-    @NotNull
-    private OrganizationGroupExt department;
 
     @OneToMany(mappedBy = "organizationIncentiveMonthResult")
     private List<OrganizationIncentiveResult> incentiveResults;
@@ -70,14 +64,6 @@ public class OrganizationIncentiveMonthResult extends StandardEntity {
 
     public void setStatus(DicIncentiveResultStatus status) {
         this.status = status;
-    }
-
-    public OrganizationGroupExt getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(OrganizationGroupExt department) {
-        this.department = department;
     }
 
     public Date getPeriod() {

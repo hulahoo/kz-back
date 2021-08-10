@@ -1,252 +1,183 @@
 package kz.uco.tsadv.web.screens.organizationincentivemonthresult;
 
-import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.global.*;
-import com.haulmont.cuba.gui.Notifications;
-import com.haulmont.cuba.gui.components.AggregationInfo;
-import com.haulmont.cuba.gui.components.GroupTable;
-import com.haulmont.cuba.gui.components.Table;
-import com.haulmont.cuba.gui.data.aggregation.AggregationStrategy;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.MessageTools;
+import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.TreeTable;
+import com.haulmont.cuba.gui.components.data.TableItems;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.security.entity.User;
+import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.NotificationService;
-import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.entity.dbview.OrganizationIncentiveMonthResultView;
-import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators;
-import kz.uco.tsadv.modules.personal.dictionary.DicIncentiveResultStatus;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveIndicators;
 import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult;
-import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
-import kz.uco.uactivity.entity.WindowProperty;
 import kz.uco.uactivity.service.ActivityService;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @UiController("tsadv_OrganizationIncentiveMonthResult.browse")
 @UiDescriptor("organization-incentive-month-result-browse.xml")
-@LookupComponent("organizationIncentiveMonthResultsTable")
+@LookupComponent("organizationIncentiveMonthResultsTree")
 @LoadDataBeforeShow
 public class OrganizationIncentiveMonthResultBrowse extends StandardLookup<OrganizationIncentiveMonthResultView> {
 
-    protected String PERIOD_DATE_FORMAT = "MMM yyyy";
     @Inject
-    private GroupTable<OrganizationIncentiveMonthResultView> organizationIncentiveMonthResultsTable;
+    protected EmployeeService employeeService;
     @Inject
-    private Metadata metadata;
+    protected DataManager dataManager;
     @Inject
-    private Notifications notifications;
+    protected FrontConfig frontConfig;
     @Inject
-    private DataManager dataManager;
+    protected ActivityService activityService;
     @Inject
-    private EmployeeService employeeService;
+    protected NotificationService notificationService;
     @Inject
-    private NotificationService notificationService;
+    protected TreeTable<OrganizationIncentiveMonthResultView> organizationIncentiveMonthResultsTree;
     @Inject
-    private FrontConfig frontConfig;
+    protected MessageTools messageTools;
     @Inject
-    private ActivityService activityService;
-    @Inject
-    private CommonService commonService;
-
-
-    protected class LocalizedDateFormatter implements Function<Object, String>{
-
-        protected String format;
-
-        LocalizedDateFormatter(String format){
-            this.format = format;
-        }
-
-        public String getFormat() {
-            return format;
-        }
-
-        public void setFormat(String format) {
-            this.format = format;
-        }
-
-        @Override
-        public String apply(Object value) {
-            Date date = (Date) value;
-            UserSessionSource us = AppBeans.get(UserSessionSource.NAME);
-            Locale currentLocale = us.getLocale();
-            if(currentLocale.getLanguage().equals("kz")) currentLocale = new Locale("ru");
-            DateFormat df = new SimpleDateFormat(format,currentLocale);
-            return df.format(date);
-        }
-
-    }
-
-    public class EmptyStringFormatter implements Function<Object, String> {
-        @Override
-        public String apply(Object o) {
-            return "";
-        }
-    }
-
-    protected class StatusColumnAggregationStrategy implements AggregationStrategy<DicIncentiveResultStatus,String>{
-        @Override
-        public String aggregate(Collection<DicIncentiveResultStatus> propertyValues) {
-            if(propertyValues != null && !propertyValues.isEmpty()) {
-                return propertyValues.stream().findAny().get().getLangValue();
-            }
-            return "";
-        }
-
-        @Override
-        public Class<String> getResultClass() {
-            return String.class;
-        }
-    }
-
-    protected class CommentColumnAggregationStrategy implements AggregationStrategy<String,String>{
-        @Override
-        public String aggregate(Collection<String> propertyValues) {
-            if(propertyValues != null && !propertyValues.isEmpty()) {
-                return propertyValues.stream().findAny().get();
-            }
-            return "";
-        }
-
-        @Override
-        public Class<String> getResultClass() {
-            return String.class;
-        }
-    }
-
-    @Subscribe
-    public void onBeforeShow(BeforeShowEvent event) {
-        initTableUI();
-    }
-
-    @Subscribe
-    public void onAfterShow(AfterShowEvent event) {
-        organizationIncentiveMonthResultsTable.expandAll();
-
-    }
+    protected UserSession userSession;
 
     public void sendNotification() {
-        PersonGroupExt personGroupExt = getResponsiblePersonFromOrganizationIncentiveIndicator();
-        TsadvUser user = employeeService.getUserExtByPersonGroupId(personGroupExt.getId());
 
-        UUID incentiveResultId = organizationIncentiveMonthResultsTable.getSingleSelected().getId();
-        OrganizationIncentiveResult incentiveResult = dataManager.load(OrganizationIncentiveResult.class)
-                .query("select e from tsadv_OrganizationIncentiveResult e where e.id = :id")
-                .parameter("id",incentiveResultId)
-                .view("organizationIncentiveResults-notification-view")
-                .one();
+        OrganizationIncentiveMonthResultView monthResult = organizationIncentiveMonthResultsTree.getSingleSelected();
+        if (monthResult == null) return;
+
+        List<TsadvUser> approvers = getApprovers(monthResult);
+
+        if (approvers.isEmpty()) return;
+
+        UUID monthResultId = Optional.ofNullable(monthResult.getParent()).orElse(monthResult).getId();
 
         Map<String, Object> params = new HashMap<>();
-        String link = frontConfig.getFrontAppUrl() + "/incentive-approve/"+incentiveResult.getOrganizationIncentiveMonthResult().getId();
+        String link = frontConfig.getFrontAppUrl() + "/incentive-approve/" + monthResultId;
         String hlink = "<a href=\"" + link + "\" target=\"_blank\">%s " + "</a>";
-        params.put("userName", user.getFullName());
-        params.put("linkRu", String.format(hlink,"ЗДЕСЬ"));
-        params.put("linkKz", String.format(hlink,"осы жерде"));
-        params.put("linkEn", String.format(hlink,"Click"));
+        params.put("linkRu", String.format(hlink, "ЗДЕСЬ"));
+        params.put("linkKz", String.format(hlink, "Осы жерде"));
+        params.put("linkEn", String.format(hlink, "Click"));
+
+        User sessionUser = userSession.getUser();
 
         ActivityType activityType = dataManager.load(ActivityType.class)
                 .query("select e from uactivity$ActivityType e where e.code = 'NOTIFICATION'")
                 .one();
-        activityService.createActivity(
-                user,
-                user,
-                activityType,
-                StatusEnum.active,
-                "description",
-                null,
-                new Date(),
-                null,
-                "",
-                null,
-                "incentive.approve.forApprover",
-                params);
-        notificationService.sendParametrizedNotification("incentive.approve.forApprover", user, params);
+
+        OrganizationIncentiveMonthResult result = dataManager.load(OrganizationIncentiveMonthResult.class)
+                .id(monthResultId)
+                .viewProperties("status")
+                .one();
+
+        result.setStatus(null);
+        dataManager.commit(result);
+
+        for (TsadvUser user : approvers) {
+            params.put("userName", user.getFullName());
+            activityService.createActivity(
+                    user,
+                    sessionUser,
+                    activityType,
+                    StatusEnum.active,
+                    "description",
+                    null,
+                    new Date(),
+                    null,
+                    "",
+                    null,
+                    "incentive.approve.forApprover",
+                    params);
+            notificationService.sendParametrizedNotification("incentive.approve.forApprover", user, params);
+        }
 
     }
 
-    protected PersonGroupExt getResponsiblePersonFromOrganizationIncentiveIndicator(){
-        if(organizationIncentiveMonthResultsTable.getSingleSelected() == null) return null;
+    protected List<TsadvUser> getApprovers(OrganizationIncentiveMonthResultView monthResult) {
 
-        OrganizationIncentiveMonthResultView incentiveMonthResultView = organizationIncentiveMonthResultsTable.getSingleSelected();
-        Date incentiveMonthResultViewPeriod = incentiveMonthResultView.getPeriod();
-        OrganizationGroupExt incentiveMonthResultOrganizationGroup = incentiveMonthResultView.getDepartment();
-        DicIncentiveIndicators incentiveMonthResultIndicator = incentiveMonthResultView.getIndicator();
+        List<DicIncentiveIndicators> dicIndicators = this.getIndicators(monthResult);
+        List<OrganizationGroupExt> departments = this.getDepartments(monthResult);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(incentiveMonthResultViewPeriod);
+        calendar.setTime(monthResult.getPeriod());
         int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        month++; // increment month - because java.util.Calendar bases on zero-index
+        int month = calendar.get(Calendar.MONTH) + 1; // increment month - because java.util.Calendar bases on zero-index
 
-        String query = " select e from tsadv_OrganizationIncentiveIndicators e " +
-                        " where e.organizationGroup = :orgGroup " +
-                        " and e.indicator = :indicator" +
-                        " and (:periodYear between EXTRACT(YEAR from e.dateFrom) and EXTRACT(YEAR from e.dateTo)) " +
-                        " and (:periodMonth between EXTRACT(MONTH from e.dateFrom) and EXTRACT(MONTH from e.dateTo)) ";
+        List<PositionGroupExt> positions = dataManager.load(OrganizationIncentiveIndicators.class)
+                .query("select e from tsadv_OrganizationIncentiveIndicators e " +
+                        "   where e.organizationGroup in :organizations" +
+                        "       and e.indicator in :dicIndicators " +
+                        "       and (:periodYear between EXTRACT(YEAR from e.dateFrom) and EXTRACT(YEAR from e.dateTo)) " +
+                        "       and (:periodMonth between EXTRACT(MONTH from e.dateFrom) and EXTRACT(MONTH from e.dateTo)) ")
+                .parameter("organizations", departments)
+                .parameter("dicIndicators", dicIndicators)
+                .parameter("periodYear", year)
+                .parameter("periodMonth", month)
+                .viewProperties("approvingPosition")
+                .list()
+                .stream()
+                .map(OrganizationIncentiveIndicators::getApprovingPosition)
+                .collect(Collectors.toList());
 
-        OrganizationIncentiveIndicators organizationIncentiveIndicator = dataManager.load(OrganizationIncentiveIndicators.class)
-                .query(query)
-                .setParameters(ParamsMap.of(
-                                "orgGroup",incentiveMonthResultOrganizationGroup,
-                                "indicator",incentiveMonthResultIndicator,
-                                "periodYear",year,
-                                "periodMonth",month))
-                .list().stream().findFirst().orElse(null);
-
-        if (organizationIncentiveIndicator == null) return null;
-
-        PositionGroupExt responsiblePosition = organizationIncentiveIndicator.getResponsiblePosition();
-
-        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
-                .query("select e.personGroup from base$AssignmentExt e " +
-                        "   where e.positionGroup.id = :positionGroupId" +
-                        "       and :systemDate between e.startDate and e.endDate " +
-                        "       and e.primaryFlag = 'TRUE' " +
-                        "       and e.assignmentStatus.code <> 'TERMINATED' " +
-                        "   ORDER BY e.assignDate DESC")
-                .setParameters(ParamsMap.of(
-                        "positionGroupId", responsiblePosition.getId(),
-                        "systemDate", CommonUtils.getSystemDate()))
-                .list().stream().findFirst().orElse(null);
-
-        return personGroupExt;
+        return dataManager.load(TsadvUser.class)
+                .query("select e from sec$User e " +
+                        "   join e.personGroup.assignments s " +
+                        "   where s.positionGroup in :positions " +
+                        "       and current_date between s.startDate and s.endDate" +
+                        "       and s.assignmentStatus.code in ('ACTIVE','SUSPENDED')" +
+                        "       and s.primaryFlag = true")
+                .parameter("positions", positions)
+                .view(View.BASE)
+                .list();
     }
 
-
-    protected void initTableUI(){
-        organizationIncentiveMonthResultsTable.getColumn("status").setFormatter(new EmptyStringFormatter());
-        organizationIncentiveMonthResultsTable.getColumn("comment").setFormatter(new EmptyStringFormatter());
-
-        AggregationInfo statusAggInfo = new AggregationInfo();
-        statusAggInfo.setPropertyPath(metadata.getClass(OrganizationIncentiveMonthResultView.class).getPropertyPath("status"));
-        statusAggInfo.setStrategy(new StatusColumnAggregationStrategy());
-
-        organizationIncentiveMonthResultsTable.setAggregatable(true);
-        Table.Column statusColumn = organizationIncentiveMonthResultsTable.getColumn("status");
-        statusColumn.setAggregation(statusAggInfo);
-
-        AggregationInfo commentAggInfo = new AggregationInfo();
-        commentAggInfo.setPropertyPath(metadata.getClass(OrganizationIncentiveMonthResultView.class).getPropertyPath("comment"));
-        commentAggInfo.setStrategy(new CommentColumnAggregationStrategy());
-        Table.Column commentColumn = organizationIncentiveMonthResultsTable.getColumn("comment");
-        commentColumn.setAggregation(commentAggInfo);
-
-
-        LocalizedDateFormatter localizedDateFormatter = new LocalizedDateFormatter(PERIOD_DATE_FORMAT);
-        organizationIncentiveMonthResultsTable.getColumn("period").setFormatter(localizedDateFormatter);
+    protected List<DicIncentiveIndicators> getIndicators(@Nonnull OrganizationIncentiveMonthResultView monthResult) {
+        if (monthResult.getParent() == null) {
+            TableItems<OrganizationIncentiveMonthResultView> items = organizationIncentiveMonthResultsTree.getItems();
+            if (items != null) {
+                return items.getItems().stream()
+                        .filter(view -> monthResult.equals(view.getParent()))
+                        .map(OrganizationIncentiveMonthResultView::getIndicator)
+                        .collect(Collectors.toList());
+            }
+        } else
+            return Collections.singletonList(monthResult.getIndicator());
+        return null;
     }
 
+    protected List<OrganizationGroupExt> getDepartments(@Nonnull OrganizationIncentiveMonthResultView monthResult) {
+        if (monthResult.getParent() == null) {
+            TableItems<OrganizationIncentiveMonthResultView> items = organizationIncentiveMonthResultsTree.getItems();
+            if (items != null) {
+                return items.getItems().stream()
+                        .filter(view -> monthResult.equals(view.getParent()))
+                        .map(OrganizationIncentiveMonthResultView::getDepartment)
+                        .collect(Collectors.toList());
+            }
+        } else
+            return Collections.singletonList(monthResult.getDepartment());
+        return null;
+    }
+
+    @Subscribe("organizationIncentiveMonthResultsTree.sendNotification")
+    protected void onOrganizationIncentiveMonthResultsTreeSendNotification(Action.ActionPerformedEvent event) {
+        this.sendNotification();
+    }
+
+    @Install(to = "organizationIncentiveMonthResultsTree.sendNotification", subject = "enabledRule")
+    protected boolean organizationIncentiveMonthResultsTreeSendNotificationEnabledRule() {
+        OrganizationIncentiveMonthResultView selected = organizationIncentiveMonthResultsTree.getSingleSelected();
+        return selected != null && selected.getParent() == null;
+    }
 
 }

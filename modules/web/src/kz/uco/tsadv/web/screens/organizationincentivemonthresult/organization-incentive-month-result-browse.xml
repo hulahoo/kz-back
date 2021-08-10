@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
         caption="msg://organizationIncentiveMonthResultBrowse.caption"
-        focusComponent="organizationIncentiveMonthResultsTable"
+        focusComponent="organizationIncentiveMonthResultsTree"
         messagesPack="kz.uco.tsadv.web.screens.organizationincentivemonthresult">
     <data readOnly="true">
         <collection id="organizationIncentiveMonthResultsDc"
@@ -17,30 +16,31 @@
     </data>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="organizationIncentiveMonthResultsTable"
+    <layout expand="organizationIncentiveMonthResultsTree"
             spacing="true">
         <filter id="filter"
-                applyTo="organizationIncentiveMonthResultsTable"
+                applyTo="organizationIncentiveMonthResultsTree"
                 dataLoader="organizationIncentiveMonthResultsDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="organizationIncentiveMonthResultsTable"
-                    width="100%"
-                    dataContainer="organizationIncentiveMonthResultsDc">
+        <treeTable id="organizationIncentiveMonthResultsTree"
+                   hierarchyProperty="parent"
+                   width="100%"
+                   multiselect="false"
+                   dataContainer="organizationIncentiveMonthResultsDc">
             <actions>
                 <action id="sendNotification"
                         caption="msg://sendNotification"
-                        trackSelection="true"
-                        invoke="sendNotification"/>
+                        trackSelection="true"/>
             </actions>
-            <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
-                <button id="sendNotificationBtn" action="organizationIncentiveMonthResultsTable.sendNotification"/>
+            <buttonsPanel alwaysVisible="false" margin="true,false,false,false">
+                <button id="sendNotificationBtn" action="organizationIncentiveMonthResultsTree.sendNotification"/>
             </buttonsPanel>
             <columns>
-                <group>
-                    <column id="company"/>
-                    <column id="period"/>
-                </group>
+                <column id="company"/>
+                <column id="period">
+                    <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" format="MMM yyyy"/>
+                </column>
                 <column id="department"/>
                 <column id="indicator"/>
                 <column id="weight"/>
@@ -51,7 +51,6 @@
                 <column id="status"/>
                 <column id="comment"/>
             </columns>
-            <rowsCount/>
-        </groupTable>
+        </treeTable>
     </layout>
 </window>

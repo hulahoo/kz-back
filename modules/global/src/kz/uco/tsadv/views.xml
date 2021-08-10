@@ -23818,7 +23818,9 @@
 
     </view>
     <view entity="tsadv_OrganizationIncentiveResult" name="organizationIncentiveResults-edit-view" extends="_local">
-        <property name="indicator" view="_local"/>
+        <property name="indicator" view="_local">
+            <property name="scoreSettings" view="_local"/>
+        </property>
     </view>
     <view entity="tsadv_OrganizationIncentiveResult" name="organizationIncentiveResults-notification-view" extends="_local">
         <property name="organizationIncentiveMonthResult" view="_local"/>
@@ -24008,16 +24010,15 @@
     </view>
     <view entity="tsadv_OrganizationIncentiveMonthResult" name="organizationIncentiveMonthResult.browse" extends="_local">
         <property name="company" view="_local"/>
-        <property name="department" view="_minimal"/>
         <property name="status" view="_local"/>
     </view>
     <view entity="tsadv_OrganizationIncentiveMonthResult" name="organizationIncentiveMonthResult.edit" extends="_local">
-        <property name="department" view="_minimal"/>
         <property name="status" view="_local"/>
     </view>
     <view entity="tsadv_OrganizationIncentiveMonthResultView" name="organizationIncentiveMonthResultView.browse" extends="_local">
         <property name="company" view="_local"/>
         <property name="department" view="_minimal"/>
+        <property name="parent" view="_minimal"/>
         <property name="status" view="_local"/>
         <property name="indicator" view="_local"/>
     </view>
