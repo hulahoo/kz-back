@@ -74,6 +74,10 @@ public class IncentiveServiceBean implements IncentiveService {
                 "                           and of.date_to >= i.date_from\n" +
                 "                           and of.date_from <= i.date_to\n" +
                 "                  join generate_series(greatest(i.date_from, of.date_from), least(i.date_to, of.date_to), '1 month'::interval) d on 1 = 1 \n" +
+                "                  join TSADV_DIC_INCENTIVE_INDICATORS dii\n" +
+                "                       on dii.id = i.INDICATOR_ID " +
+                "                           and dii.delete_ts is null " +
+                "                           and d between coalesce(dii.start_date, d) and coalesce(dii.end_date, d) " +
                 "         where i.delete_ts is null\n" +
                 "           and i.RESPONSIBLE_POSITION_ID = #personGroupId\n" +
                 "         group by d, i.organization_group_id\n" +

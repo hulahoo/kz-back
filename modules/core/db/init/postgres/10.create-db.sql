@@ -14769,7 +14769,6 @@ create table TSADV_SALARY_REQUEST (
     ORDER_GROUP_ID uuid,
     AGREEMENT_ID uuid,
     TYPE_ varchar(50) not null,
-    DIFFERENCE double precision,
     --
     primary key (ID)
 )^
@@ -18793,7 +18792,6 @@ create table TSADV_ORGANIZATION_INCENTIVE_MONTH_RESULT (
     --
     COMPANY_ID uuid not null,
     PERIOD_ date not null,
-    DEPARTMENT_ID uuid not null,
     STATUS_ID uuid,
     COMMENT_ varchar(2500),
     --
