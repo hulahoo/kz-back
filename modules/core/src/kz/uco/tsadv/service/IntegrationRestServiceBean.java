@@ -2966,28 +2966,44 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, absenceData,
                             "no companyCode");
                 }
+//                if (absenceJson.getPersonId() == null || absenceJson.getPersonId().isEmpty()) {
+//                    return prepareError(result, methodName, absenceData,
+//                            "no personId");
+//                }
+                Absence absence;
                 if (absenceJson.getPersonId() == null || absenceJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, absenceData,
-                            "no personId");
+                    absence = dataManager.load(Absence.class)
+                            .query("select e from tsadv$Absence e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.personGroup.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", absenceJson.getLegacyId(),
+                                    "companyCode", absenceJson.getCompanyCode()))
+                            .view("absence.for.integration")
+                            .list().stream().findFirst().orElse(null);
+                    if (absence == null) {
+                        return prepareError(result, methodName, absenceData,
+                                "no absence with legacyId and companyCode : "
+                                        + absenceJson.getLegacyId() + " , " + absenceJson.getCompanyCode());
+                    }
+                } else {
+                    absence = dataManager.load(Absence.class)
+                            .query("select e from tsadv$Absence e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.personGroup.legacyId = :pLegacyId " +
+                                    " and e.personGroup.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", absenceJson.getLegacyId(),
+                                    "pLegacyId", absenceJson.getPersonId(),
+                                    "companyCode", absenceJson.getCompanyCode()))
+                            .view("absence.for.integration")
+                            .list().stream().findFirst().orElse(null);
+                    if (absence == null) {
+                        return prepareError(result, methodName, absenceData,
+                                "no absence with legacyId and personId : "
+                                        + absenceJson.getLegacyId() + " , " + absenceJson.getPersonId() +
+                                        ", " + absenceJson.getCompanyCode());
+                    }
                 }
 
-                Absence absence = dataManager.load(Absence.class)
-                        .query("select e from tsadv$Absence e " +
-                                " where e.legacyId = :legacyId " +
-                                " and e.personGroup.legacyId = :pLegacyId " +
-                                " and e.personGroup.company.legacyId = :companyCode")
-                        .setParameters(ParamsMap.of("legacyId", absenceJson.getLegacyId(),
-                                "pLegacyId", absenceJson.getPersonId(),
-                                "companyCode", absenceJson.getCompanyCode()))
-                        .view("absence.for.integration")
-                        .list().stream().findFirst().orElse(null);
-
-                if (absence == null) {
-                    return prepareError(result, methodName, absenceData,
-                            "no absence with legacyId and personId : "
-                                    + absenceJson.getLegacyId() + " , " + absenceJson.getPersonId() +
-                                    ", " + absenceJson.getCompanyCode());
-                }
                 if (!absenceArrayList.stream().filter(absence1 ->
                         absence1.getId().equals(absence.getId())).findAny().isPresent()) {
                     absenceArrayList.add(absence);

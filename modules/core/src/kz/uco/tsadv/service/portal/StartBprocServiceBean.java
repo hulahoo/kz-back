@@ -19,10 +19,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service(StartBprocService.NAME)
@@ -93,6 +90,14 @@ public class StartBprocServiceBean implements StartBprocService {
     public List<NotPersisitBprocActors> getNotPersisitBprocActors(UUID employeePersonGroupId,
                                                                   BpmRolesDefiner bpmRolesDefiner,
                                                                   boolean isAssistant) {
+        return getNotPersisitBprocActors(employeePersonGroupId, bpmRolesDefiner, isAssistant, null);
+    }
+
+    @Override
+    public List<NotPersisitBprocActors> getNotPersisitBprocActors(UUID employeePersonGroupId,
+                                                                  BpmRolesDefiner bpmRolesDefiner,
+                                                                  boolean isAssistant,
+                                                                  Map<String, List<TsadvUser>> defaultValues) {
         List<NotPersisitBprocActors> actors = new ArrayList<>();
         List<BpmRolesLink> links = bpmRolesDefiner.getLinks();
 
@@ -103,7 +108,13 @@ public class StartBprocServiceBean implements StartBprocService {
             String roleCode = hrRole.getCode();
             List<TsadvUser> hrUsersForPerson;
 
-            if (roleCode.equals(OrganizationHrUserService.HR_ROLE_EMPLOYEE)) {
+            if (defaultValues != null && defaultValues.containsKey(roleCode)) {
+                hrUsersForPerson = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e where e in :users")
+                        .setParameters(ParamsMap.of("users", defaultValues.get(roleCode)))
+                        .view("user-fioWithLogin")
+                        .list();
+            } else if (roleCode.equals(OrganizationHrUserService.HR_ROLE_EMPLOYEE)) {
                 hrUsersForPerson = dataManager.load(TsadvUser.class)
                         .query("select e from tsadv$UserExt e where e.personGroup.id = :employeePersonGroupId and e.active = 'TRUE'")
                         .parameter("employeePersonGroupId", employeePersonGroupId)
