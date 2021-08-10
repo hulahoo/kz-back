@@ -24018,11 +24018,18 @@
     <view entity="tsadv_OrganizationIncentiveMonthResult" name="organizationIncentiveMonthResult.integration" extends="_local">
         <property name="status" view="_local"/>
     </view>
-    <view entity="tsadv_OrganizationIncentiveMonthResultShortView" name="organizationIncentiveMonthResultShortView.integration" extends="_local">
-        <property name="department" view="_local"/>
-        <property name="company" view="_local"/>
-        <property name="indicator" view="_local">
-            <property name="type" view="_local"/>
+    <view entity="tsadv_OrganizationIncentiveMonthResult" name="organizationIncentiveMonthResult.integration.full" extends="_local">
+        <property name="incentiveResults" view="_local">
+            <property name="organizationGroup" view="_minimal">
+                <property name="legacyId"/>
+                <property name="company">
+                    <property name="legacyId"/>
+                </property>
+            </property>
+            <property name="indicator" view="_minimal">
+                <property name="scoreSettings" view="_local"/>
+                <property name="code"/>
+            </property>
         </property>
     </view>
     <view entity="tsadv_OrganizationIncentiveMonthResultView" name="organizationIncentiveMonthResultView.browse" extends="_local">

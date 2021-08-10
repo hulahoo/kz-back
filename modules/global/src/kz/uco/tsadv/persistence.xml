@@ -681,6 +681,5 @@
         <class>kz.uco.tsadv.modules.personal.dictionary.DicIncentiveResultStatus</class>
         <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult</class>
         <class>kz.uco.tsadv.entity.dbview.OrganizationIncentiveMonthResultView</class>
-        <class>kz.uco.tsadv.entity.dbview.OrganizationIncentiveMonthResultShortView</class>
     </persistence-unit>
 </persistence>
