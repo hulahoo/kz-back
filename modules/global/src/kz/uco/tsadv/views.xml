@@ -23621,7 +23621,10 @@
             <property name="code"/>
         </property>
     </view>
-    <view entity="tsadv_PortalFeedbackQuestions" name="portalFeedbackQuestions.edit" extends="_local">
+    <view entity="tsadv_PortalFeedbackQuestions"
+          systemProperties="true"
+          name="portalFeedbackQuestions.edit"
+          extends="_local">
         <property name="user" view="_minimal">
             <property name="personGroup" view="_minimal"/>
             <property name="name"/>
