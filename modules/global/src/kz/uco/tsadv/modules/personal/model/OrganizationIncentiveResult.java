@@ -1,7 +1,9 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
+import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 
@@ -9,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @PublishEntityChangedEvents
 @Table(name = "TSADV_ORGANIZATION_INCENTIVE_RESULT")
@@ -47,6 +50,22 @@ public class OrganizationIncentiveResult extends StandardEntity {
 
     @Column(name = "RESULT_")
     protected Double result;
+
+    @MetaProperty
+    public Double getScore() {
+        if (PersistenceHelper.isLoaded(this, "indicator")
+                && PersistenceHelper.isLoaded(indicator, "scoreSettings")
+                && indicator != null) {
+            List<DicIncentiveIndicatorScoreSetting> scoreSettings = indicator.getScoreSettings();
+            if (scoreSettings != null)
+                return scoreSettings.stream()
+                        .filter(setting -> setting.getMinPercent() < result && setting.getMaxPercent() > result)
+                        .findFirst()
+                        .map(DicIncentiveIndicatorScoreSetting::getTotalScore)
+                        .orElse(null);
+        }
+        return null;
+    }
 
     public OrganizationIncentiveMonthResult getOrganizationIncentiveMonthResult() {
         return organizationIncentiveMonthResult;

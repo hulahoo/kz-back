@@ -318,6 +318,11 @@
         <method name="getIncentiveList">
             <param name="paginationPojo" type="kz.uco.tsadv.pojo.pagination.PaginationPojo"/>
         </method>
+        <method name="saveMonthResult">
+            <param name="status" type="java.lang.String"/>
+            <param name="comment" type="java.lang.String"/>
+            <param name="incentiveMonthResultId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="tsadv_BpmUserSubstitutionService">
         <method name="save">

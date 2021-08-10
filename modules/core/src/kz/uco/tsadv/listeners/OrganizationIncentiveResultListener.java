@@ -27,65 +27,65 @@ public class OrganizationIncentiveResultListener {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<OrganizationIncentiveResult, UUID> event) {
-        //here will be conflict because OrganizationIncentiveResultListener implemented in KAZMIN-687
-        if(event.getType() == EntityChangedEvent.Type.CREATED){
+
+        if (event.getType() == EntityChangedEvent.Type.CREATED) {
             OrganizationIncentiveResult incentiveResult = loadEventEntity(event);
             OrganizationIncentiveMonthResult incentiveMonthResult = findOrganizationIncentiveMonthResult(
                     incentiveResult.getOrganizationGroup().getCompany(),
                     incentiveResult.getPeriodDate()
             );
 
-            if(incentiveMonthResult == null){
+            if (incentiveMonthResult == null) {
                 incentiveMonthResult = metadata.create(OrganizationIncentiveMonthResult.class);
                 incentiveMonthResult.setId(UUID.randomUUID());
                 incentiveMonthResult.setCompany(incentiveResult.getOrganizationGroup().getCompany());
-                incentiveMonthResult.setPeriod(incentiveResult.getPeriodDate());
-                incentiveMonthResult.setDepartment(incentiveResult.getOrganizationGroup());
-
-                transactionalDataManager.save(incentiveMonthResult);
-
-                incentiveResult.setOrganizationIncentiveMonthResult(incentiveMonthResult);
-                transactionalDataManager.save(incentiveResult);
-            }else {
-                incentiveResult.setOrganizationIncentiveMonthResult(incentiveMonthResult);
-                transactionalDataManager.save(incentiveResult);
+                Date incentiveMonthResultPeriod = formatDateToFirstDayOfMonth(incentiveResult.getPeriodDate());
+                incentiveMonthResult.setPeriod(incentiveMonthResultPeriod);
             }
+
+            incentiveResult.setOrganizationIncentiveMonthResult(incentiveMonthResult);
+            transactionalDataManager.save(incentiveResult);
         }
 
     }
 
-    protected OrganizationIncentiveResult loadEventEntity(EntityChangedEvent<OrganizationIncentiveResult, UUID> event){
+    protected OrganizationIncentiveResult loadEventEntity(EntityChangedEvent<OrganizationIncentiveResult, UUID> event) {
         return transactionalDataManager
                 .load(event.getEntityId())
                 .view("organizationIncentiveResults-for-incentiveMonthResult")
                 .one();
     }
 
-    protected OrganizationIncentiveMonthResult findOrganizationIncentiveMonthResult(DicCompany company, Date period){
+    protected OrganizationIncentiveMonthResult findOrganizationIncentiveMonthResult(DicCompany company, Date period) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(period);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         month++; // increment month - because java.util.Calendar bases on zero-index
 
-
         String query = " select e from tsadv_OrganizationIncentiveMonthResult e " +
-                       " where e.company = :company " +
-                       " and EXTRACT(YEAR from e.period) = :year " +
-                       " and EXTRACT(MONTH from e.period) = :month ";
+                " where e.company = :company " +
+                " and EXTRACT(YEAR from e.period) = :year " +
+                " and EXTRACT(MONTH from e.period) = :month ";
 
-        OrganizationIncentiveMonthResult organizationIncentiveMonthResult = transactionalDataManager
+        return transactionalDataManager
                 .load(LoadContext.create(OrganizationIncentiveMonthResult.class)
                         .setQuery(
-                                new LoadContext.Query(query)
+                                LoadContext.createQuery(query)
                                         .setParameters(ParamsMap.of(
-                                                "company",company,
-                                                "year",year,
-                                                "month",month)
+                                                "company", company,
+                                                "year", year,
+                                                "month", month)
                                         )
                         )
                 );
+    }
 
-        return organizationIncentiveMonthResult;
+    protected Date formatDateToFirstDayOfMonth(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        return calendar.getTime();
     }
 }

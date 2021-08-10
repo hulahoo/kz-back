@@ -55,6 +55,18 @@ public class OrganizationIncentiveMonthResultView extends StandardEntity {
     @Column(name = "COMMENT_", length = 2500)
     private String comment;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_ID")
+    private OrganizationIncentiveMonthResultView parent;
+
+    public OrganizationIncentiveMonthResultView getParent() {
+        return parent;
+    }
+
+    public void setParent(OrganizationIncentiveMonthResultView parent) {
+        this.parent = parent;
+    }
+
     public void setWeight(Double weight) {
         this.weight = weight;
     }

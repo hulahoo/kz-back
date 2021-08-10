@@ -173,7 +173,7 @@
                                    </group>
                                    <column id="total" generator="totalColumnGenerator" caption="msg://incentive.total"/>
                                    <column id="weight"/>
-                                   <column id="result"/>
+                                   <column id="score"/>
                                </columns>
                            </groupTable>
                        </tab>
