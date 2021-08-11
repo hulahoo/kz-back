@@ -7,6 +7,7 @@ import kz.uco.base.service.NotificationService;
 import kz.uco.tsadv.modules.learning.model.PortalFeedbackQuestions;
 import kz.uco.tsadv.modules.personal.dto.PersonProfileDto;
 import kz.uco.tsadv.service.EmployeeService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -38,8 +39,8 @@ public class PortalFeedbackQuestionsChangedListener {
             PersonProfileDto dto = employeeService.personProfile(portalFeedbackQuestions.getUser().getPersonGroup().getId());
 
             Map<String, Object> map = new HashMap<>();
-            map.put("mail", dto.getEmail());
-            map.put("phone", dto.getPhone());
+            map.put("mail", StringUtils.defaultString(dto.getEmail(), ""));
+            map.put("phone", StringUtils.defaultString(dto.getPhone(), ""));
             map.put("createTs", format.format(portalFeedbackQuestions.getCreateTs()));
             map.put("fullName", portalFeedbackQuestions.getUser().getPersonGroup().getFullName());
             map.put("userName", portalFeedbackQuestions.getUser().getLogin());
