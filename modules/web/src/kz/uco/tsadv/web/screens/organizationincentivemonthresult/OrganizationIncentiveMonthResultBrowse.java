@@ -3,6 +3,7 @@ package kz.uco.tsadv.web.screens.organizationincentivemonthresult;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.MessageTools;
 import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.TreeTable;
 import com.haulmont.cuba.gui.components.data.TableItems;
@@ -50,6 +51,10 @@ public class OrganizationIncentiveMonthResultBrowse extends StandardLookup<Organ
     protected MessageTools messageTools;
     @Inject
     protected UserSession userSession;
+    @Inject
+    protected Notifications notifications;
+    @Inject
+    protected MessageBundle messageBundle;
 
     public void sendNotification() {
 
@@ -58,7 +63,12 @@ public class OrganizationIncentiveMonthResultBrowse extends StandardLookup<Organ
 
         List<TsadvUser> approvers = getApprovers(monthResult);
 
-        if (approvers.isEmpty()) return;
+        if (approvers.isEmpty()) {
+            notifications.create(Notifications.NotificationType.HUMANIZED)
+                    .withCaption(messageBundle.getMessage("approvers.not.found"))
+                    .show();
+            return;
+        }
 
         UUID monthResultId = Optional.ofNullable(monthResult.getParent()).orElse(monthResult).getId();
 
@@ -101,6 +111,9 @@ public class OrganizationIncentiveMonthResultBrowse extends StandardLookup<Organ
             notificationService.sendParametrizedNotification("incentive.approve.forApprover", user, params);
         }
 
+        notifications.create(Notifications.NotificationType.HUMANIZED)
+                .withCaption(messageBundle.getMessage("submitted.successfully"))
+                .show();
     }
 
     protected List<TsadvUser> getApprovers(OrganizationIncentiveMonthResultView monthResult) {
