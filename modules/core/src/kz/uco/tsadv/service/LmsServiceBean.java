@@ -740,6 +740,18 @@ public class LmsServiceBean implements LmsService {
             Course feedbackCourse = em.find(Course.class, answeredFeedback.getCourseId());
             Objects.requireNonNull(feedbackCourse);
 
+            CommitContext cc = new CommitContext();
+
+            em.createQuery("select e from tsadv$CourseFeedbackPersonAnswer e " +
+                    "   where e.personGroup.id = :personGroupId" +
+                    "   and e.feedbackTemplate.id = :feedbackTemplateId" +
+                    "       and e.course.id = :courseId ", CourseFeedbackPersonAnswer.class)
+                    .setParameter("personGroupId", personGroupId)
+                    .setParameter("feedbackTemplateId", feedbackTemplate.getId())
+                    .setParameter("courseId", feedbackCourse.getId())
+                    .getResultList()
+                    .forEach(cc::addInstanceToRemove);
+
             CourseFeedbackPersonAnswer feedbackPersonAnswer = metadata.create(CourseFeedbackPersonAnswer.class);
             feedbackPersonAnswer.setFeedbackTemplate(feedbackTemplate);
             feedbackPersonAnswer.setCompleteDate(new Date());
@@ -750,8 +762,6 @@ public class LmsServiceBean implements LmsService {
             feedbackPersonAnswer.setAvgScore(0D);
 
             List<CourseFeedbackPersonAnswerDetail> details = new ArrayList<>();
-
-            CommitContext cc = new CommitContext();
             questions.forEach(q -> {
                 AttemptQuestionPojo attemptQuestionPojo = answeredFeedback.getQuestionsAndAnswers().stream()
                         .filter(qa -> UUID.fromString(qa.getQuestionId()).equals(q.getId()))
