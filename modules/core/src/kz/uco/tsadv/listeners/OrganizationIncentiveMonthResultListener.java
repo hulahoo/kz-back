@@ -54,6 +54,7 @@ public class OrganizationIncentiveMonthResultListener {
                         .peek(resultJson -> resultJson.setResult(
                                 String.valueOf(incentiveResults.stream()
                                         .filter(result -> Objects.equals(result.getIndicator().getCode(), resultJson.getIncentiveType()))
+                                        .filter(result -> Objects.equals(result.getOrganizationGroup().getLegacyId(), resultJson.getOrganizationId()))
                                         .mapToDouble(OrganizationIncentiveResult::getScore)
                                         .sum())
                         ))

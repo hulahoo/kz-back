@@ -73,7 +73,9 @@ public class IncentiveServiceBean implements IncentiveService {
                 "                           and of.delete_ts is null\n" +
                 "                           and of.date_to >= i.date_from\n" +
                 "                           and of.date_from <= i.date_to\n" +
-                "                  join generate_series(greatest(i.date_from, of.date_from), least(i.date_to, of.date_to), '1 month'::interval) d on 1 = 1 \n" +
+                "                  join generate_series(date_trunc('month', greatest(i.date_from, of.date_from)),\n" +
+                "                                       date_trunc('month', least(i.date_to, of.date_to)) + INTERVAL '1 MONTH - 1 day',\n" +
+                "                                       '1 month'::interval) d on 1 = 1" +
                 "                  join TSADV_DIC_INCENTIVE_INDICATORS dii\n" +
                 "                       on dii.id = i.INDICATOR_ID " +
                 "                           and dii.delete_ts is null " +

@@ -54,8 +54,8 @@ public class OrganizationIncentiveResult extends StandardEntity {
     @MetaProperty
     public Double getScore() {
         if (PersistenceHelper.isLoaded(this, "indicator")
-                && PersistenceHelper.isLoaded(indicator, "scoreSettings")
-                && indicator != null) {
+                && indicator != null
+                && PersistenceHelper.isLoaded(indicator, "scoreSettings")) {
             List<DicIncentiveIndicatorScoreSetting> scoreSettings = indicator.getScoreSettings();
             if (scoreSettings != null)
                 return scoreSettings.stream()
