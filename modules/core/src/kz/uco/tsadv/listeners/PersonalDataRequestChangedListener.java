@@ -1,5 +1,6 @@
 package kz.uco.tsadv.listeners;
 
+import com.google.gson.Gson;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
@@ -10,7 +11,6 @@ import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.modules.integration.jsonobject.PersonalDataRequestDataJson;
-import kz.uco.tsadv.modules.integration.jsonobject.PersonalDataRequestJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.model.PersonalDataRequest;
@@ -21,7 +21,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
@@ -33,7 +32,7 @@ public class PersonalDataRequestChangedListener {
     @Inject
     protected DataManager dataManager;
     protected String APPROVED_STATUS = "APPROVED";
-    protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     @Inject
     protected IntegrationRestService integrationRestService;
     @Inject
@@ -46,8 +45,6 @@ public class PersonalDataRequestChangedListener {
             String methodName = "PersonalDataRequestChangedListener.afterCommit";
             BaseResult baseResult = new BaseResult();
             PersonalDataRequestDataJson personalDataRequestDataJson = new PersonalDataRequestDataJson();
-            ArrayList<PersonalDataRequestJson> personalDataRequestJsons = new ArrayList<>();
-            PersonalDataRequestJson personalDataRequestJson = new PersonalDataRequestJson();
             try {
                 DicRequestStatus oldStatus = null;
                 if (event.getChanges().getOldValue("status") != null
@@ -64,41 +61,42 @@ public class PersonalDataRequestChangedListener {
                 DicRequestStatus requestStatus = personalDataRequest.getStatus();
                 if (APPROVED_STATUS.equals(requestStatus.getCode()) && !APPROVED_STATUS.equals(oldStatus != null
                         ? oldStatus.getCode() : "") && !integrationConfig.getPersonalDataRequestOff()) {
-                    personalDataRequestJson.setPersonId(personalDataRequest.getPersonGroup().getLegacyId());
-                    personalDataRequestJson.setRequestNumber(personalDataRequest.getRequestNumber().toString());
-                    personalDataRequestJson.setLastName(personalDataRequest.getLastName());
-                    personalDataRequestJson.setFirstName(personalDataRequest.getFirstName());
-                    personalDataRequestJson.setMiddleName(personalDataRequest.getMiddleName());
-                    personalDataRequestJson.setLastNameLatin(personalDataRequest.getLastNameLatin());
-                    personalDataRequestJson.setFirstNameLatin(personalDataRequest.getFirstNameLatin());
-                    personalDataRequestJson.setMaritalStatus(personalDataRequest.getMaritalStatus() != null
+                    personalDataRequestDataJson.setPersonId(personalDataRequest.getPersonGroup().getLegacyId());
+                    personalDataRequestDataJson.setRequestNumber(personalDataRequest.getRequestNumber().toString());
+                    personalDataRequestDataJson.setLastName(personalDataRequest.getLastName());
+                    personalDataRequestDataJson.setFirstName(personalDataRequest.getFirstName());
+                    personalDataRequestDataJson.setMiddleName(personalDataRequest.getMiddleName());
+                    personalDataRequestDataJson.setLastNameLatin(personalDataRequest.getLastNameLatin());
+                    personalDataRequestDataJson.setFirstNameLatin(personalDataRequest.getFirstNameLatin());
+                    personalDataRequestDataJson.setMaritalStatus(personalDataRequest.getMaritalStatus() != null
                             ? personalDataRequest.getMaritalStatus().getLegacyId() : "");
-                    personalDataRequestJson.setHasLoanFromPrevEmployer(personalDataRequest.getPersonGroup()
+                    personalDataRequestDataJson.setHasLoanFromPrevEmployer(personalDataRequest.getPersonGroup()
                             .getPerson().getCommitmentsLoan() != null ? personalDataRequest.getPersonGroup()
                             .getPerson().getCommitmentsLoan() : false);
-                    personalDataRequestJson.setHasCreditFromPrevEmployer(personalDataRequest.getPersonGroup()
+                    personalDataRequestDataJson.setHasCreditFromPrevEmployer(personalDataRequest.getPersonGroup()
                             .getPerson().getCommitmentsCredit() != null ? personalDataRequest.getPersonGroup()
                             .getPerson().getCommitmentsCredit() : false);
-                    personalDataRequestJson.setHasWealthFromPrevEmployer(personalDataRequest.getPersonGroup()
+                    personalDataRequestDataJson.setHasWealthFromPrevEmployer(personalDataRequest.getPersonGroup()
                             .getPerson().getCommitmentsNotSurMatValues() != null
                             ? personalDataRequest.getPersonGroup().getPerson().getCommitmentsNotSurMatValues() : false);
-                    personalDataRequestJson.setHasNdaFromPrevEmployer(personalDataRequest.getPersonGroup()
+                    personalDataRequestDataJson.setHasNdaFromPrevEmployer(personalDataRequest.getPersonGroup()
                             .getPerson().getHaveNDA() != null && YesNoEnum.YES.equals(personalDataRequest.getPersonGroup()
                             .getPerson().getHaveNDA()) ? true : false);
-                    personalDataRequestJson.setHasCriminalRecord(personalDataRequest.getPersonGroup()
+                    personalDataRequestDataJson.setHasCriminalRecord(personalDataRequest.getPersonGroup()
                             .getPerson().getHaveConviction() != null && YesNoEnum.YES.equals(personalDataRequest.getPersonGroup()
                             .getPerson().getHaveConviction()) ? true : false);
-                    personalDataRequestJson.setEffectiveDate(getFormattedDateString(BaseCommonUtils.getSystemDate()));
-                    personalDataRequestJson.setCompanyCode(personalDataRequest.getPersonGroup() != null
+                    personalDataRequestDataJson.setEffectiveDate(getFormattedDateString(BaseCommonUtils.getSystemDate()));
+                    personalDataRequestDataJson.setCompanyCode(personalDataRequest.getPersonGroup() != null
                             && personalDataRequest.getPersonGroup().getCompany() != null
                             ? personalDataRequest.getPersonGroup().getCompany().getLegacyId()
                             : "");
-                    personalDataRequestJsons.add(personalDataRequestJson);
-                    personalDataRequestDataJson.setPersonalDataRequestJsons(personalDataRequestJsons);
+
                     setupUnirest();
+
+                    Gson gson = new Gson();
                     HttpResponse<String> response = Unirest
                             .post(getApiUrl())
-                            .body(personalDataRequestDataJson)
+                            .body(String.format("[%s]", gson.toJson(personalDataRequestDataJson)))
                             .asString();
 
                     String responseBody = response.getBody();

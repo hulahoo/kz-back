@@ -1,18 +1,21 @@
 package kz.uco.tsadv.modules.learning.model.feedback;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-import kz.uco.tsadv.modules.learning.enums.feedback.LearningFeedbackUsageType;
-import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import java.util.List;
-import javax.persistence.OneToMany;
+import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.tsadv.modules.learning.enums.feedback.LearningFeedbackUsageType;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
+@PublishEntityChangedEvents
 @NamePattern("%s|name")
 @Table(name = "TSADV_LEARNING_FEEDBACK_TEMPLATE")
 @Entity(name = "tsadv$LearningFeedbackTemplate")

@@ -7279,6 +7279,7 @@ create table TSADV_COURSE_REVIEW (
     PERSON_GROUP_ID uuid not null,
     RATE double precision,
     TEXT varchar(2000) not null,
+    FROM_FEEDBACK boolean not null,
     --
     primary key (ID)
 )^
@@ -18330,7 +18331,7 @@ create table TSADV_ORGANIZATION_INCENTIVE_INDICATORS (
     INDICATOR_TYPE varchar(50) not null,
     INDICATOR_ID uuid not null,
     WEIGHT double precision not null,
-    RESPONSIBLE_PERSON_ID uuid not null,
+    RESPONSIBLE_POSITION_ID uuid not null,
     --
     primary key (ID)
 )^

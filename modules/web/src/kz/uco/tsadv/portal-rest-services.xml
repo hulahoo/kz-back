@@ -42,6 +42,12 @@
             <param name="bpmRolesDefiner" type="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"/>
             <param name="isAssistant" type="boolean"/>
         </method>
+        <method name="getNotPersisitBprocActors">
+            <param name="employeePersonGroupId" type="java.util.UUID"/>
+            <param name="bpmRolesDefiner" type="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"/>
+            <param name="isAssistant" type="boolean"/>
+            <param name="defaultValues" type="java.util.Map"/>
+        </method>
         <method name="getBpmRolesDefiner">
             <param name="processDefinitionKey" type="java.lang.String"/>
             <param name="employeePersonGroupId" type="java.util.UUID"/>
@@ -244,6 +250,10 @@
         </method>
         <method name="availableSalary"/>
         <method name="hasPermitToCreate"/>
+        <method name="exclude">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="data" type="kz.uco.tsadv.pojo.RequestTreeData"/>
+        </method>
     </service>
     <service name="tsadv_MyTeamService">
         <method name="getChildren">

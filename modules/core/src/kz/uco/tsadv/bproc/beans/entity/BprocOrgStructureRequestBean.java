@@ -51,9 +51,4 @@ public class BprocOrgStructureRequestBean extends AbstractBprocEntityBean<OrgStr
             }
         }
     }
-
-    @Override
-    public boolean instanceOf(Class<? extends AbstractBprocRequest> tClass) {
-        return OrgStructureRequest.class.isAssignableFrom(tClass);
-    }
 }

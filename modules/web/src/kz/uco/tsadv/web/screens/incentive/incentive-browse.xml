@@ -139,7 +139,7 @@
                                    <column id="indicatorType"/>
                                    <column id="indicator"/>
                                    <column id="weight"/>
-                                   <column id="responsiblePerson"/>
+                                   <column id="responsiblePosition.position.positionName"/>
                                </columns>
                            </table>
                        </tab>
