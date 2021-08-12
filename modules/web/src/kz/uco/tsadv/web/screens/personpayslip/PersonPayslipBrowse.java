@@ -2,6 +2,8 @@ package kz.uco.tsadv.web.screens.personpayslip;
 
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.components.Filter;
+import com.haulmont.cuba.gui.components.GroupTable;
 import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.export.ExportFormat;
 import com.haulmont.cuba.gui.screen.*;
@@ -33,9 +35,13 @@ public class PersonPayslipBrowse extends StandardLookup<PersonPayslip> {
     private Messages messages;
     @Inject
     private MessageBundle messageBundle;
+    @Inject
+    private Filter filter;
+    @Inject
+    private GroupTable<PersonPayslip> personPayslipsTable;
 
     @Subscribe
-    public void onInit(InitEvent event) {
+    public void onAfterShow(AfterShowEvent event) {
         checkUserAccess();
     }
 
@@ -50,7 +56,11 @@ public class PersonPayslipBrowse extends StandardLookup<PersonPayslip> {
 
         if(!userService.hasAnyRole(acessRolesArray)){
             String noAccessMessage = messageBundle.getMessage("noAccess");
-            throw new RuntimeException(noAccessMessage);
+            notifications.create(Notifications.NotificationType.WARNING).withCaption(noAccessMessage).show();
+            close(StandardOutcome.DISCARD);
+        }else{
+            filter.setVisible(true);
+            personPayslipsTable.setVisible(true);
         }
     }
 }

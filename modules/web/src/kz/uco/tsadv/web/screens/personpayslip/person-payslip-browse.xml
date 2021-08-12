@@ -19,12 +19,14 @@
     <layout expand="personPayslipsTable"
             spacing="true">
         <filter id="filter"
+                visible="false"
                 applyTo="personPayslipsTable"
                 dataLoader="personPayslipsDl">
             <properties include=".*"/>
         </filter>
         <groupTable id="personPayslipsTable"
                     width="100%"
+                    visible="false"
                     dataContainer="personPayslipsDc">
             <columns>
                 <column id="personGroup.company"/>
