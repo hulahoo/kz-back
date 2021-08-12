@@ -819,6 +819,9 @@
         <method name="createOrUpdatePositionIncentiveFlag">
             <param name="positionIncentiveFlagData" type="kz.uco.tsadv.modules.integration.jsonobject.PositionIncentiveFlagDataJson"/>
         </method>
+        <method name="deletePositionIncentiveFlag">
+            <param name="positionIncentiveFlagData" type="kz.uco.tsadv.modules.integration.jsonobject.PositionIncentiveFlagDataJson"/>
+        </method>
     </service>
     <service name="tsadv_AbsenceRvdService">
         <method name="countTotalHours">

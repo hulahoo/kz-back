@@ -4596,6 +4596,13 @@
         <property name="assignmentStatus"
                   view="_local"/>
     </view>
+    <view class="kz.uco.tsadv.modules.personal.model.PositionIncentiveFlag"
+          extends="_local"
+          name="positionIncentiveFlag.edit">
+        <property name="positionGroup" view="_local">
+            <property name="company" view="_local"/>
+        </property>
+    </view>
     <view class="kz.uco.tsadv.modules.personal.model.Dismissal"
           extends="_local"
           name="dismissal.edit">

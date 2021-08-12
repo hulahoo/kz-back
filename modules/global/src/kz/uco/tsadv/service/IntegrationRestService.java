@@ -97,4 +97,6 @@ public interface IntegrationRestService {
     BaseResult createOrUpdatePersonAbsenceBalance(AbsenceBalanceDataJson absenceBalanceData);
 
     BaseResult createOrUpdatePositionIncentiveFlag(PositionIncentiveFlagDataJson positionIncentiveFlagData);
+
+    BaseResult deletePositionIncentiveFlag(PositionIncentiveFlagDataJson positionIncentiveFlagData);
 }
