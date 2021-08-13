@@ -59,9 +59,9 @@ public class LearningFeedbackTemplateEdit extends AbstractEditor<LearningFeedbac
         boolean isHasAllAnswers = items.stream()
                 .map(LearningFeedbackTemplateQuestion::getFeedbackQuestion)
                 .map(question -> question != null && question.getAnswers() != null ? question.getAnswers().size() : 0)
-                .peek(System.out::println)
                 .allMatch(countAnswer -> countAnswer.equals(numberOfAnswers));
         activeField.setEditable(isHasAllAnswers);
+        if (Boolean.TRUE.equals(getEditedEntity().getActive()) && !isHasAllAnswers) getEditedEntity().setActive(false);
     }
 
     @Override
