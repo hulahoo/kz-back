@@ -542,6 +542,7 @@
     </view>
     <view entity="tsadv_OrganizationIncentiveResult" name="portal-organizationIncentiveResult-view"
           extends="_local">
+        <property name="organizationGroup" view="_minimal"/>
         <property name="indicator" view="_minimal">
             <property name="scoreSettings" view="_local"/>
         </property>

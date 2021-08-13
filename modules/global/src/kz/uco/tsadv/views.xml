@@ -24029,6 +24029,7 @@
             </property>
             <property name="indicator" view="_minimal">
                 <property name="scoreSettings" view="_local"/>
+                <property name="type" view="_local"/>
                 <property name="code"/>
             </property>
         </property>

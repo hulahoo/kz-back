@@ -94,7 +94,10 @@ public class OrganizationIncentiveMonthResultBrowse extends StandardLookup<Organ
         dataManager.commit(result);
 
         for (TsadvUser user : approvers) {
-            params.put("userName", user.getFullName());
+            params.put("userNameRu", user.getFullName(Locale.forLanguageTag("ru")));
+            params.put("userNameKz", user.getFullName(Locale.forLanguageTag("kz")));
+            params.put("userNameEn", user.getFullName(Locale.forLanguageTag("en")));
+
             activityService.createActivity(
                     user,
                     sessionUser,
@@ -150,7 +153,7 @@ public class OrganizationIncentiveMonthResultBrowse extends StandardLookup<Organ
                         "       and s.assignmentStatus.code in ('ACTIVE','SUSPENDED')" +
                         "       and s.primaryFlag = true")
                 .parameter("positions", positions)
-                .view(View.BASE)
+                .view("user-fioWithLogin")
                 .list();
     }
 
