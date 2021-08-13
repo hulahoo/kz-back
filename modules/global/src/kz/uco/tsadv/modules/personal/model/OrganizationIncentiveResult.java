@@ -61,10 +61,10 @@ public class OrganizationIncentiveResult extends StandardEntity {
             List<DicIncentiveIndicatorScoreSetting> scoreSettings = indicator.getScoreSettings();
             if (scoreSettings != null)
                 return scoreSettings.stream()
-                        .filter(setting -> setting.getMinPercent() < result && setting.getMaxPercent() > result)
+                        .filter(setting -> setting.getMinPercent() <= result && setting.getMaxPercent() >= result)
                         .findFirst()
                         .map(DicIncentiveIndicatorScoreSetting::getTotalScore)
-                        .orElse(null);
+                        .orElse(0.0);
         }
         return null;
     }

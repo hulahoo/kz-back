@@ -12,6 +12,7 @@ import kz.uco.tsadv.modules.integration.jsonobject.OrganizationIncentiveMonthRes
 import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult;
 import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult;
 import kz.uco.tsadv.service.IntegrationRestService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -48,22 +49,27 @@ public class OrganizationIncentiveMonthResultListener {
 
                 List<OrganizationIncentiveResult> incentiveResults = incentiveMonthResult.getIncentiveResults();
 
-                incentiveMonthResult.getIncentiveResults()
-                        .stream()
-                        .map(this::parseToOrganizationIncentiveMonthResultJson)
-                        .peek(resultJson -> resultJson.setResult(
-                                String.valueOf(incentiveResults.stream()
-                                        .filter(result -> Objects.equals(result.getIndicator().getCode(), resultJson.getIncentiveType()))
-                                        .filter(result -> Objects.equals(result.getOrganizationGroup().getLegacyId(), resultJson.getOrganizationId()))
-                                        .mapToDouble(OrganizationIncentiveResult::getScore)
-                                        .sum())
-                        ))
-                        .forEach(incentiveMonthResultJsons::add);
+                for (OrganizationIncentiveResult incentiveResult : incentiveResults) {
+                    if (incentiveMonthResultJsons.stream().noneMatch(json -> isEquals(incentiveResult, json))) {
+                        OrganizationIncentiveMonthResultJson resultJson = this.parseToOrganizationIncentiveMonthResultJson(incentiveResult);
+                        incentiveMonthResultJsons.add(resultJson);
+                    }
+                }
+
+                for (OrganizationIncentiveResult incentiveResult : incentiveResults) {
+                    OrganizationIncentiveMonthResultJson resultJson = incentiveMonthResultJsons.stream().filter(json -> isEquals(incentiveResult, json)).findAny().get();
+                    resultJson.setFactPercent(incentiveResult.getScore() + resultJson.getFactPercent());
+                }
 
                 sendRequest(incentiveMonthResultJsons, methodName);
             }
 
         }
+    }
+
+    protected boolean isEquals(OrganizationIncentiveResult incentiveResult, OrganizationIncentiveMonthResultJson json) {
+        return Objects.equals(json.getOrganizationId(), StringUtils.defaultString(incentiveResult.getOrganizationGroup().getLegacyId(), ""))
+                && Objects.equals(json.getIncentiveType(), StringUtils.defaultString(incentiveResult.getIndicator().getType().getCode(), ""));
     }
 
     protected OrganizationIncentiveMonthResultJson parseToOrganizationIncentiveMonthResultJson(OrganizationIncentiveResult organizationIncentiveResult) {
@@ -76,6 +82,7 @@ public class OrganizationIncentiveMonthResultListener {
         organizationIncentiveMonthResultJson.setIncentiveType(incentiveType);
         String companyCode = Null.nullReplace(organizationIncentiveResult.getOrganizationGroup().getCompany().getLegacyId(), "");
         organizationIncentiveMonthResultJson.setCompanyCode(companyCode);
+
         return organizationIncentiveMonthResultJson;
     }
 

@@ -9,8 +9,19 @@ public class OrganizationIncentiveMonthResultJson implements Serializable {
     protected String organizationId;
     protected String period;
     protected String incentiveType;
-    protected String result;
+    protected String planPercent = "";
+    protected double factPercent;
     protected String companyCode;
+
+    @JsonProperty("factPercent")
+    public double getFactPercent() {
+        return factPercent;
+    }
+
+    @JsonProperty("factPercent")
+    public void setFactPercent(double factPercent) {
+        this.factPercent = factPercent;
+    }
 
     @JsonProperty("organizationId")
     public String getOrganizationId() {
@@ -43,13 +54,13 @@ public class OrganizationIncentiveMonthResultJson implements Serializable {
     }
 
     @JsonProperty("result")
-    public String getResult() {
-        return result;
+    public String getPlanPercent() {
+        return planPercent;
     }
 
-    @JsonProperty("result")
-    public void setResult(String result) {
-        this.result = result;
+    @JsonProperty("planPercent")
+    public void setPlanPercent(String planPercent) {
+        this.planPercent = planPercent;
     }
 
     @JsonProperty("companyCode")
