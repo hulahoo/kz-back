@@ -4,13 +4,20 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.chile.core.model.MetaPropertyPath;
 import com.haulmont.cuba.core.entity.Entity;
-import com.haulmont.cuba.core.global.*;
-import com.haulmont.cuba.gui.*;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.MessageTools;
+import com.haulmont.cuba.core.global.Messages;
+import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.UiComponents;
+import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.actions.list.AddAction;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.export.ExcelExporter;
 import com.haulmont.cuba.gui.export.ExportDisplay;
+import com.haulmont.cuba.gui.model.CollectionChangeType;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -20,16 +27,17 @@ import kz.uco.tsadv.api.Null;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.HierarchyService;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.function.Function;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @UiController("tsadv_IncentiveBrowse")
@@ -106,43 +114,19 @@ public class IncentiveBrowse extends Screen {
     private UiComponents uiComponents;
     @Inject
     private MessageTools messageTools;
-    
+
     protected WrapCellExcelExporter excelExporter = new WrapCellExcelExporter();
     @Inject
     private ExportDisplay exportDisplay;
 
-    protected class LocalizedDateFormatter implements Function<Object, String>{
-
-        protected String format;
-
-        LocalizedDateFormatter(String format){
-            this.format = format;
-        }
-
-        public String getFormat() {
-            return format;
-        }
-
-        public void setFormat(String format) {
-            this.format = format;
-        }
-
-        @Override
-        public String apply(Object value) {
-            Date date = (Date) value;
-            UserSessionSource us = AppBeans.get(UserSessionSource.NAME);
-            Locale currentLocale = us.getLocale();
-            if(currentLocale.getLanguage().equals("kz")) currentLocale = new Locale("ru");
-            DateFormat df = new SimpleDateFormat(format,currentLocale);
-            return df.format(date);
-        }
-
+    public Component truncateDate(Entity entity) {
+        return null;
     }
 
-    protected class WrapCellExcelExporter extends ExcelExporter{
+    protected class WrapCellExcelExporter extends ExcelExporter {
 
         @Override
-        protected void formatValueCell(Cell cell,  Object cellValue, MetaPropertyPath metaPropertyPath, int sizersIndex, int notificationRequired, int level,  Integer groupChildCount) {
+        protected void formatValueCell(Cell cell, Object cellValue, MetaPropertyPath metaPropertyPath, int sizersIndex, int notificationRequired, int level, Integer groupChildCount) {
             super.formatValueCell(cell, cellValue, metaPropertyPath, sizersIndex, notificationRequired, level, groupChildCount);
 
             if (cellValue instanceof String) {
@@ -155,7 +139,7 @@ public class IncentiveBrowse extends Screen {
     @Subscribe
     protected void onInit(InitEvent event) {
         MapScreenOptions screenOptions = (MapScreenOptions) event.getOptions();
-        if(screenOptions == null || !screenOptions.getParams().containsKey(ELEMENT_TYPE_SCREEN_PARAM)){
+        if (screenOptions == null || !screenOptions.getParams().containsKey(ELEMENT_TYPE_SCREEN_PARAM)) {
             notifications.create().withCaption("No screen params").show();
             closeWithDefaultAction();
             return;
@@ -183,14 +167,14 @@ public class IncentiveBrowse extends Screen {
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
         initHierarchiesDc();
-        LocalizedDateFormatter localizedDateFormatter = new LocalizedDateFormatter(PERIOD_DATE_FORMAT);
-        organizationIncentiveResultsTable.getColumn("periodDate").setFormatter(localizedDateFormatter);
-        organizationIncentiveResultsTable.addPrintable("total", incentiveResult -> getOrganizationIncentiveResultTotal(incentiveResult));
+//        LocalizedDateFormatter localizedDateFormatter = new LocalizedDateFormatter(PERIOD_DATE_FORMAT);
+//        organizationIncentiveResultsTable.getColumn("periodDate").setFormatter(localizedDateFormatter);
+        organizationIncentiveResultsTable.addPrintable("total", this::getOrganizationIncentiveResultTotal);
     }
 
     @Subscribe("organizationIncentiveResultsTable.excel")
     public void onOrganizationIncentiveResultsTableExcel(Action.ActionPerformedEvent event) {
-        excelExporter.exportTable(organizationIncentiveResultsTable,exportDisplay);
+        excelExporter.exportTable(organizationIncentiveResultsTable, exportDisplay);
     }
 
 
@@ -199,17 +183,17 @@ public class IncentiveBrowse extends Screen {
         refresh();
     }
 
-    protected void initHierarchiesDc(){
+    protected void initHierarchiesDc() {
         Hierarchy hierarchy = loadHierarchy();
         hierarchiesDc.getMutableItems().add(hierarchy);
         hierarchiesDc.setItem(hierarchy);
     }
 
-    protected Hierarchy loadHierarchy(){
+    protected Hierarchy loadHierarchy() {
         String hierarchyCode = ELEMENT_TYPE_SCREEN_VALUE.equals("ORGANIZATION") ? "1" : "2";
         Hierarchy hierarchy = dataManager.load(Hierarchy.class)
                 .query("select e from base$Hierarchy e where e.type.code = :code")
-                .parameter("code",hierarchyCode)
+                .parameter("code", hierarchyCode)
                 .one();
 
         return hierarchy;
@@ -296,7 +280,7 @@ public class IncentiveBrowse extends Screen {
     protected void onHierarchyElementDcItemChange(InstanceContainer.ItemChangeEvent<HierarchyElementExt> event) {
         HierarchyElementExt hierarchyElement = event.getItem();
         enableAddActions(event.getItem() != null);
-        if (hierarchyElement == null){
+        if (hierarchyElement == null) {
             loadEmptyIncentives();
             return;
         }
@@ -305,7 +289,7 @@ public class IncentiveBrowse extends Screen {
     }
 
 
-    protected void enableAddActions(boolean enable){
+    protected void enableAddActions(boolean enable) {
         organizationIncentiveFlagsTableAddBtn.setEnabled(enable);
         organizationIncentiveIndicatorsTableAddBtn.setEnabled(enable);
         organizationIncentiveResultsTableAddBtn.setEnabled(enable);
@@ -313,7 +297,7 @@ public class IncentiveBrowse extends Screen {
 
     }
 
-    protected void initTableDoubleClickActions(){
+    protected void initTableDoubleClickActions() {
         organizationIncentiveFlagsTable.setItemClickAction(new BaseAction("doubleClickAction")
                 .withHandler(e -> editOrganizationIncentiveFlag()));
         organizationIncentiveIndicatorsTable.setItemClickAction(new BaseAction("doubleClickAction")
@@ -322,82 +306,83 @@ public class IncentiveBrowse extends Screen {
                 .withHandler(e -> editOrganizationIncentiveResult()));
     }
 
-    protected void loadIncentives(){
+    protected void loadIncentives() {
         loadOrganizationIncentiveFlags();
         loadOrganizationIncentiveIndicators();
         loadOrganizationIncentiveResults();
     }
 
-    protected void loadEmptyIncentives(){
+    protected void loadEmptyIncentives() {
         loadEmptyOrganizationIncentiveFlags();
         loadEmptyOrganizationIncentiveIndicators();
         loadEmptyOrganizationIncentiveResults();
     }
 
     public void addOrganizationIncentiveFlag() {
-        Screen editScreen = screenBuilders.editor(OrganizationIncentiveFlag.class,this)
-                        .withInitializer(i -> {
-                            i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup());
-                            i.setDateTo(CommonUtils.getMaxDate());
-                        })
-                        .build();
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveFlag.class, this)
+                .withInitializer(i -> {
+                    i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup());
+                    i.setDateTo(CommonUtils.getMaxDate());
+                })
+                .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveFlags());
         editScreen.show();
 
     }
 
-    protected void editOrganizationIncentiveFlag(){
-        Screen editScreen = screenBuilders.editor(OrganizationIncentiveFlag.class,this)
+    protected void editOrganizationIncentiveFlag() {
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveFlag.class, this)
                 .editEntity(organizationIncentiveFlagsDc.getItem())
                 .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveFlags());
         editScreen.show();
     }
 
-    protected void loadOrganizationIncentiveFlags(){
+    protected void loadOrganizationIncentiveFlags() {
         organizationIncentiveFlagsDl.setQuery("select e from tsadv_OrganizationIncentiveFlag e where e.organizationGroup = :organizationGroup");
-        organizationIncentiveFlagsDl.setParameter("organizationGroup",hierarchyElementDc.getItem().getOrganizationGroup());
+        organizationIncentiveFlagsDl.setParameter("organizationGroup", hierarchyElementDc.getItem().getOrganizationGroup());
         organizationIncentiveFlagsDl.load();
     }
 
-    protected void loadEmptyOrganizationIncentiveFlags(){
+    protected void loadEmptyOrganizationIncentiveFlags() {
         organizationIncentiveFlagsDl.setQuery("select e from tsadv_OrganizationIncentiveFlag e where 1<>1");
         organizationIncentiveFlagsDl.setParameters(new HashMap<>());
         organizationIncentiveFlagsDl.load();
     }
 
     public void addOrganizationIncentiveIndicator() {
-        Screen editScreen = screenBuilders.editor(OrganizationIncentiveIndicators.class,this)
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveIndicators.class, this)
                 .withInitializer(i -> {
                     i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup());
-                    i.setDateTo(CommonUtils.getMaxDate());})
+                    i.setDateTo(CommonUtils.getMaxDate());
+                })
                 .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveIndicators());
         editScreen.show();
     }
 
-    protected void editOrganizationIncentiveIndicator(){
-        Screen editScreen = screenBuilders.editor(OrganizationIncentiveIndicators.class,this)
+    protected void editOrganizationIncentiveIndicator() {
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveIndicators.class, this)
                 .editEntity(organizationIncentiveIndicatorsDc.getItem())
                 .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveIndicators());
         editScreen.show();
     }
 
-    protected void loadOrganizationIncentiveIndicators(){
+    protected void loadOrganizationIncentiveIndicators() {
         organizationIncentiveIndicatorsDl.setQuery("select e from tsadv_OrganizationIncentiveIndicators e where e.organizationGroup = :organizationGroup");
-        organizationIncentiveIndicatorsDl.setParameter("organizationGroup",hierarchyElementDc.getItem().getOrganizationGroup());
+        organizationIncentiveIndicatorsDl.setParameter("organizationGroup", hierarchyElementDc.getItem().getOrganizationGroup());
         organizationIncentiveIndicatorsDl.load();
     }
 
-    protected void loadEmptyOrganizationIncentiveIndicators(){
+    protected void loadEmptyOrganizationIncentiveIndicators() {
         organizationIncentiveIndicatorsDl.setQuery("select e from tsadv_OrganizationIncentiveIndicators e where 1<>1");
         organizationIncentiveIndicatorsDl.setParameters(new HashMap<>());
         organizationIncentiveIndicatorsDl.load();
     }
 
     public void addOrganizationIncentiveResult() {
-        Screen editScreen = screenBuilders.editor(OrganizationIncentiveResult.class,this)
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveResult.class, this)
                 .withInitializer(i -> i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup()))
                 .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveResults());
@@ -405,20 +390,20 @@ public class IncentiveBrowse extends Screen {
     }
 
     public void editOrganizationIncentiveResult() {
-        Screen editScreen = screenBuilders.editor(OrganizationIncentiveResult.class,this)
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveResult.class, this)
                 .editEntity(organizationIncentiveResultsDc.getItem())
                 .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveResults());
         editScreen.show();
     }
 
-    protected void loadOrganizationIncentiveResults(){
+    protected void loadOrganizationIncentiveResults() {
         organizationIncentiveResultsDl.setQuery("select e from tsadv_OrganizationIncentiveResult e where e.organizationGroup = :organizationGroup");
-        organizationIncentiveResultsDl.setParameter("organizationGroup",hierarchyElementDc.getItem().getOrganizationGroup());
+        organizationIncentiveResultsDl.setParameter("organizationGroup", hierarchyElementDc.getItem().getOrganizationGroup());
         organizationIncentiveResultsDl.load();
     }
 
-    protected void loadEmptyOrganizationIncentiveResults(){
+    protected void loadEmptyOrganizationIncentiveResults() {
         organizationIncentiveResultsDl.setQuery("select e from tsadv_OrganizationIncentiveResult e where 1<>1");
         organizationIncentiveResultsDl.setParameters(new HashMap<>());
         organizationIncentiveResultsDl.load();
@@ -433,15 +418,15 @@ public class IncentiveBrowse extends Screen {
         return totalLabel;
     }
 
-    protected String getOrganizationIncentiveResultTotal(OrganizationIncentiveResult incentiveResult){
+    protected String getOrganizationIncentiveResultTotal(OrganizationIncentiveResult incentiveResult) {
         MetaClass incentiveResultMetaClass = metadata.getClass(OrganizationIncentiveResult.class);
 
-        String indicatorLangValue = incentiveResult.getIndicator() == null ? "" : Null.nullReplace(incentiveResult.getIndicator().getLangValue(),"");
-        String localizedPlanField = messageTools.getPropertyCaption(incentiveResultMetaClass,"plan");
-        String localizedFactField = messageTools.getPropertyCaption(incentiveResultMetaClass,"fact");
+        String indicatorLangValue = incentiveResult.getIndicator() == null ? "" : Null.nullReplace(incentiveResult.getIndicator().getLangValue(), "");
+        String localizedPlanField = messageTools.getPropertyCaption(incentiveResultMetaClass, "plan");
+        String localizedFactField = messageTools.getPropertyCaption(incentiveResultMetaClass, "fact");
 
-        String totalPlanString = String.format("%s-%s",localizedPlanField,Null.nullReplace(incentiveResult.getPlan(),BigDecimal.ZERO));
-        String totalFactString = String.format("%s-%s",localizedFactField,Null.nullReplace(incentiveResult.getFact(),BigDecimal.ZERO));
+        String totalPlanString = String.format("%s-%s", localizedPlanField, Null.nullReplace(incentiveResult.getPlan(), BigDecimal.ZERO));
+        String totalFactString = String.format("%s-%s", localizedFactField, Null.nullReplace(incentiveResult.getFact(), BigDecimal.ZERO));
 
         return (indicatorLangValue + "\n" + totalPlanString + ";" + totalFactString);
     }

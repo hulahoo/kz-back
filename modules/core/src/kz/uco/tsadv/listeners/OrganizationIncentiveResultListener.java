@@ -8,6 +8,7 @@ import com.haulmont.cuba.core.global.Metadata;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult;
 import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -44,6 +45,8 @@ public class OrganizationIncentiveResultListener {
             }
 
             incentiveResult.setOrganizationIncentiveMonthResult(incentiveMonthResult);
+            if (incentiveResult.getPeriodDate() != null)
+                incentiveResult.setPeriodDate(DateUtils.setDays(incentiveResult.getPeriodDate(), 1));
             transactionalDataManager.save(incentiveResult);
         }
 
