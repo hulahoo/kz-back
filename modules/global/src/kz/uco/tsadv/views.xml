@@ -15791,14 +15791,15 @@
     <view class="kz.uco.tsadv.modules.learning.model.feedback.LearningFeedbackTemplateQuestion"
           extends="_local"
           name="learningFeedbackTemplateQuestion.edit">
-        <property name="feedbackQuestion"
-                  view="learningFeedbackQuestion.browse"/>
+        <property name="feedbackQuestion" view="learningFeedbackQuestion.browse"/>
         <property name="feedbackTemplate"
                   view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.feedback.LearningFeedbackQuestion"
           extends="_local"
-          name="learningFeedbackQuestion.browse"/>
+          name="learningFeedbackQuestion.browse">
+        <property name="answers" view="_minimal"/>
+    </view>
     <view class="kz.uco.tsadv.modules.learning.model.feedback.LearningFeedbackTemplate"
           extends="_local"
           name="learningFeedbackTemplate.edit">
