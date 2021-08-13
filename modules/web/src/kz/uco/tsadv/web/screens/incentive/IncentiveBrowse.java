@@ -119,10 +119,6 @@ public class IncentiveBrowse extends Screen {
     @Inject
     private ExportDisplay exportDisplay;
 
-    public Component truncateDate(Entity entity) {
-        return null;
-    }
-
     protected class WrapCellExcelExporter extends ExcelExporter {
 
         @Override
@@ -139,7 +135,7 @@ public class IncentiveBrowse extends Screen {
     @Subscribe
     protected void onInit(InitEvent event) {
         MapScreenOptions screenOptions = (MapScreenOptions) event.getOptions();
-        if (screenOptions == null || !screenOptions.getParams().containsKey(ELEMENT_TYPE_SCREEN_PARAM)) {
+        if (!screenOptions.getParams().containsKey(ELEMENT_TYPE_SCREEN_PARAM)) {
             notifications.create().withCaption("No screen params").show();
             closeWithDefaultAction();
             return;
