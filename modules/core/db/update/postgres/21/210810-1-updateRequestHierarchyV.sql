@@ -138,7 +138,7 @@ FROM (SELECT rd.org_structure_request_id                     AS r_id,
              COALESCE(fh.min_salary::numeric, rd.min_salary) AS p_min_salary,
              COALESCE(rd.min_salary, fh.min_salary::numeric) AS min_salary
       FROM full_hierarchy fh
-               LEFT JOIN tsadv_org_structure_request_detail rd ON rd.delete_ts IS NULL AND (rd.change_type::text = ANY
+               JOIN tsadv_org_structure_request_detail rd ON rd.delete_ts IS NULL AND (rd.change_type::text = ANY
                                                                                             (ARRAY ['EDIT'::character varying::text, 'CLOSE'::character varying::text])) AND
                                                                   rd.element_type = fh.element_type AND 1 =
                                                                                                         CASE
