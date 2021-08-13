@@ -44,6 +44,7 @@ public class PortalFeedbackQuestionsChangedListener {
                     : "");
             map.put("topic", portalFeedbackQuestions.getTopic());
             map.put("text", portalFeedbackQuestions.getText());
+            map.put("req_type", portalFeedbackQuestions.getType().getLangValue());
 
             notificationService.sendNotification("portal.admin.feedback",
                     portalFeedbackQuestions.getPortalFeedback().getEmail(), map, "");
