@@ -24,6 +24,10 @@ public class JobDescriptionRequest extends AbstractBprocRequest {
     @JoinColumn(name = "POSITION_GROUP_ID")
     private PositionGroupExt positionGroup;
 
+    @Lob
+    @Column(name = "BASIC_INTERACTIONS_AT_WORK")
+    protected String basicInteractionsAtWork;
+
     @NotNull
     @Lob
     @Column(name = "POSITION_DUTIES", nullable = false)
@@ -40,6 +44,14 @@ public class JobDescriptionRequest extends AbstractBprocRequest {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FILE_ID")
     private FileDescriptor file;
+
+    public String getBasicInteractionsAtWork() {
+        return basicInteractionsAtWork;
+    }
+
+    public void setBasicInteractionsAtWork(String basicInteractionsAtWork) {
+        this.basicInteractionsAtWork = basicInteractionsAtWork;
+    }
 
     public FileDescriptor getFile() {
         return file;

@@ -99,5 +99,6 @@
         <class>kz.uco.tsadv.entity.bproc.ExtTaskData</class>
         <class>kz.uco.tsadv.modules.bpm.NotPersisitBprocActors</class>
         <class>kz.uco.tsadv.entity.bproc.StartBprocParams</class>
+        <class>kz.uco.tsadv.entity.models.PositionHierarchy</class>
     </metadata-model>
 </metadata>

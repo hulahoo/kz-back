@@ -20,6 +20,10 @@ public class JobDescription extends AbstractParentEntity {
     @JoinColumn(name = "POSITION_GROUP_ID")
     private PositionGroupExt positionGroup;
 
+    @Lob
+    @Column(name = "BASIC_INTERACTIONS_AT_WORK")
+    protected String basicInteractionsAtWork;
+
     @NotNull
     @Lob
     @Column(name = "POSITION_DUTIES", nullable = false)
@@ -40,6 +44,14 @@ public class JobDescription extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REQUEST_ID")
     private JobDescriptionRequest request;
+
+    public String getBasicInteractionsAtWork() {
+        return basicInteractionsAtWork;
+    }
+
+    public void setBasicInteractionsAtWork(String basicInteractionsAtWork) {
+        this.basicInteractionsAtWork = basicInteractionsAtWork;
+    }
 
     public JobDescriptionRequest getRequest() {
         return request;
