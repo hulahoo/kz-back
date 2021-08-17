@@ -4,16 +4,17 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.datatypes.Datatypes;
 import com.haulmont.chile.core.datatypes.impl.DoubleDatatype;
 import com.haulmont.chile.core.datatypes.impl.IntegerDatatype;
+import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.filter.Op;
-import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.Screens;
-import com.haulmont.cuba.gui.WindowManager;
-import com.haulmont.cuba.gui.WindowParam;
+import com.haulmont.cuba.gui.*;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.GroupDatasource;
+import com.haulmont.cuba.gui.export.ExportDisplay;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.base.service.common.CommonService;
@@ -44,6 +45,10 @@ public class PositionGroupBrowse extends AbstractLookup {
     protected CollectionDatasource<PositionExt, UUID> listDs;
     @Inject
     protected Metadata metadata;
+    @Inject
+    protected UiComponents uiComponents;
+    @Inject
+    protected ExportDisplay exportDisplay;
     @Inject
     private DataManager dataManager;
     @Inject
@@ -362,8 +367,11 @@ public class PositionGroupBrowse extends AbstractLookup {
             PositionGroupExt positionGroupExt = ((PositionExt) positionEdit.getItem()).getGroup();
             positionGroupsDs.refresh();
             positionGroupsTable.repaint();
-            try{
-                positionGroupsTable.setSelected(positionGroupExt);
+            try {
+                if (positionGroupsTable.getItems().getItems().stream().anyMatch(positionGroupExt1 ->
+                        positionGroupExt.getId().equals(positionGroupExt1.getId()))) {
+                    positionGroupsTable.setSelected(positionGroupExt);
+                }
             } catch (IllegalStateException e) {
             }
         });
@@ -515,4 +523,22 @@ public class PositionGroupBrowse extends AbstractLookup {
                 positionGroupsDs.refresh());
     }
 
+    public Component getJobDescriptionFile(Entity entity) {
+        PositionGroupExt positionGroupExt = (PositionGroupExt) entity;
+        if (positionGroupExt != null && positionGroupExt.getJobDescription() != null
+                && positionGroupExt.getJobDescription().getFile() != null) {
+            FileDescriptor file = positionGroupExt.getJobDescription().getFile();
+            LinkButton linkButton = uiComponents.create(LinkButton.class);
+            linkButton.setCaption(positionGroupExt.getJobDescription().getFile().getName());
+            linkButton.setAction(new BaseAction(file.getId().toString() + "download") {
+                @Override
+                public void actionPerform(Component component) {
+                    super.actionPerform(component);
+                    exportDisplay.show(file);
+                }
+            });
+            return linkButton;
+        }
+        return null;
+    }
 }

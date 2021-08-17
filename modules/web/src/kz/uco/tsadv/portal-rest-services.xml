@@ -324,4 +324,10 @@
             <param name="bpmUserSubstitution" type="kz.uco.tsadv.entity.tb.BpmUserSubstitution"/>
         </method>
     </service>
+    <service name="tsadv_PositionStructureService">
+        <method name="getStartData"/>
+        <method name="getChildren">
+            <param name="parentId" type="java.util.UUID"/>
+        </method>
+    </service>
 </services>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://jobDescriptionRequestEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.jobdescriptionrequest">
+    <data>
+        <instance id="jobDescriptionRequestDc"
+                  class="kz.uco.tsadv.modules.hr.JobDescriptionRequest" view="jobDescriptionRequest-edit">
+            <loader/>
+        </instance>
+        <collection id="tasksDc"
+                    class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
+    </data>
+    <actions>
+        <action id="reportAction"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="jobDescriptionRequestDc">
+                <column id="column1" width="750px">
+                    <textField id="requestNumberField" property="requestNumber" editable="false"/>
+                    <dateField id="requestDateField" property="requestDate" editable="false"/>
+                    <pickerField id="statusField" property="status" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <pickerField id="positionGroupField" property="positionGroup" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <textArea id="organizationPathField" editable="false" rows="5" caption="msg://organizationPathField"/>
+                </column>
+            </form>
+            <vbox id="fieldsVbox" width="100%" spacing="true">
+                <groupBox id="positionDutiesGBox" width="100%" caption="msg://positionDutiesGBox.caption">
+                    <textArea id="positionDutiesField" property="positionDuties" editable="false"
+                              rows="5" width="100%" dataContainer="jobDescriptionRequestDc"/>
+                </groupBox>
+                <groupBox id="generalAdditionalRequirementsGBox" width="100%"
+                          caption="msg://generalAdditionalRequirementsGBox.caption">
+                    <textArea id="generalAdditionalRequirementsField" rows="5" width="100%" editable="false"
+                              property="generalAdditionalRequirements" dataContainer="jobDescriptionRequestDc"/>
+                </groupBox>
+                <groupBox id="compulsoryQualificationRequirementsGBox" width="100%"
+                          caption="msg://compulsoryQualificationRequirementsGBox.caption">
+                    <textArea id="compulsoryQualificationRequirementsField" rows="5" width="100%" editable="false"
+                              property="compulsoryQualificationRequirements" dataContainer="jobDescriptionRequestDc"/>
+                </groupBox>
+                <groupBox id="fileOperationsGroupBox" width="100%" spacing="true">
+                    <linkButton id="reportBtn" action="reportAction"/>
+                    <label id="requiredlabel" value="msg://requiredlabel.value"
+                           visible="false" css="color: red;"/>
+                    <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"
+                            dataContainer="jobDescriptionRequestDc" showClearButton="true" required="true"
+                            uploadButtonCaption="mainMsg://empty" clearButtonIcon="REMOVE" uploadButtonIcon="DOWNLOAD"/>
+                </groupBox>
+            </vbox>
+            <vbox id="bpmActorsVBox"
+                  width="1000px"
+                  spacing="true">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://TransferRequest.approvalProcess.actors"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           height="100%"
+                           showSelection="false"
+                           dataContainer="tasksDc"
+                           width="100%">
+                        <columns>
+                            <column id="hrRole"/>
+                            <column id="assignee" generator="generateAssignee"/>
+                            <column id="createTime"/>
+                            <column id="endTime"/>
+                            <column id="outcome" generator="generateOutcome"/>
+                            <column id="comment"/>
+                        </columns>
+                    </table>
+                </groupBox>
+            </vbox>
+        </scrollBox>
+        <hbox id="procActionsBox"
+              align="BOTTOM_LEFT"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

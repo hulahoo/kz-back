@@ -19,6 +19,8 @@
                 <datasource id="analyticsDs" property="analytics"/>
             </datasource>
         </datasource>
+        <!--        <datasource id="jobDescriptionDs" class="kz.uco.tsadv.modules.hr.JobDescription"-->
+        <!--                    view="jobDescription-for-position-edit"/>-->
         <collectionDatasource id="posCompetenceElementsDs"
                               class="kz.uco.tsadv.modules.personal.model.CompetenceElement"
                               view="competenceElement-view">
@@ -169,7 +171,7 @@
         </collectionDatasource>
     </dsContext>
     <actions>
-        <action id="windowCommit"
+        <action id="windowCommit1"
                 caption="msg://table.btn.save"
                 icon="theme://actions.Editor.Ok.icon"
                 invoke="windowCommit"/>
@@ -337,135 +339,41 @@
                 </scrollBox>
                 <hbox id="windowActionsHBox"
                       spacing="true"
-                      stylename="c-edit-window-actions"
-                >
-                    <button id="windowCommit" action="windowCommit" icon="theme://actions.Editor.Ok.icon"
+                      stylename="c-edit-window-actions">
+                    <button id="windowCommit" action="windowCommit1" icon="theme://actions.Editor.Ok.icon"
                             caption="msg://table.btn.save"/>
                     <button id="windowClose" action="windowClose" icon="theme://actions.Editor.Cancel.icon"/>
                 </hbox>
             </tab>
-            <tab id="additional"
-                 caption="msg://edit.tab.additional"
-                 margin="true,true,true,false"
-                 spacing="true"
-                 expand="scrollBox">
-                <scrollBox id="scrollBox"
-                           height="100%"
-                           stylename="bt-scroll">
-                    <vbox id="additionalVBox"
-                          spacing="true">
-                        <groupBox caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirements">
-                            <tabSheet id="jobReqTabSheet"
-                                      height="100%">
-                                <tab id="reqLang1"
-                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang1"
-                                     margin="true,true,false,false">
-                                    <richTextArea id="jobRichTextArea1"
-                                                  datasource="positionDs"
-                                                  height="300px"
-                                                  property="candidateRequirementsLang1"
-                                                  width="100%"/>
-                                </tab>
-                                <tab id="reqLang2"
-                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang2"
-                                     margin="true,true,false,false">
-                                    <richTextArea id="jobRichTextArea2"
-                                                  datasource="positionDs"
-                                                  height="300px"
-                                                  property="candidateRequirementsLang2"
-                                                  width="100%"/>
-                                </tab>
-                                <tab id="reqLang3"
-                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang3"
-                                     margin="true,true,false,false">
-                                    <richTextArea id="jobRichTextArea3"
-                                                  datasource="positionDs"
-                                                  height="300px"
-                                                  property="candidateRequirementsLang3"
-                                                  width="100%"/>
-                                </tab>
-                                <tab id="reqLang4"
-                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang4"
-                                     margin="true,true,false,false">
-                                    <richTextArea id="jobRichTextArea4"
-                                                  datasource="positionDs"
-                                                  height="300px"
-                                                  property="candidateRequirementsLang4"
-                                                  width="100%"/>
-                                </tab>
-                                <tab id="reqLang5"
-                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang5"
-                                     margin="true,true,false,false">
-                                    <richTextArea id="jobRichTextArea5"
-                                                  datasource="positionDs"
-                                                  height="300px"
-                                                  property="candidateRequirementsLang5"
-                                                  width="100%"/>
-                                </tab>
-                            </tabSheet>
+            <tab id="jobDescriptionTab" caption="msg://jobDescriptionTab" expand="jobDescriptionVbox" spacing="true">
+                <vbox id="jobDescriptionVbox" height="100%" width="100%" expand="jobDescriptionFiesldVbox"
+                      spacing="true">
+                    <vbox id="jobDescriptionFiesldVbox" width="100%" height="100%" spacing="true">
+                        <groupBox id="positionDutiesGroupBox" width="100%" height="100%"
+                                  caption="msg://positionDutiesGroupBox">
+                            <textArea id="positionDutiesTextArea" height="100%" width="100%" required="false"/>
                         </groupBox>
-                        <groupBox caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescription">
-                            <tabSheet id="jobDescTabSheet"
-                                      height="100%">
-                                <tab id="descLang1"
-                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang1"
-                                     margin="true,true,false,false">
-                                    <richTextArea id="jobRichTextArea6"
-                                                  datasource="positionDs"
-                                                  height="300px"
-                                                  property="jobDescriptionLang1"
-                                                  width="100%"/>
-                                </tab>
-                                <tab id="descLang2"
-                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang2"
-                                     margin="true,true,false,false">
-                                    <richTextArea id="jobRichTextArea7"
-                                                  datasource="positionDs"
-                                                  height="300px"
-                                                  property="jobDescriptionLang2"
-                                                  width="100%"/>
-                                </tab>
-                                <tab id="descLang3"
-                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang3"
-                                     margin="true,true,false,false">
-                                    <richTextArea id="jobRichTextArea8"
-                                                  datasource="positionDs"
-                                                  height="300px"
-                                                  property="jobDescriptionLang3"
-                                                  width="100%"/>
-                                </tab>
-                                <tab id="descLang4"
-                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang4"
-                                     margin="true,true,false,false">
-                                    <richTextArea id="jobRichTextArea9"
-                                                  datasource="positionDs"
-                                                  height="300px"
-                                                  property="jobDescriptionLang4"
-                                                  width="100%"/>
-                                </tab>
-                                <tab id="descLang5"
-                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang5"
-                                     margin="true,true,false,false">
-                                    <richTextArea id="jobRichTextArea10"
-                                                  datasource="positionDs"
-                                                  height="300px"
-                                                  property="jobDescriptionLang5"
-                                                  width="100%"/>
-                                </tab>
-                            </tabSheet>
+                        <groupBox id="compulsoryQualificationRequirementsGroupBox" width="100%" height="100%"
+                                  caption="msg://compulsoryQualificationRequirementsGroupBox">
+                            <textArea id="compulsoryQualificationRequirementsTextArea" height="100%" width="100%"/>
+                        </groupBox>
+                        <groupBox id="generalAdditionalRequirementsGroupBox" width="100%" height="100%"
+                                  caption="msg://generalAdditionalRequirementsGroupBox">
+                            <textArea id="generalAdditionalRequirementsTextArea" height="100%" width="100%"/>
                         </groupBox>
                     </vbox>
-                </scrollBox>
-                <hbox id="windowActionsHBox1"
-                      spacing="true"
-                      stylename="c-edit-window-actions"
-                >
-                    <button id="windowCommit1" action="windowCommit" icon="theme://actions.Editor.Ok.icon"
-                            caption="msg://table.btn.save"/>
-                    <!--                    <button id="windowCommitHistory1" caption="msg://table.btn.save.history"-->
-                    <!--                            action="windowCommitHistory"/>-->
-                    <button id="windowClose1" action="windowClose" icon="theme://actions.Editor.Cancel.icon"/>
-                </hbox>
+                    <hbox id="uploadField" spacing="true">
+                        <label id="jobDescriptionFileLabel" value="msg://jobDescriptionFile" align="MIDDLE_RIGHT"/>
+                        <upload id="jobDescriptionFile" fileStoragePutMode="IMMEDIATE" showClearButton="true"
+                                showFileName="true" clearButtonCaption="mainMsg://empty" clearButtonIcon="REMOVE"
+                                uploadButtonCaption="mainMsg://empty" uploadButtonIcon="DOWNLOAD"/>
+                    </hbox>
+                </vbox>
+                <buttonsPanel id="jobDescriptionBP">
+                    <button id="jobDescriptionSaveBtn" invoke="jobDescriptionSave" caption="msg://save"/>
+                    <button id="jobDescriptionCancelBtn" invoke="jobDescriptionCancel" caption="msg://cancel"/>
+                    <button id="request" invoke="createRequest" caption="Заявка"/>
+                </buttonsPanel>
             </tab>
             <tab id="tab2"
                  caption="msg://Competences"

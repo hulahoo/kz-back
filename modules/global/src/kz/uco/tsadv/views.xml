@@ -1356,6 +1356,9 @@
                         </property>
                         <property name="primaryFlag"/>
                         <property name="assignDate"/>
+                        <property name="jobGroup" view="_minimal">
+                            <property name="jobName"/>
+                        </property>
                     </property>
                 </property>
                 <property name="assignmentStatus" view="_minimal">
@@ -1367,6 +1370,9 @@
                 <property name="primaryFlag"/>
                 <property name="group" view="_minimal">
                     <property name="list" view="_local"/>
+                </property>
+                <property name="jobGroup" view="_minimal">
+                    <property name="jobName"/>
                 </property>
             </property>
             <property name="competenceElements" view="_minimal">
@@ -1422,6 +1428,9 @@
                         <property name="organizationGroup" view="_minimal">
                             <property name="organizationName"/>
                         </property>
+                        <property name="jobGroup" view="_minimal">
+                            <property name="jobName"/>
+                        </property>
                     </property>
                     <property name="positionName"/>
                 </property>
@@ -1435,10 +1444,16 @@
                                 <property name="organizationGroup" view="_minimal">
                                     <property name="organizationName"/>
                                 </property>
+                                <property name="jobGroup" view="_minimal">
+                                    <property name="jobName"/>
+                                </property>
                             </property>
                         </property>
                         <property name="positionGroup" view="_minimal">
                             <property name="positionName"/>
+                        </property>
+                        <property name="jobGroup" view="_minimal">
+                            <property name="jobName"/>
                         </property>
                     </property>
                     <property name="assignment" view="_minimal">
@@ -1448,12 +1463,18 @@
                         <property name="positionGroup" view="_minimal">
                             <property name="positionName"/>
                         </property>
+                        <property name="jobGroup" view="_minimal">
+                            <property name="jobName"/>
+                        </property>
                     </property>
                 </property>
             </property>
             <property name="goals" view="positionGroupGoalLink.edit">
                 <property name="positionGroup" view="_minimal">
                     <property name="positionName"/>
+                </property>
+                <property name="goal" view="goal.browse">
+                    <property name="goalLang"/>
                 </property>
             </property>
             <property name="adminApprove" view="_minimal">
@@ -1465,6 +1486,17 @@
                 <property name="code"/>
             </property>
             <property name="positionName"/>
+            <property name="jobDescription" view="_minimal">
+                <property name="positionGroup" view="_minimal">
+                    <property name="positionName"/>
+                </property>
+                <property name="request" view="_minimal"/>
+                <property name="positionDuties"/>
+                <property name="generalAdditionalRequirements"/>
+                <property name="compulsoryQualificationRequirements"/>
+                <property name="file" view="_minimal"/>
+            </property>
+            <property name="organizationGroup" view="_minimal"/>
         </property>
         <property name="payroll">
             <property name="langValue1"/>
@@ -3394,10 +3426,14 @@
             <property name="jobGroup" view="_minimal">
                 <property name="list" view="job.view">
                     <property name="legacyId"/>
+                    <property name="group" view="_minimal">
+                        <property name="jobName"/>
+                    </property>
                 </property>
                 <property name="job" view="_minimal">
                     <property name="legacyId"/>
                 </property>
+                <property name="jobName"/>
             </property>
             <property name="gradeGroup" view="_minimal">
                 <property name="list" view="_minimal">
@@ -3432,14 +3468,44 @@
             </property>
             <property name="organizationGroupExt" view="organizationGroup.browse">
                 <property name="company" view="_minimal"/>
-                <property name="costCenter" view="_minimal"/>
-                <property name="payroll" view="_minimal"/>
+                <property name="costCenter" view="_minimal">
+                    <property name="company" view="_minimal"/>
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="payroll" view="_minimal">
+                    <property name="company" view="_minimal"/>
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
                 <property name="organizationNameLang1"/>
                 <property name="organizationNameLang2"/>
                 <property name="organizationNameLang3"/>
                 <property name="organizationNameLang4"/>
                 <property name="organizationNameLang5"/>
-                <property name="location" view="_minimal"/>
+                <property name="location" view="_minimal">
+                    <property name="company" view="_minimal"/>
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
                 <property name="analytics" view="_minimal">
                     <property name="calendar" view="_minimal">
                         <property name="calendar"/>
@@ -3489,6 +3555,7 @@
             </property>
             <property name="positionGroup" view="_minimal">
                 <property name="analytics" view="_minimal"/>
+                <property name="positionName"/>
             </property>
         </property>
         <property name="position" view="_minimal">
@@ -3501,6 +3568,7 @@
                 <property name="job" view="_minimal">
                     <property name="legacyId"/>
                 </property>
+                <property name="jobName"/>
             </property>
             <property name="gradeGroup" view="_minimal">
                 <property name="list" view="_minimal">
@@ -3519,7 +3587,11 @@
                 <property name="organization" view="_minimal">
                     <property name="legacyId"/>
                 </property>
+                <property name="organizationName"/>
             </property>
+        </property>
+        <property name="jobDescription" view="_minimal">
+            <property name="file" view="_minimal"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.PositionExt"
@@ -23807,7 +23879,29 @@
             <property name="programmCode" view="_minimal"/>
         </property>
     </view>
-    <view entity="tsadv_OrganizationIncentiveIndicators" name="organizationIncentiveIndicators-edit-view" extends="_local">
+    <view entity="tsadv_JobDescription" name="jobDescription-for-position-edit" extends="_local">
+        <property name="positionGroup" view="_minimal">
+            <property name="list" view="_minimal"/>
+            <property name="jobDescription" view="_minimal"/>
+        </property>
+        <property name="file" view="_minimal"/>
+        <property name="request" view="_minimal">
+            <property name="positionGroup" view="_minimal">
+                <property name="positionName"/>
+                <property name="list" view="_minimal"/>
+                <property name="jobDescription" view="_minimal"/>
+            </property>
+            <property name="positionDuties"/>
+            <property name="generalAdditionalRequirements"/>
+            <property name="compulsoryQualificationRequirements"/>
+            <property name="file" view="_minimal"/>
+            <property name="status" view="_minimal"/>
+            <property name="requestDate"/>
+            <property name="comment"/>
+        </property>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveIndicators" name="organizationIncentiveIndicators-edit-view"
+          extends="_local">
         <property name="indicator" view="_local"/>
         <property name="responsiblePosition" view="_base">
             <property name="list" view="_local"/>
@@ -23985,6 +24079,21 @@
     </view>
     <view entity="tsadv_Scholarship" name="scholarship.edit" extends="_local">
         <property name="granteesAgreement" view="_minimal"/>
+    </view>
+    <view entity="tsadv_JobDescriptionRequest" name="jobDescriptionRequest-edit" extends="_local">
+        <property name="positionGroup" view="_minimal">
+            <property name="list" view="_minimal"/>
+            <property name="organizationGroup" view="_minimal"/>
+        </property>
+        <property name="file" view="_minimal"/>
+        <property name="status" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+    </view>
+    <view entity="base$OrganizationGroupExt" name="organizationGroupExt-for-struct-path" extends="_local">
+        <property name="list" view="_minimal"/>
     </view>
     <view entity="tsadv_PersonPayslip" name="personPayslip.edit" extends="_local">
         <property name="personGroup" view="_minimal">

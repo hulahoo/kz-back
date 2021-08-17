@@ -677,5 +677,7 @@
         <class>kz.uco.tsadv.modules.personal.model.LearningResults</class>
         <class>kz.uco.tsadv.modules.personal.model.LearningResultsPerSubject</class>
         <class>kz.uco.tsadv.modules.personal.model.Scholarship</class>
+        <class>kz.uco.tsadv.modules.hr.JobDescription</class>
+        <class>kz.uco.tsadv.modules.hr.JobDescriptionRequest</class>
     </persistence-unit>
 </persistence>
