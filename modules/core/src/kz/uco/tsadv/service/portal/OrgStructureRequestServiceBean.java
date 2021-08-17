@@ -225,6 +225,8 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
             });
 
             if (!foundChildren.isEmpty()) {
+                foundChildren.sort(Comparator.comparing(requestTreeData ->
+                        Optional.ofNullable(requestTreeData.getGrade()).map(strings -> strings[0]).orElse("")));
                 foundChildren.forEach(requestTreeData -> collectChildren(requestTreeData, treeDataList));
                 parent.setChildren(foundChildren);
             }
