@@ -172,6 +172,8 @@
                   screen="base$PositionGroup.browse"/>
             <item screen="tsadv_ExecutiveAssistants.browse"
                   caption="mainMsg://menu_config.tsadv_ExecutiveAssistants.browse"/>
+            <item screen="tsadv_JobDescriptionRequest.browse"
+                  caption="mainMsg://menu_config.tsadv_JobDescriptionRequest.browse"/>
 
         </menu>
         <menu id="hrGradesAndRules"

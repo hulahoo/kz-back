@@ -1,0 +1,1 @@
+alter table TSADV_JOB_DESCRIPTION add column BASIC_INTERACTIONS_AT_WORK text ;

@@ -149,7 +149,7 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
         }
     }
 
-    private void overrideOutcomeActions(OutcomesPanel outcomesPanel, Button button) {
+    protected void overrideOutcomeActions(OutcomesPanel outcomesPanel, Button button) {
         Action action = button.getAction();
         if (action == null) throw new NullPointerException("Outcome is null!");
 
