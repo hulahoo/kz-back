@@ -28,12 +28,16 @@
                     </actions>
                 </pickerField>
                 <dateField id="startDateField" property="startDate"/>
-                <dateField id="endDateField" property="endDate"/>
+                <dateField id="endDateField" property="endDate"/>`
             </column>
             <column width="350px">
-                <pickerField property="managerPositionGroup.position.organizationGroupExt" editable="false"
+                <pickerField id="managerOrganizationGroup"
+                             metaClass="base$OrganizationGroupExt"
+                             editable="false"
                              caption="msg://manager.organization"/>
-                <pickerField property="assistancePositionGroup.position.organizationGroupExt" editable="false"
+                <pickerField id="assistanceOrganizationGroup"
+                             metaClass="base$OrganizationGroupExt"
+                             editable="false"
                              caption="msg://assistance.organization"/>
                 <pickerField property="managerPositionGroup.company" editable="false" caption="msg://manager.company"/>
                 <pickerField property="assistancePositionGroup.company" editable="false"
