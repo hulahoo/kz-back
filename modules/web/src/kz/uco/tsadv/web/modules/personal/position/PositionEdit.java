@@ -92,7 +92,7 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     protected PickerField costCenterField;
     @Named("fieldGroup.extra")
     protected TextField extraField;
-//    @Inject
+    //    @Inject
 //    protected TabSheet jobReqTabSheet;
     @Inject
     protected TabSheet jobDescTabSheet;
@@ -924,6 +924,13 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     public void createRequest() {
         JobDescriptionRequest jobDescriptionRequest = metadata.create(JobDescriptionRequest.class);
         jobDescriptionRequest.setPositionGroup(getItem().getGroup());
+        if (jobDescription != null) {
+            jobDescriptionRequest.setBasicInteractionsAtWork(jobDescription.getBasicInteractionsAtWork());
+            jobDescriptionRequest.setCompulsoryQualificationRequirements(jobDescription.getCompulsoryQualificationRequirements());
+            jobDescriptionRequest.setGeneralAdditionalRequirements(jobDescription.getGeneralAdditionalRequirements());
+            jobDescriptionRequest.setPositionDuties(jobDescription.getPositionDuties());
+        }
+
         JobDescriptionRequestEdit jobDescriptionRequestEdit = screens.create(JobDescriptionRequestEdit.class, OpenMode.THIS_TAB
                 , new MapScreenOptions(ParamsMap.of("from", "base$Position.edit")));
         jobDescriptionRequestEdit.setEntityToEdit(jobDescriptionRequest);

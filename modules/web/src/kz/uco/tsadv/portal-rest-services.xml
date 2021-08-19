@@ -330,4 +330,9 @@
             <param name="parentId" type="java.util.UUID"/>
         </method>
     </service>
+    <service name="tsadv_JobDescriptionService">
+        <method name="getJobDescriptionRequests">
+            <param name="positionId" type="java.lang.String"/>
+        </method>
+    </service>
 </services>

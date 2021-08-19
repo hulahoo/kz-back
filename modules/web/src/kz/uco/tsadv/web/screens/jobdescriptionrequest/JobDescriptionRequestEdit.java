@@ -25,10 +25,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @UiController("tsadv_JobDescriptionRequest.edit")
 @UiDescriptor("job-description-request-edit.xml")
@@ -66,6 +63,20 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
     protected TextArea<String> organizationPathField;
     @Inject
     protected OrganizationService organizationService;
+    protected boolean readOnly = false;
+
+    @Subscribe
+    protected void onInit(InitEvent event) {
+        if (event.getOptions() != null) {
+            MapScreenOptions options = (MapScreenOptions) event.getOptions();
+            Map<String, Object> params = options.getParams();
+            if (params.containsKey("readOnly") && ((Boolean) params.get("readOnly"))) {
+                readOnly = true;
+            }
+        }
+
+    }
+
 
     @Subscribe
     protected void onAfterShowTsadv(AfterShowEvent event) {
@@ -84,20 +95,36 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
         StringBuilder structOrganization = new StringBuilder();
         if (jobDescriptionRequestDc.getItem() != null
                 && jobDescriptionRequestDc.getItem().getPositionGroup() != null
-                && jobDescriptionRequestDc.getItem().getPositionGroup().getOrganizationGroup() != null) {
+                && jobDescriptionRequestDc.getItem().getPositionGroup().getPosition() != null
+                && jobDescriptionRequestDc.getItem().getPositionGroup().getPosition().getOrganizationGroupExt() != null) {
             OrganizationGroupExt organizationGroupExt = dataManager.load(Id.of(
-                    jobDescriptionRequestDc.getItem().getPositionGroup().getOrganizationGroup().getId(), OrganizationGroupExt.class))
+                    jobDescriptionRequestDc.getItem().getPositionGroup().getPosition().getOrganizationGroupExt().getId(),
+                    OrganizationGroupExt.class))
                     .view("organizationGroupExt-for-struct-path").optional().orElse(null);
-            int i = 0;
+            List<OrganizationGroupExt> organizationList = new ArrayList<>();
             while (organizationGroupExt != null && organizationGroupExt.getOrganizationName() != null) {
-                i++;
-                for (int j = 0; j < i; j++) {
-                    structOrganization.append("- ");
-                }
-                structOrganization.append(organizationGroupExt.getOrganizationName()).append("\r\n");
+                organizationList.add(organizationGroupExt);
                 organizationGroupExt = organizationService.getParent(organizationGroupExt);
             }
+            Collections.reverse(organizationList);
+            if (organizationList.size() > 0) {
+                organizationList.remove(0);
+            }
+            int i = 0;
+            for (OrganizationGroupExt groupExt : organizationList) {
+                for (int j = 0; j < organizationList.indexOf(groupExt) + 1; j++) {
+                    structOrganization.append("- ");
+                }
+                structOrganization.append(groupExt.getOrganizationName()).append("\r\n");
+            }
             organizationPathField.setValue(structOrganization.toString());
+        }
+        if (readOnly){
+            for (Component component : getWindow().getComponents()) {
+                if (component instanceof Component.Editable) {
+                    ((Component.Editable) component).setEditable(false);
+                }
+            }
         }
     }
 
