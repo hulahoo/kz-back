@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.learning.model;
 
+import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
@@ -33,6 +34,18 @@ public class CourseReview extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FROM_COURSE_FEEDBACK_PERSON_ANSWER_ID")
     protected CourseFeedbackPersonAnswer fromCourseFeedbackPersonAnswer;
+
+    @MetaProperty(related = "rate")
+    public Double getRoundedRate() {
+        if (rate != null) {
+            int intRate = rate.intValue();
+            double dif = rate - intRate;
+            if (dif < 0.25) return intRate + 0.0;
+            else if (0.25 <= dif && dif < 0.75) return intRate + 0.5;
+            else return intRate + 1.0;
+        }
+        return null;
+    }
 
     public CourseFeedbackPersonAnswer getFromCourseFeedbackPersonAnswer() {
         return fromCourseFeedbackPersonAnswer;

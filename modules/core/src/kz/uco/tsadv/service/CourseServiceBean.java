@@ -835,7 +835,7 @@ public class CourseServiceBean implements CourseService {
         Double avgRate = course.getReviews().isEmpty()
                 ? 0D
                 : course.getReviews().stream()
-                .map(CourseReview::getRate)
+                .map(CourseReview::getRoundedRate)
                 .reduce(Double::sum)
                 .orElseThrow(() -> new NullPointerException("Reviews is empty!")) / course.getReviews().size();
         coursePojo.setAvgRate(avgRate);
@@ -863,10 +863,10 @@ public class CourseServiceBean implements CourseService {
                 .user(r.getPersonGroup().getFullName())
                 .date(r.getCreateTs())
                 .comment(r.getText())
-                .rating(r.getRate() != null ? Math.round(r.getRate()) : r.getRate())
+                .rating(r.getRoundedRate())
                 .build()).collect(Collectors.toList()));
         coursePojo.setRating(course.getReviews().stream()
-                .collect(Collectors.groupingBy(r -> r.getRate() != null ? Math.round(r.getRate()) : 0.0, Collectors.counting()))
+                .collect(Collectors.groupingBy(CourseReview::getRoundedRate, Collectors.counting()))
                 .entrySet().stream()
                 .map(m -> new PairPojo<>(m.getKey(), m.getValue()))
                 .collect(Collectors.toList()));
