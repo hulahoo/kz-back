@@ -54,6 +54,8 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
     @Inject
     protected TextArea<String> generalAdditionalRequirementsField;
     @Inject
+    protected TextArea<String> basicInteractionsAtWorkField;
+    @Inject
     protected TextArea<String> compulsoryQualificationRequirementsField;
     @Inject
     protected Label<String> requiredlabel;
@@ -84,6 +86,7 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
         if (PersistenceHelper.isNew(jobDescriptionRequestDc.getItem())) {
             positionDutiesField.setEditable(true);
             generalAdditionalRequirementsField.setEditable(true);
+            basicInteractionsAtWorkField.setEditable(true);
             compulsoryQualificationRequirementsField.setEditable(true);
         }
         if (activeTaskData == null || activeTaskData.getName() == null

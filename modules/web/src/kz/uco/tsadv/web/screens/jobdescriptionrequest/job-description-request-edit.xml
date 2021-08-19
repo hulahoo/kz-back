@@ -43,6 +43,10 @@
                     <textArea id="positionDutiesField" property="positionDuties" editable="false"
                               rows="5" width="100%" dataContainer="jobDescriptionRequestDc"/>
                 </groupBox>
+                <groupBox id="basicInteractionsAtWorkGBox" width="100%" caption="msg://basicInteractionsAtWorkBox.caption">
+                    <textArea id="basicInteractionsAtWorkField" property="basicInteractionsAtWork" editable="false"
+                              rows="5" width="100%" dataContainer="jobDescriptionRequestDc"/>
+                </groupBox>
                 <groupBox id="generalAdditionalRequirementsGBox" width="100%"
                           caption="msg://generalAdditionalRequirementsGBox.caption">
                     <textArea id="generalAdditionalRequirementsField" rows="5" width="100%" editable="false"
