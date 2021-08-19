@@ -5,28 +5,7 @@
         messagesPack="kz.uco.tsadv.web.screens.jobdescriptionrequest">
     <data readOnly="true">
         <collection id="jobDescriptionRequestsDc"
-                    class="kz.uco.tsadv.modules.hr.JobDescriptionRequest">
-            <view extends="_local">
-                <property name="positionGroup" view="_minimal">
-                    <property name="list" view="_minimal"/>
-                    <property name="organizationGroup" view="_minimal">
-                        <property name="list" view="_minimal">
-                            <property name="organizationNameLang1"/>
-                            <property name="organizationNameLang2"/>
-                            <property name="organizationNameLang3"/>
-                            <property name="organizationNameLang4"/>
-                            <property name="organizationNameLang5"/>
-                            <property name="startDate"/>
-                            <property name="endDate"/>
-                        </property>
-                    </property>
-                </property>
-                <property name="status" view="_minimal">
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="code"/>
-                </property>
-            </view>
+                    class="kz.uco.tsadv.modules.hr.JobDescriptionRequest" view="jobDescriptionRequest-browse">
             <loader id="jobDescriptionRequestsDl">
                 <query>
                     <![CDATA[select e from tsadv_JobDescriptionRequest e order by e.requestDate]]>

@@ -119,11 +119,14 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
             }
             organizationPathField.setValue(structOrganization.toString());
         }
-        if (readOnly){
+        if (readOnly) {
             for (Component component : getWindow().getComponents()) {
                 if (component instanceof Component.Editable) {
                     ((Component.Editable) component).setEditable(false);
                 }
+            }
+            for (Component component : procActionButtonHBox.getComponents()) {
+                component.setVisible(false);
             }
         }
     }
@@ -166,5 +169,11 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
             return (BaseAction) action;
         }
         return super.getNewOutcomeAction(outcomesPanel, action);
+    }
+
+
+    @Subscribe("windowClose1")
+    protected void onWindowClose1(Action.ActionPerformedEvent event) {
+        closeWithDiscard();
     }
 }

@@ -13,6 +13,7 @@
     </data>
     <actions>
         <action id="reportAction"/>
+        <action id="windowClose1" icon="CANCEL" caption="msg://cancel"/>
     </actions>
     <dialogMode height="600"
                 width="800"/>
@@ -89,7 +90,7 @@
               spacing="true">
             <hbox id="procActionButtonHBox"
                   spacing="true"/>
-            <button action="windowClose"/>
+            <button action="windowClose1"/>
         </hbox>
     </layout>
 </window>
