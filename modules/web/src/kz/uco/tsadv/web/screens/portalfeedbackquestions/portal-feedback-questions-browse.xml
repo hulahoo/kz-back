@@ -35,6 +35,9 @@
             <columns>
                 <column id="user"/>
                 <column id="portalFeedback.company"/>
+                <column id="portalFeedback.category"/>
+                <column id="portalFeedback.email"/>
+                <column id="type"/>
                 <column id="topic"/>
                 <column id="text"/>
             </columns>
