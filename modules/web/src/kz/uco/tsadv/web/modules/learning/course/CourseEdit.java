@@ -15,11 +15,15 @@ import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.security.entity.User;
 import com.haulmont.cuba.web.gui.facets.NotificationFacetProvider;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.cuba.actions.CreateActionExt;
+import kz.uco.base.service.NotificationService;
+import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
@@ -27,9 +31,7 @@ import kz.uco.tsadv.modules.personal.model.PersonExt;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @UiController("tsadv$Course.edit")
 @UiDescriptor("course-edit.xml")
@@ -101,6 +103,10 @@ public class CourseEdit extends StandardEditor<Course> {
     protected NotificationFacetProvider notificationFacetProvider;
     @Inject
     protected NotificationFacet notification;
+    @Inject
+    private NotificationService notificationService;
+    @Inject
+    private CommonService commonService;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -511,6 +517,7 @@ public class CourseEdit extends StandardEditor<Course> {
 
     @Subscribe("enrollmentsTable.addAttempt")
     public void onEnrollmentsTableAddAttempt(Action.ActionPerformedEvent event) {
+        Map<String, Object> userParams = new HashMap<>();
         CommitContext commitContext = new CommitContext();
         for (Enrollment enrollment : enrollmentsTable.getSelected()) {
             for (CourseSection section : courseDc.getItem().getSections()) {
@@ -532,6 +539,15 @@ public class CourseEdit extends StandardEditor<Course> {
                     }
                 }
             }
+            TsadvUser user = commonService.getEntity(TsadvUser.class,
+                    "select distinct su " +
+                            "from tsadv$UserExt su " +
+                            "where su.personGroup.id = :id ",
+                    ParamsMap.of("id",enrollment.getPersonGroup().getId()),
+                    "_base");
+            userParams.put("personFullName", enrollment.getPersonGroup().getPerson().getFullName());
+            userParams.put("courseName", enrollment.getCourse().getName());
+            notificationService.sendParametrizedNotification("tdc.additional.attempt", user, userParams);
         }
         dataManager.commit(commitContext);
         notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
