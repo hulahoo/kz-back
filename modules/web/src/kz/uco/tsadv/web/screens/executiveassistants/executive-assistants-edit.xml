@@ -15,13 +15,17 @@
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="executiveAssistantsDc">
             <column width="350px">
-                <pickerField id="managerPositionGroupField" property="managerPositionGroup">
+                <pickerField id="managerPositionGroupField"
+                             property="managerPositionGroup"
+                             caption="msg://managerPosition">
                     <actions>
                         <action id="lookup" type="picker_lookup"/>
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
-                <pickerField id="assistancePositionGroupField" property="assistancePositionGroup">
+                <pickerField id="assistancePositionGroupField"
+                             property="assistancePositionGroup"
+                             caption="msg://assistance.position">
                     <actions>
                         <action id="lookup" type="picker_lookup"/>
                         <action id="clear" type="picker_clear"/>
