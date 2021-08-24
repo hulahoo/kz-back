@@ -52,21 +52,10 @@ public class IncentiveServiceBean implements IncentiveService {
 
         UUID positionGroupId = position.getGroup().getId();
 
-        final String query = "with result as (\n" +
-                "    select sum(score.total_score) as result,\n" +
-                "           r.organization_group_id,\n" +
-                "           to_char(r.period_date, 'yyyy-MM')                   as date_\n" +
-                "    from tsadv_organization_incentive_result r\n" +
-                "             left join TSADV_DIC_INCENTIVE_INDICATOR_SCORE_SETTING score\n" +
-                "                       on score.indicator_id = r.indicator_id\n" +
-                "                           and score.delete_ts is null\n" +
-                "                           and r.result_ between score.min_percent and score.max_percent" +
-                "    where r.delete_ts is null\n" +
-                "    group by r.organization_group_id, to_char(r.period_date, 'yyyy-MM')\n" +
-                "),\n" +
-                "     INCENTIVE as (\n" +
+        final String query = "with INCENTIVE as (\n" +
                 "         select d as date_,\n" +
-                "                i.organization_group_id\n" +
+                "                i.organization_group_id,\n" +
+                "                string_agg(i.INDICATOR_ID::text,', ') as INDICATORS\n" +
                 "         from TSADV_ORGANIZATION_INCENTIVE_INDICATORS i\n" +
                 "                  join TSADV_ORGANIZATION_INCENTIVE_FLAG of\n" +
                 "                       on of.organization_group_id = i.organization_group_id\n" +
@@ -83,7 +72,23 @@ public class IncentiveServiceBean implements IncentiveService {
                 "         where i.delete_ts is null\n" +
                 "           and i.RESPONSIBLE_POSITION_ID = #personGroupId\n" +
                 "         group by d, i.organization_group_id\n" +
-                "     )\n" +
+                "     ),\n" +
+                " result as (\n" +
+                "    select sum(score.total_score) as result,\n" +
+                "           r.organization_group_id,\n" +
+                "           to_char(r.period_date, 'yyyy-MM')                   as date_\n" +
+                "    from tsadv_organization_incentive_result r\n" +
+                "             join INCENTIVE i " +
+                "                   on r.organization_group_id = i.organization_group_id\n" +
+                "                       and to_char(r.period_date, 'yyyy-MM') = to_char(i.date_, 'yyyy-MM')\n" +
+                "                       and i.INDICATORS ~ r.INDICATOR_ID::text\n" +
+                "             left join TSADV_DIC_INCENTIVE_INDICATOR_SCORE_SETTING score\n" +
+                "                       on score.indicator_id = r.indicator_id\n" +
+                "                           and score.delete_ts is null\n" +
+                "                           and r.result_ between score.min_percent and score.max_percent" +
+                "    where r.delete_ts is null\n" +
+                "    group by r.organization_group_id, to_char(r.period_date, 'yyyy-MM')\n" +
+                ")\n" +
                 "select %s\n" +
                 "from INCENTIVE i\n" +
                 "         join base_organization o\n" +

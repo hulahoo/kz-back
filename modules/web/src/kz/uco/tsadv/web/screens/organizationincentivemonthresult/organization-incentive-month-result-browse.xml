@@ -46,6 +46,7 @@
                 <column id="weight"/>
                 <column id="plan"/>
                 <column id="fact"/>
+                <column id="result"/>
                 <column id="premiumPercent"/>
                 <column id="totalPremiumPercent"/>
                 <column id="status"/>

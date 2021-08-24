@@ -1,5 +1,10 @@
-create or replace view tsadv_organization_incentive_month_result_view(id, version, create_ts, created_by, update_ts, updated_by, delete_ts, deleted_by, company_id, period_, department_id, indicator_id, weight, plan_, fact, premium_percent, total_premium_percent, status_id, comment_, parent_id) as
-	SELECT ir.id,
+drop view tsadv_organization_incentive_month_result_view;
+create view tsadv_organization_incentive_month_result_view
+            (id, version, create_ts, created_by, update_ts, updated_by, delete_ts, deleted_by, company_id, period_,
+             department_id, indicator_id, weight, plan_, fact, result_, premium_percent, total_premium_percent, status_id,
+             comment_, parent_id)
+as
+SELECT ir.id,
        ir.version,
        mr.create_ts,
        mr.created_by,
@@ -14,10 +19,11 @@ create or replace view tsadv_organization_incentive_month_result_view(id, versio
        ir.weight,
        ir.plan_,
        ir.fact,
+       ir.result_,
        s.total_score                                                                      AS premium_percent,
        sum(s.total_score) OVER (PARTITION BY mr.id, ii.type_id, ir.organization_group_id) AS total_premium_percent,
-       NULL::uuid                                                                         AS status_id,
-       NULL::character varying(2500)                                                      AS comment_,
+        NULL::uuid                                                                         AS status_id,
+        NULL::character varying(2500)                                                      AS comment_,
        mr.id                                                                              AS parent_id
 FROM tsadv_organization_incentive_month_result mr
          JOIN tsadv_organization_incentive_result ir
@@ -39,10 +45,11 @@ SELECT mr.id,
        mr.company_id,
        mr.period_,
        NULL::uuid             AS department_id,
-       NULL::uuid             AS indicator_id,
-       NULL::double precision AS weight,
+        NULL::uuid             AS indicator_id,
+        NULL::double precision AS weight,
        NULL::numeric          AS plan_,
        NULL::numeric          AS fact,
+       NULL::numeric          AS result_,
        NULL::double precision AS premium_percent,
        NULL::double precision AS total_premium_percent,
        mr.status_id,
@@ -51,5 +58,5 @@ SELECT mr.id,
 FROM tsadv_organization_incentive_month_result mr
 WHERE mr.delete_ts IS NULL;
 
-alter table tsadv_organization_incentive_month_result_view owner to tal;
-
+alter table tsadv_organization_incentive_month_result_view
+    owner to tal;

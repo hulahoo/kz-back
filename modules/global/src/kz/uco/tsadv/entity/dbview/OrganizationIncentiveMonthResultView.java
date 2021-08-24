@@ -42,6 +42,9 @@ public class OrganizationIncentiveMonthResultView extends StandardEntity {
     @Column(name = "FACT")
     private BigDecimal fact;
 
+    @Column(name = "RESULT_")
+    private Double result;
+
     @Column(name = "PREMIUM_PERCENT")
     private Double premiumPercent;
 
@@ -58,6 +61,14 @@ public class OrganizationIncentiveMonthResultView extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
     private OrganizationIncentiveMonthResultView parent;
+
+    public Double getResult() {
+        return result;
+    }
+
+    public void setResult(Double result) {
+        this.result = result;
+    }
 
     public OrganizationIncentiveMonthResultView getParent() {
         return parent;
