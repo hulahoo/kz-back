@@ -38,6 +38,8 @@ public class StartBprocServiceBean implements StartBprocService {
     @Inject
     protected PositionService positionService;
     @Inject
+    protected UserSessionSource userSessionSource;
+    @Inject
     protected BpmRolesDefinerService definerService;
 
     @Override
@@ -198,6 +200,9 @@ public class StartBprocServiceBean implements StartBprocService {
         notPersisitBprocActors = excludeDuplicate(notPersisitBprocActors);
 
         for (NotPersisitBprocActors notPersisitBprocActor : notPersisitBprocActors) {
+
+            if (isExcludeActor(notPersisitBprocActor)) continue;
+
             BprocActors bprocActors = metadata.create(BprocActors.class);
             bprocActors.setEntityId(entityId);
             bprocActors.setBprocUserTaskCode(notPersisitBprocActor.getBprocUserTaskCode());
@@ -212,6 +217,15 @@ public class StartBprocServiceBean implements StartBprocService {
         }
 
         dataManager.commit(commitContext);
+    }
+
+    protected boolean isExcludeActor(NotPersisitBprocActors notPersisitBprocActor) {
+        DicHrRole hrRole = notPersisitBprocActor.getHrRole();
+        if (hrRole != null && OrganizationHrUserService.HR_ROLE_ORG_MANGER.equals(hrRole.getCode())) {
+            List<TsadvUser> users = notPersisitBprocActor.getUsers();
+            if (users.size() == 1) return users.get(0).equals(userSessionSource.getUserSession().getUser());
+        }
+        return false;
     }
 
     protected NotPersisitBprocActors createNotPersisitBprocActors(BpmRolesLink link, DicHrRole hrRole) {
