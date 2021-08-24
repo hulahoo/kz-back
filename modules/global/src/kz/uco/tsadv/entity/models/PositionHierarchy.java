@@ -3,8 +3,6 @@ package kz.uco.tsadv.entity.models;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
-import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
-import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

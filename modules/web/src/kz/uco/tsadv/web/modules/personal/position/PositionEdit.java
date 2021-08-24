@@ -92,7 +92,7 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     protected PickerField costCenterField;
     @Named("fieldGroup.extra")
     protected TextField extraField;
-//    @Inject
+    //    @Inject
 //    protected TabSheet jobReqTabSheet;
     @Inject
     protected TabSheet jobDescTabSheet;
@@ -167,6 +167,8 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     @Inject
     protected TextArea<String> positionDutiesTextArea;
     @Inject
+    protected TextArea<String> basicInteractionsAtWorkTextArea;
+    @Inject
     protected FileUploadField jobDescriptionFile;
     @Inject
     protected TextArea<String> compulsoryQualificationRequirementsTextArea;
@@ -200,6 +202,7 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
                     positionDutiesTextArea.setRequired(false);
                 }
                 positionDutiesTextArea.setValue(jobDescription.getPositionDuties());
+                basicInteractionsAtWorkTextArea.setValue(jobDescription.getBasicInteractionsAtWork());
                 compulsoryQualificationRequirementsTextArea.setValue(jobDescription.getCompulsoryQualificationRequirements());
                 generalAdditionalRequirementsTextArea.setValue(jobDescription.getGeneralAdditionalRequirements());
                 if (jobDescription.getFile() != null) {
@@ -210,14 +213,16 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
                     positionDutiesTextArea.setRequired(true);
                     jobDescriptionChanged = true;
                 });
+                basicInteractionsAtWorkTextArea.addTextChangeListener(textChangeEvent -> {
+                    jobDescription.setBasicInteractionsAtWork(textChangeEvent.getText());
+                    jobDescriptionChanged = true;
+                });
                 compulsoryQualificationRequirementsTextArea.addTextChangeListener(textChangeEvent -> {
                     jobDescription.setCompulsoryQualificationRequirements(textChangeEvent.getText());
-                    positionDutiesTextArea.setRequired(true);
                     jobDescriptionChanged = true;
                 });
                 generalAdditionalRequirementsTextArea.addTextChangeListener(textChangeEvent -> {
                     jobDescription.setGeneralAdditionalRequirements(textChangeEvent.getText());
-                    positionDutiesTextArea.setRequired(true);
                     jobDescriptionChanged = true;
                 });
                 jobDescriptionFile.addValueChangeListener(fileDescriptorValueChangeEvent -> {
@@ -924,6 +929,13 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     public void createRequest() {
         JobDescriptionRequest jobDescriptionRequest = metadata.create(JobDescriptionRequest.class);
         jobDescriptionRequest.setPositionGroup(getItem().getGroup());
+        if (jobDescription != null) {
+            jobDescriptionRequest.setBasicInteractionsAtWork(jobDescription.getBasicInteractionsAtWork());
+            jobDescriptionRequest.setCompulsoryQualificationRequirements(jobDescription.getCompulsoryQualificationRequirements());
+            jobDescriptionRequest.setGeneralAdditionalRequirements(jobDescription.getGeneralAdditionalRequirements());
+            jobDescriptionRequest.setPositionDuties(jobDescription.getPositionDuties());
+        }
+
         JobDescriptionRequestEdit jobDescriptionRequestEdit = screens.create(JobDescriptionRequestEdit.class, OpenMode.THIS_TAB
                 , new MapScreenOptions(ParamsMap.of("from", "base$Position.edit")));
         jobDescriptionRequestEdit.setEntityToEdit(jobDescriptionRequest);

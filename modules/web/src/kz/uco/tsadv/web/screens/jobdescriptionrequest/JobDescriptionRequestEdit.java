@@ -4,7 +4,6 @@ import com.haulmont.addon.bproc.web.processform.Outcome;
 import com.haulmont.addon.bproc.web.processform.ProcessForm;
 import com.haulmont.addon.bproc.web.uicomponent.outcomespanel.OutcomesPanel;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.components.*;
@@ -14,12 +13,12 @@ import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.hr.JobDescriptionRequest;
-import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.OrganizationService;
 import kz.uco.tsadv.service.PositionService;
+import kz.uco.tsadv.service.PositionStructureService;
 import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 import org.springframework.util.CollectionUtils;
 
@@ -57,6 +56,8 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
     @Inject
     protected TextArea<String> generalAdditionalRequirementsField;
     @Inject
+    protected TextArea<String> basicInteractionsAtWorkField;
+    @Inject
     protected TextArea<String> compulsoryQualificationRequirementsField;
     @Inject
     protected Label<String> requiredlabel;
@@ -66,6 +67,22 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
     protected TextArea<String> organizationPathField;
     @Inject
     protected OrganizationService organizationService;
+    protected boolean readOnly = false;
+    @Inject
+    protected PositionStructureService positionStructureService;
+
+    @Subscribe
+    protected void onInit(InitEvent event) {
+        if (event.getOptions() != null) {
+            MapScreenOptions options = (MapScreenOptions) event.getOptions();
+            Map<String, Object> params = options.getParams();
+            if (params.containsKey("readOnly") && ((Boolean) params.get("readOnly"))) {
+                readOnly = true;
+            }
+        }
+
+    }
+
 
     @Subscribe
     protected void onAfterShowTsadv(AfterShowEvent event) {
@@ -73,6 +90,7 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
         if (PersistenceHelper.isNew(jobDescriptionRequestDc.getItem())) {
             positionDutiesField.setEditable(true);
             generalAdditionalRequirementsField.setEditable(true);
+            basicInteractionsAtWorkField.setEditable(true);
             compulsoryQualificationRequirementsField.setEditable(true);
         }
         if (activeTaskData == null || activeTaskData.getName() == null
@@ -81,23 +99,22 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
             fileField.setVisible(false);
             fileField.setRequired(false);
         }
-        StringBuilder structOrganization = new StringBuilder();
         if (jobDescriptionRequestDc.getItem() != null
                 && jobDescriptionRequestDc.getItem().getPositionGroup() != null
-                && jobDescriptionRequestDc.getItem().getPositionGroup().getOrganizationGroup() != null) {
-            OrganizationGroupExt organizationGroupExt = dataManager.load(Id.of(
-                    jobDescriptionRequestDc.getItem().getPositionGroup().getOrganizationGroup().getId(), OrganizationGroupExt.class))
-                    .view("organizationGroupExt-for-struct-path").optional().orElse(null);
-            int i = 0;
-            while (organizationGroupExt != null && organizationGroupExt.getOrganizationName() != null) {
-                i++;
-                for (int j = 0; j < i; j++) {
-                    structOrganization.append("- ");
+                && jobDescriptionRequestDc.getItem().getPositionGroup().getPosition() != null
+                && jobDescriptionRequestDc.getItem().getPositionGroup().getPosition().getOrganizationGroupExt() != null) {
+            organizationPathField.setValue(positionStructureService.getOrganizationHierarchyTree(
+                    jobDescriptionRequestDc.getItem().getPositionGroup().getPosition().getOrganizationGroupExt().getId()));
+        }
+        if (readOnly) {
+            for (Component component : getWindow().getComponents()) {
+                if (component instanceof Component.Editable) {
+                    ((Component.Editable) component).setEditable(false);
                 }
-                structOrganization.append(organizationGroupExt.getOrganizationName()).append("\r\n");
-                organizationGroupExt = organizationService.getParent(organizationGroupExt);
             }
-            organizationPathField.setValue(structOrganization.toString());
+            for (Component component : procActionButtonHBox.getComponents()) {
+                component.setVisible(false);
+            }
         }
     }
 
@@ -139,5 +156,11 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
             return (BaseAction) action;
         }
         return super.getNewOutcomeAction(outcomesPanel, action);
+    }
+
+
+    @Subscribe("windowClose1")
+    protected void onWindowClose1(Action.ActionPerformedEvent event) {
+        closeWithDiscard();
     }
 }

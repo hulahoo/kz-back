@@ -13,6 +13,7 @@
     </data>
     <actions>
         <action id="reportAction"/>
+        <action id="windowClose1" icon="CANCEL" caption="msg://cancel"/>
     </actions>
     <dialogMode height="600"
                 width="800"/>
@@ -40,6 +41,10 @@
             <vbox id="fieldsVbox" width="100%" spacing="true">
                 <groupBox id="positionDutiesGBox" width="100%" caption="msg://positionDutiesGBox.caption">
                     <textArea id="positionDutiesField" property="positionDuties" editable="false"
+                              rows="5" width="100%" dataContainer="jobDescriptionRequestDc"/>
+                </groupBox>
+                <groupBox id="basicInteractionsAtWorkGBox" width="100%" caption="msg://basicInteractionsAtWorkBox.caption">
+                    <textArea id="basicInteractionsAtWorkField" property="basicInteractionsAtWork" editable="false"
                               rows="5" width="100%" dataContainer="jobDescriptionRequestDc"/>
                 </groupBox>
                 <groupBox id="generalAdditionalRequirementsGBox" width="100%"
@@ -89,7 +94,7 @@
               spacing="true">
             <hbox id="procActionButtonHBox"
                   spacing="true"/>
-            <button action="windowClose"/>
+            <button action="windowClose1"/>
         </hbox>
     </layout>
 </window>

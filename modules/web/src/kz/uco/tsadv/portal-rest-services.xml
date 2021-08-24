@@ -329,5 +329,16 @@
         <method name="getChildren">
             <param name="parentId" type="java.util.UUID"/>
         </method>
+        <method name="getPositionDetails">
+            <param name="positionGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="getOrganizationHierarchyTree">
+            <param name="organizationGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_JobDescriptionService">
+        <method name="getJobDescriptionRequests">
+            <param name="positionId" type="java.lang.String"/>
+        </method>
     </service>
 </services>

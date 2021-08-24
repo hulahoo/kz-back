@@ -55,6 +55,7 @@ public class BprocJobDescriptionRequestBean<T extends JobDescriptionRequest> ext
         jobDescription.setPositionGroup(jobDescriptionRequest.getPositionGroup());
         jobDescription.setPositionDuties(jobDescriptionRequest.getPositionDuties());
         jobDescription.setCompulsoryQualificationRequirements(jobDescriptionRequest.getCompulsoryQualificationRequirements());
+        jobDescription.setBasicInteractionsAtWork(jobDescriptionRequest.getBasicInteractionsAtWork());
         jobDescription.setGeneralAdditionalRequirements(jobDescriptionRequest.getGeneralAdditionalRequirements());
         jobDescription.setFile(jobDescriptionRequest.getFile());
         jobDescription.setRequest(jobDescriptionRequest);

@@ -1,5 +1,6 @@
 package kz.uco.tsadv.service;
 
+import kz.uco.tsadv.entity.models.PositionGroupDetails;
 import kz.uco.tsadv.entity.models.PositionHierarchy;
 
 import java.util.List;
@@ -12,5 +13,8 @@ public interface PositionStructureService {
 
     List<PositionHierarchy> getStartData();
 
+    PositionGroupDetails getPositionDetails(UUID positionGroupId);
+
+    String getOrganizationHierarchyTree(UUID organizationGroupId);
 
 }
