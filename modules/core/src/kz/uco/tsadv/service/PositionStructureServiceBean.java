@@ -1,11 +1,18 @@
 package kz.uco.tsadv.service;
 
+import com.haulmont.cuba.core.entity.contracts.Id;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.entity.models.PositionGroupDetails;
 import kz.uco.tsadv.entity.models.PositionHierarchy;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
+import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import org.springframework.stereotype.Service;
+
 
 import javax.inject.Inject;
 import java.util.*;
@@ -20,9 +27,13 @@ public class PositionStructureServiceBean implements PositionStructureService {
     protected UserSessionSource userSessionSource;
     @Inject
     protected Metadata metadata;
+    @Inject
+    protected DataManager dataManager;
+    @Inject
+    protected HierarchyService hierarchyService;
 
     @Override
-        public List<PositionHierarchy> getChildren(UUID parentId) {
+    public List<PositionHierarchy> getChildren(UUID parentId) {
         String sql = "select  bhe2.position_group_id " +
                 ", case when lower(?2) = 'ru' then bp2.position_full_name_lang1  " +
                 "when lower(?2) = 'kz' then bp2.position_full_name_lang2 " +
@@ -173,4 +184,54 @@ public class PositionStructureServiceBean implements PositionStructureService {
         }
         return resultHierarchy;
     }
+
+    @Override
+    public PositionGroupDetails getPositionDetails(UUID positionGroupId) {
+        PositionGroupDetails positionGroupDetails = metadata.create(PositionGroupDetails.class);
+        if (positionGroupId != null) {
+            positionGroupDetails.setId(positionGroupId);
+            PositionGroupExt positionGroupExt = dataManager.load(Id.of(positionGroupId, PositionGroupExt.class))
+                    .view("positionGroupExt.for.requisition").one();
+            positionGroupDetails.setPositionGroupName(positionGroupExt.getPositionName());
+            if (positionGroupExt.getPosition().getFunctionalManagerPositionGroup() != null) {
+                positionGroupDetails.setFunctionalManagerId(positionGroupExt.getPosition().getFunctionalManagerPositionGroup().getId().toString());
+                positionGroupDetails.setFunctionalManagerName(positionGroupExt.getPosition().getFunctionalManagerPositionGroup().getFullName());
+            }
+            PositionGroupExt parentPosition = hierarchyService.getParentPosition(positionGroupExt, "positionGroupExt-for-position-details");
+            positionGroupDetails.setAdministrativeManagerId(parentPosition.getId().toString());
+            positionGroupDetails.setAdministrativeManagerName(parentPosition.getFullName());
+            positionGroupDetails.setStructuralOrganizationsTree(getOrganizationHierarchyTree(
+                    positionGroupExt.getPosition().getOrganizationGroupExt().getId()));
+        }
+        return positionGroupDetails;
+    }
+
+    public String getOrganizationHierarchyTree(UUID organizationGroupId) {
+        OrganizationService organizationService = AppBeans.get(OrganizationService.class);
+
+        StringBuilder structOrganization = new StringBuilder();
+        if (organizationGroupId != null) {
+            OrganizationGroupExt organizationGroupExt = dataManager.load(Id.of(
+                    organizationGroupId, OrganizationGroupExt.class))
+                    .view("organizationGroupExt-for-struct-path").optional().orElse(null);
+            List<OrganizationGroupExt> organizationList = new ArrayList<>();
+            while (organizationGroupExt != null && organizationGroupExt.getOrganizationName() != null) {
+                organizationList.add(organizationGroupExt);
+                organizationGroupExt = organizationService.getParent(organizationGroupExt);
+            }
+            Collections.reverse(organizationList);
+            if (organizationList.size() > 0) {
+                organizationList.remove(0);
+            }
+            int i = 0;
+            for (OrganizationGroupExt groupExt : organizationList) {
+                for (int j = 0; j < organizationList.indexOf(groupExt) + 1; j++) {
+                    structOrganization.append("- ");
+                }
+                structOrganization.append(groupExt.getOrganizationName()).append("\r\n");
+            }
+        }
+        return structOrganization.toString();
+    }
+
 }

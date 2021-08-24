@@ -101,5 +101,6 @@
         <class>kz.uco.tsadv.entity.bproc.StartBprocParams</class>
         <class>kz.uco.tsadv.entity.models.PositionHierarchy</class>
         <class>kz.uco.tsadv.entity.models.JobDescriptionRequestJson</class>
+        <class>kz.uco.tsadv.entity.models.PositionGroupDetails</class>
     </metadata-model>
 </metadata>

@@ -4,7 +4,6 @@ import com.haulmont.addon.bproc.web.processform.Outcome;
 import com.haulmont.addon.bproc.web.processform.ProcessForm;
 import com.haulmont.addon.bproc.web.uicomponent.outcomespanel.OutcomesPanel;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.components.*;
@@ -14,18 +13,21 @@ import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.hr.JobDescriptionRequest;
-import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.OrganizationService;
 import kz.uco.tsadv.service.PositionService;
+import kz.uco.tsadv.service.PositionStructureService;
 import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @UiController("tsadv_JobDescriptionRequest.edit")
 @UiDescriptor("job-description-request-edit.xml")
@@ -66,6 +68,8 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
     @Inject
     protected OrganizationService organizationService;
     protected boolean readOnly = false;
+    @Inject
+    protected PositionStructureService positionStructureService;
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -95,32 +99,12 @@ public class JobDescriptionRequestEdit extends AbstractBprocEditor<JobDescriptio
             fileField.setVisible(false);
             fileField.setRequired(false);
         }
-        StringBuilder structOrganization = new StringBuilder();
         if (jobDescriptionRequestDc.getItem() != null
                 && jobDescriptionRequestDc.getItem().getPositionGroup() != null
                 && jobDescriptionRequestDc.getItem().getPositionGroup().getPosition() != null
                 && jobDescriptionRequestDc.getItem().getPositionGroup().getPosition().getOrganizationGroupExt() != null) {
-            OrganizationGroupExt organizationGroupExt = dataManager.load(Id.of(
-                    jobDescriptionRequestDc.getItem().getPositionGroup().getPosition().getOrganizationGroupExt().getId(),
-                    OrganizationGroupExt.class))
-                    .view("organizationGroupExt-for-struct-path").optional().orElse(null);
-            List<OrganizationGroupExt> organizationList = new ArrayList<>();
-            while (organizationGroupExt != null && organizationGroupExt.getOrganizationName() != null) {
-                organizationList.add(organizationGroupExt);
-                organizationGroupExt = organizationService.getParent(organizationGroupExt);
-            }
-            Collections.reverse(organizationList);
-            if (organizationList.size() > 0) {
-                organizationList.remove(0);
-            }
-            int i = 0;
-            for (OrganizationGroupExt groupExt : organizationList) {
-                for (int j = 0; j < organizationList.indexOf(groupExt) + 1; j++) {
-                    structOrganization.append("- ");
-                }
-                structOrganization.append(groupExt.getOrganizationName()).append("\r\n");
-            }
-            organizationPathField.setValue(structOrganization.toString());
+            organizationPathField.setValue(positionStructureService.getOrganizationHierarchyTree(
+                    jobDescriptionRequestDc.getItem().getPositionGroup().getPosition().getOrganizationGroupExt().getId()));
         }
         if (readOnly) {
             for (Component component : getWindow().getComponents()) {
