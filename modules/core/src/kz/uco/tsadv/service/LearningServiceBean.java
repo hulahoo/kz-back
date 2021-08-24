@@ -70,12 +70,12 @@ public class LearningServiceBean implements LearningService {
         Workbook workbook = parseToWorkbook(fileDescriptor);
         int sheetsCount = workbook.getNumberOfSheets();
 
-        if (sheetsCount != 3) {
-            throw new RuntimeException("Sheets count must be 3!");
+        if (sheetsCount != 2) {
+            throw new RuntimeException("Sheets count must be 2!");
         }
         Map<String, QuestionBank> questionBankMap = parseQuestionBank(workbook.getSheet(workbook.getSheetName(0)));
         Map<String, Question> questionMap = parseQuestion(workbook.getSheet(workbook.getSheetName(1)), questionBankMap);
-        parseAnswer(workbook.getSheet(workbook.getSheetName(2)), questionMap);
+        parseAnswer(workbook.getSheet(workbook.getSheetName(1)), questionMap);
 
         ImportLearningLog importLearningLog = metadata.create(ImportLearningLog.class);
         importLearningLog.setFile(fileDescriptor);
@@ -466,19 +466,19 @@ public class LearningServiceBean implements LearningService {
         for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
             Row row = sheet.getRow(rowIndex);
 
-            String text = getStringValue(row.getCell(0));
+            String text = getStringValue(row.getCell(5));
             if (StringUtils.isBlank(text)) break;
 
             Answer answer = metadata.create(Answer.class);
             answer.setAnswer(text);
 
-            String correct = getStringValue(row.getCell(1));
+            String correct = getStringValue(row.getCell(6));
             if (correct.equalsIgnoreCase("y")) {
                 correct = "true";
             }
             answer.setCorrect(Boolean.parseBoolean(correct));
 
-            String questionCode = getStringValue(row.getCell(2));
+            String questionCode = getStringValue(row.getCell(7));
             Question findQuestion = questionMap.get(questionCode);
             if (findQuestion == null) {
                 throw new NullPointerException("Question is not found!");
