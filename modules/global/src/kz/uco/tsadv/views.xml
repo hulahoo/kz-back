@@ -7042,6 +7042,7 @@
                   view="_local"/>
         <property name="level"
                   view="_local"/>
+        <property name="learningLanguage" view="_local"/>
     </view>
     <view class="kz.uco.tsadv.modules.recruitment.model.PersonExperience"
           extends="_local"
