@@ -18,14 +18,4 @@ import java.util.Date;
 @LookupComponent("portalFeedbackQuestionsesTable")
 @LoadDataBeforeShow
 public class PortalFeedbackQuestionsBrowse extends StandardLookup<PortalFeedbackQuestions> {
-    @Inject
-    private ComponentsFactory componentsFactory;
-
-    public Component dateCr(PortalFeedbackQuestions entity) throws ParseException {
-        Label label=componentsFactory.createComponent(Label.class);
-        SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd-MM-yyyy");
-        String d=formatForDateNow.format(entity.getCreateTs());
-        label.setValue(d);
-        return label;
-    }
 }

@@ -40,7 +40,9 @@
                 <column id="portalFeedback.email"/>
                 <column id="type"/>
                 <column id="topic"/>
-                <column id="createTss" generator="dateCr" caption="msg://dateCr"/>
+                <column id="createTs">
+                    <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" type="DATE"/>
+                </column>
                 <column id="text"/>
             </columns>
             <rowsCount/>
