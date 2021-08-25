@@ -32,8 +32,8 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="managerPositionGroup"/>
-                <column id="assistancePositionGroup"/>
+                <column id="managerPositionGroup" caption="msg://Manager’s position"/>
+                <column id="assistancePositionGroup" caption="msg://Assistant’s position"/>
                 <column id="managerPositionGroup.position.organizationGroupExt" caption="msg://manager.organization"/>
                 <column id="assistancePositionGroup.position.organizationGroupExt" caption="msg://assistance.organization"/>
                 <column id="managerPositionGroup.company" caption="msg://manager.company"/>

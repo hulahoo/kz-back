@@ -3,12 +3,14 @@ package kz.uco.tsadv.modules.administration;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.administration.enums.PortalAvailability;
 import kz.uco.tsadv.modules.administration.enums.PortalMenuType;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 import static kz.uco.base.common.MultiLanguageUtils.getCurrentLanguageValue;
 
@@ -47,9 +49,24 @@ public class PortalMenuCustomization extends StandardEntity {
     @Column(name = "PORTAL_AVAILABILITY", nullable = false)
     private String portalAvailability;
 
+    @JoinTable(name = "TSADV_PORTAL_MENU_CUSTOMIZATION_DIC_COMPANY_LINK",
+            joinColumns = @JoinColumn(name = "PORTAL_MENU_CUSTOMIZATION_ID"),
+            inverseJoinColumns = @JoinColumn(name = "DIC_COMPANY_ID"))
+    @ManyToMany
+    @OrderBy("order")
+    private List<DicCompany> companies;
+
     @MetaProperty(related = {"name1", "name2", "name3"})
     public String getName() {
         return getCurrentLanguageValue(name1, name2, name3);
+    }
+
+    public List<DicCompany> getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(List<DicCompany> companies) {
+        this.companies = companies;
     }
 
     public String getName3() {

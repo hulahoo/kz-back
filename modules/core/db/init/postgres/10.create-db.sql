@@ -7279,6 +7279,7 @@ create table TSADV_COURSE_REVIEW (
     PERSON_GROUP_ID uuid not null,
     RATE double precision,
     TEXT varchar(2000) not null,
+    FROM_FEEDBACK boolean not null,
     --
     primary key (ID)
 )^
@@ -18331,7 +18332,7 @@ create table TSADV_ORGANIZATION_INCENTIVE_INDICATORS (
     INDICATOR_TYPE varchar(50) not null,
     INDICATOR_ID uuid not null,
     WEIGHT double precision not null,
-    RESPONSIBLE_PERSON_ID uuid not null,
+    RESPONSIBLE_POSITION_ID uuid not null,
     --
     primary key (ID)
 )^
@@ -18685,3 +18686,85 @@ create table TSADV_GUARDIAN (
     primary key (ID)
 )^
 -- end TSADV_GUARDIAN
+-- begin TSADV_PORTAL_MENU_CUSTOMIZATION_DIC_COMPANY_LINK
+create table TSADV_PORTAL_MENU_CUSTOMIZATION_DIC_COMPANY_LINK (
+    PORTAL_MENU_CUSTOMIZATION_ID uuid,
+    DIC_COMPANY_ID uuid,
+    primary key (PORTAL_MENU_CUSTOMIZATION_ID, DIC_COMPANY_ID)
+)^
+-- end TSADV_PORTAL_MENU_CUSTOMIZATION_DIC_COMPANY_LINK
+-- begin TSADV_JOB_DESCRIPTION
+create table TSADV_JOB_DESCRIPTION (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    POSITION_GROUP_ID uuid not null,
+    BASIC_INTERACTIONS_AT_WORK text,
+    POSITION_DUTIES text not null,
+    GENERAL_ADDITIONAL_REQUIREMENTS text,
+    COMPULSORY_QUALIFICATION_REQUIREMENTS text,
+    FILE_ID uuid,
+    REQUEST_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_JOB_DESCRIPTION
+-- begin TSADV_JOB_DESCRIPTION_REQUEST
+create table TSADV_JOB_DESCRIPTION_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    REQUEST_NUMBER bigint not null,
+    STATUS_ID uuid not null,
+    REQUEST_DATE date not null,
+    COMMENT_ varchar(3000),
+    --
+    POSITION_GROUP_ID uuid not null,
+    BASIC_INTERACTIONS_AT_WORK text,
+    POSITION_DUTIES text not null,
+    GENERAL_ADDITIONAL_REQUIREMENTS text,
+    COMPULSORY_QUALIFICATION_REQUIREMENTS text,
+    FILE_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_JOB_DESCRIPTION_REQUEST
+
+-- begin TSADV_PERSON_PAYSLIP
+create table TSADV_PERSON_PAYSLIP (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    PERIOD date,
+    FILE_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_PAYSLIP

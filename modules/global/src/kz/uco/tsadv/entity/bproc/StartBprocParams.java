@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,14 +26,14 @@ public class StartBprocParams extends BaseUuidEntity {
     @NotNull
     private Boolean isAssistant = false;
 
-    protected Map<String, Object> params;
+    protected Map<String, List<TsadvUser>> defaultApprovers;
 
-    public Map<String, Object> getParams() {
-        return params;
+    public Map<String, List<TsadvUser>> getDefaultApprovers() {
+        return defaultApprovers;
     }
 
-    public void setParams(Map<String, Object> params) {
-        this.params = params;
+    public void setDefaultApprovers(Map<String, List<TsadvUser>> defaultApprovers) {
+        this.defaultApprovers = defaultApprovers;
     }
 
     public UUID getEmployeePersonGroupId() {

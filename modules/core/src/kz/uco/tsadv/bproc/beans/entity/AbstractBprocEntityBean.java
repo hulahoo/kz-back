@@ -44,8 +44,8 @@ public abstract class AbstractBprocEntityBean<T extends AbstractBprocRequest> im
     @Override
     public void approve(T entity) {
         changeRequestStatus(entity, "APPROVED");
-        String rejectNotificationTemplateCode = bprocService.getProcessVariable(entity, "approveNotificationTemplateCode");
-        bprocService.sendNotificationToInitiator(entity, rejectNotificationTemplateCode);
+        String approveNotificationTemplateCode = bprocService.getProcessVariable(entity, "approveNotificationTemplateCode");
+        bprocService.sendNotificationToInitiator(entity, approveNotificationTemplateCode);
     }
 
     @Override

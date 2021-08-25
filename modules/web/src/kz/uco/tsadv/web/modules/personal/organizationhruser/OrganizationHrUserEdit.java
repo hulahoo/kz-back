@@ -5,7 +5,6 @@ import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.FieldGroup;
-import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.components.ValidationErrors;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
@@ -13,7 +12,6 @@ import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
 import kz.uco.tsadv.web.modules.personal.common.Utils;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +19,6 @@ import java.util.Map;
 public class OrganizationHrUserEdit extends AbstractEditor<OrganizationHrUser> {
     @Inject
     private FieldGroup fieldGroup;
-    @Named("fieldGroup.counter")
-    private TextField counterField;
     @Inject
     protected CommonService commonService;
 
@@ -58,7 +54,7 @@ public class OrganizationHrUserEdit extends AbstractEditor<OrganizationHrUser> {
     protected void postValidate(ValidationErrors errors) {
         super.postValidate(errors);
         Integer counter = getItem().getCounter();
-        if (foundSameRole()){
+        if (foundSameRole()) {
             errors.add(getMessage("sameRoleError"));
         }
         if (counter != null && (counter != 0 && counter != 1)) {
@@ -70,15 +66,17 @@ public class OrganizationHrUserEdit extends AbstractEditor<OrganizationHrUser> {
         return !commonService.getEntities(OrganizationHrUser.class,
                 " select t from tsadv$OrganizationHrUser t      \n" +
                         "   where t.id <> :id       \n" +
-                        "       and t.organizationGroup.id= :organizationGroupId      \n" +
+                        "       and t.organizationGroup.id = :organizationGroupId      \n" +
                         "       and t.dateFrom <= :dateFrom      \n" +
                         "       and t.dateTo >= :dateTo        \n" +
+                        "       and t.hrRole.id = :hrRoleId        \n" +
                         "       and t.user.id = :userId  ",
                 ParamsMap.of("userId", getItem().getUser().getId(),
                         "dateFrom", getItem().getDateFrom(),
-                        "organizationGroupId",getItem().getOrganizationGroup().getId(),
+                        "organizationGroupId", getItem().getOrganizationGroup().getId(),
                         "dateTo", getItem().getDateTo(),
-                        "id", getItem().getId()),
+                        "id", getItem().getId(),
+                        "hrRoleId", getItem().getHrRole().getId()),
                 View.MINIMAL).isEmpty();
     }
 

@@ -6,6 +6,7 @@ import kz.uco.tsadv.modules.personal.requests.OrgStructureRequest;
 import kz.uco.tsadv.pojo.OrgRequestSaveModel;
 import kz.uco.tsadv.pojo.OrganizationRequestSaveModel;
 import kz.uco.tsadv.pojo.PositionRequestSaveModel;
+import kz.uco.tsadv.pojo.RequestTreeData;
 
 import java.util.UUID;
 
@@ -23,6 +24,8 @@ public interface OrgStructureRequestService {
     String savePosition(PositionRequestSaveModel positionRequestSaveModel);
 
     String getGrades();
+
+    void exclude(UUID requestId, RequestTreeData data);
 
     void exclude(UUID requestId, UUID requestDetailId, UUID elementGroupId, int elementType);
 
