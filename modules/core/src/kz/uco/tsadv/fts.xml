@@ -2044,5 +2044,8 @@
         <entity class="kz.uco.tsadv.modules.hr.JobDescriptionRequest">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.DicPortalFeedbackType">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

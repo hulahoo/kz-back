@@ -31,11 +31,18 @@
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
+                <action id="excel" type="excel"/>
             </actions>
             <columns>
                 <column id="user"/>
                 <column id="portalFeedback.company"/>
+                <column id="portalFeedback.category"/>
+                <column id="portalFeedback.email"/>
+                <column id="type"/>
                 <column id="topic"/>
+                <column id="createTs">
+                    <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" type="DATE"/>
+                </column>
                 <column id="text"/>
             </columns>
             <rowsCount/>
@@ -44,6 +51,7 @@
                 <button id="createBtn" action="portalFeedbackQuestionsesTable.create"/>
                 <button id="editBtn" action="portalFeedbackQuestionsesTable.edit"/>
                 <button id="removeBtn" action="portalFeedbackQuestionsesTable.remove"/>
+                <button id="excelBtn" action="portalFeedbackQuestionsesTable.excel"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">
