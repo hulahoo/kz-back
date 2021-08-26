@@ -8,7 +8,7 @@
     <layout>
         <groupTable id="usersTable">
             <columns>
-                <column id="personGroup.person.fioWithEmployeeNumber" ext:index="2" visible="false"/>
+                <column id="personGroup.person.fioWithEmployeeNumber" ext:index="2" visible="true"/>
                 <column id="position" visible="false"/>
             </columns>
         </groupTable>

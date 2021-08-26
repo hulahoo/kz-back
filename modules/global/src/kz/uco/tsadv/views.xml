@@ -20915,6 +20915,7 @@
                   view="_minimal">
             <property name="size"/>
         </property>
+        <property name="personGroup" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.administration.TsadvUser"
           extends="user.edit"
