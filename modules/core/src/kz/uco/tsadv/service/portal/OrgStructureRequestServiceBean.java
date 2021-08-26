@@ -629,6 +629,6 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
 
     @Override
     public boolean hasPermitToCreate() {
-        return this.employeeService.hasHrRole("ORG_MANGER");
+        return this.employeeService.hasHrRole("ORG_MANAGER_C&B");
     }
 }

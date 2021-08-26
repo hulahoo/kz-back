@@ -1,17 +1,21 @@
 package kz.uco.tsadv.web.modules.personal.person;
 
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.global.AppBeans;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.WindowManager;
+import com.haulmont.cuba.gui.app.core.file.FileUploadDialog;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.data.DataSupplier;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
+import com.haulmont.cuba.gui.screen.OpenMode;
+import com.haulmont.cuba.gui.screen.StandardOutcome;
 import com.haulmont.cuba.gui.theme.ThemeConstantsManager;
+import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.components.WebProgressBar;
 import com.haulmont.reports.entity.Report;
@@ -104,6 +108,12 @@ public class PersonCardNoAssignment extends AbstractHrEditor<PersonExt> {
     protected AbsenceBalanceService absenceBalanceService;
 
     protected String screenName;
+    @Inject
+    private Screens screens;
+    @Inject
+    private FileUploadingAPI fileUploadingAPI;
+    @Inject
+    private Notifications notifications;
 //    public boolean existingSalariesAreChanged;
 
     @SuppressWarnings("all")
@@ -383,9 +393,11 @@ public class PersonCardNoAssignment extends AbstractHrEditor<PersonExt> {
         userInfo.setHtmlEnabled(true);
         personCardLeftMenu.add(userInfo);
 
-        Image personImage = WebCommonUtils.setImage(person.getImage(), null, "70px");
+        FileDescriptor personImageFileDescriptor = getPersonImageFileDescriptor(person);
+        Image personImage = WebCommonUtils.setImage(personImageFileDescriptor, null, "70px");
         personImage.addStyleName("b-user-image circle-image");
         personImage.setId("personImage");
+        personImage.addClickListener( e -> uploadImageToPersonGroup());
         personCardLeftMenu.add(personImage);
 
         VBoxLayout actions = componentsFactory.createComponent(VBoxLayout.class);
@@ -422,6 +434,13 @@ public class PersonCardNoAssignment extends AbstractHrEditor<PersonExt> {
             }
 
         }));
+
+        actions.add(createLinkButton("Редактировать фото", new BaseAction("edit-person-photo"){
+                    @Override
+                    public void actionPerform(Component component) { uploadImageToPersonGroup(); }
+                }
+        ));
+
         personCardLeftMenu.add(actions);
 
         VBoxLayout pages = componentsFactory.createComponent(VBoxLayout.class);
@@ -506,6 +525,60 @@ public class PersonCardNoAssignment extends AbstractHrEditor<PersonExt> {
         label.setId(id);
         label.setValue(value);
         return label;
+    }
+
+    protected FileDescriptor getPersonImageFileDescriptor(PersonExt person){
+        FileDescriptor actualFileDesctiptor = null;
+        if(person.getGroup() != null && person.getGroup().getImage() != null){
+            actualFileDesctiptor = person.getGroup().getImage();
+        }else{
+            actualFileDesctiptor = person.getImage();
+        }
+
+        return actualFileDesctiptor;
+    }
+
+    protected void uploadImageToPersonGroup(){
+        FileUploadDialog dialog = (FileUploadDialog) screens.create("fileUploadDialog", OpenMode.DIALOG);
+        dialog.addAfterCloseListener(event -> {
+            if(!event.closedWith(StandardOutcome.COMMIT)) return;
+
+            PersonExt person = personDs.getItem();
+            if(person.getGroup() == null) return;
+
+            UUID fileId = dialog.getFileId();
+            String fileName = dialog.getFileName();
+            FileDescriptor fileDescriptor = fileUploadingAPI.getFileDescriptor(fileId,fileName);
+
+            String fileExtension = fileDescriptor.getExtension().toLowerCase();
+            ArrayList<String> acceptedExtensions = new ArrayList<>();
+            acceptedExtensions.add("jpg");
+            acceptedExtensions.add("png");
+
+            if(!acceptedExtensions.stream().anyMatch( ex -> ex.equals(fileExtension))){
+                notifications.create(Notifications.NotificationType.ERROR).withCaption(getMessage("image.extension-error")).show();
+                return;
+            }
+
+            try{
+                CommitContext commitContext = new CommitContext();
+                PersonGroupExt personGroup = person.getGroup();
+                fileUploadingAPI.putFileIntoStorage(fileId,fileDescriptor);
+                personGroup.setImage(fileDescriptor);
+                commitContext.addInstanceToCommit(personGroup);
+                commitContext.addInstanceToCommit(fileDescriptor);
+                dataManager.commit(commitContext);
+                personGroupDs.refresh();
+            }catch (FileStorageException e){
+                notifications.create(Notifications.NotificationType.ERROR).withCaption("image.save-error").show();
+                e.printStackTrace();
+            }
+
+            Image cardPersonImage = (Image) personCardLeftMenu.getComponentNN("personImage");
+            WebCommonUtils.setImage(getPersonImageFileDescriptor(person),cardPersonImage,"70px");
+        });
+
+        screens.show(dialog);
     }
 
 //    /**
