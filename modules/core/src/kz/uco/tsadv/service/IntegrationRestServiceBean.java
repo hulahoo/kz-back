@@ -1273,6 +1273,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         try (Transaction tx = persistence.getTransaction()) {
             EntityManager entityManager = persistence.getEntityManager();
             ArrayList<HierarchyElementGroup> hierarchyElementGroups = new ArrayList<>();
+            ArrayList<HierarchyElementExt> hierarchyElementExts = new ArrayList<>();
             for (HierarchyElementJson hierarchyElementJson : hierarchyElementJsons) {
                 if (hierarchyElementJson.getLegacyId() == null || hierarchyElementJson.getLegacyId().isEmpty()) {
                     return prepareError(result, methodName, hierarchyElementData,
@@ -1282,31 +1283,39 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, hierarchyElementData,
                             "no companyCode");
                 }
-                HierarchyElementGroup hierarchyElementGroup = dataManager.load(HierarchyElementGroup.class)
-                        .query("select e.group from base$HierarchyElementExt e " +
+                List<HierarchyElementExt> hierarchyElementExtList = dataManager.load(HierarchyElementExt.class)
+                        .query("select e from base$HierarchyElementExt e " +
                                 " where e.legacyId = :legacyId and e.positionGroup.id in " +
                                 " (select p.group.id from base$PositionExt p " +
                                 " where p.organizationGroupExt.company.legacyId = :company)")
                         .setParameters(ParamsMap.of("legacyId", hierarchyElementJson.getLegacyId(),
                                 "company", hierarchyElementJson.getCompanyCode()))
-                        .view("hierarchyElementGroup-for-integration-rest").list().stream().findFirst().orElse(null);
-
-                if (hierarchyElementGroup == null) {
+                        .view("hierarchyElementExt-for-integration-rest").list();
+                if (hierarchyElementExtList.isEmpty()) {
                     return prepareError(result, methodName, hierarchyElementData,
                             "no hierarchy with legacyId and companyCode : "
                                     + hierarchyElementJson.getLegacyId() + " , " + hierarchyElementJson.getCompanyCode());
                 }
-                if (!hierarchyElementGroups.stream().filter(hierarchyElementGroup1 ->
-                        hierarchyElementGroup1.getId().equals(hierarchyElementGroup.getId())).findAny().isPresent()) {
-                    hierarchyElementGroups.add(hierarchyElementGroup);
+                for (HierarchyElementExt hierarchyElementExt : hierarchyElementExtList) {
+                    if (hierarchyElementExts.stream().filter(hierarchyElementExt1 ->
+                            hierarchyElementExt1.getId().equals(hierarchyElementExt.getId())).findAny().isPresent()) {
+                        hierarchyElementExts.add(hierarchyElementExt);
+                    }
+                    if (!hierarchyElementGroups.stream().filter(hierarchyElementGroup1 ->
+                            hierarchyElementGroup1.getId().equals(hierarchyElementExt.getGroup().getId())).findAny().isPresent()) {
+                        hierarchyElementGroups.add(hierarchyElementExt.getGroup());
+                    }
                 }
-
             }
             for (HierarchyElementGroup hierarchyElementGroup : hierarchyElementGroups) {
-                for (HierarchyElementExt hierarchyElementExt : hierarchyElementGroup.getList()) {
-                    entityManager.remove(hierarchyElementExt);
+                if (hierarchyElementGroup.getDeleteTs() == null) {
+                    entityManager.remove(hierarchyElementGroup);
                 }
-                entityManager.remove(hierarchyElementGroup);
+            }
+            for (HierarchyElementExt hierarchyElementExt1 : hierarchyElementExts) {
+                if (hierarchyElementExt1.getDeleteTs() == null) {
+                    entityManager.remove(hierarchyElementExt1);
+                }
             }
             tx.commit();
         } catch (Exception e) {

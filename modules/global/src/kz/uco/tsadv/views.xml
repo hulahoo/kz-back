@@ -23403,11 +23403,35 @@
                 <property name="positionGroup" view="_minimal">
                     <property name="positionName"/>
                 </property>
-                <property name="group" view="_minimal"/>
+                <property name="group" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="positionGroup" view="_minimal">
+                            <property name="positionName"/>
+                        </property>
+                        <property name="organizationGroup" view="_minimal">
+                            <property name="organizationName"/>
+                        </property>
+                    </property>
+                </property>
                 <property name="parent" view="_minimal">
                     <property name="legacyId"/>
+                    <property name="positionGroup" view="_minimal">
+                        <property name="positionName"/>
+                    </property>
+                    <property name="organizationGroup" view="_minimal">
+                        <property name="organizationName"/>
+                    </property>
                 </property>
-                <property name="parentGroup" view="_minimal"/>
+                <property name="parentGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="positionGroup" view="_minimal">
+                            <property name="positionName"/>
+                        </property>
+                        <property name="organizationGroup" view="_minimal">
+                            <property name="organizationName"/>
+                        </property>
+                    </property>
+                </property>
             </property>
             <property name="legacyId"/>
         </property>
@@ -23416,7 +23440,22 @@
             <property name="legacyId"/>
         </property>
         <property name="parent" view="_minimal">
-            <property name="group" view="_minimal"/>
+            <property name="group" view="_minimal">
+                <property name="list" view="_minimal">
+                    <property name="positionGroup" view="_minimal">
+                        <property name="positionName"/>
+                    </property>
+                    <property name="organizationGroup" view="_minimal">
+                        <property name="organizationName"/>
+                    </property>
+                </property>
+            </property>
+            <property name="positionGroup" view="_minimal">
+                <property name="positionName"/>
+            </property>
+            <property name="organizationGroup" view="_minimal">
+                <property name="organizationName"/>
+            </property>
         </property>
     </view>
     <view entity="tsadv_DicIssuingAuthority" name="dicIssuingAuthority.for.integration" extends="_local">
