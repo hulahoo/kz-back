@@ -4,10 +4,7 @@ import com.haulmont.addon.bproc.web.processform.Outcome;
 import com.haulmont.addon.bproc.web.processform.ProcessForm;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.FileStorageException;
-import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.cuba.gui.components.FileUploadField;
-import com.haulmont.cuba.gui.components.Form;
-import com.haulmont.cuba.gui.components.LinkButton;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.export.ExportFormat;
@@ -52,11 +49,24 @@ public class AddressRequestEdit extends AbstractBprocEditor<AddressRequest> {
     private FileUploadField upload;
     @Inject
     private CollectionPropertyContainer<FileDescriptor> attachmentsDc;
+    @Inject
+    private TextField<String> addressEnglishTextField;
+    @Inject
+    private TextField<String> addressKazakhTextField;
 
     @Override
     protected void initEditableFields() {
         super.initEditableFields();
-        form.setEditable(isDraft());
+//        form.setEditable(isDraft());
+        boolean formIsEditable = isDraft();
+        for(Component component : form.getComponents()){
+            if(component instanceof Component.Editable){
+                ((Component.Editable) component).setEditable(formIsEditable);
+            }
+        }
+
+        addressEnglishTextField.setEditable(true);
+        addressKazakhTextField.setEditable(true);
     }
 
     @Subscribe("upload")
