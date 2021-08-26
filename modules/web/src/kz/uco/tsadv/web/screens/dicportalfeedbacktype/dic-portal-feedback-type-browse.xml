@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://dicPortalFeedbackTypeBrowse.caption"
+        focusComponent="dicPortalFeedbackTypesTable"
+        messagesPack="kz.uco.tsadv.web.screens.dicportalfeedbacktype">
+    <data readOnly="true">
+        <collection id="dicPortalFeedbackTypesDc"
+                    class="kz.uco.tsadv.modules.learning.model.DicPortalFeedbackType">
+            <view extends="_local">
+                <property name="company" view="_minimal"/>
+                <property name="langValue"/>
+            </view>
+            <loader id="dicPortalFeedbackTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicPortalFeedbackType e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicPortalFeedbackTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicPortalFeedbackTypesTable"
+                dataLoader="dicPortalFeedbackTypesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicPortalFeedbackTypesTable"
+                    width="100%"
+                    dataContainer="dicPortalFeedbackTypesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="company"/>
+                <column id="langValue"/>
+                <column id="systemNotificationText"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="active"/>
+                <column id="order"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicPortalFeedbackTypesTable.create"/>
+                <button id="editBtn" action="dicPortalFeedbackTypesTable.edit"/>
+                <button id="removeBtn" action="dicPortalFeedbackTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
