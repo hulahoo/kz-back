@@ -67,7 +67,7 @@ public class AddressRequestChangedListener {
                     addressRequestDataJson.setLegacyId(addressRequest.getBaseAddress() != null
                             ? addressRequest.getBaseAddress().getLegacyId() : "");
                     addressRequestDataJson.setAddressType(addressRequest.getAddressType() != null
-                            ? addressRequest.getAddressType().getCode() : "");
+                            ? addressRequest.getAddressType().getLegacyId() : "");
                     addressRequestDataJson.setPostal(addressRequest.getPostalCode());
                     addressRequestDataJson.setCountryId(addressRequest.getCountry() != null
                             ? addressRequest.getCountry().getLegacyId() : "");

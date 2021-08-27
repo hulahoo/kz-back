@@ -225,6 +225,8 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
             });
 
             if (!foundChildren.isEmpty()) {
+                foundChildren.sort(Comparator.comparing(requestTreeData ->
+                        Optional.ofNullable(requestTreeData.getGrade()).map(strings -> strings[0]).orElse(""),Comparator.reverseOrder()));
                 foundChildren.forEach(requestTreeData -> collectChildren(requestTreeData, treeDataList));
                 parent.setChildren(foundChildren);
             }
@@ -627,6 +629,6 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
 
     @Override
     public boolean hasPermitToCreate() {
-        return this.employeeService.hasHrRole("ORG_MANGER");
+        return this.employeeService.hasHrRole("ORG_MANAGER_C&B");
     }
 }

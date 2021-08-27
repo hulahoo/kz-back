@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.learning.model;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.learning.dictionary.DicPortalFeedbackQuestion;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Table(name = "TSADV_PORTAL_FEEDBACK")
 @Entity(name = "tsadv_PortalFeedback")
+@NamePattern("%s|category")
 public class PortalFeedback extends AbstractParentEntity {
     private static final long serialVersionUID = 5811365451358538679L;
 

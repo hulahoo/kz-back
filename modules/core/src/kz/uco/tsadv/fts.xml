@@ -2002,6 +2002,9 @@
         <entity class="kz.uco.tsadv.modules.bpm.BprocReassignment">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonPayslip">
+            <include re=".*"/>
+        </entity>
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicSocStatus">
             <include re=".*"/>
         </entity>
@@ -2033,6 +2036,15 @@
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.personal.model.Scholarship">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.hr.JobDescription">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.hr.JobDescriptionRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.DicPortalFeedbackType">
             <include re=".*"/>
         </entity>
     </entities>

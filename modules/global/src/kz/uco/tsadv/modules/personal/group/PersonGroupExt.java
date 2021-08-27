@@ -3,6 +3,7 @@ package kz.uco.tsadv.modules.personal.group;
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Extends;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -35,6 +36,11 @@ import java.util.Locale;
 @Customizer(PersonGroupExtDescriptorCustomizer.class)
 public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonExt> {
     private static final long serialVersionUID = -6026637722093200432L;
+
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IMAGE_ID")
+    private FileDescriptor image;
 
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
@@ -239,6 +245,14 @@ public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonEx
 
     public void setSocStatus(DicSocStatus socStatus) {
         this.socStatus = socStatus;
+    }
+
+    public FileDescriptor getImage() {
+        return image;
+    }
+
+    public void setImage(FileDescriptor image) {
+        this.image = image;
     }
 
     public DicCompany getCompany() {

@@ -7279,6 +7279,7 @@ create table TSADV_COURSE_REVIEW (
     PERSON_GROUP_ID uuid not null,
     RATE double precision,
     TEXT varchar(2000) not null,
+    FROM_FEEDBACK boolean not null,
     --
     primary key (ID)
 )^
@@ -17285,6 +17286,7 @@ alter table BASE_PERSON_GROUP add column SOC_STATUS_ID uuid ^
 alter table BASE_PERSON_GROUP add column DRIVER_CATEGORY_ID uuid ^
 alter table BASE_PERSON_GROUP add column REQUEST_NUMBER varchar(255) ^
 alter table BASE_PERSON_GROUP add column DTYPE varchar(31) ^
+alter table BASE_PERSON_GROUP add column IMAGE_ID uuid ^
 update BASE_PERSON_GROUP set DTYPE = 'base$PersonGroupExt' where DTYPE is null ^
 -- end BASE_PERSON_GROUP
 -- begin BASE_ASSIGNMENT_GROUP
@@ -17691,6 +17693,7 @@ create table TSADV_PORTAL_FEEDBACK_QUESTIONS (
     PORTAL_FEEDBACK_ID uuid not null,
     TOPIC varchar(255) not null,
     TEXT text not null,
+    TYPE_ID uuid not null,
     --
     primary key (ID)
 )^
@@ -18340,7 +18343,7 @@ create table TSADV_ORGANIZATION_INCENTIVE_INDICATORS (
     INDICATOR_TYPE varchar(50) not null,
     INDICATOR_ID uuid not null,
     WEIGHT double precision not null,
-    RESPONSIBLE_PERSON_ID uuid not null,
+    RESPONSIBLE_POSITION_ID uuid not null,
     --
     primary key (ID)
 )^
@@ -18694,3 +18697,131 @@ create table TSADV_GUARDIAN (
     primary key (ID)
 )^
 -- end TSADV_GUARDIAN
+-- begin TSADV_PORTAL_MENU_CUSTOMIZATION_DIC_COMPANY_LINK
+create table TSADV_PORTAL_MENU_CUSTOMIZATION_DIC_COMPANY_LINK (
+    PORTAL_MENU_CUSTOMIZATION_ID uuid,
+    DIC_COMPANY_ID uuid,
+    primary key (PORTAL_MENU_CUSTOMIZATION_ID, DIC_COMPANY_ID)
+)^
+-- end TSADV_PORTAL_MENU_CUSTOMIZATION_DIC_COMPANY_LINK
+-- begin TSADV_JOB_DESCRIPTION
+create table TSADV_JOB_DESCRIPTION (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    POSITION_GROUP_ID uuid not null,
+    BASIC_INTERACTIONS_AT_WORK text,
+    POSITION_DUTIES text not null,
+    GENERAL_ADDITIONAL_REQUIREMENTS text,
+    COMPULSORY_QUALIFICATION_REQUIREMENTS text,
+    FILE_ID uuid,
+    REQUEST_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_JOB_DESCRIPTION
+-- begin TSADV_JOB_DESCRIPTION_REQUEST
+create table TSADV_JOB_DESCRIPTION_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    REQUEST_NUMBER bigint not null,
+    STATUS_ID uuid not null,
+    REQUEST_DATE date not null,
+    COMMENT_ varchar(3000),
+    --
+    POSITION_GROUP_ID uuid not null,
+    BASIC_INTERACTIONS_AT_WORK text,
+    POSITION_DUTIES text not null,
+    GENERAL_ADDITIONAL_REQUIREMENTS text,
+    COMPULSORY_QUALIFICATION_REQUIREMENTS text,
+    FILE_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_JOB_DESCRIPTION_REQUEST
+-- begin TSADV_DIC_PORTAL_FEEDBACK_TYPE
+create table TSADV_DIC_PORTAL_FEEDBACK_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    SYSTEM_NOTIFICATION_TEXT1 varchar(3000),
+    SYSTEM_NOTIFICATION_TEXT2 varchar(3000),
+    SYSTEM_NOTIFICATION_TEXT3 varchar(3000),
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_PORTAL_FEEDBACK_TYPE
+-- begin TSADV_PORTAL_FEEDBACK_QUESTIONS_FILE_DESCRIPTOR_LINK
+create table TSADV_PORTAL_FEEDBACK_QUESTIONS_FILE_DESCRIPTOR_LINK (
+    PORTAL_FEEDBACK_QUESTIONS_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (PORTAL_FEEDBACK_QUESTIONS_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_PORTAL_FEEDBACK_QUESTIONS_FILE_DESCRIPTOR_LINK
+
+-- begin TSADV_PERSON_PAYSLIP
+create table TSADV_PERSON_PAYSLIP (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    PERIOD date,
+    FILE_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_PAYSLIP

@@ -1,0 +1,1 @@
+ alter table TSADV_PORTAL_FEEDBACK_QUESTIONS add column TYPE_ID uuid;

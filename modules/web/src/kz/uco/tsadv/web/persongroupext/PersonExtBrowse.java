@@ -1,17 +1,17 @@
 package kz.uco.tsadv.web.persongroupext;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.WindowManager;
-import com.haulmont.cuba.gui.components.Action;
-import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.cuba.gui.components.GroupTable;
-import com.haulmont.cuba.gui.components.Image;
+import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.screen.LookupComponent;
 import kz.uco.base.common.WebCommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -73,13 +73,26 @@ public class PersonExtBrowse extends StandardLookup<PersonExt> {
     }
 
     public void personCard(PersonExt item, String columnId) {
-        getWindow().openEditor("person-card-no-assignment",
+        AbstractEditor editor = getWindow().openEditor("person-card-no-assignment",
                 item.getGroup(), WindowManager.OpenType.THIS_TAB);
+        editor.addAfterCloseListener(e -> personDl.load());
     }
 
     public Component generateUserImageCell(PersonExt entity) {
-        Image image = WebCommonUtils.setImage(entity.getImage(), null, IMAGE_CELL_HEIGHT);
+        FileDescriptor personImageFileDescriptor = getPersonImageFileDescriptor(entity);
+        Image image = WebCommonUtils.setImage(personImageFileDescriptor, null, IMAGE_CELL_HEIGHT);
         image.addStyleName("circle-image");
         return image;
+    }
+
+    protected FileDescriptor getPersonImageFileDescriptor(PersonExt person){
+        FileDescriptor actualFileDesctiptor = null;
+        if(person.getGroup() != null && person.getGroup().getImage() != null){
+            actualFileDesctiptor = person.getGroup().getImage();
+        }else{
+            actualFileDesctiptor = person.getImage();
+        }
+
+        return actualFileDesctiptor;
     }
 }

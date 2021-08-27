@@ -2966,28 +2966,44 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, absenceData,
                             "no companyCode");
                 }
+//                if (absenceJson.getPersonId() == null || absenceJson.getPersonId().isEmpty()) {
+//                    return prepareError(result, methodName, absenceData,
+//                            "no personId");
+//                }
+                Absence absence;
                 if (absenceJson.getPersonId() == null || absenceJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, absenceData,
-                            "no personId");
+                    absence = dataManager.load(Absence.class)
+                            .query("select e from tsadv$Absence e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.personGroup.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", absenceJson.getLegacyId(),
+                                    "companyCode", absenceJson.getCompanyCode()))
+                            .view("absence.for.integration")
+                            .list().stream().findFirst().orElse(null);
+                    if (absence == null) {
+                        return prepareError(result, methodName, absenceData,
+                                "no absence with legacyId and companyCode : "
+                                        + absenceJson.getLegacyId() + " , " + absenceJson.getCompanyCode());
+                    }
+                } else {
+                    absence = dataManager.load(Absence.class)
+                            .query("select e from tsadv$Absence e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.personGroup.legacyId = :pLegacyId " +
+                                    " and e.personGroup.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", absenceJson.getLegacyId(),
+                                    "pLegacyId", absenceJson.getPersonId(),
+                                    "companyCode", absenceJson.getCompanyCode()))
+                            .view("absence.for.integration")
+                            .list().stream().findFirst().orElse(null);
+                    if (absence == null) {
+                        return prepareError(result, methodName, absenceData,
+                                "no absence with legacyId and personId : "
+                                        + absenceJson.getLegacyId() + " , " + absenceJson.getPersonId() +
+                                        ", " + absenceJson.getCompanyCode());
+                    }
                 }
 
-                Absence absence = dataManager.load(Absence.class)
-                        .query("select e from tsadv$Absence e " +
-                                " where e.legacyId = :legacyId " +
-                                " and e.personGroup.legacyId = :pLegacyId " +
-                                " and e.personGroup.company.legacyId = :companyCode")
-                        .setParameters(ParamsMap.of("legacyId", absenceJson.getLegacyId(),
-                                "pLegacyId", absenceJson.getPersonId(),
-                                "companyCode", absenceJson.getCompanyCode()))
-                        .view("absence.for.integration")
-                        .list().stream().findFirst().orElse(null);
-
-                if (absence == null) {
-                    return prepareError(result, methodName, absenceData,
-                            "no absence with legacyId and personId : "
-                                    + absenceJson.getLegacyId() + " , " + absenceJson.getPersonId() +
-                                    ", " + absenceJson.getCompanyCode());
-                }
                 if (!absenceArrayList.stream().filter(absence1 ->
                         absence1.getId().equals(absence.getId())).findAny().isPresent()) {
                     absenceArrayList.add(absence);
@@ -5505,5 +5521,172 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
         }
         return "";
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonPaySlip(PersonPayslipDataJson personPayslipDataJson) {
+        String methodName = "createOrUpdatePersonPaySlip";
+        ArrayList<PersonPayslipJson> personPayslipJsons = new ArrayList<>();
+        if (personPayslipDataJson.getPersonPayslipJsons() != null) {
+            personPayslipJsons = personPayslipDataJson.getPersonPayslipJsons();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            for (PersonPayslipJson personPayslipJson : personPayslipJsons) {
+                if (personPayslipJson.getPersonId() == null || personPayslipJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no personId");
+                }
+                if (personPayslipJson.getCompanyCode() == null || personPayslipJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no companyCode");
+                }
+                if (personPayslipJson.getPeriod() == null || personPayslipJson.getPeriod().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no period");
+                }
+                if (personPayslipJson.getFile() == null || personPayslipJson.getFile().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no file");
+                }
+                if (personPayslipJson.getExtension() == null || personPayslipJson.getExtension().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no extension");
+                }
+
+                PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                        .query("select e from base$PersonGroupExt e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.company.legacyId = :company")
+                        .setParameters(ParamsMap.of("legacyId", personPayslipJson.getPersonId(),
+                                "company", personPayslipJson.getCompanyCode()))
+                        .view("personGroupExt-for-integration-rest")
+                        .list().stream().findFirst().orElse(null);
+
+                if (personGroupExt == null) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no personGroup with personId = " + personPayslipJson.getPersonId()
+                                    + " and companyCode = " + personPayslipJson.getCompanyCode());
+                }
+                PersonPayslip personPayslip = dataManager.load(PersonPayslip.class)
+                        .query("select e from tsadv_PersonPayslip e " +
+                                " where e.personGroup.legacyId = :personGroup " +
+                                " and e.period = :period " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("personGroup", personPayslipJson.getPersonId(),
+                                "period", formatter.parse(personPayslipJson.getPeriod()),
+                                "companyCode", personPayslipJson.getCompanyCode()))
+                        .view("personPayslip.edit")
+                        .list().stream().findFirst().orElse(null);
+                SimpleDateFormat year = new SimpleDateFormat("yyyy");
+                SimpleDateFormat month = new SimpleDateFormat("MM");
+                if (personPayslip != null) {
+                    byte[] decoder = Base64.getDecoder().decode(personPayslipJson.getFile());
+                    FileDescriptor file = metadata.create(FileDescriptor.class);
+                    file.setCreateDate(BaseCommonUtils.getSystemDate());
+                    file.setName("Расчетный_лист_за_" + month.format(personPayslip.getPeriod())
+                            + "_" + year.format(personPayslip.getPeriod())
+                            + "." + personPayslipJson.getExtension());
+                    file.setExtension(personPayslipJson.getExtension());
+                    file.setSize((long) decoder.length);
+                    fileStorageAPI.saveFile(file, decoder);
+                    personPayslip.setFile(file);
+
+                    commitContext.addInstanceToCommit(file);
+                    commitContext.addInstanceToCommit(personPayslip);
+                } else {
+                    personPayslip = metadata.create(PersonPayslip.class);
+                    personPayslip.setPeriod(formatter.parse(personPayslipJson.getPeriod()));
+                    byte[] decoder = Base64.getDecoder().decode(personPayslipJson.getFile());
+                    FileDescriptor file = metadata.create(FileDescriptor.class);
+                    file.setCreateDate(BaseCommonUtils.getSystemDate());
+                    file.setName("Расчетный_лист_за_" + month.format(personPayslip.getPeriod())
+                            + "_" + year.format(personPayslip.getPeriod())
+                            + "." + personPayslipJson.getExtension());
+                    file.setExtension(personPayslipJson.getExtension());
+                    file.setSize((long) decoder.length);
+                    fileStorageAPI.saveFile(file, decoder);
+                    personPayslip.setUuid(UUID.randomUUID());
+                    personPayslip.setPersonGroup(personGroupExt);
+                    personPayslip.setFile(file);
+
+                    commitContext.addInstanceToCommit(file);
+                    commitContext.addInstanceToCommit(personPayslip);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, personPayslipDataJson, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personPayslipDataJson);
+    }
+
+    @Override
+    public BaseResult deletePersonPaySlip(PersonPayslipDataJson personPayslipDataJson) {
+        String methodName = "deletePersonPaySlip";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonPayslipJson> personPayslipJsons = new ArrayList<>();
+        if (personPayslipDataJson.getPersonPayslipJsons() != null) {
+            personPayslipJsons = personPayslipDataJson.getPersonPayslipJsons();
+        }
+
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PersonPayslip> personPayslips = new ArrayList<>();
+            for (PersonPayslipJson personPayslipJson : personPayslipJsons) {
+
+                if (personPayslipJson.getPersonId() == null || personPayslipJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no personId");
+                }
+
+                if (personPayslipJson.getCompanyCode() == null || personPayslipJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no companyCode");
+                }
+
+                if (personPayslipJson.getPeriod() == null || personPayslipJson.getPeriod().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no period");
+                }
+
+                PersonPayslip personPayslip = dataManager.load(PersonPayslip.class)
+                        .query("select e from tsadv_PersonPayslip e " +
+                                " where e.personGroup.legacyId = :personGroup " +
+                                " and e.period = :period " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("personGroup", personPayslipJson.getPersonId(),
+                                "period", formatter.parse(personPayslipJson.getPeriod()),
+                                "companyCode", personPayslipJson.getCompanyCode()))
+                        .view("personPayslip.edit")
+                        .list().stream().findFirst().orElse(null);
+
+                if (personPayslip == null) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no tsadv_PersonPayslip with personId " + personPayslipJson.getPersonId()
+                                    + " and company legacyId " + personPayslipJson.getCompanyCode()
+                                    + " and period " + personPayslipJson.getPeriod());
+                }
+
+                if (!personPayslips.stream().filter(payslip ->
+                        payslip.getId().equals(personPayslip.getId())).findAny().isPresent()) {
+                    personPayslips.add(personPayslip);
+                }
+            }
+
+            for (PersonPayslip personPayslip : personPayslips) {
+                entityManager.remove(personPayslip);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personPayslipDataJson, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
+        return prepareSuccess(result, methodName, personPayslipDataJson);
     }
 }

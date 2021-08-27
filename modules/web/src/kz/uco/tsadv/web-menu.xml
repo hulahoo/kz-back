@@ -172,6 +172,8 @@
                   screen="base$PositionGroup.browse"/>
             <item screen="tsadv_ExecutiveAssistants.browse"
                   caption="mainMsg://menu_config.tsadv_ExecutiveAssistants.browse"/>
+            <item screen="tsadv_JobDescriptionRequest.browse"
+                  caption="mainMsg://menu_config.tsadv_JobDescriptionRequest.browse"/>
 
         </menu>
         <menu id="hrGradesAndRules"
@@ -233,6 +235,7 @@
         <item screen="tsadv_VacationScheduleRequest.browse"
               caption="mainMsg://menu_config.tsadv_VacationScheduleRequest.browse"/>
         <item screen="tsadv_DicLmsSliderPosition.browse"/>
+        <item screen="tsadv_PersonPayslip.browse" caption="mainMsg://menu_config.tsadv_PersonPayslip.browse"/>
     </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
@@ -779,6 +782,8 @@
         <menu id="portalFeedback">
             <menu id="portalFeedbackDictionary">
                 <item screen="tsadv_DicPortalFeedbackQuestion.browse"/>
+                <item screen="tsadv_DicPortalFeedbackType.browse"
+                      caption="mainMsg://menu_config.tsadv_DicPortalFeedbackType.browse"/>
             </menu>
             <item screen="tsadv_PortalFeedback.browse"/>
             <item screen="tsadv_PortalFeedbackQuestions.browse"/>
