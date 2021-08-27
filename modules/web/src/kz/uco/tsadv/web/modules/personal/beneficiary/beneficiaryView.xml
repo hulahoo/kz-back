@@ -138,6 +138,28 @@
                         <field id="beneficiaryJob"
                                property="beneficiaryJob"/>
                     </column>
+                    <column id="column3">
+                        <field id="addressType"
+                               property="addressType"/>
+                        <field id="postalCode"
+                               property="postalCode"/>
+                        <field id="country"
+                               property="country"/>
+                        <field id="addressKATOCode"
+                               property="addressKATOCode"/>
+                        <field id="streetType"
+                               property="streetType"/>
+                        <field id="streetName"
+                               property="streetName"/>
+                        <field id="building"
+                               property="building"/>
+                        <field id="block"
+                               property="block"/>
+                        <field id="flat"
+                               property="flat"/>
+                        <field id="addressForExpats"
+                               property="addressForExpats"/>
+                    </column>
                 </fieldGroup>
                 <fieldGroup id="beneficiaryFieldGroup"
                             datasource="beneficiaryDs"

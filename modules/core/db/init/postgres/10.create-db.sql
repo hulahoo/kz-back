@@ -15584,6 +15584,16 @@ create table TSADV_BENEFICIARY (
     BENEFICIARY_ADDRESS varchar(2500),
     BENEFICIARY_PLACE_OF_WORK varchar(2500),
     BENEFICIARY_JOB varchar(2500),
+    ADDRESS_TYPE_ID uuid not null,
+    POSTAL_CODE varchar(2500),
+    COUNTRY_ID uuid not null,
+    ADDRESS_KATO_CODE_ID uuid,
+    STREET_TYPE_ID uuid not null,
+    STREET_NAME varchar(2500),
+    BUILDING varchar(2500),
+    BLOCK varchar(2500),
+    FLAT varchar(2500),
+    ADDRESS_FOR_EXPATS varchar(2500),
     --
     primary key (ID)
 )^
@@ -17683,6 +17693,7 @@ create table TSADV_PORTAL_FEEDBACK_QUESTIONS (
     PORTAL_FEEDBACK_ID uuid not null,
     TOPIC varchar(255) not null,
     TEXT text not null,
+    TYPE_ID uuid not null,
     --
     primary key (ID)
 )^
@@ -18746,6 +18757,52 @@ create table TSADV_JOB_DESCRIPTION_REQUEST (
     primary key (ID)
 )^
 -- end TSADV_JOB_DESCRIPTION_REQUEST
+-- begin TSADV_DIC_PORTAL_FEEDBACK_TYPE
+create table TSADV_DIC_PORTAL_FEEDBACK_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    SYSTEM_NOTIFICATION_TEXT1 varchar(3000),
+    SYSTEM_NOTIFICATION_TEXT2 varchar(3000),
+    SYSTEM_NOTIFICATION_TEXT3 varchar(3000),
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_PORTAL_FEEDBACK_TYPE
+-- begin TSADV_PORTAL_FEEDBACK_QUESTIONS_FILE_DESCRIPTOR_LINK
+create table TSADV_PORTAL_FEEDBACK_QUESTIONS_FILE_DESCRIPTOR_LINK (
+    PORTAL_FEEDBACK_QUESTIONS_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (PORTAL_FEEDBACK_QUESTIONS_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_PORTAL_FEEDBACK_QUESTIONS_FILE_DESCRIPTOR_LINK
 
 -- begin TSADV_PERSON_PAYSLIP
 create table TSADV_PERSON_PAYSLIP (

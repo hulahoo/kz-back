@@ -25,11 +25,12 @@
         </filter>
         <groupTable id="executiveAssistantsesTable"
                     width="100%"
-                    dataContainer="executiveAssistantsesDc">
+                    dataContainer="executiveAssistantsesDc" multiselect="true">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
+                <action id="excel" type="excel"/>
             </actions>
             <columns>
                 <column id="managerPositionGroup" caption="msg://Manager’s position"/>
@@ -46,6 +47,7 @@
                 <button id="createBtn" action="executiveAssistantsesTable.create"/>
                 <button id="editBtn" action="executiveAssistantsesTable.edit"/>
                 <button id="removeBtn" action="executiveAssistantsesTable.remove"/>
+                <button id="excelBtn" action="executiveAssistantsesTable.excel"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">
