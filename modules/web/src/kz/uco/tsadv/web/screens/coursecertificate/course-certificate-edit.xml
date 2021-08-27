@@ -19,9 +19,14 @@
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="courseCertificateDc">
             <column width="250px">
-                <dateField id="startDateField" property="startDate" caption="msg://startDate"/>
-                <dateField id="endDateField" property="endDate" caption="msg://endDate"/>
-                <field id="certificate" property="certificate" caption="msg://certificate"/>
+                <dateField id="startDateField" property="startDate"/>
+                <dateField id="endDateField" property="endDate"/>
+                <pickerField id="certificate" property="certificate">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

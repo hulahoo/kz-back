@@ -2044,5 +2044,8 @@
         <entity class="kz.uco.tsadv.modules.hr.JobDescriptionRequest">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.administration.TsadvReport">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

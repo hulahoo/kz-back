@@ -24138,4 +24138,19 @@
             <property name="organizationGroupExt" view="_minimal"/>
         </property>
     </view>
+    <view entity="tsadv_TsadvReport" name="report.edit" extends="_local">
+        <property name="screenshot" view="_minimal"/>
+        <property name="group" view="_local"/>
+        <property name="defaultTemplate" view="template.edit"/>
+        <property name="templates" view="template.edit"/>
+    </view>
+    <view entity="tsadv_TsadvReport" name="report.view">
+        <property name="name"/>
+        <property name="localeNames"/>
+        <property name="code"/>
+        <property name="description"/>
+        <property name="reportType"/>
+        <property name="group" view="_minimal"/>
+        <property name="screenshot" view="_minimal"/>
+    </view>
 </views>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.report.TsadvReportEditor"
+        extends="com/haulmont/reports/gui/report/edit/report-edit.xml"
+        messagesPack="kz.uco.tsadv.web.report">
+    <dsContext>
+        <datasource id="reportDs"
+                    class="kz.uco.tsadv.modules.administration.TsadvReport"/>
+    </dsContext>
+    <layout>
+        <tabSheet id="tabsheet">
+            <tab id="generalTab">
+                <frame src="/kz/uco/tsadv/web/report/tsadv-general.xml" id="generalFrame"/>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

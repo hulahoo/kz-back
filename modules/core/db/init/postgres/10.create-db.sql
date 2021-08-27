@@ -18768,3 +18768,8 @@ create table TSADV_PERSON_PAYSLIP (
     primary key (ID)
 )^
 -- end TSADV_PERSON_PAYSLIP
+-- begin REPORT_REPORT
+alter table REPORT_REPORT add column SCREENSHOT_ID uuid ^
+alter table REPORT_REPORT add column DTYPE varchar(100) ^
+update REPORT_REPORT set DTYPE = 'tsadv_TsadvReport' where DTYPE is null ^
+-- end REPORT_REPORT
