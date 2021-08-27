@@ -8759,6 +8759,10 @@
     <view class="kz.uco.tsadv.modules.personal.model.Beneficiary"
           extends="_local"
           name="beneficiaryView">
+        <property name="streetType" view="_minimal"/>
+        <property name="addressKATOCode" view="_minimal"/>
+        <property name="country" view="_local"/>
+        <property name="addressType" view="_minimal"/>
         <property name="personGroupParent" view="_minimal">
             <property name="list" view="_minimal">
                 <property name="fioWithEmployeeNumber"/>
