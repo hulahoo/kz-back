@@ -479,7 +479,7 @@ public class LearningServiceBean implements LearningService {
                 }
                 answer.setCorrect(Boolean.parseBoolean(correct));
 
-                String questionCode = getStringValue(row.getCell(7));
+                String questionCode = getStringValue(row.getCell(0));
                 Question findQuestion = questionMap.get(questionCode);
                 if (findQuestion == null) {
                     throw new NullPointerException("Question is not found!");
