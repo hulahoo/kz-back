@@ -23,6 +23,7 @@
                 <pickerField id="indicator" property="indicator"/>
                 <textField id="weightField" property="weight"/>
                 <pickerField id="responsiblePosition" property="responsiblePosition"/>
+                <pickerField id="approvingPosition" property="approvingPosition"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

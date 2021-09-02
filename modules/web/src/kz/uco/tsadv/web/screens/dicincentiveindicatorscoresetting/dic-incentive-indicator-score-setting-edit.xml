@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://dicIncentiveIndicatorScoreSettingEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.dicincentiveindicatorscoresetting">
+    <data>
+        <instance id="dicIncentiveIndicatorScoreSettingDc"
+                  class="kz.uco.tsadv.modules.personal.model.DicIncentiveIndicatorScoreSetting">
+            <view extends="_local"/>
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="AUTO"
+                width="AUTO"
+                forceDialog="true"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="dicIncentiveIndicatorScoreSettingDc">
+            <column width="350px">
+                <textField id="minPercentField" property="minPercent"/>
+                <textField id="maxPercentField" property="maxPercent"/>
+                <textField id="totalScoreField" property="totalScore"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

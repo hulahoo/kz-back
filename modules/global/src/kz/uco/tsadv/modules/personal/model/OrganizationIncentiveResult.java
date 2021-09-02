@@ -1,6 +1,9 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
+import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 
@@ -8,7 +11,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_ORGANIZATION_INCENTIVE_RESULT")
 @Entity(name = "tsadv_OrganizationIncentiveResult")
 public class OrganizationIncentiveResult extends StandardEntity {
@@ -18,6 +23,10 @@ public class OrganizationIncentiveResult extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ORGANIZATION_GROUP_ID")
     protected OrganizationGroupExt organizationGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORGANIZATION_INCENTIVE_MONTH_RESULT_ID")
+    private OrganizationIncentiveMonthResult organizationIncentiveMonthResult;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "PERIOD_DATE")
@@ -36,8 +45,45 @@ public class OrganizationIncentiveResult extends StandardEntity {
     @Column(name = "WEIGHT")
     protected Double weight;
 
+    @Column(name = "PREMIUM_PERCENT")
+    private Double premiumPercent;
+
     @Column(name = "RESULT_")
     protected Double result;
+
+    @MetaProperty
+    public Double getScore() {
+        if (PersistenceHelper.isLoaded(this, "indicator")
+                && PersistenceHelper.isLoaded(this, "result")
+                && result != null
+                && indicator != null
+                && PersistenceHelper.isLoaded(indicator, "scoreSettings")) {
+            List<DicIncentiveIndicatorScoreSetting> scoreSettings = indicator.getScoreSettings();
+            if (scoreSettings != null)
+                return scoreSettings.stream()
+                        .filter(setting -> setting.getMinPercent() <= result && setting.getMaxPercent() >= result)
+                        .findFirst()
+                        .map(DicIncentiveIndicatorScoreSetting::getTotalScore)
+                        .orElse(0.0);
+        }
+        return null;
+    }
+
+    public OrganizationIncentiveMonthResult getOrganizationIncentiveMonthResult() {
+        return organizationIncentiveMonthResult;
+    }
+
+    public void setOrganizationIncentiveMonthResult(OrganizationIncentiveMonthResult organizationIncentiveMonthResult) {
+        this.organizationIncentiveMonthResult = organizationIncentiveMonthResult;
+    }
+
+    public Double getPremiumPercent() {
+        return premiumPercent;
+    }
+
+    public void setPremiumPercent(Double premiumPercent) {
+        this.premiumPercent = premiumPercent;
+    }
 
     public Double getResult() {
         return result;

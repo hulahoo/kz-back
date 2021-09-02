@@ -5514,6 +5514,171 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         return prepareSuccess(result, methodName, absenceBalanceData);
     }
 
+    @Override
+    public BaseResult createOrUpdatePositionIncentiveFlag(PositionIncentiveFlagDataJson positionIncentiveFlagData) {
+        String startInfinityDate = "1900-01-01";
+        String endInfinityDate = "9999-12-31";
+        String YES_STRING = "Y";
+        String NO_STRING = "N";
+
+        String methodName = "createOrUpdatePositionIncentiveFlag";
+        ArrayList<PositionIncentiveFlagJson> positionIncentiveFlags = new ArrayList<>();
+        if (positionIncentiveFlagData.getPositionIncentiveFlags() != null) {
+            positionIncentiveFlags = positionIncentiveFlagData.getPositionIncentiveFlags();
+        }
+
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+
+        try {
+            for (PositionIncentiveFlagJson positionIncentiveFlagJson : positionIncentiveFlags) {
+
+                if (isNullOrEmpty(positionIncentiveFlagJson.getPositionId())) {
+                    return prepareError(result, methodName, positionIncentiveFlagData, "no positionId");
+                }
+
+                if (isNullOrEmpty(positionIncentiveFlagJson.getCompanyCode())) {
+                    return prepareError(result, methodName, positionIncentiveFlagData, "no companyCode");
+                }
+
+                if (isNullOrEmpty(positionIncentiveFlagJson.getIncentiveFlag())) {
+                    return prepareError(result, methodName, positionIncentiveFlagData, "no incentiveFlag");
+                }
+
+                if(!positionIncentiveFlagJson.getIncentiveFlag().equals(YES_STRING)
+                        && !positionIncentiveFlagJson.getIncentiveFlag().equals(NO_STRING)){
+                    return prepareError(result, methodName, positionIncentiveFlagData, "incentiveFlag not equals 'Y' or 'N' ");
+                }
+
+                if (isNullOrEmpty(positionIncentiveFlagJson.getStartDate())) {
+                    positionIncentiveFlagJson.setStartDate(startInfinityDate);
+                }
+
+                if (isNullOrEmpty(positionIncentiveFlagJson.getEndDate())) {
+                    positionIncentiveFlagJson.setEndDate(endInfinityDate);
+                }
+
+                PositionGroupExt positionGroupExt = dataManager.load(PositionGroupExt.class)
+                        .query("select e from base$PositionGroupExt e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.company.legacyId = :companyCode ")
+                        .setParameters(ParamsMap.of(
+                                "legacyId", positionIncentiveFlagJson.getPositionId(),
+                                "companyCode", positionIncentiveFlagJson.getCompanyCode()
+                        ))
+                        .list().stream().findFirst().orElse(null);
+
+                if (positionGroupExt == null) {
+                    return prepareError(
+                            result,
+                            methodName,
+                            positionIncentiveFlagData,
+                            String.format("no base$PositionGroupExt with legacy_id - '%s' and companyCode - '%s'",
+                                    positionIncentiveFlagJson.getPositionId(),
+                                    positionIncentiveFlagJson.getCompanyCode()
+                            )
+                    );
+                }
+
+                Date startDateJson = formatter.parse(positionIncentiveFlagJson.getStartDate());
+                Date endDateJson = formatter.parse(positionIncentiveFlagJson.getEndDate());
+//              dates intersection: :startDate <= e.dateTo and :endDate >= e.dateFrom
+                List<PositionIncentiveFlag> positionIncentiveFlagRemoveList = dataManager.load(PositionIncentiveFlag.class)
+                        .query("select e from tsadv_PositionIncentiveFlag e " +
+                                " where e.positionGroup = :positionGroup " +
+                                " and :startDate <= e.dateTo and :endDate >= e.dateFrom")
+                        .setParameters(ParamsMap.of(
+                                "positionGroup",positionGroupExt,
+                                "startDate",startDateJson,
+                                "endDate",endDateJson))
+                        .list();
+
+                positionIncentiveFlagRemoveList.forEach(commitContext::addInstanceToRemove);
+
+                PositionIncentiveFlag newPositionIncentiveFlag = metadata.create(PositionIncentiveFlag.class);
+                newPositionIncentiveFlag.setId(UUID.randomUUID());
+                newPositionIncentiveFlag.setPositionGroup(positionGroupExt);
+                newPositionIncentiveFlag.setLegacyId(positionIncentiveFlagJson.getLegacyId());
+                newPositionIncentiveFlag.setDateFrom(startDateJson);
+                newPositionIncentiveFlag.setDateTo(endDateJson);
+                boolean isIncentive = positionIncentiveFlagJson.getIncentiveFlag().equals(YES_STRING);
+                newPositionIncentiveFlag.setIsIncentive(isIncentive);
+
+                commitContext.addInstanceToCommit(newPositionIncentiveFlag);
+            }
+
+            dataManager.commit(commitContext);
+
+        }catch (Exception e ){
+            e.printStackTrace();
+
+            return prepareError(result, methodName, positionIncentiveFlagData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
+        return prepareSuccess(result, methodName, positionIncentiveFlagData);
+    }
+
+    @Override
+    public BaseResult deletePositionIncentiveFlag(PositionIncentiveFlagDataJson positionIncentiveFlagData) {
+        String methodName = "deletePositionIncentiveFlag";
+        BaseResult result = new BaseResult();
+        ArrayList<PositionIncentiveFlagJson> positionIncentiveFlags = new ArrayList<>();
+        if (positionIncentiveFlagData.getPositionIncentiveFlags() != null) {
+            positionIncentiveFlags = positionIncentiveFlagData.getPositionIncentiveFlags();
+        }
+
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PositionIncentiveFlag> positionIncentiveFlagsArrayList = new ArrayList<>();
+            for (PositionIncentiveFlagJson positionIncentiveFlagJson : positionIncentiveFlags) {
+
+                if (positionIncentiveFlagJson.getLegacyId() == null || positionIncentiveFlagJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, positionIncentiveFlagData,
+                            "no legacyId");
+                }
+
+                if (positionIncentiveFlagJson.getCompanyCode() == null || positionIncentiveFlagJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, positionIncentiveFlagData,
+                            "no companyCode");
+                }
+
+                PositionIncentiveFlag positionIncentiveFlag = dataManager.load(PositionIncentiveFlag.class)
+                        .query(
+                                " select e from tsadv_PositionIncentiveFlag e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.positionGroup.company.legacyId = :companyCode ")
+                        .setParameters(ParamsMap.of(
+                                "legacyId", positionIncentiveFlagJson.getLegacyId(),
+                                "companyCode", positionIncentiveFlagJson.getCompanyCode()))
+                        .view("positionIncentiveFlag.edit").list().stream().findFirst().orElse(null);
+
+                if (positionIncentiveFlag == null) {
+                    return prepareError(result, methodName, positionIncentiveFlagData,
+                            "no tsadv_PositionIncentiveFlag with legacyId " + positionIncentiveFlagJson.getLegacyId()
+                                    + " and company legacyId " + positionIncentiveFlagJson.getCompanyCode());
+                }
+
+                if (!positionIncentiveFlagsArrayList.stream().filter(positionIncentiveFlag1 ->
+                        positionIncentiveFlag1.getId().equals(positionIncentiveFlag.getId())).findAny().isPresent()) {
+                    positionIncentiveFlagsArrayList.add(positionIncentiveFlag);
+                }
+            }
+
+            for (PositionIncentiveFlag positionIncentiveFlag : positionIncentiveFlagsArrayList) {
+                entityManager.remove(positionIncentiveFlag);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, positionIncentiveFlagData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
+        return prepareSuccess(result, methodName, positionIncentiveFlagData);
+    }
+
     protected String getEmpNumber(String jsonEmpNumber) {
         for (int i = 0; i < jsonEmpNumber.length(); i++) {
             if (jsonEmpNumber.charAt(i) != '0') {
@@ -5521,6 +5686,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
         }
         return "";
+    }
+
+    protected boolean isNullOrEmpty(String checkValue){
+        return  (checkValue == null || checkValue.isEmpty());
     }
 
     @Override

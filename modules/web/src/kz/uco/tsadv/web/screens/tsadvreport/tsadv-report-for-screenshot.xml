@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="tsadvReportsTable"
+        messagesPack="kz.uco.tsadv.web.screens.tsadvreport">
+    <data readOnly="true">
+        <collection id="tsadvReportsDc"
+                    class="kz.uco.tsadv.modules.administration.TsadvReport"
+                    view="report.edit">
+            <loader id="tsadvReportsDl">
+                <query>
+                    <![CDATA[select e from tsadv_TsadvReport e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tsadvReportsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="tsadvReportsTable"
+                dataLoader="tsadvReportsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="tsadvReportsTable"
+                    width="100%"
+                    dataContainer="tsadvReportsDc">
+            <actions>
+                <action id="screenshot" caption="msg://seeScreenshot" trackSelection="true"/>
+            </actions>
+            <columns>
+                <group>
+                    <column id="group"/>
+                </group>
+                <column id="locName"/>
+                <column id="description" maxTextLength="100"/>
+                <column id="code"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="screenshotBtn" action="tsadvReportsTable.screenshot"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

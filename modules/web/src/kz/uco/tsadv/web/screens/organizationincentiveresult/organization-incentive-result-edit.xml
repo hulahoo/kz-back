@@ -17,7 +17,7 @@
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="organizationIncentiveResultDc">
             <column width="250px">
-                <dateField id="periodDateField" property="periodDate"/>
+                <dateField id="periodDateField" resolution="MONTH" property="periodDate" dateFormat="MM.yyyy"/>
                 <pickerField id="indicatorField" property="indicator"/>
                 <textField id="planField" property="plan"/>
                 <textField id="factField" property="fact"/>

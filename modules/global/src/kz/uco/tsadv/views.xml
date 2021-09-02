@@ -4639,6 +4639,13 @@
         <property name="assignmentStatus"
                   view="_local"/>
     </view>
+    <view class="kz.uco.tsadv.modules.personal.model.PositionIncentiveFlag"
+          extends="_local"
+          name="positionIncentiveFlag.edit">
+        <property name="positionGroup" view="_local">
+            <property name="company" view="_local"/>
+        </property>
+    </view>
     <view class="kz.uco.tsadv.modules.personal.model.Dismissal"
           extends="_local"
           name="dismissal.edit">
@@ -8759,6 +8766,10 @@
     <view class="kz.uco.tsadv.modules.personal.model.Beneficiary"
           extends="_local"
           name="beneficiaryView">
+        <property name="streetType" view="_minimal"/>
+        <property name="addressKATOCode" view="_minimal"/>
+        <property name="country" view="_local"/>
+        <property name="addressType" view="_minimal"/>
         <property name="personGroupParent" view="_minimal">
             <property name="list" view="_minimal">
                 <property name="fioWithEmployeeNumber"/>
@@ -23912,13 +23923,29 @@
     <view entity="tsadv_OrganizationIncentiveIndicators" name="organizationIncentiveIndicators-edit-view"
           extends="_local">
         <property name="indicator" view="_local"/>
+        <property name="organizationGroup" view="_minimal"/>
         <property name="responsiblePosition" view="_base">
+            <property name="list" view="_local"/>
+        </property>
+        <property name="approvingPosition" view="_local">
             <property name="list" view="_local"/>
         </property>
 
     </view>
     <view entity="tsadv_OrganizationIncentiveResult" name="organizationIncentiveResults-edit-view" extends="_local">
+        <property name="indicator" view="_local">
+            <property name="scoreSettings" view="_local"/>
+        </property>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveResult" name="organizationIncentiveResults-notification-view" extends="_local">
+        <property name="organizationIncentiveMonthResult" view="_local"/>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveResult" name="organizationIncentiveResults-for-incentiveMonthResult" extends="_local">
         <property name="indicator" view="_local"/>
+        <property name="organizationGroup" view="_local">
+            <property name="company" view="_local"/>
+        </property>
+        <property name="organizationIncentiveMonthResult" view="_local"/>
     </view>
     <view entity="tsadv$UserExt" name="myTsadv_view" extends="_local">
         <property name="personGroup" view="_local"/>
@@ -24142,5 +24169,59 @@
             </property>
             <property name="organizationGroupExt" view="_minimal"/>
         </property>
+    </view>
+    <view entity="tsadv_DicIncentiveIndicators" name="dicIncentiveIndicators.browse" extends="_local">
+        <property name="type" view="_local"/>
+    </view>
+    <view entity="tsadv_DicIncentiveIndicators" name="dicIncentiveIndicators.edit" extends="_local">
+        <property name="type" view="_local"/>
+        <property name="scoreSettings" view="_local"/>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveMonthResult" name="organizationIncentiveMonthResult.browse" extends="_local">
+        <property name="company" view="_local"/>
+        <property name="status" view="_local"/>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveMonthResult" name="organizationIncentiveMonthResult.edit" extends="_local">
+        <property name="status" view="_local"/>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveMonthResult" name="organizationIncentiveMonthResult.integration" extends="_local">
+        <property name="status" view="_local"/>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveMonthResult" name="organizationIncentiveMonthResult.integration.full" extends="_local">
+        <property name="incentiveResults" view="_local">
+            <property name="organizationGroup" view="_minimal">
+                <property name="legacyId"/>
+                <property name="company">
+                    <property name="legacyId"/>
+                </property>
+            </property>
+            <property name="indicator" view="_minimal">
+                <property name="scoreSettings" view="_local"/>
+                <property name="type" view="_local"/>
+                <property name="code"/>
+            </property>
+        </property>
+    </view>
+    <view entity="tsadv_OrganizationIncentiveMonthResultView" name="organizationIncentiveMonthResultView.browse" extends="_local">
+        <property name="company" view="_local"/>
+        <property name="department" view="_minimal"/>
+        <property name="parent" view="_minimal"/>
+        <property name="status" view="_local"/>
+        <property name="indicator" view="_local"/>
+    </view>
+    <view entity="tsadv_TsadvReport" name="report.edit" extends="_local">
+        <property name="screenshot" view="_minimal"/>
+        <property name="group" view="_local"/>
+        <property name="defaultTemplate" view="template.edit"/>
+        <property name="templates" view="template.edit"/>
+    </view>
+    <view entity="tsadv_TsadvReport" name="report.view">
+        <property name="name"/>
+        <property name="localeNames"/>
+        <property name="code"/>
+        <property name="description"/>
+        <property name="reportType"/>
+        <property name="group" view="_minimal"/>
+        <property name="screenshot" view="_minimal"/>
     </view>
 </views>
