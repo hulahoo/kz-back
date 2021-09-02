@@ -50,6 +50,19 @@ public class OrganizationIncentiveIndicators extends StandardEntity {
     @NotNull
     protected PositionGroupExt responsiblePosition;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "APPROVING_POSITION_ID")
+    @NotNull
+    private PositionGroupExt approvingPosition;
+
+    public PositionGroupExt getApprovingPosition() {
+        return approvingPosition;
+    }
+
+    public void setApprovingPosition(PositionGroupExt approvingPosition) {
+        this.approvingPosition = approvingPosition;
+    }
+
     public void setResponsiblePosition(PositionGroupExt responsiblePosition) {
         this.responsiblePosition = responsiblePosition;
     }

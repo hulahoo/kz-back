@@ -2,6 +2,7 @@ package kz.uco.tsadv.service.portal;
 
 import com.haulmont.cuba.core.entity.BaseGenericIdEntity;
 import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.core.jmx.ConfigStorageMBean;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.config.PositionStructureConfig;
@@ -43,7 +44,9 @@ public class PortalHelperServiceBean implements PortalHelperService {
     @Inject
     protected ExecutiveAssistantService assistantService;
     @Inject
-    private PositionStructureConfig positionStructureConfig;
+    protected PositionStructureConfig positionStructureConfig;
+    @Inject
+    protected ConfigStorageMBean configStorageMBean;
 
     @Override
     public <T extends BaseGenericIdEntity<K>, K> T newEntity(String entityName) {
@@ -132,6 +135,11 @@ public class PortalHelperServiceBean implements PortalHelperService {
                 .parameter("availabilities", availabilities)
                 .parameter("companies", companies)
                 .list();
+    }
+
+    @Override
+    public String getConfig(String classFQN, String methodName) {
+        return configStorageMBean.getConfigValue(classFQN, methodName);
     }
 
     protected PortalMenuCustomization findParent(PortalMenuCustomization menu, List<PortalMenuCustomization> menuList, List<PortalMenuPojo> fullMenuPojoList) {

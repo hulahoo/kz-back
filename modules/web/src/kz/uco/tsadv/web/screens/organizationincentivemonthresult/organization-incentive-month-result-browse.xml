@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://organizationIncentiveMonthResultBrowse.caption"
+        focusComponent="organizationIncentiveMonthResultsTree"
+        messagesPack="kz.uco.tsadv.web.screens.organizationincentivemonthresult">
+    <data readOnly="true">
+        <collection id="organizationIncentiveMonthResultsDc"
+                    class="kz.uco.tsadv.entity.dbview.OrganizationIncentiveMonthResultView"
+                    view="organizationIncentiveMonthResultView.browse">
+            <loader id="organizationIncentiveMonthResultsDl">
+                <query>
+                    <![CDATA[select e from tsadv_OrganizationIncentiveMonthResultView e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="organizationIncentiveMonthResultsTree"
+            spacing="true">
+        <filter id="filter"
+                applyTo="organizationIncentiveMonthResultsTree"
+                dataLoader="organizationIncentiveMonthResultsDl">
+            <properties include=".*"/>
+        </filter>
+        <treeTable id="organizationIncentiveMonthResultsTree"
+                   hierarchyProperty="parent"
+                   width="100%"
+                   multiselect="false"
+                   dataContainer="organizationIncentiveMonthResultsDc">
+            <actions>
+                <action id="sendNotification"
+                        caption="msg://sendNotification"
+                        trackSelection="true"/>
+            </actions>
+            <buttonsPanel alwaysVisible="false" margin="true,false,false,false">
+                <button id="sendNotificationBtn" action="organizationIncentiveMonthResultsTree.sendNotification"/>
+            </buttonsPanel>
+            <columns>
+                <column id="company"/>
+                <column id="period">
+                    <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" format="MMM yyyy"/>
+                </column>
+                <column id="department"/>
+                <column id="indicator"/>
+                <column id="weight"/>
+                <column id="plan"/>
+                <column id="fact"/>
+                <column id="result"/>
+                <column id="premiumPercent"/>
+                <column id="totalPremiumPercent"/>
+                <column id="status"/>
+                <column id="comment"/>
+            </columns>
+        </treeTable>
+    </layout>
+</window>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://dicIncentiveIndicatorScoreSettingBrowse.caption"
+        focusComponent="dicIncentiveIndicatorScoreSettingsTable"
+        messagesPack="kz.uco.tsadv.web.screens.dicincentiveindicatorscoresetting">
+    <data readOnly="true">
+        <collection id="dicIncentiveIndicatorScoreSettingsDc"
+                    class="kz.uco.tsadv.modules.personal.model.DicIncentiveIndicatorScoreSetting">
+            <view extends="_local"/>
+            <loader id="dicIncentiveIndicatorScoreSettingsDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicIncentiveIndicatorScoreSetting e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicIncentiveIndicatorScoreSettingsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicIncentiveIndicatorScoreSettingsTable"
+                dataLoader="dicIncentiveIndicatorScoreSettingsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicIncentiveIndicatorScoreSettingsTable"
+                    width="100%"
+                    dataContainer="dicIncentiveIndicatorScoreSettingsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="minPercent"/>
+                <column id="maxPercent"/>
+                <column id="totalScore"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicIncentiveIndicatorScoreSettingsTable.create"/>
+                <button id="editBtn" action="dicIncentiveIndicatorScoreSettingsTable.edit"/>
+                <button id="removeBtn" action="dicIncentiveIndicatorScoreSettingsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

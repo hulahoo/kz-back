@@ -14769,7 +14769,6 @@ create table TSADV_SALARY_REQUEST (
     ORDER_GROUP_ID uuid,
     AGREEMENT_ID uuid,
     TYPE_ varchar(50) not null,
-    DIFFERENCE double precision,
     --
     primary key (ID)
 )^
@@ -18323,6 +18322,9 @@ create table TSADV_DIC_INCENTIVE_INDICATORS (
     IS_DEFAULT boolean not null,
     ORDER_ integer,
     --
+    GENERAL boolean not null,
+    TYPE_ID uuid not null,
+    --
     primary key (ID)
 )^
 -- end TSADV_DIC_INCENTIVE_INDICATORS
@@ -18344,6 +18346,7 @@ create table TSADV_ORGANIZATION_INCENTIVE_INDICATORS (
     INDICATOR_ID uuid not null,
     WEIGHT double precision not null,
     RESPONSIBLE_POSITION_ID uuid not null,
+    APPROVING_POSITION_ID uuid not null,
     --
     primary key (ID)
 )^
@@ -18360,16 +18363,38 @@ create table TSADV_ORGANIZATION_INCENTIVE_RESULT (
     DELETED_BY varchar(50),
     --
     ORGANIZATION_GROUP_ID uuid not null,
+    ORGANIZATION_INCENTIVE_MONTH_RESULT_ID uuid,
     PERIOD_DATE date,
     INDICATOR_ID uuid,
     PLAN_ decimal(19, 2),
     FACT decimal(19, 2),
     WEIGHT double precision,
+    PREMIUM_PERCENT double precision,
     RESULT_ double precision,
     --
     primary key (ID)
 )^
 -- end TSADV_ORGANIZATION_INCENTIVE_RESULT
+-- begin TSADV_POSITION_INCENTIVE_FLAG
+create table TSADV_POSITION_INCENTIVE_FLAG (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    POSITION_GROUP_ID uuid not null,
+    LEGACY_ID varchar(255),
+    IS_INCENTIVE boolean not null,
+    DATE_FROM date,
+    DATE_TO date,
+    --
+    primary key (ID)
+)^
+-- end TSADV_POSITION_INCENTIVE_FLAG
 -- begin TSADV_BPROC_REASSIGNMENT
 create table TSADV_BPROC_REASSIGNMENT (
     ID uuid,
@@ -18697,6 +18722,114 @@ create table TSADV_GUARDIAN (
     primary key (ID)
 )^
 -- end TSADV_GUARDIAN
+-- begin TSADV_DIC_INCENTIVE_INDICATOR_TYPE
+create table TSADV_DIC_INCENTIVE_INDICATOR_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_INCENTIVE_INDICATOR_TYPE
+-- begin TSADV_DIC_INCENTIVE_INDICATOR_SCORE_SETTING
+create table TSADV_DIC_INCENTIVE_INDICATOR_SCORE_SETTING (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    INDICATOR_ID uuid not null,
+    MIN_PERCENT double precision not null,
+    MAX_PERCENT double precision not null,
+    TOTAL_SCORE double precision not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_INCENTIVE_INDICATOR_SCORE_SETTING
+-- begin TSADV_DIC_INCENTIVE_RESULT_STATUS
+create table TSADV_DIC_INCENTIVE_RESULT_STATUS (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_INCENTIVE_RESULT_STATUS
+-- begin TSADV_ORGANIZATION_INCENTIVE_MONTH_RESULT
+create table TSADV_ORGANIZATION_INCENTIVE_MONTH_RESULT (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    COMPANY_ID uuid not null,
+    PERIOD_ date not null,
+    STATUS_ID uuid,
+    COMMENT_ varchar(2500),
+    --
+    primary key (ID)
+)^
+-- end TSADV_ORGANIZATION_INCENTIVE_MONTH_RESULT
 -- begin TSADV_PORTAL_MENU_CUSTOMIZATION_DIC_COMPANY_LINK
 create table TSADV_PORTAL_MENU_CUSTOMIZATION_DIC_COMPANY_LINK (
     PORTAL_MENU_CUSTOMIZATION_ID uuid,
