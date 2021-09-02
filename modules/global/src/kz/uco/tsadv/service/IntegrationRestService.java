@@ -99,4 +99,8 @@ public interface IntegrationRestService {
     BaseResult createOrUpdatePositionIncentiveFlag(PositionIncentiveFlagDataJson positionIncentiveFlagData);
 
     BaseResult deletePositionIncentiveFlag(PositionIncentiveFlagDataJson positionIncentiveFlagData);
+
+    BaseResult createOrUpdatePersonPaySlip(PersonPayslipDataJson personPayslipDataJson);
+
+    BaseResult deletePersonPaySlip(PersonPayslipDataJson personPayslipDataJson);
 }

@@ -74,14 +74,12 @@ public class Address extends AbstractParentEntity {
     @JoinColumn(name = "LANGUAGE_ID")
     private DicLanguage language;
 
-    @NotNull
     @Temporal(TemporalType.DATE)
-    @Column(name = "START_DATE", nullable = false)
+    @Column(name = "START_DATE")
     protected Date startDate;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "END_DATE", nullable = false)
-    @NotNull
+    @Column(name = "END_DATE")
     protected Date endDate;
 
     @OrderBy("name")

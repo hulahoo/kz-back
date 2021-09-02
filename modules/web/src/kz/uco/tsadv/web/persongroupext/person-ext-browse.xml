@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://grantees"
+        focusComponent="personTable"
+        messagesPack="kz.uco.tsadv.web.persongroupext">
+    <data readOnly="true">
+        <collection id="personDc"
+                    class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                    view="person.full">
+            <loader id="personDl">
+                <query>
+                    <![CDATA[select e from base$PersonExt e
+                             where current_date between e.startDate and e.endDate
+                             and e.type.code = 'GRANT']]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personTable"
+                dataLoader="personDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personTable"
+                    width="100%"
+                    dataContainer="personDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="userImage"
+                        caption="msg://Photo"
+                        generator="generateUserImageCell"
+                        sortable="false"/>
+                <column id="fioWithEmployeeNumber" link="true" linkInvoke="personCard"/>
+                <column id="nationalIdentifier"/>
+                <column id="type"/>
+                <column id="group.company"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="personTable.create"/>
+                <button id="editBtn" action="personTable.edit"/>
+                <button id="removeBtn" action="personTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

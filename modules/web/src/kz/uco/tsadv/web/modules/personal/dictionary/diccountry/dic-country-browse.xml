@@ -34,11 +34,10 @@
                 <column id="langValue1"/>
                 <column id="langValue2"/>
                 <column id="langValue3"/>
-                <column id="langValue4"/>
-                <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="active"/>
                 <column id="company"/>
             </columns>
             <rows datasource="dicCountriesDs"/>

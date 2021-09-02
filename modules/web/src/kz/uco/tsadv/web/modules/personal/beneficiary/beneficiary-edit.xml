@@ -85,14 +85,24 @@
                     <field datasource="personDs"
                            property="nationality"/>
                     <field id="dateOfBirth"
+                           required="true"
                            datasource="personDs"
                            property="dateOfBirth"/>
                     <field id="sex"
                            datasource="personDs"
+                           required="true"
                            property="sex"/>
                     <field id="personType"
                            datasource="personDs"
                            property="type"/>
+                    <field id="beneficiaryAddress"
+                           property="beneficiaryAddress"/>
+                    <field id="addressType"
+                           property="addressType"/>
+                    <field id="postalCode"
+                           property="postalCode"/>
+                    <field id="country"
+                           property="country"/>
                 </column>
                 <column id="column2">
                     <field id="employeeNumber"
@@ -110,6 +120,16 @@
                            datasource="personDs"
                            maxLength="12"
                            property="nationalIdentifier"/>
+                    <field id="beneficiaryJob"
+                           property="beneficiaryJob"/>
+                    <field id="addressKATOCode"
+                           property="addressKATOCode"/>
+                    <field id="streetType"
+                           property="streetType"/>
+                    <field id="streetName"
+                           property="streetName"/>
+                    <field id="addressForExpats"
+                           property="addressForExpats"/>
                 </column>
             </fieldGroup>
             <fieldGroup id="beneficiaryFieldGroup"
@@ -132,6 +152,16 @@
                     <field id="getAlimony"
                            caption="msg://getAlimony"
                            property="getAlimony"/>
+                    <field id="socStatus"
+                           property="socStatus"/>
+                    <field id="beneficiaryPlaceOfWork"
+                           property="beneficiaryPlaceOfWork"/>
+                    <field id="building"
+                           property="building"/>
+                    <field id="block"
+                           property="block"/>
+                    <field id="flat"
+                           property="flat"/>
                 </column>
             </fieldGroup>
         </hbox>

@@ -23,4 +23,6 @@ public interface PortalHelperService {
 
     List<PortalMenuCustomization> getPortalMenu(String menuType);
 
+    String getConfig(String classFQN, String methodName);
+
 }

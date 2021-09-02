@@ -140,6 +140,10 @@
                   caption="mainMsg://menu_config.tsadv_DicCriminalLiabilityType.browse"/>
             <item screen="tsadv$DicMICAttachmentStatus.browse"
                   caption="mainMsg://dms"/>
+            <item screen="tsadv_DicSocStatus.browse"/>
+            <item screen="tsadv_DicDriverCategory.browse"/>
+            <item screen="tsadv_DicFieldOfActivity.browse"/>
+            <item screen="tsadv_DicGuardianType.browse"/>
         </menu>
         <menu id="hrPerson"
               icon="font-icon:USERS">
@@ -147,6 +151,7 @@
                   screen="base$Person.browse"/>
             <item id="hrAssignmentGroups"
                   screen="base$AssignmentGroup.browse"/>
+            <item id="grantees" screen="base$PersonExt.browse"/>
         </menu>
         <item id="hrJobs"
               icon="font-icon:TASKS"
@@ -167,6 +172,8 @@
                   screen="base$PositionGroup.browse"/>
             <item screen="tsadv_ExecutiveAssistants.browse"
                   caption="mainMsg://menu_config.tsadv_ExecutiveAssistants.browse"/>
+            <item screen="tsadv_JobDescriptionRequest.browse"
+                  caption="mainMsg://menu_config.tsadv_JobDescriptionRequest.browse"/>
 
         </menu>
         <menu id="hrGradesAndRules"
@@ -177,6 +184,13 @@
                   screen="tsadv$GradeRule.browse"/>
         </menu>
         <menu id="incentive">
+            <item screen="tsadv_DicIncentiveIndicatorType.browse"
+                  caption="mainMsg://menu_config.tsadv_DicIncentiveIndicatorType.browse"/>
+            <item screen="tsadv_DicIncentiveResultStatus.browse"
+                  caption="mainMsg://DicIncentiveResultStatuses"/>
+            <item id="indicators"
+                  screen="tsadv_DicIncentiveIndicators.browse"
+                  caption="mainMsg://incentiveIndicators"/>
             <item id="organizationIncentives"
                   screen="tsadv_IncentiveBrowse"
                   caption="mainMsg://org.structure"
@@ -189,6 +203,9 @@
                   openType="NEW_TAB">
                 <param name="ELEMENT_TYPE" value="POSITION"/>
             </item>
+            <item id="organizationIncentiveMonthResults"
+                  screen="tsadv_OrganizationIncentiveMonthResult.browse"
+                  caption="mainMsg://menu_config.tsadv_OrganizationIncentiveMonthResult.browse"/>
         </menu>
         <menu id="hrCompetences"
               icon="font-icon:BRIEFCASE">
@@ -228,6 +245,7 @@
         <item screen="tsadv_VacationScheduleRequest.browse"
               caption="mainMsg://menu_config.tsadv_VacationScheduleRequest.browse"/>
         <item screen="tsadv_DicLmsSliderPosition.browse"/>
+        <item screen="tsadv_PersonPayslip.browse" caption="mainMsg://menu_config.tsadv_PersonPayslip.browse"/>
     </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
@@ -742,6 +760,7 @@
         <item screen="bproc_DecisionTableModelerScreen"/>
         <!--        <item screen="tsadv$BpmRolesDefiner.browse"/>-->
         <item screen="tsadv_BpmRolesDefinerCompany" caption="mainMsg://menu_config.tsadv_BpmRolesDefinerCompany"/>
+        <item screen="tsadv$ProcInstanceV.browse" caption="mainMsg://menu_config.tsadv$ProcInstanceV.browse"/>
     </menu>
     <menu id="application-uactivity" insertBefore="administration">
         <menu id="Tasks">
@@ -773,6 +792,8 @@
         <menu id="portalFeedback">
             <menu id="portalFeedbackDictionary">
                 <item screen="tsadv_DicPortalFeedbackQuestion.browse"/>
+                <item screen="tsadv_DicPortalFeedbackType.browse"
+                      caption="mainMsg://menu_config.tsadv_DicPortalFeedbackType.browse"/>
             </menu>
             <item screen="tsadv_PortalFeedback.browse"/>
             <item screen="tsadv_PortalFeedbackQuestions.browse"/>
@@ -952,7 +973,6 @@
     <!--        <item id="bpm$ProcModel.lookup"/>-->
     <!--        <item id="bpm$ProcDefinition.lookup"/>-->
     <!--        <item id="bpm$ProcInstance.lookup"/>-->
-    <!--        <item screen="tsadv$ProcInstanceV.browse" id="tsadv$ProcInstanceV.browse"/>-->
     <!--        <item id="bpm$ProcTask.lookup"/>-->
     <!--        <item id="bpm$ProcAttachmentType.lookup"/>-->
     <!--        <item id="stencilSetEditor"/>-->

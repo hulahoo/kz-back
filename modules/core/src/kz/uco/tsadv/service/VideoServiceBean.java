@@ -148,8 +148,12 @@ public class VideoServiceBean implements VideoService {
                     e.printStackTrace();
                 } finally {
                     try {
-                        inputStream.close();
-                        outputStream.close();
+                        if (inputStream != null) {
+                            inputStream.close();
+                        }
+                        if (outputStream != null) {
+                            outputStream.close();
+                        }
                     } catch (IOException e) {
                         error = true;
                         videoFileForPlay.setStatus(VideoFileConvertStatus.CONVERTED_ERROR);

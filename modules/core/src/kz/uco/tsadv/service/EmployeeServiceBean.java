@@ -25,10 +25,7 @@ import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.enums.MatrixType;
 import kz.uco.tsadv.modules.performance.model.CalibrationMember;
 import kz.uco.tsadv.modules.performance.model.CalibrationSession;
-import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
-import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
-import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
-import kz.uco.tsadv.modules.personal.dictionary.DicPhoneType;
+import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.dto.OrgChartNode;
 import kz.uco.tsadv.modules.personal.dto.PersonProfileDto;
 import kz.uco.tsadv.modules.personal.group.*;
@@ -147,8 +144,9 @@ public class EmployeeServiceBean implements EmployeeService {
                         " where e.personGroup.id = :personGroupId " +
                         "   and :date between e.startDate and e.endDate ")
                 .view(new View(viewRepository.getView(Address.class, View.LOCAL), "", false)
-                        .addProperty("city", new View(DicCity.class))
-                        .addProperty("addressType", new View(DicAddressType.class)))
+                        .addProperty("city", viewRepository.getView(DicCity.class, View.LOCAL))
+                        .addProperty("kato", viewRepository.getView(DicKato.class, View.LOCAL))
+                        .addProperty("addressType", viewRepository.getView(DicAddressType.class, View.LOCAL)))
                 .parameter("personGroupId", personGroupId)
                 .parameter("date", CommonUtils.getSystemDate())
                 .list();
@@ -192,10 +190,19 @@ public class EmployeeServiceBean implements EmployeeService {
             else if ("mobile".equals(personContact.getType().getCode())) dto.setPhone(personContact.getContactValue());
         });
 
-        //set address
-        //todo
-        addresses.stream().map(address -> address.getCityName() != null ? address.getCityName() : address.getCity() != null ? address.getCity().getLangValue() : null)
-                .filter(Objects::nonNull)
+        addresses.stream()
+                .sorted((o1, o2) -> o1.getAddressType() != null && "RESIDENCE".equals(o1.getAddressType().getCode()) ? 1
+                        : o2.getAddressType() != null && "RESIDENCE".equals(o2.getAddressType().getCode())
+                        ? -1
+                        : 0)
+                .map(address -> StringUtils.isNoneBlank(address.getCityName())
+                        ? address.getCityName()
+                        : address.getCity() != null
+                        ? address.getCity().getLangValue()
+                        : address.getKato() != null
+                        ? address.getKato().getLangValue()
+                        : null)
+                .filter(StringUtils::isNotBlank)
                 .findFirst()
                 .ifPresent(dto::setCityOfResidence);
 

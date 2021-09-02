@@ -13,6 +13,10 @@
         <method name="getPortalMenu">
             <param name="menuType" type="java.lang.String"/>
         </method>
+        <method name="getConfig">
+            <param name="classFQN" type="java.lang.String"/>
+            <param name="methodName" type="java.lang.String"/>
+        </method>
     </service>
     <service name="tsadv_BprocService">
         <method name="getProcessInstanceData">
@@ -41,6 +45,12 @@
             <param name="employeePersonGroupId" type="java.util.UUID"/>
             <param name="bpmRolesDefiner" type="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"/>
             <param name="isAssistant" type="boolean"/>
+        </method>
+        <method name="getNotPersisitBprocActors">
+            <param name="employeePersonGroupId" type="java.util.UUID"/>
+            <param name="bpmRolesDefiner" type="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"/>
+            <param name="isAssistant" type="boolean"/>
+            <param name="defaultValues" type="java.util.Map"/>
         </method>
         <method name="getBpmRolesDefiner">
             <param name="processDefinitionKey" type="java.lang.String"/>
@@ -244,6 +254,10 @@
         </method>
         <method name="availableSalary"/>
         <method name="hasPermitToCreate"/>
+        <method name="exclude">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="data" type="kz.uco.tsadv.pojo.RequestTreeData"/>
+        </method>
     </service>
     <service name="tsadv_MyTeamService">
         <method name="getChildren">
@@ -302,6 +316,38 @@
         </method>
         <method name="getChildVacationSchedule">
             <param name="paginationPojo" type="kz.uco.tsadv.pojo.pagination.PaginationPojo"/>
+        </method>
+    </service>
+    <service name="tsadv_IncentiveService">
+        <method name="getIncentiveList">
+            <param name="paginationPojo" type="kz.uco.tsadv.pojo.pagination.PaginationPojo"/>
+        </method>
+        <method name="saveMonthResult">
+            <param name="status" type="java.lang.String"/>
+            <param name="comment" type="java.lang.String"/>
+            <param name="incentiveMonthResultId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_BpmUserSubstitutionService">
+        <method name="save">
+            <param name="bpmUserSubstitution" type="kz.uco.tsadv.entity.tb.BpmUserSubstitution"/>
+        </method>
+    </service>
+    <service name="tsadv_PositionStructureService">
+        <method name="getStartData"/>
+        <method name="getChildren">
+            <param name="parentId" type="java.util.UUID"/>
+        </method>
+        <method name="getPositionDetails">
+            <param name="positionGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="getOrganizationHierarchyTree">
+            <param name="organizationGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_JobDescriptionService">
+        <method name="getJobDescriptionRequests">
+            <param name="positionId" type="java.lang.String"/>
         </method>
     </service>
 </services>

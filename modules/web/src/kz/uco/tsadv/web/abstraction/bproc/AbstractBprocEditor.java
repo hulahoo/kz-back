@@ -149,7 +149,7 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
         }
     }
 
-    private void overrideOutcomeActions(OutcomesPanel outcomesPanel, Button button) {
+    protected void overrideOutcomeActions(OutcomesPanel outcomesPanel, Button button) {
         Action action = button.getAction();
         if (action == null) throw new NullPointerException("Outcome is null!");
 
@@ -323,7 +323,7 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
                 employee != null
                         ? employee.getPersonGroup().getId()
                         : userSession.getAttribute(StaticVariable.USER_PERSON_GROUP_ID));
-        startBprocParams.setParams(getProcessVariables());
+        startBprocParams.setDefaultApprovers(getDefaultApprovers());
         startBprocParams.setIsAssistant(getIsAssistant());
         return startBprocParams;
     }
@@ -338,7 +338,7 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
     }
 
     @Nullable
-    protected Map<String, Object> getProcessVariables() {
+    protected Map<String, List<TsadvUser>> getDefaultApprovers() {
         return null;
     }
 

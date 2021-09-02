@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://granteesEditor"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.persongroupext">
+    <data>
+        <instance id="personExtDc"
+                  class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                  view="person.full">
+            <loader/>
+        </instance>
+        <collection id="sexDc" class="kz.uco.base.entity.dictionary.DicSex" view="dicSex-edit">
+            <loader id="sexDl">
+                <query>
+                    <![CDATA[select e from base$DicSex e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="maritalStatusDc" class="kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus"
+                    view="_minimal">
+            <loader id="maritalStatusDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicMaritalStatus e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="companyDc"
+                    class="kz.uco.base.entity.dictionary.DicCompany"
+                    view="_local">
+            <loader id="companyDl">
+                <query>
+                    <![CDATA[select e from base_DicCompany e ]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="socStatusDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicSocStatus"
+                    view="dicSocStatus.edit">
+            <loader id="socStatusDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicSocStatus e ]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="driverCategoryDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicDriverCategory"
+                    view="dicDriverCategory.edit">
+            <loader id="driverCategoryDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicDriverCategory e ]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="personExtDc">
+                <column width="250px">
+                    <textField id="requestNumber" property="group.requestNumber" required="true"/>
+                    <textField id="lastNameField" property="lastName"/>
+                    <textField id="firstNameField" property="firstName"/>
+                    <textField id="middleNameField" property="middleName"/>
+                    <textField id="lastNameLatinField" property="lastNameLatin" required="true"/>
+                    <textField id="firstNameLatinField" property="firstNameLatin" required="true"/>
+                    <textField id="nationalIdentifierField" property="nationalIdentifier" required="true"/>
+                    <dateField id="dateOfBirthField" property="dateOfBirth" required="true"/>
+                </column>
+                <column id="column2" width="250px">
+                    <lookupField id="sexField" optionsContainer="sexDc" property="sex" required="true"/>
+                    <lookupField id="maritalStatusField" property="maritalStatus" optionsContainer="maritalStatusDc"
+                                 required="true"/>
+                    <textField id="birthPlaceField" property="birthPlace"/>
+                    <lookupField id="companyField" property="group.company" optionsContainer="companyDc"
+                                 required="true"/>
+                    <lookupField id="typeField" property="type" editable="false"/>
+                    <lookupField id="socStatus" property="group.socStatus" optionsContainer="socStatusDc"/>
+                    <lookupField id="driverCategory" property="group.driverCategory"
+                                 optionsContainer="driverCategoryDc"/>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

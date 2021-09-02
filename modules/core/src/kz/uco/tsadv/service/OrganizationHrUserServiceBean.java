@@ -82,9 +82,11 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
                     "organizationHrUser.view");
         } else {
             List<OrganizationGroupExt> organizationGroupExtList = commonService.getEntities(OrganizationGroupExt.class,
-                    "select e.parent.organizationGroup " +
+                    "select p.organizationGroup " +
                             " from base$HierarchyElementExt e " +
+                            " join e.parentGroup.list p" +
                             " where :date between e.startDate and e.endDate" +
+                            "  and :date between p.startDate and p.endDate" +
                             " and e.organizationGroup.id = :organizationGroupId " +
                             "   and e.hierarchy.primaryFlag = true",
                     ParamsMap.of("organizationGroupId", organizationGroupId, "date", CommonUtils.getSystemDate()),
@@ -172,7 +174,7 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
                 while (CollectionUtils.isEmpty(managerList) && manager != null) {
                     managerList = getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(manager.getId(), null));
                     if (CollectionUtils.isEmpty(managerList))
-                        manager = positionService.getManager(positionGroup.getId());
+                        manager = positionService.getManager(manager.getId());
                 }
                 return managerList;
             }
@@ -189,6 +191,12 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
                 PositionGroupExt manager = positionService.getManager(positionGroup.getId());
                 if (manager == null) return new ArrayList<>();
                 return assistantService.getAssistantList(manager.getId());
+            }
+            case HR_ROLE_FUN_MANAGER: {
+                PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL);
+                PositionGroupExt functionalManager = positionService.getFunctionalManager(positionGroup.getId());
+                if (functionalManager == null) return new ArrayList<>();
+                return getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(functionalManager.getId(), null));
             }
             default: {
                 OrganizationGroupExt organizationGroup = employeeService.getOrganizationGroupByPersonGroupId(personGroupId, View.MINIMAL);

@@ -5,6 +5,10 @@ import com.haulmont.cuba.core.config.Property;
 import com.haulmont.cuba.core.config.Source;
 import com.haulmont.cuba.core.config.SourceType;
 import com.haulmont.cuba.core.config.defaults.*;
+import com.haulmont.cuba.core.config.type.Factory;
+import com.haulmont.cuba.core.config.type.UuidTypeFactory;
+
+import java.util.UUID;
 
 @Source(type = SourceType.DATABASE)
 public interface ExtAppPropertiesConfig extends Config {
@@ -43,4 +47,9 @@ public interface ExtAppPropertiesConfig extends Config {
     @Property("tsadv.course.defaultLogo")
     @DefaultString("")
     String getDefaultLogo();
+
+    @Property("tsadv.learning.defaultQuestionForFeedback")
+    @Factory(factory = UuidTypeFactory.class)
+    UUID getDefaultQuestionForFeedback();
+
 }

@@ -103,6 +103,10 @@
                         <field id="dateOfBirth"
                                datasource="personDs"
                                property="dateOfBirth"/>
+                        <field id="beneficiaryAddress"
+                               property="beneficiaryAddress"/>
+                        <field id="beneficiaryPlaceOfWork"
+                               property="beneficiaryPlaceOfWork"/>
                     </column>
                     <column id="column2">
                         <field id="firstNameLatin"
@@ -129,6 +133,32 @@
                         <field id="sex"
                                datasource="personDs"
                                property="sex"/>
+                        <field id="socStatus"
+                               property="socStatus"/>
+                        <field id="beneficiaryJob"
+                               property="beneficiaryJob"/>
+                    </column>
+                    <column id="column3">
+                        <field id="addressType"
+                               property="addressType"/>
+                        <field id="postalCode"
+                               property="postalCode"/>
+                        <field id="country"
+                               property="country"/>
+                        <field id="addressKATOCode"
+                               property="addressKATOCode"/>
+                        <field id="streetType"
+                               property="streetType"/>
+                        <field id="streetName"
+                               property="streetName"/>
+                        <field id="building"
+                               property="building"/>
+                        <field id="block"
+                               property="block"/>
+                        <field id="flat"
+                               property="flat"/>
+                        <field id="addressForExpats"
+                               property="addressForExpats"/>
                     </column>
                 </fieldGroup>
                 <fieldGroup id="beneficiaryFieldGroup"

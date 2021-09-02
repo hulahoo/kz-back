@@ -3,6 +3,7 @@ package kz.uco.tsadv.modules.personal.group;
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Extends;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -17,6 +18,8 @@ import kz.uco.tsadv.modules.learning.model.Enrollment;
 import kz.uco.tsadv.modules.learning.model.IndividualDevelopmentPlan;
 import kz.uco.tsadv.modules.learning.model.Internship;
 import kz.uco.tsadv.modules.performance.model.Assessment;
+import kz.uco.tsadv.modules.personal.dictionary.DicDriverCategory;
+import kz.uco.tsadv.modules.personal.dictionary.DicSocStatus;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.recruitment.model.*;
 import org.eclipse.persistence.annotations.Customizer;
@@ -33,6 +36,11 @@ import java.util.Locale;
 @Customizer(PersonGroupExtDescriptorCustomizer.class)
 public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonExt> {
     private static final long serialVersionUID = -6026637722093200432L;
+
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IMAGE_ID")
+    private FileDescriptor image;
 
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
@@ -203,6 +211,49 @@ public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonEx
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMPANY_ID")
     protected DicCompany company;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SOC_STATUS_ID")
+    protected DicSocStatus socStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DRIVER_CATEGORY_ID")
+    protected DicDriverCategory driverCategory;
+
+    @Column(name = "REQUEST_NUMBER")
+    protected String requestNumber;
+
+    public String getRequestNumber() {
+        return requestNumber;
+    }
+
+    public void setRequestNumber(String requestNumber) {
+        this.requestNumber = requestNumber;
+    }
+
+    public DicDriverCategory getDriverCategory() {
+        return driverCategory;
+    }
+
+    public void setDriverCategory(DicDriverCategory driverCategory) {
+        this.driverCategory = driverCategory;
+    }
+
+    public DicSocStatus getSocStatus() {
+        return socStatus;
+    }
+
+    public void setSocStatus(DicSocStatus socStatus) {
+        this.socStatus = socStatus;
+    }
+
+    public FileDescriptor getImage() {
+        return image;
+    }
+
+    public void setImage(FileDescriptor image) {
+        this.image = image;
+    }
 
     public DicCompany getCompany() {
         return company;

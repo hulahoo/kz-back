@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://browseCaption"
+        focusComponent="granteesAgreementsTable"
+        messagesPack="kz.uco.tsadv.web.screens.granteesagreement">
+    <data readOnly="true">
+        <collection id="granteesAgreementsDc"
+                    class="kz.uco.tsadv.modules.personal.model.GranteesAgreement"
+                    view="granteesAgreement.edit">
+            <loader id="granteesAgreementsDl">
+                <query>
+                    <![CDATA[select e from tsadv_GranteesAgreement e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="granteesAgreementsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="granteesAgreementsTable"
+                dataLoader="granteesAgreementsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="granteesAgreementsTable"
+                    width="100%"
+                    dataContainer="granteesAgreementsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="contractNumber"/>
+                <column id="contractDate"/>
+                <column id="university"/>
+                <column id="agreementNumber"/>
+                <column id="agreementDate"/>
+                <column id="startYear"/>
+                <column id="status"/>
+                <column id="personGroup"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="granteesAgreementsTable.create"/>
+                <button id="editBtn" action="granteesAgreementsTable.edit"/>
+                <button id="removeBtn" action="granteesAgreementsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

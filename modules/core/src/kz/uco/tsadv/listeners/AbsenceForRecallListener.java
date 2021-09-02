@@ -9,8 +9,8 @@ import kong.unirest.Unirest;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.api.Null;
+import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.modules.integration.jsonobject.AbsenceForRecallDataJson;
-import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
 import kz.uco.tsadv.service.DatesService;
@@ -27,7 +27,8 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
     protected String APPROVED_STATUS = "APPROVED";
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-    protected String ABSENCE_RECALL_API_URL = "http://10.2.200.101:8290/api/ahruco/absence/recall/request";
+    @Inject
+    protected IntegrationConfig integrationConfig;
 
     @Inject
     IntegrationRestService integrationRestService;
@@ -38,7 +39,7 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
 
     @Override
     public void onBeforeInsert(AbsenceForRecall entity, EntityManager entityManager) {
-        if (isApproved(entity, entityManager)) {
+        if (isApproved(entity, entityManager) && !integrationConfig.getAbsenceForRecallOff()) {
             AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity, entityManager);
 
             setupUnirest();
@@ -65,7 +66,7 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
 
     @Override
     public void onBeforeUpdate(AbsenceForRecall entity, EntityManager entityManager) {
-        if (isApproved(entity, entityManager)) {
+        if (isApproved(entity, entityManager) && !integrationConfig.getAbsenceForRecallOff()) {
             AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity, entityManager);
 
             setupUnirest();
@@ -98,7 +99,7 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
 
 
     protected String getApiUrl() {
-        return ABSENCE_RECALL_API_URL;
+        return integrationConfig.getAbsenceForRecallUrl();
     }
 
     protected AbsenceForRecallDataJson getAbsenceForRecallDataJson(AbsenceForRecall entity, EntityManager entityManager) {
@@ -144,7 +145,7 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
     }
 
     protected void setupUnirest() {
-        Unirest.config().setDefaultBasicAuth("ahruco", "ahruco");
+        Unirest.config().setDefaultBasicAuth(integrationConfig.getBasicAuthLogin(), integrationConfig.getBasicAuthPassword());
         Unirest.config().addDefaultHeader("Content-Type", "application/json");
         Unirest.config().addDefaultHeader("Accept", "*/*");
         Unirest.config().addDefaultHeader("Accept-Encoding", "gzip, deflate, br");

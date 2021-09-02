@@ -1,6 +1,7 @@
 package kz.uco.tsadv.web.modules.personal.person;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowManager;
@@ -126,7 +127,8 @@ public class PersonBrowse extends AbstractLookup {
     }
 
     public Component generateUserImageCell(PersonExt entity) {
-        Image image = WebCommonUtils.setImage(entity.getImage(), null, IMAGE_CELL_HEIGHT);
+        FileDescriptor personImageFileDescriptor = getPersonImageFileDescriptor(entity);
+        Image image = WebCommonUtils.setImage(personImageFileDescriptor, null, IMAGE_CELL_HEIGHT);
         image.addStyleName("circle-image");
         return image;
     }
@@ -135,7 +137,8 @@ public class PersonBrowse extends AbstractLookup {
         AssignmentExt assignment = assignmentService.getAssignment(person.getGroup().getId(), "assignment.card");
 
         if (assignment != null) {
-            openEditor("person-card", person.getGroup(), WindowManager.OpenType.THIS_TAB);
+            AbstractEditor editor = openEditor("person-card", person.getGroup(), WindowManager.OpenType.THIS_TAB);
+            editor.addAfterCloseListener(e -> personsDs.refresh());
         } else {
             AbstractEditor noAssignmentEditor = openEditor("person-card-no-assignment",
                     person.getGroup(), WindowManager.OpenType.THIS_TAB);
@@ -226,5 +229,16 @@ public class PersonBrowse extends AbstractLookup {
                 absence,
                 WindowManager.OpenType.THIS_TAB);
         editor.addCloseWithCommitListener(() -> personsDs.refresh());
+    }
+
+    protected FileDescriptor getPersonImageFileDescriptor(PersonExt person){
+        FileDescriptor actualFileDesctiptor = null;
+        if(person.getGroup() != null && person.getGroup().getImage() != null){
+            actualFileDesctiptor = person.getGroup().getImage();
+        }else{
+            actualFileDesctiptor = person.getImage();
+        }
+
+        return actualFileDesctiptor;
     }
 }

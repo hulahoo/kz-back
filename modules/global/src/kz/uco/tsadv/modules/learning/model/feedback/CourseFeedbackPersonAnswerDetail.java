@@ -1,17 +1,15 @@
 package kz.uco.tsadv.modules.learning.model.feedback;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
+import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.CourseSectionSession;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.base.entity.abstraction.AbstractParentEntity;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+@PublishEntityChangedEvents
 @Table(name = "TSADV_COURSE_FEEDBACK_PERSON_ANSWER_DETAIL")
 @Entity(name = "tsadv$CourseFeedbackPersonAnswerDetail")
 public class CourseFeedbackPersonAnswerDetail extends AbstractParentEntity {

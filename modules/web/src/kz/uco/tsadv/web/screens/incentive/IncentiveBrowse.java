@@ -2,7 +2,9 @@ package kz.uco.tsadv.web.screens.incentive;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.model.MetaClass;
+import com.haulmont.chile.core.model.MetaPropertyPath;
 import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.MessageTools;
 import com.haulmont.cuba.core.global.Messages;
@@ -11,15 +13,27 @@ import com.haulmont.cuba.gui.*;
 import com.haulmont.cuba.gui.actions.list.AddAction;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.export.ExcelExporter;
+import com.haulmont.cuba.gui.export.ExportDisplay;
+import com.haulmont.cuba.gui.model.CollectionChangeType;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.security.global.UserSession;
+import kz.uco.base.common.StaticVariable;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.shared.Hierarchy;
+import kz.uco.base.entity.shared.OrganizationGroup;
 import kz.uco.tsadv.api.Null;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.HierarchyService;
+import org.apache.commons.lang3.time.DateUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.ss.usermodel.Cell;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -73,6 +87,8 @@ public class IncentiveBrowse extends Screen {
 
     protected String ELEMENT_TYPE_SCREEN_PARAM = "ELEMENT_TYPE";
     protected String ELEMENT_TYPE_SCREEN_VALUE = "";
+    protected String PERIOD_DATE_FORMAT = "MMM yyyy";
+
     @Named("organizationIncentiveIndicatorsTable.add")
     private AddAction<OrganizationIncentiveIndicators> organizationIncentiveIndicatorsTableAdd;
     @Inject
@@ -108,12 +124,33 @@ public class IncentiveBrowse extends Screen {
     @Inject
     private CollectionContainer<PositionIncentiveFlag> positionIncentiveFlagsDc;
 
+    protected WrapCellExcelExporter excelExporter = new WrapCellExcelExporter();
+    @Inject
+    private ExportDisplay exportDisplay;
+    @Inject
+    private EmployeeService employeeService;
+    @Inject
+    private UserSession userSession;
+
+
+
+    protected class WrapCellExcelExporter extends ExcelExporter {
+
+        @Override
+        protected void formatValueCell(Cell cell, Object cellValue, MetaPropertyPath metaPropertyPath, int sizersIndex, int notificationRequired, int level, Integer groupChildCount) {
+            super.formatValueCell(cell, cellValue, metaPropertyPath, sizersIndex, notificationRequired, level, groupChildCount);
+
+            if (cellValue instanceof String) {
+                HSSFCellStyle style = (HSSFCellStyle) cell.getCellStyle();
+                style.setWrapText(true);
+            }
+        }
+    }
 
     @Subscribe
     protected void onInit(InitEvent event) {
         MapScreenOptions screenOptions = (MapScreenOptions) event.getOptions();
-
-        if(screenOptions == null || !screenOptions.getParams().containsKey(ELEMENT_TYPE_SCREEN_PARAM)){
+        if (!screenOptions.getParams().containsKey(ELEMENT_TYPE_SCREEN_PARAM)) {
             notifications.create().withCaption("No screen params").show();
             closeWithDefaultAction();
             return;
@@ -142,24 +179,33 @@ public class IncentiveBrowse extends Screen {
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
         initHierarchiesDc();
+//        LocalizedDateFormatter localizedDateFormatter = new LocalizedDateFormatter(PERIOD_DATE_FORMAT);
+//        organizationIncentiveResultsTable.getColumn("periodDate").setFormatter(localizedDateFormatter);
+        organizationIncentiveResultsTable.addPrintable("total", this::getOrganizationIncentiveResultTotal);
     }
+
+    @Subscribe("organizationIncentiveResultsTable.excel")
+    public void onOrganizationIncentiveResultsTableExcel(Action.ActionPerformedEvent event) {
+        excelExporter.exportTable(organizationIncentiveResultsTable, exportDisplay);
+    }
+
 
     @Subscribe(id = "hierarchiesDc", target = Target.DATA_CONTAINER)
     public void onHierarchiesDcItemChange(InstanceContainer.ItemChangeEvent<Hierarchy> event) {
         refresh();
     }
 
-    protected void initHierarchiesDc(){
+    protected void initHierarchiesDc() {
         Hierarchy hierarchy = loadHierarchy();
         hierarchiesDc.getMutableItems().add(hierarchy);
         hierarchiesDc.setItem(hierarchy);
     }
 
-    protected Hierarchy loadHierarchy(){
+    protected Hierarchy loadHierarchy() {
         String hierarchyCode = ELEMENT_TYPE_SCREEN_VALUE.equals("ORGANIZATION") ? "1" : "2";
         Hierarchy hierarchy = dataManager.load(Hierarchy.class)
                 .query("select e from base$Hierarchy e where e.type.code = :code")
-                .parameter("code",hierarchyCode)
+                .parameter("code", hierarchyCode)
                 .one();
 
         return hierarchy;
@@ -170,7 +216,26 @@ public class IncentiveBrowse extends Screen {
         if (hierarchy != null) {
             tree.collapseTree();
             hierarchyElementDc.getMutableItems().clear();
-            addChildren(null);
+
+            List<HierarchyElementExt> childHierarchyElement = hierarchyService.getChildHierarchyElement(hierarchiesDc.getItem(), null);
+
+            UUID personGroupId = userSession.getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
+            HierarchyElementExt parent = null;
+            if (personGroupId != null && childHierarchyElement.size() == 1) {
+                DicCompany company = employeeService.getCompanyByPersonGroupId(personGroupId);
+
+                List<HierarchyElementExt> hierarchyElements = hierarchyService.getChildHierarchyElement(hierarchiesDc.getItem(), childHierarchyElement.get(0));
+                for (HierarchyElementExt hierarchyElementExt : hierarchyElements) {
+                    OrganizationGroupExt reload = dataManager.reload(hierarchyElementExt.getOrganizationGroup(), new View(OrganizationGroup.class).addProperty("company", new View(DicCompany.class)));
+                    if (Objects.equals(reload.getCompany(), company)) {
+                        parent = hierarchyElementExt;
+                        break;
+                    }
+                }
+            }
+
+            if (parent != null) hierarchyElementDc.getMutableItems().add(parent);
+            addChildren(parent);
         }
     }
 
@@ -246,7 +311,7 @@ public class IncentiveBrowse extends Screen {
     protected void onHierarchyElementDcItemChange(InstanceContainer.ItemChangeEvent<HierarchyElementExt> event) {
         HierarchyElementExt hierarchyElement = event.getItem();
         enableAddActions(event.getItem() != null);
-        if (hierarchyElement == null){
+        if (hierarchyElement == null) {
             loadEmptyIncentives();
             return;
         }
@@ -255,7 +320,7 @@ public class IncentiveBrowse extends Screen {
     }
 
 
-    protected void enableAddActions(boolean enable){
+    protected void enableAddActions(boolean enable) {
         positionIncentiveFlagsTableAddBtn.setEnabled(enable);
         organizationIncentiveFlagsTableAddBtn.setEnabled(enable);
         organizationIncentiveIndicatorsTableAddBtn.setEnabled(enable);
@@ -275,7 +340,7 @@ public class IncentiveBrowse extends Screen {
         }
     }
 
-    protected void initTableDoubleClickActions(){
+    protected void initTableDoubleClickActions() {
         positionIncentiveFlagsTable.setItemClickAction(new BaseAction("doubleClickAction")
                 .withHandler(e -> editPositionIncentiveFlag()));
         organizationIncentiveFlagsTable.setItemClickAction(new BaseAction("doubleClickAction")
@@ -286,14 +351,14 @@ public class IncentiveBrowse extends Screen {
                 .withHandler(e -> editOrganizationIncentiveResult()));
     }
 
-    protected void loadIncentives(){
+    protected void loadIncentives() {
         loadPositionIncentiveFlags();
         loadOrganizationIncentiveFlags();
         loadOrganizationIncentiveIndicators();
         loadOrganizationIncentiveResults();
     }
 
-    protected void loadEmptyIncentives(){
+    protected void loadEmptyIncentives() {
         loadEmptyPositionIncentiveFlags();
         loadEmptyOrganizationIncentiveFlags();
         loadEmptyOrganizationIncentiveIndicators();
@@ -332,69 +397,70 @@ public class IncentiveBrowse extends Screen {
     }
 
     public void addOrganizationIncentiveFlag() {
-        Screen editScreen = screenBuilders.editor(OrganizationIncentiveFlag.class,this)
-                        .withInitializer(i -> {
-                            i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup());
-                            i.setDateTo(CommonUtils.getMaxDate());
-                        })
-                        .build();
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveFlag.class, this)
+                .withInitializer(i -> {
+                    i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup());
+                    i.setDateTo(CommonUtils.getMaxDate());
+                })
+                .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveFlags());
         editScreen.show();
 
     }
 
-    protected void editOrganizationIncentiveFlag(){
-        Screen editScreen = screenBuilders.editor(OrganizationIncentiveFlag.class,this)
+    protected void editOrganizationIncentiveFlag() {
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveFlag.class, this)
                 .editEntity(organizationIncentiveFlagsDc.getItem())
                 .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveFlags());
         editScreen.show();
     }
 
-    protected void loadOrganizationIncentiveFlags(){
+    protected void loadOrganizationIncentiveFlags() {
         organizationIncentiveFlagsDl.setQuery("select e from tsadv_OrganizationIncentiveFlag e where e.organizationGroup = :organizationGroup");
-        organizationIncentiveFlagsDl.setParameter("organizationGroup",hierarchyElementDc.getItem().getOrganizationGroup());
+        organizationIncentiveFlagsDl.setParameter("organizationGroup", hierarchyElementDc.getItem().getOrganizationGroup());
         organizationIncentiveFlagsDl.load();
     }
 
-    protected void loadEmptyOrganizationIncentiveFlags(){
+    protected void loadEmptyOrganizationIncentiveFlags() {
         organizationIncentiveFlagsDl.setQuery("select e from tsadv_OrganizationIncentiveFlag e where 1<>1");
         organizationIncentiveFlagsDl.setParameters(new HashMap<>());
         organizationIncentiveFlagsDl.load();
     }
 
     public void addOrganizationIncentiveIndicator() {
-        Screen editScreen = screenBuilders.editor(OrganizationIncentiveIndicators.class,this)
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveIndicators.class, this)
                 .withInitializer(i -> {
                     i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup());
-                    i.setDateTo(CommonUtils.getMaxDate());})
+                    i.setDateTo(CommonUtils.getMaxDate());
+                })
                 .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveIndicators());
         editScreen.show();
     }
 
-    protected void editOrganizationIncentiveIndicator(){
-        Screen editScreen = screenBuilders.editor(OrganizationIncentiveIndicators.class,this)
+    protected void editOrganizationIncentiveIndicator() {
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveIndicators.class, this)
                 .editEntity(organizationIncentiveIndicatorsDc.getItem())
                 .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveIndicators());
         editScreen.show();
     }
 
-    protected void loadOrganizationIncentiveIndicators(){
+    protected void loadOrganizationIncentiveIndicators() {
         organizationIncentiveIndicatorsDl.setQuery("select e from tsadv_OrganizationIncentiveIndicators e where e.organizationGroup = :organizationGroup");
-        organizationIncentiveIndicatorsDl.setParameter("organizationGroup",hierarchyElementDc.getItem().getOrganizationGroup());
+        organizationIncentiveIndicatorsDl.setParameter("organizationGroup", hierarchyElementDc.getItem().getOrganizationGroup());
         organizationIncentiveIndicatorsDl.load();
     }
 
-    protected void loadEmptyOrganizationIncentiveIndicators(){
+    protected void loadEmptyOrganizationIncentiveIndicators() {
         organizationIncentiveIndicatorsDl.setQuery("select e from tsadv_OrganizationIncentiveIndicators e where 1<>1");
         organizationIncentiveIndicatorsDl.setParameters(new HashMap<>());
         organizationIncentiveIndicatorsDl.load();
     }
 
     public void addOrganizationIncentiveResult() {
-        Screen editScreen = screenBuilders.editor(OrganizationIncentiveResult.class,this)
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveResult.class, this)
                 .withInitializer(i -> i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup()))
                 .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveResults());
@@ -402,20 +468,20 @@ public class IncentiveBrowse extends Screen {
     }
 
     public void editOrganizationIncentiveResult() {
-        Screen editScreen = screenBuilders.editor(OrganizationIncentiveResult.class,this)
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveResult.class, this)
                 .editEntity(organizationIncentiveResultsDc.getItem())
                 .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveResults());
         editScreen.show();
     }
 
-    protected void loadOrganizationIncentiveResults(){
+    protected void loadOrganizationIncentiveResults() {
         organizationIncentiveResultsDl.setQuery("select e from tsadv_OrganizationIncentiveResult e where e.organizationGroup = :organizationGroup");
-        organizationIncentiveResultsDl.setParameter("organizationGroup",hierarchyElementDc.getItem().getOrganizationGroup());
+        organizationIncentiveResultsDl.setParameter("organizationGroup", hierarchyElementDc.getItem().getOrganizationGroup());
         organizationIncentiveResultsDl.load();
     }
 
-    protected void loadEmptyOrganizationIncentiveResults(){
+    protected void loadEmptyOrganizationIncentiveResults() {
         organizationIncentiveResultsDl.setQuery("select e from tsadv_OrganizationIncentiveResult e where 1<>1");
         organizationIncentiveResultsDl.setParameters(new HashMap<>());
         organizationIncentiveResultsDl.load();
@@ -423,18 +489,23 @@ public class IncentiveBrowse extends Screen {
 
     public Component totalColumnGenerator(Entity entity) {
         OrganizationIncentiveResult incentiveResult = (OrganizationIncentiveResult) entity;
-        MetaClass incentiveResultMetaClass = metadata.getClass(OrganizationIncentiveResult.class);
-
-        String indicatorLangValue = incentiveResult.getIndicator() == null ? "" : Null.nullReplace(incentiveResult.getIndicator().getLangValue(),"");
-        String localizedPlanField = messageTools.getPropertyCaption(incentiveResultMetaClass,"plan");
-        String localizedFactField = messageTools.getPropertyCaption(incentiveResultMetaClass,"fact");
-
-        String totalPlanString = String.format("%s-%s",localizedPlanField,Null.nullReplace(incentiveResult.getPlan(),BigDecimal.ZERO));
-        String totalFactString = String.format("%s-%s",localizedFactField,Null.nullReplace(incentiveResult.getFact(),BigDecimal.ZERO));
 
         Label totalLabel = uiComponents.create(Label.TYPE_STRING);
-        totalLabel.setValue(indicatorLangValue + "\n" + totalPlanString + ";" + totalFactString);
+        totalLabel.setValue(getOrganizationIncentiveResultTotal(incentiveResult));
 
         return totalLabel;
+    }
+
+    protected String getOrganizationIncentiveResultTotal(OrganizationIncentiveResult incentiveResult) {
+        MetaClass incentiveResultMetaClass = metadata.getClass(OrganizationIncentiveResult.class);
+
+        String indicatorLangValue = incentiveResult.getIndicator() == null ? "" : Null.nullReplace(incentiveResult.getIndicator().getLangValue(), "");
+        String localizedPlanField = messageTools.getPropertyCaption(incentiveResultMetaClass, "plan");
+        String localizedFactField = messageTools.getPropertyCaption(incentiveResultMetaClass, "fact");
+
+        String totalPlanString = String.format("%s-%s", localizedPlanField, Null.nullReplace(incentiveResult.getPlan(), BigDecimal.ZERO));
+        String totalFactString = String.format("%s-%s", localizedFactField, Null.nullReplace(incentiveResult.getFact(), BigDecimal.ZERO));
+
+        return (indicatorLangValue + "\n" + totalPlanString + ";" + totalFactString);
     }
 }

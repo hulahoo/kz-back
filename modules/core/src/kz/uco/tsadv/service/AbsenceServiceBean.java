@@ -10,8 +10,10 @@ import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicCompany;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.enums.VacationDurationType;
@@ -22,13 +24,21 @@ import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.VacationConditions;
 import kz.uco.tsadv.modules.timesheet.model.Calendar;
+import kz.uco.uactivity.entity.ActivityType;
+import kz.uco.uactivity.entity.StatusEnum;
+import kz.uco.uactivity.entity.WindowProperty;
+import kz.uco.uactivity.service.ActivityService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
+
+import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
+import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 @Service(AbsenceService.NAME)
 public class AbsenceServiceBean implements AbsenceService {
@@ -51,9 +61,13 @@ public class AbsenceServiceBean implements AbsenceService {
     private Persistence persistence;
     @Inject
     private Metadata metadata;
+    @Inject
+    private NotificationSenderAPIService notificationSenderAPIService;
 
     @Inject
     private UserSessionSource userSessionSource;
+    @Inject
+    private ActivityService activityService;
 
     @Override
     public boolean isLongAbsence(Absence absence) {
@@ -575,5 +589,156 @@ public class AbsenceServiceBean implements AbsenceService {
     @Nullable
     protected VacationDurationType getVacationDurationType(@Nullable DicAbsenceType absenceType) {
         return absenceType != null ? absenceType.getVacationDurationType() : null;
+    }
+
+    @Override
+    public void sendNotifyForEmployee() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        List<PersonGroupExt> absencePersonGroupList = dataManager.load(PersonGroupExt.class)
+                .query("select e.personGroup from tsadv$Absence e " +
+                        " join tsadv$DicAbsenceType t on e.type = t " +
+                        " where :date = e.dateFrom " +
+                        " and t.useInSelfService = true " +
+                        " and t.availableForRecallAbsence = true " +
+                        " and t.isVacationDate = true " +
+                        " and t.availableForChangeDate = true ")
+                .parameter("date", getDate())
+                .view("personGroup.browse")
+                .list();
+        if (!absencePersonGroupList.isEmpty()) {
+            absencePersonGroupList.forEach(personGroupExt -> {
+                TsadvUser tsadvUser = getTsadvUser(personGroupExt);
+                if (tsadvUser != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("fullNameRu", personGroupExt.getFullName());
+                    params.put("fullNameEn", personGroupExt.getPersonFirstLastNameLatin());
+                    params.put("dateFrom", formatter.format(getDate()));
+
+                    activityService.createActivity(
+                            tsadvUser,
+                            tsadvUser,
+                            getActivityType(),
+                            StatusEnum.active,
+                            "description",
+                            null,
+                            new Date(),
+                            null,
+                            null,
+                            tsadvUser.getId(),
+                            "Vacation.reminder.without.schedule",
+                            params);
+                    notificationSenderAPIService.sendParametrizedNotification("Vacation.reminder.without.schedule", tsadvUser, params);
+                }
+            });
+        }
+
+        List<PersonGroupExt> vacationScheduleRequestPersonGroupList = dataManager.load(PersonGroupExt.class)
+                .query("select e.personGroup from tsadv$Absence e " +
+                        " join tsadv$DicAbsenceType t on e.type = t " +
+                        " where :date = e.dateFrom " +
+                        " and t.useInSelfService = true " +
+                        " and t.availableForRecallAbsence = true " +
+                        " and t.isVacationDate = true " +
+                        " and t.availableForChangeDate = true ")
+                .parameter("date", getDate())
+                .view("personGroup.browse")
+                .list();
+        if (!vacationScheduleRequestPersonGroupList.isEmpty()) {
+            vacationScheduleRequestPersonGroupList.forEach(personGroupExt -> {
+                TsadvUser tsadvUser = getTsadvUser(personGroupExt);
+                if (tsadvUser != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("fullNameRu", personGroupExt.getFullName());
+                    params.put("fullNameEn", personGroupExt.getPersonFirstLastNameLatin());
+                    params.put("dateFrom", formatter.format(getDate()));
+
+                    activityService.createActivity(
+                            tsadvUser,
+                            tsadvUser,
+                            getActivityType(),
+                            StatusEnum.active,
+                            "description",
+                            null,
+                            new Date(),
+                            null,
+                            null,
+                            tsadvUser.getId(),
+                            "Vacation.reminder",
+                            params);
+                    notificationSenderAPIService.sendParametrizedNotification("Vacation.reminder", tsadvUser, params);
+                }
+            });
+        }
+    }
+
+    protected ActivityType getActivityType() {
+        return dataManager.load(ActivityType.class)
+                .query("select e from uactivity$ActivityType e where e.code = 'NOTIFICATION'")
+                .view(new View(ActivityType.class)
+                        .addProperty("code")
+                        .addProperty("windowProperty",
+                                new View(WindowProperty.class).addProperty("entityName").addProperty("screenName")))
+                .one();
+    }
+
+    protected Date getDate() {
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.add(java.util.Calendar.DATE, +7);
+        return calendar.getTime();
+    }
+
+    protected TsadvUser getTsadvUser(PersonGroupExt personGroupExt) {
+        return dataManager.load(TsadvUser.class)
+                .query("select e from tsadv$UserExt e " +
+                        " where e.personGroup = :personGroup")
+                .parameter("personGroup", personGroupExt)
+                .view("userExt.edit")
+                .list().stream().findFirst().orElse(null);
+    }
+
+    @Override
+    public void sendNotificationForEmployeeEveryYear() {
+        List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                .query("select e from base$PersonGroupExt e " +
+                        " join base_DicCompany dc on e.company.id = dc.id " +
+                        " where dc.code <> 'VCM' " +
+                        " and e not in (select vsr.personGroup from tsadv_VacationScheduleRequest vsr " +
+                        " where vsr.startDate between :startDate and :endDate)")
+                .parameter("startDate", java.sql.Date.valueOf(getStartDateNextYear()))
+                .parameter("endDate", java.sql.Date.valueOf(getEndDateNextYear()))
+                .view("personGroup.browse")
+                .list();
+        if (!personGroupExtList.isEmpty()) {
+            personGroupExtList.forEach(personGroupExt -> {
+                TsadvUser tsadvUser = getTsadvUser(personGroupExt);
+                if (tsadvUser != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("fullNameRu", personGroupExt.getFullName());
+
+                    activityService.createActivity(
+                            tsadvUser,
+                            tsadvUser,
+                            getActivityType(),
+                            StatusEnum.active,
+                            "description",
+                            null,
+                            new Date(),
+                            null,
+                            null,
+                            tsadvUser.getId(),
+                            "reminder.schedule.the.leave",
+                            params);
+                    notificationSenderAPIService.sendParametrizedNotification("reminder.schedule.the.leave", tsadvUser, params);
+                }
+            });
+        }
+    }
+
+    private LocalDate getEndDateNextYear() {
+        return LocalDate.now().plusYears(1).with(lastDayOfYear());
+    }
+
+    private LocalDate getStartDateNextYear() {
+        return LocalDate.now().plusYears(1).with(firstDayOfYear());
     }
 }

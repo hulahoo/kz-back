@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://procInstanceVBrowse.caption"
+        focusComponent="procInstanceVsTable"
+        messagesPack="kz.uco.tsadv.web.screens.procinstancev">
+    <data readOnly="true">
+        <collection id="procInstanceVsDc"
+                    class="kz.uco.tsadv.entity.dbview.ProcInstanceV">
+            <view extends="_local">
+                <property name="process"/>
+                <property name="startUser" view="_minimal">
+                    <property name="fullName"/>
+                </property>
+                <property name="status" view="_minimal"/>
+            </view>
+            <loader id="procInstanceVsDl">
+                <query>
+                    <![CDATA[select e from tsadv$ProcInstanceV e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="procInstanceVsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="procInstanceVsTable"
+                dataLoader="procInstanceVsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="procInstanceVsTable"
+                    width="100%"
+                    dataContainer="procInstanceVsDc">
+            <actions>
+                <action id="showProcessParticipants"
+                        trackSelection="true"
+                        caption="msg://process.participants"/>
+            </actions>
+            <columns>
+                <column id="process"/>
+                <column id="requestNumber" link="true" linkInvoke="openEntity"/>
+                <column id="startUser"/>
+                <column id="startTime"/>
+                <column id="endTime"/>
+                <column id="status"/>
+                <column id="active"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="showProcessParticipantsButton"
+                        action="procInstanceVsTable.showProcessParticipants"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
