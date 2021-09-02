@@ -87,96 +87,103 @@
                 </hbox>
                 <vbox id="cssLayout"
                       margin="false,false,false,true">
-                   <tabSheet>
-                       <tab id="organizationIncentiveFlagsTab"
-                            expand="organizationIncentiveFlagsTable"
-                            caption="msg://main"
-                            spacing="true">
-                           <table id="organizationIncentiveFlagsTable"
-                                  dataContainer="organizationIncentiveFlagsDc"
-                                  width="100%">
-                               <actions>
-                                   <action id="add" type="add" enable="false"/>
-                                   <action id="remove" type="remove"/>
-                               </actions>
-                               <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
-                                   <button id="organizationIncentiveFlagsTableAddBtn"
-                                           caption="msg://add"
-                                           enable="false"
-                                           invoke="addOrganizationIncentiveFlag" />
-                                   <button id="organizationIncentiveFlagsTableRemoveBtn"
-                                           action="organizationIncentiveFlagsTable.remove"/>
-                               </buttonsPanel>
-                               <columns>
-                                   <column id="isIncentive"/>
-                                   <column id="dateFrom"/>
-                                   <column id="dateTo"/>
-                               </columns>
-                           </table>
-                       </tab>
-                       <tab id="organizationIncentiveIndicatorsTab"
-                            caption="msg://indicators"
-                            expand="organizationIncentiveIndicatorsTable"
-                            spacing="true">
-                           <table id="organizationIncentiveIndicatorsTable"
-                                  dataContainer="organizationIncentiveIndicatorsDc"
-                                  width="100%">
-                               <actions>
-                                   <action id="add" type="add"/>
-                                   <action id="remove" type="remove"/>
-                               </actions>
-                               <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
-                                   <button id="organizationIncentiveIndicatorsTableAddBtn"
-                                           caption="msg://add"
-                                           enable="false"
-                                           invoke="addOrganizationIncentiveIndicator"/>
-                                   <button id="organizationIncentiveIndicatorsTableRemoveBtn"
-                                           action="organizationIncentiveIndicatorsTable.remove"/>
-                               </buttonsPanel>
-                               <columns>
-                                   <column id="dateFrom"/>
-                                   <column id="dateTo"/>
-                                   <column id="indicatorType"/>
-                                   <column id="indicator"/>
-                                   <column id="weight"/>
-                                   <column id="responsiblePosition.position.positionName"/>
-                               </columns>
-                           </table>
-                       </tab>
-                       <tab id="organizationIncentiveResultsTab" caption="msg://result">
-                           <groupTable id="organizationIncentiveResultsTable" width="100%"
-                                       dataContainer="organizationIncentiveResultsDc">
-                               <actions>
-                                   <action id="add" type="add"/>
-                                   <action id="edit" type="edit"/>
-                                   <action id="remove" type="remove"/>
-                                   <action id="excel" type="excel"/>
-                               </actions>
-                               <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
-                                   <button id="organizationIncentiveResultsTableAddBtn"
-                                           caption="msg://add"
-                                           enable="false"
-                                           invoke="addOrganizationIncentiveResult"/>
-                                   <button id="organizationIncentiveResultsTableEditBtn"
-                                           caption="msg://editBtn"
-                                           enable="false"
-                                           invoke="editOrganizationIncentiveResult"/>
-                                   <button id="organizationIncentiveResultsTableExcelBtn"
-                                           action="organizationIncentiveResultsTable.excel"/>
-                                   <button id="organizationIncentiveResultsTableRemoveBtn"
-                                           action="organizationIncentiveResultsTable.remove"/>
-                               </buttonsPanel>
-                               <columns>
-                                   <group>
-                                       <column id="periodDate"/>
-                                   </group>
-                                   <column id="total" generator="totalColumnGenerator" caption="msg://incentive.total"/>
-                                   <column id="weight"/>
-                                   <column id="result"/>
-                               </columns>
-                           </groupTable>
-                       </tab>
-                   </tabSheet>
+                    <tabSheet>
+                        <tab id="organizationIncentiveFlagsTab"
+                             expand="organizationIncentiveFlagsTable"
+                             caption="msg://main"
+                             spacing="true">
+                            <table id="organizationIncentiveFlagsTable"
+                                   dataContainer="organizationIncentiveFlagsDc"
+                                   width="100%">
+                                <actions>
+                                    <action id="add" type="add" enable="false"/>
+                                    <action id="remove" type="remove"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
+                                    <button id="organizationIncentiveFlagsTableAddBtn"
+                                            caption="msg://add"
+                                            enable="false"
+                                            invoke="addOrganizationIncentiveFlag"/>
+                                    <button id="organizationIncentiveFlagsTableRemoveBtn"
+                                            action="organizationIncentiveFlagsTable.remove"/>
+                                </buttonsPanel>
+                                <columns>
+                                    <column id="isIncentive"/>
+                                    <column id="dateFrom"/>
+                                    <column id="dateTo"/>
+                                </columns>
+                            </table>
+                        </tab>
+                        <tab id="organizationIncentiveIndicatorsTab"
+                             caption="msg://indicators"
+                             expand="organizationIncentiveIndicatorsTable"
+                             spacing="true">
+                            <table id="organizationIncentiveIndicatorsTable"
+                                   dataContainer="organizationIncentiveIndicatorsDc"
+                                   width="100%">
+                                <actions>
+                                    <action id="add" type="add"/>
+                                    <action id="remove" type="remove"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
+                                    <button id="organizationIncentiveIndicatorsTableAddBtn"
+                                            caption="msg://add"
+                                            enable="false"
+                                            invoke="addOrganizationIncentiveIndicator"/>
+                                    <button id="organizationIncentiveIndicatorsTableRemoveBtn"
+                                            action="organizationIncentiveIndicatorsTable.remove"/>
+                                </buttonsPanel>
+                                <columns>
+                                    <column id="dateFrom"/>
+                                    <column id="dateTo"/>
+                                    <column id="indicatorType"/>
+                                    <column id="indicator"/>
+                                    <column id="weight"/>
+                                    <column id="responsiblePosition.position.positionName"
+                                            caption="msg://responsiblePosition"/>
+                                    <column id="approvingPosition.position.positionName"
+                                            caption="msg://approvingPosition"/>
+                                </columns>
+                            </table>
+                        </tab>
+                        <tab id="organizationIncentiveResultsTab" caption="msg://result">
+                            <groupTable id="organizationIncentiveResultsTable" width="100%"
+                                        dataContainer="organizationIncentiveResultsDc">
+                                <actions>
+                                    <action id="add" type="add"/>
+                                    <action id="edit" type="edit"/>
+                                    <action id="remove" type="remove"/>
+                                    <action id="excel" type="excel"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
+                                    <button id="organizationIncentiveResultsTableAddBtn"
+                                            caption="msg://add"
+                                            enable="false"
+                                            invoke="addOrganizationIncentiveResult"/>
+                                    <button id="organizationIncentiveResultsTableEditBtn"
+                                            caption="msg://editBtn"
+                                            enable="false"
+                                            invoke="editOrganizationIncentiveResult"/>
+                                    <button id="organizationIncentiveResultsTableExcelBtn"
+                                            action="organizationIncentiveResultsTable.excel"/>
+                                    <button id="organizationIncentiveResultsTableRemoveBtn"
+                                            action="organizationIncentiveResultsTable.remove"/>
+                                </buttonsPanel>
+                                <columns>
+                                    <group>
+                                        <column id="periodDate">
+                                            <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"
+                                                       format="MMM.yyyy"/>
+                                        </column>
+                                    </group>
+                                    <column id="total" generator="totalColumnGenerator"
+                                            caption="msg://incentive.total"/>
+                                    <column id="weight"/>
+                                    <column id="score"/>
+                                </columns>
+                            </groupTable>
+                        </tab>
+                    </tabSheet>
                 </vbox>
             </vbox>
         </split>

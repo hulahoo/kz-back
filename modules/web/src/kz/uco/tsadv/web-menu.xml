@@ -184,6 +184,13 @@
                   screen="tsadv$GradeRule.browse"/>
         </menu>
         <menu id="incentive">
+            <item screen="tsadv_DicIncentiveIndicatorType.browse"
+                  caption="mainMsg://menu_config.tsadv_DicIncentiveIndicatorType.browse"/>
+            <item screen="tsadv_DicIncentiveResultStatus.browse"
+                  caption="mainMsg://DicIncentiveResultStatuses"/>
+            <item id="indicators"
+                  screen="tsadv_DicIncentiveIndicators.browse"
+                  caption="mainMsg://incentiveIndicators"/>
             <item id="organizationIncentives"
                   screen="tsadv_IncentiveBrowse"
                   caption="mainMsg://org.structure"
@@ -196,6 +203,9 @@
                   openType="NEW_TAB">
                 <param name="ELEMENT_TYPE" value="POSITION"/>
             </item>
+            <item id="organizationIncentiveMonthResults"
+                  screen="tsadv_OrganizationIncentiveMonthResult.browse"
+                  caption="mainMsg://menu_config.tsadv_OrganizationIncentiveMonthResult.browse"/>
         </menu>
         <menu id="hrCompetences"
               icon="font-icon:BRIEFCASE">

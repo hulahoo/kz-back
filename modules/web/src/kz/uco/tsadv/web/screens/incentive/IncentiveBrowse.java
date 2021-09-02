@@ -4,7 +4,11 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.chile.core.model.MetaPropertyPath;
 import com.haulmont.cuba.core.entity.Entity;
-import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.MessageTools;
+import com.haulmont.cuba.core.global.Messages;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
@@ -14,6 +18,7 @@ import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.export.ExcelExporter;
 import com.haulmont.cuba.gui.export.ExportDisplay;
+import com.haulmont.cuba.gui.model.CollectionChangeType;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -29,16 +34,18 @@ import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.HierarchyService;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.function.Function;
+import java.util.UUID;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @UiController("tsadv_IncentiveBrowse")
@@ -124,33 +131,7 @@ public class IncentiveBrowse extends Screen {
     @Inject
     private UserSession userSession;
 
-    protected class LocalizedDateFormatter implements Function<Object, String> {
 
-        protected String format;
-
-        LocalizedDateFormatter(String format) {
-            this.format = format;
-        }
-
-        public String getFormat() {
-            return format;
-        }
-
-        public void setFormat(String format) {
-            this.format = format;
-        }
-
-        @Override
-        public String apply(Object value) {
-            Date date = (Date) value;
-            UserSessionSource us = AppBeans.get(UserSessionSource.NAME);
-            Locale currentLocale = us.getLocale();
-            if (currentLocale.getLanguage().equals("kz")) currentLocale = new Locale("ru");
-            DateFormat df = new SimpleDateFormat(format, currentLocale);
-            return df.format(date);
-        }
-
-    }
 
     protected class WrapCellExcelExporter extends ExcelExporter {
 
@@ -168,7 +149,7 @@ public class IncentiveBrowse extends Screen {
     @Subscribe
     protected void onInit(InitEvent event) {
         MapScreenOptions screenOptions = (MapScreenOptions) event.getOptions();
-        if (screenOptions == null || !screenOptions.getParams().containsKey(ELEMENT_TYPE_SCREEN_PARAM)) {
+        if (!screenOptions.getParams().containsKey(ELEMENT_TYPE_SCREEN_PARAM)) {
             notifications.create().withCaption("No screen params").show();
             closeWithDefaultAction();
             return;
@@ -196,9 +177,9 @@ public class IncentiveBrowse extends Screen {
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
         initHierarchiesDc();
-        LocalizedDateFormatter localizedDateFormatter = new LocalizedDateFormatter(PERIOD_DATE_FORMAT);
-        organizationIncentiveResultsTable.getColumn("periodDate").setFormatter(localizedDateFormatter);
-        organizationIncentiveResultsTable.addPrintable("total", incentiveResult -> getOrganizationIncentiveResultTotal(incentiveResult));
+//        LocalizedDateFormatter localizedDateFormatter = new LocalizedDateFormatter(PERIOD_DATE_FORMAT);
+//        organizationIncentiveResultsTable.getColumn("periodDate").setFormatter(localizedDateFormatter);
+        organizationIncentiveResultsTable.addPrintable("total", this::getOrganizationIncentiveResultTotal);
     }
 
     @Subscribe("organizationIncentiveResultsTable.excel")

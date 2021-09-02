@@ -2047,5 +2047,20 @@
         <entity class="kz.uco.tsadv.modules.learning.model.DicPortalFeedbackType">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicatorType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.DicIncentiveIndicatorScoreSetting">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicIncentiveResultStatus">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.dbview.OrganizationIncentiveMonthResultView">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
