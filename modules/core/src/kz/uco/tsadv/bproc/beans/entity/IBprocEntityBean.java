@@ -22,4 +22,6 @@ public interface IBprocEntityBean<T extends AbstractBprocRequest> {
     Map<String, Object> getNotificationParams(String templateCode, T entity);
 
     void changeRequestStatus(T entity, String code);
+
+    void revision(T entity);
 }

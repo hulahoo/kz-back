@@ -140,6 +140,8 @@ public class BprocProcessStatesListener extends AbstractBprocHelper {
             bprocService.reject(bprocRequest);
         else if (userTaskResults.containsOutcome(outcomesContainer, AbstractBprocRequest.OUTCOME_CANCEL))
             bprocService.cancel(bprocRequest);
+        else if (userTaskResults.containsOutcome(outcomesContainer, AbstractBprocRequest.OUTCOME_REVISION))
+            bprocService.revision(bprocRequest);
         else if (userTaskResults.containsOutcome(outcomesContainer, AbstractBprocRequest.OUTCOME_APPROVE)) {
 
             List<BprocActors> bprocActors = getBprocActors(bprocRequest);

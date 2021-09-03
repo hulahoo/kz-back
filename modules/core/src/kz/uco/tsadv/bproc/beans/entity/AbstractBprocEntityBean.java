@@ -35,6 +35,11 @@ public abstract class AbstractBprocEntityBean<T extends AbstractBprocRequest> im
     }
 
     @Override
+    public void revision(T entity) {
+        changeRequestStatus(entity, "TO_BE_REVISED");
+    }
+
+    @Override
     public void reject(T entity) {
         changeRequestStatus(entity, "REJECT");
         String rejectNotificationTemplateCode = bprocService.getProcessVariable(entity, "rejectNotificationTemplateCode");
