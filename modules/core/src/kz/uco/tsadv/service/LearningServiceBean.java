@@ -32,6 +32,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Service(LearningService.NAME)
 public class LearningServiceBean implements LearningService {
@@ -70,12 +71,12 @@ public class LearningServiceBean implements LearningService {
         Workbook workbook = parseToWorkbook(fileDescriptor);
         int sheetsCount = workbook.getNumberOfSheets();
 
-        if (sheetsCount != 3) {
-            throw new RuntimeException("Sheets count must be 3!");
+        if (sheetsCount != 2) {
+            throw new RuntimeException("Sheets count must be 2!");
         }
         Map<String, QuestionBank> questionBankMap = parseQuestionBank(workbook.getSheet(workbook.getSheetName(0)));
         Map<String, Question> questionMap = parseQuestion(workbook.getSheet(workbook.getSheetName(1)), questionBankMap);
-        parseAnswer(workbook.getSheet(workbook.getSheetName(2)), questionMap);
+        parseAnswer(workbook.getSheet(workbook.getSheetName(1)), questionMap);
 
         ImportLearningLog importLearningLog = metadata.create(ImportLearningLog.class);
         importLearningLog.setFile(fileDescriptor);
@@ -465,28 +466,29 @@ public class LearningServiceBean implements LearningService {
     private void parseAnswer(Sheet sheet, Map<String, Question> questionMap) throws Exception {
         for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
             Row row = sheet.getRow(rowIndex);
+            if(row.getCell(5)!=null) {
+                String text = getStringValue(row.getCell(5));
+                if (StringUtils.isBlank(text)) break;
 
-            String text = getStringValue(row.getCell(0));
-            if (StringUtils.isBlank(text)) break;
+                Answer answer = metadata.create(Answer.class);
+                answer.setAnswer(text);
 
-            Answer answer = metadata.create(Answer.class);
-            answer.setAnswer(text);
+                String correct = getStringValue(row.getCell(6));
+                if (correct.equalsIgnoreCase("y")) {
+                    correct = "true";
+                }
+                answer.setCorrect(Boolean.parseBoolean(correct));
 
-            String correct = getStringValue(row.getCell(1));
-            if (correct.equalsIgnoreCase("y")) {
-                correct = "true";
+                String questionCode = getStringValue(row.getCell(0));
+                Question findQuestion = questionMap.get(questionCode);
+                if (findQuestion == null) {
+                    throw new NullPointerException("Question is not found!");
+                }
+
+                answer.setQuestion(findQuestion);
+
+                findQuestion.getAnswers().add(answer);
             }
-            answer.setCorrect(Boolean.parseBoolean(correct));
-
-            String questionCode = getStringValue(row.getCell(2));
-            Question findQuestion = questionMap.get(questionCode);
-            if (findQuestion == null) {
-                throw new NullPointerException("Question is not found!");
-            }
-
-            answer.setQuestion(findQuestion);
-
-            findQuestion.getAnswers().add(answer);
         }
     }
 
@@ -502,12 +504,15 @@ public class LearningServiceBean implements LearningService {
      */
     private Map<String, Question> parseQuestion(Sheet sheet, Map<String, QuestionBank> questionBankMap) throws Exception {
         Map<String, Question> questionMap = new HashMap<>();
+        ArrayList<String> codes=new ArrayList<>();
         for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
             Row row = sheet.getRow(rowIndex);
 
             String code = getStringValue(row.getCell(0));
 
             if (StringUtils.isBlank(code)) break;
+            if(codes.contains(code)) continue;
+            codes.add(getStringValue(row.getCell(0)));
 
             Question question = metadata.create(Question.class);
             question.setText(getStringValue(row.getCell(1)));
