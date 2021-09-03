@@ -6,6 +6,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.service.BprocService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.ResolvableType;
 
 import javax.inject.Inject;
@@ -37,6 +38,9 @@ public abstract class AbstractBprocEntityBean<T extends AbstractBprocRequest> im
     @Override
     public void revision(T entity) {
         changeRequestStatus(entity, "TO_BE_REVISED");
+        String revisionNotificationTemplateCode = bprocService.getProcessVariable(entity, "revisionNotificationTemplateCode");
+        if (StringUtils.isNotEmpty(revisionNotificationTemplateCode))
+            bprocService.sendNotificationToInitiator(entity, revisionNotificationTemplateCode);
     }
 
     @Override
