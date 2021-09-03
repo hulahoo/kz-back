@@ -483,9 +483,16 @@ public class OrganizationServiceBean extends kz.uco.base.service.OrganizationSer
     public void sendToResponsibleForIndicators() {
         Map<String, Object> userParams = new HashMap<>();
         for (TsadvUser tsadvUser : commonService.getEntities(TsadvUser.class,
-                "select bp from tsadv$UserExt bp inner join tsadv_OrganizationIncentiveIndicators toii on toii.responsiblePerson=bp.personGroup",
+                "" +
+                        "select distinct su " +
+                        "from tsadv$UserExt su " +
+                        "inner join base$AssignmentExt ba on ba.personGroup.id =su.personGroup.id " +
+                        "inner join tsadv_OrganizationIncentiveIndicators toii on toii.responsiblePosition.id =ba.positionGroup.id " +
+                        "and current_date between toii.dateFrom and toii.dateTo "+
+                        "and current_date between ba.startDate and ba.endDate "+
+                        "and toii.deleteTs is null ",
                 null,
-                "myTsadv_view")) {
+                "_base")) {
             userParams.put("userFullName", tsadvUser.getFullName());
             notificationService.sendParametrizedNotification("incentive.fill.request", tsadvUser, userParams);
         }
