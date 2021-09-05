@@ -1,4 +1,4 @@
-drop view tsadv_organization_incentive_month_result_view;
+drop view IF EXISTS tsadv_organization_incentive_month_result_view;
 create view tsadv_organization_incentive_month_result_view
             (id, version, create_ts, created_by, update_ts, updated_by, delete_ts, deleted_by, company_id, period_,
              department_id, indicator_id, weight, plan_, fact, result_, premium_percent, total_premium_percent, status_id,
