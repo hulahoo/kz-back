@@ -432,10 +432,14 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                         + (assignedPerformancePlan.getExtraPoint() != null
                         ? assignedPerformancePlan.getExtraPoint()
                         : 0.0));
-                assignedPerformancePlan.setCompanyBonus(calculateCompanyBonus(assignedPerformancePlan.getMaxBonus(),
-                        currentAssignment).doubleValue());
                 assignedPerformancePlan.setPersonalBonus(calculatePersonalBonus(assignedPerformancePlan.getMaxBonus()
                         , assignedPerformancePlan.getFinalScore()));
+                if (!assignedPerformancePlan.getPersonalBonus().equals(0.0)) {
+                    assignedPerformancePlan.setCompanyBonus(calculateCompanyBonus(assignedPerformancePlan.getMaxBonus(),
+                            currentAssignment).doubleValue());
+                } else {
+                    assignedPerformancePlan.setCompanyBonus(0.0);
+                }
                 assignedPerformancePlan.setFinalBonus(assignedPerformancePlan.getCompanyBonus()
                         + assignedPerformancePlan.getPersonalBonus());
                 if (assignedPerformancePlan.getAdjustedScore() != null) {
