@@ -118,6 +118,11 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     }
 
     @Override
+    public <T extends AbstractBprocRequest> void revision(T entity) {
+        bprocEntityBeanAdapter.revision(entity);
+    }
+
+    @Override
     public <T extends AbstractBprocRequest> void reject(T entity) {
         bprocEntityBeanAdapter.reject(entity);
     }

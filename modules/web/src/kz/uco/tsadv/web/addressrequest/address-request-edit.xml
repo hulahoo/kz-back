@@ -110,8 +110,8 @@
                     <textField property="addressForExpats"/>
                     <textField property="block"/>
                     <textField property="building"/>
-                    <textField property="addressEnglish"/>
-                    <textField property="addressKazakh"/>
+                    <textField id="addressEnglishTextField" property="addressEnglish"/>
+                    <textField id="addressKazakhTextField" property="addressKazakh"/>
                     <textField property="flat"/>
                 </column>
             </form>

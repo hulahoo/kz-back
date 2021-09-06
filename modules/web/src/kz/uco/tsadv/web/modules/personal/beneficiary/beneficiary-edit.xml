@@ -97,6 +97,12 @@
                            property="type"/>
                     <field id="beneficiaryAddress"
                            property="beneficiaryAddress"/>
+                    <field id="addressType"
+                           property="addressType"/>
+                    <field id="postalCode"
+                           property="postalCode"/>
+                    <field id="country"
+                           property="country"/>
                 </column>
                 <column id="column2">
                     <field id="employeeNumber"
@@ -116,6 +122,14 @@
                            property="nationalIdentifier"/>
                     <field id="beneficiaryJob"
                            property="beneficiaryJob"/>
+                    <field id="addressKATOCode"
+                           property="addressKATOCode"/>
+                    <field id="streetType"
+                           property="streetType"/>
+                    <field id="streetName"
+                           property="streetName"/>
+                    <field id="addressForExpats"
+                           property="addressForExpats"/>
                 </column>
             </fieldGroup>
             <fieldGroup id="beneficiaryFieldGroup"
@@ -142,6 +156,12 @@
                            property="socStatus"/>
                     <field id="beneficiaryPlaceOfWork"
                            property="beneficiaryPlaceOfWork"/>
+                    <field id="building"
+                           property="building"/>
+                    <field id="block"
+                           property="block"/>
+                    <field id="flat"
+                           property="flat"/>
                 </column>
             </fieldGroup>
         </hbox>

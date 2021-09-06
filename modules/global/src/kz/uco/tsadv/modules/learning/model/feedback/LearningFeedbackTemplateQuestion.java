@@ -1,14 +1,12 @@
 package kz.uco.tsadv.modules.learning.model.feedback;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+@PublishEntityChangedEvents
 @Table(name = "TSADV_LEARNING_FEEDBACK_TEMPLATE_QUESTION")
 @Entity(name = "tsadv$LearningFeedbackTemplateQuestion")
 public class LearningFeedbackTemplateQuestion extends AbstractParentEntity {

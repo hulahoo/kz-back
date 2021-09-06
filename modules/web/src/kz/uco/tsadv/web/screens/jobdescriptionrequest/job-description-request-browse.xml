@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://jobDescriptionRequestBrowse.caption"
+        focusComponent="jobDescriptionRequestsTable"
+        messagesPack="kz.uco.tsadv.web.screens.jobdescriptionrequest">
+    <data readOnly="true">
+        <collection id="jobDescriptionRequestsDc"
+                    class="kz.uco.tsadv.modules.hr.JobDescriptionRequest" view="jobDescriptionRequest-browse">
+            <loader id="jobDescriptionRequestsDl">
+                <query>
+                    <![CDATA[select e from tsadv_JobDescriptionRequest e order by e.requestDate]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="jobDescriptionRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="jobDescriptionRequestsTable"
+                dataLoader="jobDescriptionRequestsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="jobDescriptionRequestsTable"
+                    width="100%"
+                    dataContainer="jobDescriptionRequestsDc">
+            <actions>
+            </actions>
+            <columns>
+                <column id="requestNumber" link="true" linkInvoke="openRequest"/>
+                <column id="positionGroup"/>
+                <column id="positionGroup.organizationGroup.organization"/>
+                <column id="requestDate"/>
+                <column id="status"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

@@ -52,7 +52,7 @@ public class TsadvUser extends UserExt {
         return String.format("%s [%s]", fullName, login);
     }
 
-    protected String getFullName(Locale locale) {
+    public String getFullName(Locale locale) {
         if (PersistenceHelper.isLoaded(this, "personGroup")) {
             if (personGroup != null && PersistenceHelper.isLoaded(personGroup, "list")) {
                 return personGroup.getFullName(locale);

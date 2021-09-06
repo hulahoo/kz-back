@@ -2002,6 +2002,9 @@
         <entity class="kz.uco.tsadv.modules.bpm.BprocReassignment">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonPayslip">
+            <include re=".*"/>
+        </entity>
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicSocStatus">
             <include re=".*"/>
         </entity>
@@ -2033,6 +2036,36 @@
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.personal.model.Scholarship">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.hr.JobDescription">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.hr.JobDescriptionRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.DicPortalFeedbackType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.administration.TsadvReport">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicatorType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.DicIncentiveIndicatorScoreSetting">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicIncentiveResultStatus">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.dbview.OrganizationIncentiveMonthResultView">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PositionIncentiveFlag">
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.performance.dictionary.DicPerformanceStage">

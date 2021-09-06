@@ -22,7 +22,8 @@
                 <lookupField id="indicatorTypeField" property="indicatorType"/>
                 <pickerField id="indicator" property="indicator"/>
                 <textField id="weightField" property="weight"/>
-                <pickerField id="responsiblePerson" property="responsiblePerson"/>
+                <pickerField id="responsiblePosition" property="responsiblePosition"/>
+                <pickerField id="approvingPosition" property="approvingPosition"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

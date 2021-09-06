@@ -1,10 +1,11 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators;
 import kz.uco.tsadv.modules.personal.enums.OrganizationIncentiveIndicatorType;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import java.util.Date;
 
 @Table(name = "TSADV_ORGANIZATION_INCENTIVE_INDICATORS")
 @Entity(name = "tsadv_OrganizationIncentiveIndicators")
+@NamePattern("%s|responsiblePosition")
 public class OrganizationIncentiveIndicators extends StandardEntity {
     private static final long serialVersionUID = -5141736109346347548L;
 
@@ -43,17 +45,30 @@ public class OrganizationIncentiveIndicators extends StandardEntity {
     @Column(name = "WEIGHT", nullable = false)
     protected Double weight;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "RESPONSIBLE_PERSON_ID")
-    protected PersonGroupExt responsiblePerson;
+    @JoinColumn(name = "RESPONSIBLE_POSITION_ID")
+    @NotNull
+    protected PositionGroupExt responsiblePosition;
 
-    public PersonGroupExt getResponsiblePerson() {
-        return responsiblePerson;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "APPROVING_POSITION_ID")
+    @NotNull
+    private PositionGroupExt approvingPosition;
+
+    public PositionGroupExt getApprovingPosition() {
+        return approvingPosition;
     }
 
-    public void setResponsiblePerson(PersonGroupExt responsiblePerson) {
-        this.responsiblePerson = responsiblePerson;
+    public void setApprovingPosition(PositionGroupExt approvingPosition) {
+        this.approvingPosition = approvingPosition;
+    }
+
+    public void setResponsiblePosition(PositionGroupExt responsiblePosition) {
+        this.responsiblePosition = responsiblePosition;
+    }
+
+    public PositionGroupExt getResponsiblePosition() {
+        return responsiblePosition;
     }
 
     public Double getWeight() {

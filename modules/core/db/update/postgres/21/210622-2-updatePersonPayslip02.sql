@@ -1,0 +1,2 @@
+alter table TSADV_PERSON_PAYSLIP add constraint FK_TSADV_PERSON_PAYSLIP_FILE foreign key (FILE_ID) references SYS_FILE(ID);
+create index IDX_TSADV_PERSON_PAYSLIP_FILE on TSADV_PERSON_PAYSLIP (FILE_ID);

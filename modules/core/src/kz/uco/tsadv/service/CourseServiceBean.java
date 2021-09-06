@@ -8,7 +8,6 @@ import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
-import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.FrontConfig;
@@ -775,10 +774,10 @@ public class CourseServiceBean implements CourseService {
     protected Long calculateAttemptCount(UUID courseSectionId) {
         if (courseSectionId == null) return 0L;
         return persistence.callInTransaction(em -> (Long) em.createNativeQuery(
-                "SELECT count(*) " +
-                        "FROM tsadv_course_section_attempt csa " +
-                        "WHERE csa.delete_ts IS NULL " +
-                        "      AND csa.course_section_id = ?1")
+                        "SELECT count(*) " +
+                                "FROM tsadv_course_section_attempt csa " +
+                                "WHERE csa.delete_ts IS NULL " +
+                                "      AND csa.course_section_id = ?1")
                 .setParameter(1, courseSectionId)
                 .getSingleResult());
     }
@@ -836,7 +835,7 @@ public class CourseServiceBean implements CourseService {
         Double avgRate = course.getReviews().isEmpty()
                 ? 0D
                 : course.getReviews().stream()
-                .map(CourseReview::getRate)
+                .map(CourseReview::getRoundedRate)
                 .reduce(Double::sum)
                 .orElseThrow(() -> new NullPointerException("Reviews is empty!")) / course.getReviews().size();
         coursePojo.setAvgRate(avgRate);
@@ -864,10 +863,10 @@ public class CourseServiceBean implements CourseService {
                 .user(r.getPersonGroup().getFullName())
                 .date(r.getCreateTs())
                 .comment(r.getText())
-                .rating(r.getRate())
+                .rating(r.getRoundedRate())
                 .build()).collect(Collectors.toList()));
         coursePojo.setRating(course.getReviews().stream()
-                .collect(Collectors.groupingBy(CourseReview::getRate, Collectors.counting()))
+                .collect(Collectors.groupingBy(CourseReview::getRoundedRate, Collectors.counting()))
                 .entrySet().stream()
                 .map(m -> new PairPojo<>(m.getKey(), m.getValue()))
                 .collect(Collectors.toList()));
@@ -900,24 +899,24 @@ public class CourseServiceBean implements CourseService {
     @Override
     public List<CategoryCoursePojo> allCourses(UUID personGroupId) {
         return this.mapCoursesToCategory(dataManager.loadList(LoadContext.create(Course.class).setQuery(LoadContext.createQuery("" +
-                "select c " +
-                "from tsadv$Course c " +
-                "   join c.category ca " +
-                "where c.activeFlag = true"))
-                .setView("course.list"))
+                                "select c " +
+                                "from tsadv$Course c " +
+                                "   join c.category ca " +
+                                "where c.activeFlag = true"))
+                        .setView("course.list"))
                 .stream(), personGroupId);
     }
 
     @Override
     public List<CategoryCoursePojo> searchCourses(UUID personGroupId, String courseName) {
         return this.mapCoursesToCategory(dataManager.loadList(LoadContext.create(Course.class).setQuery(LoadContext.createQuery("" +
-                "select c " +
-                "from tsadv$Course c " +
-                "   join c.category ca " +
-                "where (lower (c.name) like lower (concat(concat('%', :courseName), '%'))) " +
-                "   and c.activeFlag = true")
-                .setParameter("courseName", courseName))
-                .setView("course.list"))
+                                        "select c " +
+                                        "from tsadv$Course c " +
+                                        "   join c.category ca " +
+                                        "where (lower (c.name) like lower (concat(concat('%', :courseName), '%'))) " +
+                                        "   and c.activeFlag = true")
+                                .setParameter("courseName", courseName))
+                        .setView("course.list"))
                 .stream()
                 .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())), personGroupId);
     }
@@ -971,9 +970,9 @@ public class CourseServiceBean implements CourseService {
                 scormResult.setCourseSectionAttempt(newAttempt);
                 scormResult.setQuestion(dataManager.load(LoadContext.create(ScormQuestionMapping.class)
                         .setQuery(LoadContext.createQuery("" +
-                                "select e " +
-                                "from tsadv_ScormQuestionMapping e " +
-                                "where e.code = :code")
+                                        "select e " +
+                                        "from tsadv_ScormQuestionMapping e " +
+                                        "where e.code = :code")
                                 .setParameter("code", id.getFieldId()))));
                 scormResult.setScore(id.getScore());
                 scormResult.setMaxScore(id.getMaxScore());
@@ -1006,22 +1005,22 @@ public class CourseServiceBean implements CourseService {
     @Override
     public PairPojo<Boolean, String> validateEnroll(UUID courseId, UUID personGroupId, String locale) {
         List<Object[]> result = persistence.callInTransaction(em -> em.createNativeQuery("" +
-                "SELECT c.id, " +
-                "       prc.name           AS course_name, " +
-                "       e.id           AS enrollment " +
-                "FROM tsadv_course c " +
-                "         JOIN tsadv_course_pre_requisition pr " +
-                "              ON pr.course_id = c.id " +
-                "                  AND pr.delete_ts IS NULL " +
-                "         JOIN tsadv_course prc " +
-                "              ON pr.requisition_course_id = prc.id " +
-                "                  AND prc.active_flag " +
-                "         LEFT JOIN tsadv_enrollment e " +
-                "                   ON prc.id = e.course_id " +
-                "                       AND e.delete_ts IS NULL " +
-                "                       AND e.person_group_id = ?2 " +
-                "WHERE c.id = ?1" +
-                "   AND ((NOT e.status = 5) OR (e.id IS NULL));")
+                        "SELECT c.id, " +
+                        "       prc.name           AS course_name, " +
+                        "       e.id           AS enrollment " +
+                        "FROM tsadv_course c " +
+                        "         JOIN tsadv_course_pre_requisition pr " +
+                        "              ON pr.course_id = c.id " +
+                        "                  AND pr.delete_ts IS NULL " +
+                        "         JOIN tsadv_course prc " +
+                        "              ON pr.requisition_course_id = prc.id " +
+                        "                  AND prc.active_flag " +
+                        "         LEFT JOIN tsadv_enrollment e " +
+                        "                   ON prc.id = e.course_id " +
+                        "                       AND e.delete_ts IS NULL " +
+                        "                       AND e.person_group_id = ?2 " +
+                        "WHERE c.id = ?1" +
+                        "   AND ((NOT e.status = 5) OR (e.id IS NULL));")
                 .setParameter(1, courseId)
                 .setParameter(2, personGroupId)
                 .getResultList());
@@ -1063,39 +1062,39 @@ public class CourseServiceBean implements CourseService {
     @Override
     public List<CategoryCoursePojo> mapCoursesToCategory(Stream<Course> courseStream, UUID personGroupId) {
         return courseStream.map(course -> {
-            CoursePojo coursePojo = new CoursePojo();
-            coursePojo.setId(course.getId());
-            dataManager.load(Enrollment.class).query("" +
-                    "select e " +
-                    "from tsadv$Enrollment e " +
-                    "where e.personGroup.id = :personGroupId " +
-                    "   and e.course.id = :courseId ")
-                    .parameter("personGroupId", personGroupId)
-                    .parameter("courseId", course.getId())
-                    .optional()
-                    .ifPresent(e -> {
-                        coursePojo.setEnrollmentId(e.getId().toString());
-                        coursePojo.setEnrollmentStatus(e.getStatus().toString());
-                    });
-            coursePojo.setName(course.getName());
-            coursePojo.setOnline(course.getIsOnline());
+                    CoursePojo coursePojo = new CoursePojo();
+                    coursePojo.setId(course.getId());
+                    dataManager.load(Enrollment.class).query("" +
+                                    "select e " +
+                                    "from tsadv$Enrollment e " +
+                                    "where e.personGroup.id = :personGroupId " +
+                                    "   and e.course.id = :courseId ")
+                            .parameter("personGroupId", personGroupId)
+                            .parameter("courseId", course.getId())
+                            .optional()
+                            .ifPresent(e -> {
+                                coursePojo.setEnrollmentId(e.getId().toString());
+                                coursePojo.setEnrollmentStatus(e.getStatus().toString());
+                            });
+                    coursePojo.setName(course.getName());
+                    coursePojo.setOnline(course.getIsOnline());
 
-            if (course.getLogo() != null) {
-                dataManager.load(FileDescriptor.class)
-                        .view(View.MINIMAL)
-                        .query("" +
-                                "select ri.resizedImage " +
-                                "from tsadv_ResizedImage ri " +
-                                "where ri.originalImage.id = :originalImageId " +
-                                "   and ri.size.width = :width " +
-                                "   and ri.size.width = :height ")
-                        .setParameters(ParamsMap.of("originalImageId", course.getLogo().getId(), "width", frontConfig.getImageSizeWidth(), "height", frontConfig.getImageSizeHeight()))
-                        .optional()
-                        .ifPresent(f -> coursePojo.setLogo(f.getId()));
-            }
-            coursePojo.setCategory(new CategoryCoursePojo(course.getCategory().getId(), course.getCategory().getLangValue()));
-            return coursePojo;
-        })
+                    if (course.getLogo() != null) {
+                        dataManager.load(FileDescriptor.class)
+                                .view(View.MINIMAL)
+                                .query("" +
+                                        "select ri.resizedImage " +
+                                        "from tsadv_ResizedImage ri " +
+                                        "where ri.originalImage.id = :originalImageId " +
+                                        "   and ri.size.width = :width " +
+                                        "   and ri.size.width = :height ")
+                                .setParameters(ParamsMap.of("originalImageId", course.getLogo().getId(), "width", frontConfig.getImageSizeWidth(), "height", frontConfig.getImageSizeHeight()))
+                                .optional()
+                                .ifPresent(f -> coursePojo.setLogo(f.getId()));
+                    }
+                    coursePojo.setCategory(new CategoryCoursePojo(course.getCategory().getId(), course.getCategory().getLangValue()));
+                    return coursePojo;
+                })
                 .collect(Collectors.groupingBy(CoursePojo::getCategory))
                 .entrySet()
                 .stream()

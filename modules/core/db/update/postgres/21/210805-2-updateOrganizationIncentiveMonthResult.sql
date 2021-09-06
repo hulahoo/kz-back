@@ -1,0 +1,4 @@
+-- alter table TSADV_ORGANIZATION_INCENTIVE_MONTH_RESULT add column COMPANY_ID uuid ^
+-- update TSADV_ORGANIZATION_INCENTIVE_MONTH_RESULT set COMPANY_ID = <default_value> ;
+-- alter table TSADV_ORGANIZATION_INCENTIVE_MONTH_RESULT alter column COMPANY_ID set not null ;
+alter table TSADV_ORGANIZATION_INCENTIVE_MONTH_RESULT add column COMPANY_ID uuid not null ;

@@ -95,4 +95,12 @@ public interface IntegrationRestService {
     BaseResult createOrUpdateUser(UserDataJson userData);
 
     BaseResult createOrUpdatePersonAbsenceBalance(AbsenceBalanceDataJson absenceBalanceData);
+
+    BaseResult createOrUpdatePositionIncentiveFlag(PositionIncentiveFlagDataJson positionIncentiveFlagData);
+
+    BaseResult deletePositionIncentiveFlag(PositionIncentiveFlagDataJson positionIncentiveFlagData);
+
+    BaseResult createOrUpdatePersonPaySlip(PersonPayslipDataJson personPayslipDataJson);
+
+    BaseResult deletePersonPaySlip(PersonPayslipDataJson personPayslipDataJson);
 }

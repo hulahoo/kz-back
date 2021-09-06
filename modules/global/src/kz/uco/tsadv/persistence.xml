@@ -661,11 +661,13 @@
         <class>kz.uco.tsadv.modules.learning.dictionary.DicProgrammCode</class>
         <class>kz.uco.tsadv.modules.learning.dictionary.DicAssessmentMethod</class>
         <class>kz.uco.tsadv.modules.learning.model.PositionCourse</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonPayslip</class>
         <class>kz.uco.tsadv.modules.administration.PortalMenuCustomization</class>
         <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveFlag</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators</class>
         <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveIndicators</class>
         <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult</class>
+        <class>kz.uco.tsadv.modules.personal.model.PositionIncentiveFlag</class>
         <class>kz.uco.tsadv.modules.bpm.BprocReassignment</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicSocStatus</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicDriverCategory</class>
@@ -678,5 +680,14 @@
         <class>kz.uco.tsadv.modules.personal.model.LearningResults</class>
         <class>kz.uco.tsadv.modules.personal.model.LearningResultsPerSubject</class>
         <class>kz.uco.tsadv.modules.personal.model.Scholarship</class>
+        <class>kz.uco.tsadv.modules.hr.JobDescription</class>
+        <class>kz.uco.tsadv.modules.hr.JobDescriptionRequest</class>
+        <class>kz.uco.tsadv.modules.learning.model.DicPortalFeedbackType</class>
+        <class>kz.uco.tsadv.modules.administration.TsadvReport</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicatorType</class>
+        <class>kz.uco.tsadv.modules.personal.model.DicIncentiveIndicatorScoreSetting</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicIncentiveResultStatus</class>
+        <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveMonthResult</class>
+        <class>kz.uco.tsadv.entity.dbview.OrganizationIncentiveMonthResultView</class>
     </persistence-unit>
 </persistence>

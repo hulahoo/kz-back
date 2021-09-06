@@ -376,10 +376,10 @@ public class CourseEdit extends StandardEditor<Course> {
                                 })
                                 .build().show();
                     } else if (courseScheduleDc.getItems().size() == 0) {
-                        notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                                .withCaption(messageBundle.getMessage("notCourseSchedule")
-                                        + " " + courseDc.getItem().getName())
-                                .show();
+//                        notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+//                                .withCaption(messageBundle.getMessage("notCourseSchedule")
+//                                        + " " + courseDc.getItem().getName())
+//                                .show();
                     }
                 });
     }

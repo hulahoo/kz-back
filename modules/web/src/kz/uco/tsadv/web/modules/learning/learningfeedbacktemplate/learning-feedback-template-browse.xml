@@ -12,6 +12,9 @@
                          maxResults="20">
             <query>
                 <![CDATA[select e from tsadv$LearningFeedbackTemplate e]]>
+                <filter>
+                    <c> e.active = :param$active </c>
+                </filter>
             </query>
         </groupDatasource>
     </dsContext>

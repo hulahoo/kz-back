@@ -6,11 +6,11 @@ import kz.uco.tsadv.modules.personal.enums.OrgRequestChangeType;
 import kz.uco.tsadv.modules.personal.group.GradeGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
-import kz.uco.tsadv.modules.personal.model.HierarchyElementGroup;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Table(name = "TSADV_ORG_STRUCTURE_REQUEST_DETAIL")
 @Entity(name = "tsadv_OrgStructureRequestDetail")
@@ -70,6 +70,17 @@ public class OrgStructureRequestDetail extends StandardEntity {
 
     @Column(name = "MAX_SALARY")
     private BigDecimal maxSalary;
+
+    @OneToMany(mappedBy = "parent")
+    private List<OrgStructureRequestDetail> children;
+
+    public List<OrgStructureRequestDetail> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<OrgStructureRequestDetail> children) {
+        this.children = children;
+    }
 
     public PositionGroupExt getPositionGroup() {
         return positionGroup;

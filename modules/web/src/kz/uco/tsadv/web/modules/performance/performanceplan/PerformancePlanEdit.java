@@ -200,10 +200,10 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 .withSelectHandler(personList -> {
                     CommitContext commitContext = new CommitContext();
                     List<PersonExt> assignedPerformancePlanPersonList = dataManager.load(PersonExt.class)
-                            .query("select p from tsadv$AssignedPerformancePlan e " +
-                                    " join base$PersonExt p on e.assignedPerson = p.group " +
-                                    " and current_date between p.startDate and p.endDate " +
-                                    " where e.performancePlan = :performancePlan")
+                            .query("select pe from tsadv$AssignedPerformancePlan e " +
+                                    " join base$PersonExt pe on e.assignedPerson = pe.group " +
+                                    " where e.performancePlan = :performancePlan " +
+                                    " and current_date between pe.startDate and pe.endDate ")
                             .parameter("performancePlan", performancePlanDc.getItem())
                             .view("person-view")
                             .list();

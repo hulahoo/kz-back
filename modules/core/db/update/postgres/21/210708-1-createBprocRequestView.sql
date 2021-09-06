@@ -5,7 +5,7 @@ select a.id_::uuid             as id,
        a.start_time_           as start_time,
        a.end_time_             as end_time,
        a.end_time_ is not null as active,
-
+       a.business_key_,
        1                       as version,
        null                    as COMMENT_,
        null                    as ORGANIZATION_BIN,

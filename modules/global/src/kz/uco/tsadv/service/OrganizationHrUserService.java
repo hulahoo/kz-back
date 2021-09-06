@@ -16,6 +16,7 @@ public interface OrganizationHrUserService {
 
     String HR_ROLE_MANAGER = "MANAGER";
     String HR_ROLE_SUP_MANAGER = "SUP_MANAGER";
+    String HR_ROLE_ORG_MANGER = "ORG_MANGER";
     String HR_ROLE_EMPLOYEE = "EMPLOYEE";
     String HR_ROLE_MANAGER_ASSISTANT = "MANAGER_ASSISTANT";
     String HR_SPECIALIST = "HR";

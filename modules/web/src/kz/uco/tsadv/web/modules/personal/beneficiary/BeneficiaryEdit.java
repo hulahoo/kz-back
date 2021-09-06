@@ -8,9 +8,11 @@ import com.haulmont.cuba.gui.data.DataSupplier;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import kz.uco.base.common.StaticVariable;
+import kz.uco.base.entity.dictionary.DicCountry;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.personal.dictionary.DicKato;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Beneficiary;
@@ -18,6 +20,7 @@ import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.personal.model.RelationshipTypeBeneficiary;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -25,6 +28,7 @@ import static java.lang.Integer.parseInt;
 
 public class BeneficiaryEdit extends AbstractEditor<Beneficiary> {
 
+    protected String KZ_COUNTRY_CODE = "1";
     protected PersonExt person;
     protected PersonGroupExt personGroupChild;
     protected Beneficiary personBeneficiary;
@@ -57,6 +61,10 @@ public class BeneficiaryEdit extends AbstractEditor<Beneficiary> {
     protected FileUploadingAPI fileUploadingAPI;
     @Inject
     protected FieldGroup fieldGroupPersonName;
+    @Named("fieldGroupPerson.country")
+    private PickerField<DicCountry> countryField;
+    @Named("fieldGroupPerson.addressKATOCode")
+    private PickerField<DicKato> addressKATOCodeField;
 
     @Override
     protected void initNewItem(Beneficiary item) {
@@ -164,6 +172,14 @@ public class BeneficiaryEdit extends AbstractEditor<Beneficiary> {
     public void ready() {
         super.ready();
         autoWriteNameLatin();
+        countryField.addValueChangeListener(dicCountryValueChangeEvent -> {
+            if (dicCountryValueChangeEvent.getValue() == null) {
+                addressKATOCodeField.setRequired(false);
+                return;
+            }
+            DicCountry dicCountry = dicCountryValueChangeEvent.getValue();
+            if(dicCountry.getCode().equals(KZ_COUNTRY_CODE)) addressKATOCodeField.setRequired(true);
+        });
     }
 
     protected void autoWriteNameLatin() {
@@ -291,9 +307,14 @@ public class BeneficiaryEdit extends AbstractEditor<Beneficiary> {
     protected boolean postCommit(boolean committed, boolean close) {
         if (committed) {
             personBeneficiary = metadata.create(Beneficiary.class);
-            personBeneficiary.setPersonGroupParent(beneficiaryDs.getItem().getPersonGroupChild());
-            personBeneficiary.setPersonGroupChild(beneficiaryDs.getItem().getPersonGroupParent());
-            personBeneficiary.setDateFrom(beneficiaryDs.getItem().getDateFrom());
+            Beneficiary beneficiary = beneficiaryDs.getItem();
+            personBeneficiary.setPersonGroupParent(beneficiary.getPersonGroupChild());
+            personBeneficiary.setPersonGroupChild(beneficiary.getPersonGroupParent());
+            personBeneficiary.setDateFrom(beneficiary.getDateFrom());
+            personBeneficiary.setCountry(beneficiary.getCountry());
+            personBeneficiary.setAddressType(beneficiary.getAddressType());
+            personBeneficiary.setStreetType(beneficiary.getStreetType());
+
             setRelationshipType();
             dataManager.commit(personBeneficiary);
 

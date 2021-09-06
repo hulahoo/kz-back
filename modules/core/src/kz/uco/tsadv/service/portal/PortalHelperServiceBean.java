@@ -2,6 +2,8 @@ package kz.uco.tsadv.service.portal;
 
 import com.haulmont.cuba.core.entity.BaseGenericIdEntity;
 import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.core.jmx.ConfigStorageMBean;
+import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.config.TsadvGlobalConfig;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,7 +44,9 @@ public class PortalHelperServiceBean implements PortalHelperService {
     @Inject
     protected ExecutiveAssistantService assistantService;
     @Inject
-    private PositionStructureConfig positionStructureConfig;
+    protected PositionStructureConfig positionStructureConfig;
+    @Inject
+    protected ConfigStorageMBean configStorageMBean;
 
     @Override
     public <T extends BaseGenericIdEntity<K>, K> T newEntity(String entityName) {
@@ -55,11 +60,8 @@ public class PortalHelperServiceBean implements PortalHelperService {
         UUID generalCompanyId = tsadvGlobalConfig.getGeneralCompanyId();
 
         List<UUID> companyIds = new ArrayList<>();
-        if (company != null)
-            companyIds.add(company.getId());
-        if (generalCompanyId != null)
-            companyIds.add
-                    (generalCompanyId);
+        if (company != null) companyIds.add(company.getId());
+        if (generalCompanyId != null) companyIds.add(generalCompanyId);
         return companyIds;
     }
 
@@ -70,6 +72,7 @@ public class PortalHelperServiceBean implements PortalHelperService {
 
         List<PortalMenuPojo> fullMenuPojoList = getFullMenuPojoList(new ArrayList<>(), menuList, null);
 
+        @SuppressWarnings("ConstantConditions")
         List<PortalMenuCustomization> list = dataManager.load(PortalMenuCustomization.class)
                 .query("select e from tsadv_PortalMenuCustomization e where e.menuType = :menuType")
                 .viewProperties("menuItem", "active", "name1", "name2", "name3", "parent.id")
@@ -102,6 +105,7 @@ public class PortalHelperServiceBean implements PortalHelperService {
         dataManager.commit(context);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public List<PortalMenuCustomization> getPortalMenu(String menuType) {
         PositionExt position = positionService.getPosition(new View(PositionExt.class).addProperty("group"));
@@ -118,15 +122,24 @@ public class PortalHelperServiceBean implements PortalHelperService {
         if (isManager) availabilities.add(PortalAvailability.FOR_MANAGER);
         if (isAssistant) availabilities.add(PortalAvailability.FOR_ASSISTANT);
 
+        List<UUID> companies = getCompaniesForLoadDictionary(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID));
+
         return dataManager.load(PortalMenuCustomization.class)
                 .query("select e from tsadv_PortalMenuCustomization e " +
                         "   where e.menuType = :menuType " +
                         "   and e.portalAvailability in :availabilities" +
-                        "   and e.active = 'TRUE'")
+                        "   and e.active = 'TRUE'" +
+                        "   and e.companies in :companies ")
                 .viewProperties("menuItem")
                 .parameter("menuType", PortalMenuType.fromId(menuType))
                 .parameter("availabilities", availabilities)
+                .parameter("companies", companies)
                 .list();
+    }
+
+    @Override
+    public String getConfig(String classFQN, String methodName) {
+        return configStorageMBean.getConfigValue(classFQN, methodName);
     }
 
     protected PortalMenuCustomization findParent(PortalMenuCustomization menu, List<PortalMenuCustomization> menuList, List<PortalMenuPojo> fullMenuPojoList) {
@@ -153,6 +166,10 @@ public class PortalHelperServiceBean implements PortalHelperService {
         portalMenuCustomization.setMenuItem(menuPojo.getId());
         portalMenuCustomization.setName1(menuPojo.getRu());
         portalMenuCustomization.setName3(menuPojo.getEn());
+        UUID generalCompanyId = tsadvGlobalConfig.getGeneralCompanyId();
+        if (generalCompanyId != null)
+            portalMenuCustomization.setCompanies(
+                    Collections.singletonList(dataManager.getReference(DicCompany.class, generalCompanyId)));
         return portalMenuCustomization;
     }
 }

@@ -15,25 +15,33 @@
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="executiveAssistantsDc">
             <column width="350px">
-                <pickerField id="managerPositionGroupField" property="managerPositionGroup">
+                <pickerField id="managerPositionGroupField"
+                             property="managerPositionGroup"
+                             caption="msg://managerPosition">
                     <actions>
                         <action id="lookup" type="picker_lookup"/>
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
-                <pickerField id="assistancePositionGroupField" property="assistancePositionGroup">
+                <pickerField id="assistancePositionGroupField"
+                             property="assistancePositionGroup"
+                             caption="msg://assistance.position">
                     <actions>
                         <action id="lookup" type="picker_lookup"/>
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
                 <dateField id="startDateField" property="startDate"/>
-                <dateField id="endDateField" property="endDate"/>
+                <dateField id="endDateField" property="endDate"/>`
             </column>
             <column width="350px">
-                <pickerField property="managerPositionGroup.position.organizationGroupExt" editable="false"
+                <pickerField id="managerOrganizationGroup"
+                             metaClass="base$OrganizationGroupExt"
+                             editable="false"
                              caption="msg://manager.organization"/>
-                <pickerField property="assistancePositionGroup.position.organizationGroupExt" editable="false"
+                <pickerField id="assistanceOrganizationGroup"
+                             metaClass="base$OrganizationGroupExt"
+                             editable="false"
                              caption="msg://assistance.organization"/>
                 <pickerField property="managerPositionGroup.company" editable="false" caption="msg://manager.company"/>
                 <pickerField property="assistancePositionGroup.company" editable="false"
