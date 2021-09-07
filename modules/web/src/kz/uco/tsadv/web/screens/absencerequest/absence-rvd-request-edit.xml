@@ -63,6 +63,7 @@
                                  optionsContainer="dicAbsenceTypesDc"/>
                     <lookupField id="purposeField" property="purpose" required="true"
                                  optionsContainer="dicAbsencePurposesDc"/>
+                    <textField id="purposeTextField" property="purposeText" visible="false"/>
                     <dateField id="timeOfStartingField" property="timeOfStarting" required="true"/>
                     <dateField id="timeOfFinishingField" property="timeOfFinishing" required="true"/>
                     <checkBox id="compensationField" property="compensation" visible="false"
