@@ -23718,17 +23718,34 @@
           name="portalFeedbackQuestions.edit"
           extends="_local">
         <property name="user" view="_minimal">
-            <property name="personGroup" view="_minimal"/>
+            <property name="personGroup" view="_minimal">
+                <property name="assignments" view="_minimal">
+                    <property name="positionGroup" view="_minimal">
+                        <property name="fullName"/>
+                        <property name="positionName"/>
+                    </property>
+                    <property name="jobGroup" view="_minimal">
+                        <property name="jobName"/>
+                    </property>
+                    <property name="organizationGroup" view="_minimal">
+                        <property name="organizationName"/>
+                    </property>
+                </property>
+                <property name="company" view="_minimal"/>
+            </property>
             <property name="name"/>
             <property name="firstName"/>
             <property name="email"/>
+            <property name="position"/>
+            <property name="language"/>
+            <property name="mobilePhone"/>
+            <property name="telegramChatId"/>
         </property>
         <property name="portalFeedback" view="_minimal">
             <property name="company" view="_minimal"/>
-            <property name="category" view="_minimal"/>
             <property name="email"/>
         </property>
-        <property name="files"/>
+        <property name="files" view="_local"/>
         <property name="type"/>
     </view>
     <view entity="tsadv_CoursePersonNote" name="coursePersonNote-view" extends="_local">
