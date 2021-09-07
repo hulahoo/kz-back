@@ -7,6 +7,8 @@ import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.components.actions.EditAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
+import com.haulmont.cuba.gui.data.Datasource;
+import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.config.LearningConfig;
 import kz.uco.tsadv.modules.learning.enums.feedback.LearningFeedbackUsageType;
 import kz.uco.tsadv.modules.learning.model.feedback.LearningFeedbackTemplate;
@@ -20,6 +22,8 @@ public class LearningFeedbackTemplateEdit extends AbstractEditor<LearningFeedbac
 
     @Inject
     protected CollectionDatasource<LearningFeedbackTemplateQuestion, UUID> templateQuestionsDs;
+    @Inject
+    protected Datasource<LearningFeedbackTemplate> learningFeedbackTemplateDs;
     @Named("fieldGroup.active")
     protected CheckBox activeField;
     @Inject
@@ -30,10 +34,19 @@ public class LearningFeedbackTemplateEdit extends AbstractEditor<LearningFeedbac
     protected EditAction templateQuestionsTableEdit;
     @Inject
     protected LearningConfig learningConfig;
+    @Inject
+    protected ExtAppPropertiesConfig extAppPropertiesConfig;
+
+    protected int numberOfAnswers;
+    protected UUID defaultQuestionForFeedback;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
+
+        numberOfAnswers = learningConfig.getNumberOfAnswers();
+        defaultQuestionForFeedback = extAppPropertiesConfig.getDefaultQuestionForFeedback();
+
         templateQuestionsTableCreate.setInitialValuesSupplier(() -> Collections.singletonMap("order", templateQuestionsDs.size() + 1));
         templateQuestionsTableCreate.setBeforeActionPerformedHandler(() -> {
             ArrayList<LearningFeedbackTemplateQuestion> questionsListForCreate = new ArrayList<>(templateQuestionsDs.getItems());
@@ -42,26 +55,36 @@ public class LearningFeedbackTemplateEdit extends AbstractEditor<LearningFeedbac
         });
         templateQuestionsTableEdit.setBeforeActionPerformedHandler(() -> {
             ArrayList<LearningFeedbackTemplateQuestion> questionsListForEdit = new ArrayList<>(templateQuestionsDs.getItems());
-            questionsListForEdit.removeIf(learningFeedbackTemplateQuestion -> {
-                return learningFeedbackTemplateQuestion.getOrder().equals(templateQuestionsTable.getSingleSelected().getOrder()) &&
-                        learningFeedbackTemplateQuestion.getFeedbackQuestion().getId().equals(templateQuestionsTable.getSingleSelected().getFeedbackQuestion().getId());
-            });
+            LearningFeedbackTemplateQuestion singleSelected = templateQuestionsTable.getSingleSelected();
+            questionsListForEdit.removeIf(learningFeedbackTemplateQuestion ->
+                    learningFeedbackTemplateQuestion.getOrder().equals(singleSelected.getOrder())
+                            && learningFeedbackTemplateQuestion.getFeedbackQuestion().equals(singleSelected.getFeedbackQuestion()));
             templateQuestionsTableEdit.setWindowParams(ParamsMap.of("questionList", questionsListForEdit));
             return true;
         });
-
-        templateQuestionsDs.addCollectionChangeListener(this::templateQuestionCollectionChanged);
     }
 
     protected void templateQuestionCollectionChanged(CollectionDatasource.CollectionChangeEvent<LearningFeedbackTemplateQuestion, UUID> event) {
         Collection<LearningFeedbackTemplateQuestion> items = event.getDs().getItems();
-        Integer numberOfAnswers = learningConfig.getNumberOfAnswers();
+        isActiveEnable(items);
+    }
+
+    @Override
+    public void ready() {
+        super.ready();
+        isActiveEnable(templateQuestionsDs.getItems());
+
+        templateQuestionsDs.addCollectionChangeListener(this::templateQuestionCollectionChanged);
+    }
+
+    protected void isActiveEnable(Collection<LearningFeedbackTemplateQuestion> items) {
         boolean isHasAllAnswers = items.stream()
                 .map(LearningFeedbackTemplateQuestion::getFeedbackQuestion)
                 .map(question -> question != null && question.getAnswers() != null ? question.getAnswers().size() : 0)
                 .allMatch(countAnswer -> countAnswer.equals(numberOfAnswers));
+        if (getEditedEntity().getId().equals(defaultQuestionForFeedback)) isHasAllAnswers = true;
         activeField.setEditable(isHasAllAnswers);
-        if (Boolean.TRUE.equals(getEditedEntity().getActive()) && !isHasAllAnswers) getEditedEntity().setActive(false);
+        if (Boolean.TRUE.equals(getEditedEntity().getActive()) && !isHasAllAnswers) activeField.setValue(false);
     }
 
     @Override
