@@ -82,7 +82,7 @@ public class PcfMainData extends EditableFrame {
             }
         }
 
-        if (assignmentDs != null) {
+        if (assignmentDs != null && assignmentDs.getItem() != null) {
             if ((currentAssignmanetFirst = this.assignmentDs.getItem().getGroup().getList().get(0)) != null) {
                 secondAssignmentField.setValue(assignmentService.isReHire(currentAssignmanetFirst));
             }
@@ -90,7 +90,7 @@ public class PcfMainData extends EditableFrame {
 
         hireDateListener();
 
-        if (assignmentDs == null) {
+        if (assignmentDs == null || assignmentDs.getItem() == null) {
             Date personDateOfBirth = this.personDs.getItem().getDateOfBirth();
             yearsCounter.setValue(employeeService.calculateAge(personDateOfBirth) +
                     " " + employeeService.getYearCases(employeeService.calculateAge(personDateOfBirth)));
