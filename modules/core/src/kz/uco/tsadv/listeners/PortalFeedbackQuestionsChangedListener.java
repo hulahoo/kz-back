@@ -56,10 +56,7 @@ public class PortalFeedbackQuestionsChangedListener {
             map.put("createTs", format.format(portalFeedbackQuestions.getCreateTs()));
             map.put("fullName", portalFeedbackQuestions.getUser().getPersonGroup().getFullName());
             map.put("userName", portalFeedbackQuestions.getUser().getLogin());
-            map.put("company", portalFeedbackQuestions.getPortalFeedback() != null
-                    && portalFeedbackQuestions.getPortalFeedback().getCompany() != null
-                    ? portalFeedbackQuestions.getPortalFeedback().getCompany().getLangValue()
-                    : "");
+            map.put("company", portalFeedbackQuestions.getUser().getPersonGroup().getCompany().getCode());
             map.put("category", portalFeedbackQuestions.getPortalFeedback() != null
                     && portalFeedbackQuestions.getPortalFeedback().getCategory() != null
                     ? portalFeedbackQuestions.getPortalFeedback().getCategory().getLangValue()

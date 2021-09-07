@@ -23722,6 +23722,7 @@
                         <property name="organizationName"/>
                     </property>
                 </property>
+                <property name="company" view="_minimal"/>
             </property>
             <property name="name"/>
             <property name="firstName"/>
