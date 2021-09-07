@@ -2,10 +2,7 @@ package kz.uco.tsadv.web.modules.learning.course;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.core.global.CommitContext;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.PersistenceHelper;
+import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
@@ -23,6 +20,7 @@ import kz.uco.base.cuba.actions.CreateActionExt;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
@@ -107,6 +105,10 @@ public class CourseEdit extends StandardEditor<Course> {
     private NotificationService notificationService;
     @Inject
     private CommonService commonService;
+    @Inject
+    private FrontConfig frontConfig;
+    @Inject
+    private GlobalConfig globalConfig;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -543,10 +545,23 @@ public class CourseEdit extends StandardEditor<Course> {
                     "select distinct su " +
                             "from tsadv$UserExt su " +
                             "where su.personGroup.id = :id ",
-                    ParamsMap.of("id",enrollment.getPersonGroup().getId()),
+                    ParamsMap.of("id", enrollment.getPersonGroup().getId()),
                     "_base");
-            userParams.put("personFullName", enrollment.getPersonGroup().getPerson().getFullName());
-            userParams.put("courseName", enrollment.getCourse().getName());
+            String courseLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
+                    "tsadv$Course.edit" +
+                    "&item=" + "tsadv$Course" + "-" + enrollment.getCourse().getId() +
+                    "\" target=\"_blank\">%s " + "</a>";
+            String myCourseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                    + "/course/" +enrollment.getCourse().getId()
+                    + "\" target=\"_blank\">%s " + "</a>";
+            userParams.put("personFullNameRu", enrollment.getPersonGroup().getPerson().getFirstName() + " " + enrollment.getPersonGroup().getPerson().getLastName());
+            userParams.put("personFullNameEn", enrollment.getPersonGroup().getPerson().getFirstNameLatin() != null
+                    && !enrollment.getPersonGroup().getPerson().getFirstNameLatin().isEmpty() &&
+                    enrollment.getPersonGroup().getPerson().getLastNameLatin() != null
+                    && !enrollment.getPersonGroup().getPerson().getLastNameLatin().isEmpty()
+                    ? enrollment.getPersonGroup().getPerson().getFirstNameLatin() + " " + enrollment.getPersonGroup().getPerson().getLastNameLatin()
+                    : enrollment.getPersonGroup().getPerson().getFirstName() + " " + enrollment.getPersonGroup().getPerson().getLastName());
+            userParams.put("courseName", String.format(myCourseLink, enrollment.getCourse().getName()));
             notificationService.sendParametrizedNotification("tdc.additional.attempt", user, userParams);
         }
         dataManager.commit(commitContext);
