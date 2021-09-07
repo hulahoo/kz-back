@@ -63,16 +63,20 @@
                                  optionsContainer="dicAbsenceTypesDc"/>
                     <lookupField id="purposeField" property="purpose" required="true"
                                  optionsContainer="dicAbsencePurposesDc"/>
-                    <textField id="purposeTextField" property="purposeText" visible="false" required="true"/>
                     <dateField id="timeOfStartingField" property="timeOfStarting" required="true"/>
                     <dateField id="timeOfFinishingField" property="timeOfFinishing" required="true"/>
-                    <textField id="totalHoursField" property="totalHours" required="true" editable="false"/>
-                    <checkBox id="compencationField" property="compensation" editable="false"
+                    <checkBox id="compensationField" property="compensation" visible="false"
                               stylename="check-to-radio"/>
-                    <checkBox id="vacationDayField" property="vacationDay" editable="false"
+                    <checkBox id="vacationDayField" property="vacationDay" visible="false"
                               stylename="check-to-radio"/>
-                    <checkBox id="acquaintedField" property="acquainted" visible="false"/>
-                    <checkBox id="agreeField" property="agree" visible="false"/>
+                    <textField id="shiftCodeField" property="shiftCode" visible="false"/>
+                    <pickerField id="shiftField" property="shift" visible="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <textField id="overrideAllHoursByDayField" property="overrideAllHoursByDay" visible="false"/>
                 </column>
             </form>
             <groupBox id="filesBox"

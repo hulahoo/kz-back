@@ -5,10 +5,7 @@ import com.haulmont.addon.bproc.web.processform.ProcessForm;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.FileStorageException;
-import com.haulmont.cuba.gui.components.CheckBox;
-import com.haulmont.cuba.gui.components.DateField;
-import com.haulmont.cuba.gui.components.FileUploadField;
-import com.haulmont.cuba.gui.components.TextField;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.export.ExportFormat;
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
@@ -16,8 +13,11 @@ import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.administration.TsadvUser;
+import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest;
+import kz.uco.tsadv.modules.personal.model.DicShift;
 import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 
 import javax.inject.Inject;
@@ -54,7 +54,7 @@ public class AbsenceRvdRequestEdit extends AbstractBprocEditor<AbsenceRvdRequest
     @Inject
     protected TextField<String> purposeTextField;
     @Inject
-    protected CheckBox compencationField;
+    protected CheckBox compensationField;
     @Inject
     protected MessageBundle messageBundle;
     @Inject
@@ -63,6 +63,43 @@ public class AbsenceRvdRequestEdit extends AbstractBprocEditor<AbsenceRvdRequest
     protected FileUploadField addFile;
     @Inject
     protected FileUploadingAPI fileUploadingAPI;
+
+    protected ExtTaskData extTaskData;
+    @Inject
+    protected Form form;
+    @Inject
+    protected PickerField<DicShift> shiftField;
+    @Inject
+    protected TextField<String> shiftCodeField;
+    @Inject
+    protected TextField<YesNoEnum> overrideAllHoursByDayField;
+
+    @Subscribe
+    protected void onBeforeShow(BeforeShowEvent event) {
+        if (!isDraft()) {
+            initEditableFields();
+        }
+        if (absenceRvdRequestDc.getItem().getType() != null
+                && absenceRvdRequestDc.getItem().getType().getWorkOnWeekend()) {
+            compensationField.setVisible(true);
+            vacationDayField.setVisible(true);
+            shiftField.setVisible(true);
+        } else if (absenceRvdRequestDc.getItem().getType() != null
+                && absenceRvdRequestDc.getItem().getType().getTemporaryTransfer()) {
+            shiftCodeField.setVisible(true);
+            shiftField.setVisible(true);
+            overrideAllHoursByDayField.setVisible(true);
+        }
+    }
+
+    @Override
+    protected void initEditableFields() {
+        extTaskData = (ExtTaskData) getActiveTaskData();
+        if (extTaskData.getHrRole() != null
+                && !"HR".equalsIgnoreCase(extTaskData.getHrRole().getCode())) {
+            form.setEditable(false);
+        }
+    }
 
     @Subscribe
     protected void onInitEntity(InitEntityEvent<AbsenceRvdRequest> event) {
