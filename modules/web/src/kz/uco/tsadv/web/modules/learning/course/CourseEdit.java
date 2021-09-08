@@ -17,6 +17,7 @@ import com.haulmont.cuba.web.gui.facets.NotificationFacetProvider;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.cuba.actions.CreateActionExt;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
@@ -26,6 +27,10 @@ import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.uactivity.entity.ActivityType;
+import kz.uco.uactivity.entity.StatusEnum;
+import kz.uco.uactivity.entity.WindowProperty;
+import kz.uco.uactivity.service.ActivityService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -109,6 +114,10 @@ public class CourseEdit extends StandardEditor<Course> {
     private FrontConfig frontConfig;
     @Inject
     private GlobalConfig globalConfig;
+    @Inject
+    private NotificationSenderAPIService notificationSenderAPIService;
+    @Inject
+    private ActivityService activityService;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -517,6 +526,16 @@ public class CourseEdit extends StandardEditor<Course> {
                 .addAfterCloseListener(afterCloseEvent -> preRequisitionDl.load());
     }
 
+    protected ActivityType getActivityType() {
+        return dataManager.load(ActivityType.class)
+                .query("select e from uactivity$ActivityType e where e.code = 'NOTIFICATION'")
+                .view(new View(ActivityType.class)
+                        .addProperty("code")
+                        .addProperty("windowProperty",
+                                new View(WindowProperty.class).addProperty("entityName").addProperty("screenName")))
+                .one();
+    }
+
     @Subscribe("enrollmentsTable.addAttempt")
     public void onEnrollmentsTableAddAttempt(Action.ActionPerformedEvent event) {
         Map<String, Object> userParams = new HashMap<>();
@@ -562,7 +581,20 @@ public class CourseEdit extends StandardEditor<Course> {
                     ? enrollment.getPersonGroup().getPerson().getFirstNameLatin() + " " + enrollment.getPersonGroup().getPerson().getLastNameLatin()
                     : enrollment.getPersonGroup().getPerson().getFirstName() + " " + enrollment.getPersonGroup().getPerson().getLastName());
             userParams.put("courseName", String.format(myCourseLink, enrollment.getCourse().getName()));
-            notificationService.sendParametrizedNotification("tdc.additional.attempt", user, userParams);
+            activityService.createActivity(
+                    user,
+                    user,
+                    getActivityType(),
+                    StatusEnum.active,
+                    "description",
+                    null,
+                    new Date(),
+                    null,
+                    null,
+                    user.getId(),
+                    "tdc.additional.attempt",
+                    userParams);
+            notificationSenderAPIService.sendParametrizedNotification("tdc.additional.attempt", user, userParams);
         }
         dataManager.commit(commitContext);
         notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
