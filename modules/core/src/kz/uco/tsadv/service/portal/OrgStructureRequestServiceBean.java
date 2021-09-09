@@ -620,6 +620,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
 
         final AssignmentExt currentAssignment = dataManager.reload(currentPersonGroup.getCurrentAssignment(), "assignment.gradeGroup");
         return this.employeeService.hasHrRole("C&B_COMPANY")
+                || this.employeeService.hasHrRole("C&B_GROUP")
                 || (currentAssignment.getGradeGroup() != null
                 ? currentAssignment.getGradeGroup().getAvailableSalary()
                 : currentAssignment.getPositionGroup().getGradeGroup() != null
