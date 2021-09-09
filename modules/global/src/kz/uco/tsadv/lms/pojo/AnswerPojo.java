@@ -6,6 +6,15 @@ import java.util.UUID;
 public class AnswerPojo implements Serializable {
     protected UUID id;
     protected String text;
+    protected UUID imageId;
+
+    public UUID getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(UUID imageId) {
+        this.imageId = imageId;
+    }
 
     public UUID getId() {
         return id;

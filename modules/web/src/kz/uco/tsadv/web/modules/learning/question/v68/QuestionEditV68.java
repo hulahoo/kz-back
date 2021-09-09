@@ -1,4 +1,4 @@
-package kz.uco.tsadv.web.modules.learning.question;
+package kz.uco.tsadv.web.modules.learning.question.v68;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.AbstractEditor;
@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class QuestionEdit extends AbstractEditor<Question> {
+@Deprecated
+public class QuestionEditV68 extends AbstractEditor<Question> {
 
     @Inject
     protected CollectionDatasource<Answer, UUID> answersDs;

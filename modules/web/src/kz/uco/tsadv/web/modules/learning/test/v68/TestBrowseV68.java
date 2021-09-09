@@ -1,4 +1,4 @@
-package kz.uco.tsadv.web.modules.learning.test;
+package kz.uco.tsadv.web.modules.learning.test.v68;
 
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.CommitContext;
@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class TestBrowse extends AbstractLookup {
+@Deprecated
+public class TestBrowseV68 extends AbstractLookup {
     @Inject
     protected Table<Test> testsTable;
     @Inject

@@ -5455,12 +5455,14 @@
           name="answer.edit">
         <property name="answer"/>
         <property name="correct"/>
+        <property name="image"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.Question"
           name="question.edit">
         <property name="text"/>
         <property name="type"/>
         <property name="score"/>
+        <property name="image"/>
         <property name="answers"
                   view="answer.edit">
         </property>
@@ -5534,9 +5536,7 @@
         <property name="sectionName"/>
         <property name="questionOrder"/>
         <property name="questionBank"
-                  view="_minimal">
-            <property name="description"/>
-        </property>
+                  view="_minimal"/>
         <property name="questionPerPage"/>
         <property name="answerOrder"/>
         <property name="questions"
@@ -21065,7 +21065,9 @@
     <view class="kz.uco.tsadv.modules.learning.model.Test" extends="_local" name="test.course.lms">
         <property name="sections" view="_local">
             <property name="questions" view="_local">
-                <property name="question" view="_local"/>
+                <property name="question" view="_local">
+                    <property name="image" view="_minimal"/>
+                </property>
             </property>
         </property>
     </view>

@@ -107,10 +107,10 @@ public class LmsServiceBean implements LmsService {
         }
 
         return persistence.callInTransaction(em -> (Boolean) em.createNativeQuery("" +
-                "select (select count(*) " +
-                "           from tsadv_enrollment " +
-                "           where person_group_id = ?1 " +
-                "           and course_id = ?2) > 0")
+                        "select (select count(*) " +
+                        "           from tsadv_enrollment " +
+                        "           where person_group_id = ?1 " +
+                        "           and course_id = ?2) > 0")
                 .setParameter(1, userPersonGroupId)
                 .setParameter(2, courseId)
                 .getSingleResult());
@@ -125,10 +125,10 @@ public class LmsServiceBean implements LmsService {
         List<Enrollment> enrollments = dataManager.loadList(LoadContext.create(Enrollment.class)
                 .setQuery(
                         LoadContext.createQuery(
-                                "select e " +
-                                        "from tsadv$Enrollment e " +
-                                        "where e.personGroup.id = :personGroup " +
-                                        "and e.status = :status")
+                                        "select e " +
+                                                "from tsadv$Enrollment e " +
+                                                "where e.personGroup.id = :personGroup " +
+                                                "and e.status = :status")
                                 .setParameter("personGroup", userPersonGroupId)
                                 .setParameter("status", enrollmentStatus))
                 .setView("enrollment.course.schedule"));
@@ -153,15 +153,15 @@ public class LmsServiceBean implements LmsService {
         Objects.requireNonNull(userPersonGroupId);
 
         Object[] course = persistence.callInTransaction(em -> (Object[]) em.createNativeQuery("" +
-                "SELECT c.id, " +
-                "   c.name, " +
-                "   c.description, " +
-                "   c.logo, " +
-                "   e.id, " +
-                "   c.self_enrollment " +
-                "FROM tsadv_course c " +
-                "   LEFT JOIN tsadv_enrollment e ON c.id = e.course_id AND e.delete_ts is null AND e.person_group_id = ?2 " +
-                "WHERE c.id = ?1")
+                        "SELECT c.id, " +
+                        "   c.name, " +
+                        "   c.description, " +
+                        "   c.logo, " +
+                        "   e.id, " +
+                        "   c.self_enrollment " +
+                        "FROM tsadv_course c " +
+                        "   LEFT JOIN tsadv_enrollment e ON c.id = e.course_id AND e.delete_ts is null AND e.person_group_id = ?2 " +
+                        "WHERE c.id = ?1")
                 .setParameter(1, courseId)
                 .setParameter(2, userPersonGroupId).getSingleResult());
 
@@ -177,7 +177,7 @@ public class LmsServiceBean implements LmsService {
 
         List<CourseSection> courseSections = dataManager.loadList(LoadContext.create(CourseSection.class)
                 .setQuery(LoadContext.createQuery("" +
-                        "select cs from tsadv$CourseSection cs where cs.course.id = :courseId order by cs.order")
+                                "select cs from tsadv$CourseSection cs where cs.course.id = :courseId order by cs.order")
                         .setParameter("courseId", course[0])).setView("course.section.format"));
 
         List<CourseSectionPojo> sections = new ArrayList<>();
@@ -202,11 +202,11 @@ public class LmsServiceBean implements LmsService {
         coursePojo.setCourseFeedbacks(dataManager
                 .loadList(LoadContext.create(LearningFeedbackTemplate.class)
                         .setQuery(LoadContext.createQuery(
-                                "select e from tsadv$LearningFeedbackTemplate e " +
-                                        "where e.id in (select cft.feedbackTemplate.id from tsadv$CourseFeedbackTemplate cft where cft.course.id = :courseId and :systemDate between cft.startDate and cft.endDate) " +
-                                        "and e.active = True " +
-                                        "and e.employee = True " +
-                                        "and e.usageType = :usageType")
+                                        "select e from tsadv$LearningFeedbackTemplate e " +
+                                                "where e.id in (select cft.feedbackTemplate.id from tsadv$CourseFeedbackTemplate cft where cft.course.id = :courseId and :systemDate between cft.startDate and cft.endDate) " +
+                                                "and e.active = True " +
+                                                "and e.employee = True " +
+                                                "and e.usageType = :usageType")
                                 .setParameter("courseId", courseId)
                                 .setParameter("systemDate", CommonUtils.getSystemDate())
                                 .setParameter("usageType", LearningFeedbackUsageType.COURSE.getId()))
@@ -287,11 +287,11 @@ public class LmsServiceBean implements LmsService {
         if (contentTypeEnum != null) {
             return dataManager.loadList(LoadContext.create(LearningObject.class)
                     .setQuery(LoadContext.createQuery("" +
-                            "select e " +
-                            "from tsadv$LearningObject e " +
-                            "where e.contentType = :contentType " +
-                            "order by " +
-                            "e.objectName")
+                                    "select e " +
+                                    "from tsadv$LearningObject e " +
+                                    "where e.contentType = :contentType " +
+                                    "order by " +
+                                    "e.objectName")
                             .setParameter("contentType", contentTypeEnum))
                     .setView(View.LOCAL));
         } else {
@@ -305,9 +305,9 @@ public class LmsServiceBean implements LmsService {
             Test test = getTestByCourseSectionObject(em, courseSectionObjectId, "test.course.lms");
             //TODO: почему то поиск по jpql-у не находит ничего
             Enrollment enrollment = em.createNativeQuery("" +
-                    "SELECT e.* " +
-                    "FROM tsadv_enrollment e " +
-                    "WHERE e.id = ?1", Enrollment.class)
+                            "SELECT e.* " +
+                            "FROM tsadv_enrollment e " +
+                            "WHERE e.id = ?1", Enrollment.class)
                     .setParameter(1, enrollmentId)
                     .getSingleResult();
             Objects.requireNonNull(enrollment);
@@ -319,10 +319,10 @@ public class LmsServiceBean implements LmsService {
     public TestPojo startAndLoadTest(UUID testId) {
         return persistence.callInTransaction(em -> {
             Test test = em.createQuery(
-                    "select t " +
-                            "from tsadv$CourseSectionObject cso " +
-                            "   join cso.test t " +
-                            "where cso.id = :csoId", Test.class)
+                            "select t " +
+                                    "from tsadv$CourseSectionObject cso " +
+                                    "   join cso.test t " +
+                                    "where cso.id = :csoId", Test.class)
                     .setParameter("csoId", testId).setView(Test.class, "test.course.lms").getSingleResult();
             return getTestPojo(em, test, createAndGetAttempt(em, test, testId).getId());
         });
@@ -338,25 +338,25 @@ public class LmsServiceBean implements LmsService {
         List<CourseSectionObject> courseSectionObjects = dataManager.loadList(LoadContext.create(CourseSectionObject.class)
                 .setQuery(
                         LoadContext.createQuery(
-                                "select cso " +
-                                        "from tsadv$Enrollment e " +
-                                        "   join e.course c " +
-                                        "   join c.sections cs " +
-                                        "   join cs.sectionObject cso " +
-                                        "   join cso.test t " +
-                                        "where e.personGroup.id = :personGroup " +
-                                        "   and t.id is not null ")
+                                        "select cso " +
+                                                "from tsadv$Enrollment e " +
+                                                "   join e.course c " +
+                                                "   join c.sections cs " +
+                                                "   join cs.sectionObject cso " +
+                                                "   join cso.test t " +
+                                                "where e.personGroup.id = :personGroup " +
+                                                "   and t.id is not null ")
                                 .setParameter("personGroup", userPersonGroupId))
                 .setView("courseSectionObject.edit"));
         List<EnrollmentPojo> enrollmentsPojo = new ArrayList<>();
         for (CourseSectionObject courseSectionObject : courseSectionObjects) {
             Course course = dataManager.load(LoadContext.create(Course.class).setQuery(LoadContext.createQuery("" +
-                    "select c " +
-                    "from tsadv$Course c " +
-                    "   join c.sections cs " +
-                    "   join cs.sectionObject cso " +
-                    "where cso.id = :csoId")
-                    .setParameter("csoId", courseSectionObject.getId()))
+                                    "select c " +
+                                    "from tsadv$Course c " +
+                                    "   join c.sections cs " +
+                                    "   join cs.sectionObject cso " +
+                                    "where cso.id = :csoId")
+                            .setParameter("csoId", courseSectionObject.getId()))
                     .setView("course.with.logo"));
             if (course == null) {
                 throw new NullPointerException("Can not find course by course section object id " + courseSectionObject.getId());
@@ -406,8 +406,8 @@ public class LmsServiceBean implements LmsService {
                                 Objects.requireNonNull(qf);
                                 List<Answer> answers = dataManager.loadList(LoadContext.create(Answer.class)
                                         .setQuery(LoadContext.createQuery("select a " +
-                                                " from tsadv$Answer a " +
-                                                " where a.question.id = :questionId")
+                                                        " from tsadv$Answer a " +
+                                                        " where a.question.id = :questionId")
                                                 .setParameter("questionId", question.getId())));
                                 if (CollectionUtils.isEmpty(answers)) {
                                     throw new NullPointerException("Can not find answers by id " + question.getId());
@@ -445,9 +445,9 @@ public class LmsServiceBean implements LmsService {
                             Objects.requireNonNull(qf);
 
                             List<Answer> answers = dataManager.loadList(LoadContext.create(Answer.class).setQuery(LoadContext.createQuery("" +
-                                    "select a " +
-                                    "from tsadv$Answer a " +
-                                    "where a.question.id = :questionId")
+                                            "select a " +
+                                            "from tsadv$Answer a " +
+                                            "where a.question.id = :questionId")
                                     .setParameter("questionId", question.getId())));
                             if (CollectionUtils.isEmpty(answers)) {
                                 throw new NullPointerException("Can not find answers by id " + question.getId());
@@ -482,9 +482,9 @@ public class LmsServiceBean implements LmsService {
             case MANY: {
                 List<Answer> answers = dataManager.loadList(LoadContext.create(Answer.class)
                         .setQuery(LoadContext.createQuery("" +
-                                "select a " +
-                                "from tsadv$Answer a " +
-                                "where a.id in :ids")
+                                        "select a " +
+                                        "from tsadv$Answer a " +
+                                        "where a.id in :ids")
                                 .setParameter("ids", userAnswer.stream().map(UUID::fromString).collect(Collectors.toList())))
                         .setView(View.LOCAL));
                 List<String> answersIds = answers.stream().map(answer -> "\"" +
@@ -572,9 +572,9 @@ public class LmsServiceBean implements LmsService {
     public void removeCertificate(String certificateFileId) {
         EnrollmentCertificateFile ecf = dataManager.load(LoadContext.create(EnrollmentCertificateFile.class)
                 .setQuery(LoadContext.createQuery("" +
-                        "select ecf " +
-                        "from tsadv$EnrollmentCertificateFile ecf " +
-                        "where ecf.certificateFile.id = :certificateFileId")
+                                "select ecf " +
+                                "from tsadv$EnrollmentCertificateFile ecf " +
+                                "where ecf.certificateFile.id = :certificateFileId")
                         .setParameter("certificateFileId", UUID.fromString(certificateFileId)))
                 .setView("enrollmentCertificateFile.with.certificateFile"));
         if (ecf != null) {
@@ -614,12 +614,12 @@ public class LmsServiceBean implements LmsService {
         Objects.requireNonNull(user);
 
         return dataManager.loadList(LoadContext.create(SendingNotification.class).setQuery(LoadContext.createQuery("" +
-                "select n " +
-                "from base$SendingNotification n " +
-                "where n.user.id = :userId " +
-                "order by n.createTs desc")
-                .setParameter("userId", user.getId()))
-                .setView("notifications.lmsp"))
+                                        "select n " +
+                                        "from base$SendingNotification n " +
+                                        "where n.user.id = :userId " +
+                                        "order by n.createTs desc")
+                                .setParameter("userId", user.getId()))
+                        .setView("notifications.lmsp"))
                 .stream()
                 .map(n -> {
                     NotificationPojo notificationPojo = new NotificationPojo();
@@ -743,9 +743,9 @@ public class LmsServiceBean implements LmsService {
             CommitContext cc = new CommitContext();
 
             em.createQuery("select e from tsadv$CourseFeedbackPersonAnswer e " +
-                    "   where e.personGroup.id = :personGroupId" +
-                    "   and e.feedbackTemplate.id = :feedbackTemplateId" +
-                    "       and e.course.id = :courseId ", CourseFeedbackPersonAnswer.class)
+                            "   where e.personGroup.id = :personGroupId" +
+                            "   and e.feedbackTemplate.id = :feedbackTemplateId" +
+                            "       and e.course.id = :courseId ", CourseFeedbackPersonAnswer.class)
                     .setParameter("personGroupId", personGroupId)
                     .setParameter("feedbackTemplateId", feedbackTemplate.getId())
                     .setParameter("courseId", feedbackCourse.getId())
@@ -809,19 +809,19 @@ public class LmsServiceBean implements LmsService {
                     .setView("course.section.with.format.session"));
 
             TypedQuery<Long> attempts = em.createQuery("" +
-                    "select count(a) " +
-                    "from tsadv$CourseSectionAttempt a " +
-                    "where " +
-                    "   a.enrollment.id = :enrollmentId " +
-                    "   and a.courseSection.id = :courseSectionId", Long.class)
+                            "select count(a) " +
+                            "from tsadv$CourseSectionAttempt a " +
+                            "where " +
+                            "   a.enrollment.id = :enrollmentId " +
+                            "   and a.courseSection.id = :courseSectionId", Long.class)
                     .setParameter("enrollmentId", enrollmentId)
                     .setParameter("courseSectionId", courseSectionId);
             if (attempts.getSingleResult() == 0 && courseSection.getSectionObject().getTest() == null) {
                 //TODO: почему то поиск по jpql-у не находит ничего
                 Enrollment enrollment = em.createNativeQuery("" +
-                        "SELECT e.* " +
-                        "FROM tsadv_enrollment e " +
-                        "WHERE e.id = ?1", Enrollment.class)
+                                "SELECT e.* " +
+                                "FROM tsadv_enrollment e " +
+                                "WHERE e.id = ?1", Enrollment.class)
                         .setParameter(1, enrollmentId)
                         .getSingleResult();
                 Objects.requireNonNull(enrollment);
@@ -908,9 +908,9 @@ public class LmsServiceBean implements LmsService {
                 question.getAnswers().stream()
                         .filter(a -> a.getId().equals(UUID.fromString(personAnswer)))
                         .findFirst().ifPresent(answer -> {
-                    detail.setScore(answer.getScore());
-                    detail.setAnswer(answer);
-                });
+                            detail.setScore(answer.getScore());
+                            detail.setAnswer(answer);
+                        });
                 break;
             }
         }
@@ -918,10 +918,10 @@ public class LmsServiceBean implements LmsService {
 
     protected Integer getQuestionsOrder(EntityManager em, UUID feedbackTemplateId, UUID questionId) {
         return em.createQuery("" +
-                "select e " +
-                "from tsadv$LearningFeedbackTemplateQuestion e " +
-                "where e.feedbackQuestion.id = :feedbackQuestionId " +
-                "   and e.feedbackTemplate.id = :feedbackTemplateId ", LearningFeedbackTemplateQuestion.class)
+                        "select e " +
+                        "from tsadv$LearningFeedbackTemplateQuestion e " +
+                        "where e.feedbackQuestion.id = :feedbackQuestionId " +
+                        "   and e.feedbackTemplate.id = :feedbackTemplateId ", LearningFeedbackTemplateQuestion.class)
                 .setParameter("feedbackQuestionId", questionId)
                 .setParameter("feedbackTemplateId", feedbackTemplateId)
                 .getFirstResult()
@@ -968,14 +968,14 @@ public class LmsServiceBean implements LmsService {
     protected List<LearningFeedbackQuestion> getFeedbackQuestions(UUID feedbackTemplateId, String viewName) {
         return persistence.callInTransaction(em ->
                 em.createQuery(
-                        "select fq " +
-                                "from tsadv$LearningFeedbackTemplate lft " +
-                                "   inner join lft.templateQuestions tq " +
-                                "   inner join tq.feedbackQuestion fq " +
-                                "where lft.active = true" +
-                                "   and lft.id = :lftId " +
-                                "order by " +
-                                "   tq.order ")
+                                "select fq " +
+                                        "from tsadv$LearningFeedbackTemplate lft " +
+                                        "   inner join lft.templateQuestions tq " +
+                                        "   inner join tq.feedbackQuestion fq " +
+                                        "where lft.active = true" +
+                                        "   and lft.id = :lftId " +
+                                        "order by " +
+                                        "   tq.order ")
                         .setParameter("lftId", feedbackTemplateId)
                         .setView(LearningFeedbackQuestion.class, viewName)
                         .getResultList());
@@ -1104,13 +1104,13 @@ public class LmsServiceBean implements LmsService {
 
     private CourseSectionAttempt createAndGetAttempt(EntityManager em, Test test, UUID courseSectionObjectId) {
         Enrollment enrollment = em.createQuery("" +
-                "select e " +
-                "from tsadv$Enrollment e " +
-                "   join e.course c " +
-                "   join c.sections cs " +
-                "   join cs.sectionObject cso " +
-                "where e.personGroup.id = :personGroup " +
-                "   and cso.id = :csoId ", Enrollment.class)
+                        "select e " +
+                        "from tsadv$Enrollment e " +
+                        "   join e.course c " +
+                        "   join c.sections cs " +
+                        "   join cs.sectionObject cso " +
+                        "where e.personGroup.id = :personGroup " +
+                        "   and cso.id = :csoId ", Enrollment.class)
                 .setParameter("csoId", courseSectionObjectId)
                 .setParameter("personGroup", Objects.requireNonNull(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID)))
                 .setView(Enrollment.class, "enrollment.with.section.course.object")
@@ -1155,18 +1155,22 @@ public class LmsServiceBean implements LmsService {
         questionPojo.setText(question.getText());
         questionPojo.setType(question.getType());
 
+        if (question.getImage() != null) questionPojo.setImageId(question.getImage().getId());
+
         if (question.getType().equals(QuestionType.ONE) || question.getType().equals(QuestionType.MANY)) {
             List<Answer> answers = em.createQuery(
-                    "select a " +
-                            "from tsadv$Question q " +
-                            "   join q.answers a " +
-                            "where q.id = :questionId ", Answer.class)
+                            "select a " +
+                                    "from tsadv$Question q " +
+                                    "   join q.answers a " +
+                                    "where q.id = :questionId ", Answer.class)
+                    .setViewName("answer.edit")
                     .setParameter("questionId", question.getId()).setView(Answer.class, View.LOCAL).getResultList();
 
             questionPojo.setAnswers(answers.stream().map(answer -> {
                 AnswerPojo answerPojo = new AnswerPojo();
                 answerPojo.setId(answer.getId());
                 answerPojo.setText(answer.getAnswer());
+                if (answer.getImage() != null) answerPojo.setImageId(answer.getImage().getId());
                 return answerPojo;
             }).collect(Collectors.toList()));
         }
@@ -1190,9 +1194,9 @@ public class LmsServiceBean implements LmsService {
 
     private CourseSection getCourseSection(UUID courseSectionObjectId) {
         return persistence.callInTransaction(em -> em.createNativeQuery("" +
-                "SELECT cs.id " +
-                "FROM tsadv_course_section_object cso " +
-                "   inner join tsadv_course_section cs ON cs.section_object_id = cso.id and cs.delete_ts is null and cso.id = ?1", CourseSection.class)
+                        "SELECT cs.id " +
+                        "FROM tsadv_course_section_object cso " +
+                        "   inner join tsadv_course_section cs ON cs.section_object_id = cso.id and cs.delete_ts is null and cso.id = ?1", CourseSection.class)
                 .setParameter(1, courseSectionObjectId)
                 .getSingleResult());
     }
@@ -1203,10 +1207,10 @@ public class LmsServiceBean implements LmsService {
 
     private Test getTestByCourseSectionObject(EntityManager em, UUID courseSectionObjectId, String viewName) {
         return em.createQuery(
-                "select t " +
-                        "from tsadv$CourseSectionObject cso " +
-                        "   join cso.test t " +
-                        "where cso.id = :courseSectionObjectId", Test.class)
+                        "select t " +
+                                "from tsadv$CourseSectionObject cso " +
+                                "   join cso.test t " +
+                                "where cso.id = :courseSectionObjectId", Test.class)
                 .setParameter("courseSectionObjectId", courseSectionObjectId).setView(Test.class, viewName).getSingleResult();
     }
 
@@ -1225,7 +1229,7 @@ public class LmsServiceBean implements LmsService {
                 query.setParameter(parameter, condition.getValue());
             }
         }
-        query.setQueryString(String.format(queryString, conditionQuery.toString()));
+        query.setQueryString(String.format(queryString, conditionQuery));
     }
 
     private boolean hasAttempts(CourseSectionPojo courseSectionPojo, Enrollment enrollment) {

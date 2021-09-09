@@ -1,4 +1,4 @@
-package kz.uco.tsadv.web.modules.learning.test;
+package kz.uco.tsadv.web.modules.learning.test.v68;
 
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.CheckBox;
@@ -12,7 +12,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Map;
 
-public class TestEdit extends AbstractEditor<Test> {
+@Deprecated
+public class TestEditV68 extends AbstractEditor<Test> {
 
     @Named("fieldGroup.questionPerPage")
     protected TextField questionPerPageField;

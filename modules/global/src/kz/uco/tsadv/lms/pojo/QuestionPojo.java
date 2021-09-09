@@ -10,7 +10,16 @@ public class QuestionPojo implements Serializable {
     protected UUID id;
     protected String text;
     protected QuestionType type;
+    protected UUID imageId;
     protected List<AnswerPojo> answers;
+
+    public UUID getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(UUID imageId) {
+        this.imageId = imageId;
+    }
 
     public UUID getId() {
         return id;

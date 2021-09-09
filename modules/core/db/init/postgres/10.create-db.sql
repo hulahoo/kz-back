@@ -14353,7 +14353,6 @@ create table TSADV_LEARNING_FEEDBACK_ANSWER (
     ANSWER_LANG_VALUE4 varchar(2000),
     ANSWER_LANG_VALUE5 varchar(2000),
     FEEDBACK_QUESTION_ID uuid not null,
-    ANSWERLANGVALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -14646,6 +14645,7 @@ create table TSADV_QUESTION (
     TEXT varchar(2000),
     TYPE_ integer not null,
     SCORE integer not null,
+    IMAGE_ID uuid,
     --
     primary key (ID)
 )^
@@ -15145,6 +15145,7 @@ create table TSADV_ANSWER (
     ANSWER varchar(2000),
     CORRECT boolean not null,
     QUESTION_ID uuid,
+    IMAGE_ID uuid,
     --
     primary key (ID)
 )^
@@ -15486,7 +15487,6 @@ create table TSADV_RC_ANSWER (
     ANSWER_TEXT5 varchar(2000),
     ANSWER_RESULT varchar(50),
     POSITIVE_ boolean not null,
-    ANSWERTEXT varchar(255),
     --
     primary key (ID)
 )^
@@ -16267,7 +16267,6 @@ create table TSADV_SUCCESSION_PLANNING (
     END_DATE date not null,
     DESCRIPTION text,
     PERSON_GROUP_ID uuid,
-    POSITIONNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -16497,8 +16496,6 @@ create table TSADV_JOB (
     JOB_DESCRIPTION_LANG4 text,
     JOB_DESCRIPTION_LANG5 text,
     JOB_CATEGORY_ID uuid,
-    CANDIDATEREQUIREMENTS varchar(255),
-    JOBDESCRIPTION varchar(255),
     --
     primary key (ID)
 )^

@@ -1,12 +1,11 @@
 package kz.uco.tsadv.modules.learning.model;
 
 import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import kz.uco.tsadv.modules.learning.enums.QuestionType;
-import kz.uco.tsadv.modules.learning.model.*;
-import kz.uco.tsadv.modules.learning.model.QuestionBank;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.tsadv.modules.learning.enums.QuestionType;
 
 import javax.persistence.*;
 import java.util.List;
@@ -33,6 +32,18 @@ public class Question extends AbstractParentEntity {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "question")
     protected List<Answer> answers;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IMAGE_ID")
+    private FileDescriptor image;
+
+    public FileDescriptor getImage() {
+        return image;
+    }
+
+    public void setImage(FileDescriptor image) {
+        this.image = image;
+    }
 
     public QuestionType getType() {
         return type == null ? null : QuestionType.fromId(type);

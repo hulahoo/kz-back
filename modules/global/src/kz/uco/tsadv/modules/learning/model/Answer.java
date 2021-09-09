@@ -1,7 +1,6 @@
 package kz.uco.tsadv.modules.learning.model;
 
-import kz.uco.tsadv.modules.learning.model.*;
-import kz.uco.tsadv.modules.learning.model.Question;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 
 import javax.persistence.*;
@@ -20,6 +19,18 @@ public class Answer extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "QUESTION_ID")
     protected kz.uco.tsadv.modules.learning.model.Question question;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IMAGE_ID")
+    private FileDescriptor image;
+
+    public FileDescriptor getImage() {
+        return image;
+    }
+
+    public void setImage(FileDescriptor image) {
+        this.image = image;
+    }
 
     public void setQuestion(kz.uco.tsadv.modules.learning.model.Question question) {
         this.question = question;
