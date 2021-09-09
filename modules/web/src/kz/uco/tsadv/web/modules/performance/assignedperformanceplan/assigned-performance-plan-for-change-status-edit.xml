@@ -15,7 +15,8 @@
             <loader id="statusDl">
                 <query>
                     <![CDATA[select e from tsadv$DicRequestStatus e where e.code <> 'REJECT'
-                    and e.code <> 'CANCELED_BY_INITIATOR']]>
+                    and e.code <> 'CANCELED_BY_INITIATOR'
+                    and e.code <> 'CANCELLED']]>
                 </query>
             </loader>
         </collection>
