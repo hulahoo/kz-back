@@ -585,8 +585,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
             HSSFRow row = sheet.getRow(i);
             try {
                 if (row.getCell(Integer.parseInt(assignedPerformancePlanId)) != null
-                        && (row.getCell(adjustedScore).getNumericCellValue() > 0
-                        || row.getCell(adjustedBonus).getNumericCellValue() > 0)) {
+                        && (row.getCell(adjustedScore).getNumericCellValue() >= 0
+                        || row.getCell(adjustedBonus).getNumericCellValue() >= 0)) {
                     boolean isTrue = addToBase(row.getCell(Integer.parseInt(assignedPerformancePlanId)).getStringCellValue(),
                             row.getCell(adjustedScore).getNumericCellValue(),
                             row.getCell(adjustedBonus).getNumericCellValue());
