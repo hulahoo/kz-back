@@ -80,9 +80,10 @@ public class LearningFeedbackTemplateEdit extends AbstractEditor<LearningFeedbac
     protected void isActiveEnable(Collection<LearningFeedbackTemplateQuestion> items) {
         boolean isHasAllAnswers = items.stream()
                 .map(LearningFeedbackTemplateQuestion::getFeedbackQuestion)
-                .map(question -> question != null && question.getAnswers() != null ? question.getAnswers().size() : 0)
+                .filter(Objects::nonNull)
+                .filter(learningFeedbackQuestion -> !learningFeedbackQuestion.getId().equals(defaultQuestionForFeedback))
+                .map(question -> question.getAnswers() != null ? question.getAnswers().size() : 0)
                 .allMatch(countAnswer -> countAnswer.equals(numberOfAnswers));
-        if (getEditedEntity().getId().equals(defaultQuestionForFeedback)) isHasAllAnswers = true;
         activeField.setEditable(isHasAllAnswers);
         if (Boolean.TRUE.equals(getEditedEntity().getActive()) && !isHasAllAnswers) activeField.setValue(false);
     }
