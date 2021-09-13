@@ -3,7 +3,6 @@ package kz.uco.tsadv.pojo;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class CoursePojo implements Serializable {
@@ -30,6 +29,7 @@ public class CoursePojo implements Serializable {
     private String enrollmentStatus;
     private CategoryCoursePojo category;
     private Boolean isOnline;
+    private Date createTs;
 
     public String getLearningProof() {
         return learningProof;
@@ -213,5 +213,13 @@ public class CoursePojo implements Serializable {
 
     public void setOnline(Boolean online) {
         isOnline = online;
+    }
+
+    public Date getCreateTs() {
+        return createTs;
+    }
+
+    public void setCreateTs(Date createTs) {
+        this.createTs = createTs;
     }
 }

@@ -1078,6 +1078,7 @@ public class CourseServiceBean implements CourseService {
                             });
                     coursePojo.setName(course.getName());
                     coursePojo.setOnline(course.getIsOnline());
+                    coursePojo.setCreateTs(course.getCreateTs());
 
                     if (course.getLogo() != null) {
                         dataManager.load(FileDescriptor.class)
