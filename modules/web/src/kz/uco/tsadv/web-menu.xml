@@ -65,8 +65,8 @@
                   screen="tsadv$DicPhoneType.browse"/>
             <item id="hrDicDocumentTypes"
                   screen="tsadv$DicDocumentType.browse"/>
-            <item id="hrDicReadinessLevels"
-                  screen="tsadv$DicReadinessLevel.browse"/>
+<!--            <item id="hrDicReadinessLevels"-->
+<!--                  screen="tsadv$DicReadinessLevel.browse"/>-->
             <item id="hrDicRequestStatuses"
                   screen="tsadv$DicRequestStatus.browse"/>
             <item id="hrDicAbsenceCategory"
@@ -77,8 +77,8 @@
                   screen="tsadv$DicBusinessTripType.browse"/>
             <item id="hrDicCities"
                   screen="base$DicCity.browse"/>
-            <item id="hrDicCostTypes"
-                  screen="tsadv$DicCostType.browse"/>
+<!--            <item id="hrDicCostTypes"-->
+<!--                  screen="tsadv$DicCostType.browse"/>-->
             <item id="hrDicMaritalStatuses"
                   screen="tsadv$DicMaritalStatus.browse"/>
             <item id="hrDicNationalities"
@@ -91,15 +91,15 @@
                   screen="tsadv$DicDismissalStatus.browse"/>
             <item id="hrDicDismissalReason"
                   screen="tsadv$DicDismissalReason.browse"/>
-            <item id="hrDicOrderReason"
-                  screen="tsadv$DicOrderReason.browse"/>
+<!--            <item id="hrDicOrderReason"-->
+<!--                  screen="tsadv$DicOrderReason.browse"/>-->
             <item screen="tsadv$GlobalValueGroup.browse"/>
             <!--            <item screen="tsadv$CaseType.browse"/>-->
             <item screen="tsadv$DicEmployeeCategory.browse"/>
             <item screen="tsadv$SurChargeName.browse"/>
             <item screen="tsadv$DicAgreementStatus.browse"/>
-            <item screen="base$DicTe1Type.browse"/>
-            <item screen="base$DicTe2Type.browse"/>
+<!--            <item screen="base$DicTe1Type.browse"/>-->
+<!--            <item screen="base$DicTe2Type.browse"/>-->
             <item screen="base$DicSettlementType.browse"/>
             <item screen="tsadv$DicEducationLevel.browse"/>
             <item screen="tsadv$DicEducationDegree.browse"/>
@@ -125,6 +125,10 @@
             <item screen="tsadv_DicStreetType.browse"/>
             <item screen="tsadv_DicKato.browse"/>
             <item screen="tsadv_DicShift.browse"/>
+            <item screen="tsadv_DicSocStatus.browse"/>
+            <item screen="tsadv_DicDriverCategory.browse"/>
+            <item screen="tsadv_DicFieldOfActivity.browse"/>
+            <item screen="tsadv_DicGuardianType.browse"/>
             <item screen="tsadv$DicLanguage.browse"/>
             <item screen="tsadv$DicRateType.browse"/>
             <item screen="tsadv$DicLearningHistoryStatus.browse"/>
@@ -140,10 +144,6 @@
                   caption="mainMsg://menu_config.tsadv_DicCriminalLiabilityType.browse"/>
             <item screen="tsadv$DicMICAttachmentStatus.browse"
                   caption="mainMsg://dms"/>
-            <item screen="tsadv_DicSocStatus.browse"/>
-            <item screen="tsadv_DicDriverCategory.browse"/>
-            <item screen="tsadv_DicFieldOfActivity.browse"/>
-            <item screen="tsadv_DicGuardianType.browse"/>
         </menu>
         <menu id="hrPerson"
               icon="font-icon:USERS">
