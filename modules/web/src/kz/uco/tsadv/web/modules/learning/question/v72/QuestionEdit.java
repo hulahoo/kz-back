@@ -1,12 +1,11 @@
 package kz.uco.tsadv.web.modules.learning.question.v72;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.actions.list.CreateAction;
-import com.haulmont.cuba.gui.components.FileUploadField;
-import com.haulmont.cuba.gui.components.HasValue;
-import com.haulmont.cuba.gui.components.Image;
-import com.haulmont.cuba.gui.components.ValidationErrors;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
@@ -15,6 +14,7 @@ import kz.uco.tsadv.modules.learning.enums.QuestionType;
 import kz.uco.tsadv.modules.learning.model.Answer;
 import kz.uco.tsadv.modules.learning.model.Question;
 import kz.uco.tsadv.web.modules.learning.answer.v72.AnswerEdit;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -25,6 +25,7 @@ import javax.inject.Named;
 @LoadDataBeforeShow
 public class QuestionEdit extends StandardEditor<Question> {
 
+    protected static final Logger log = org.slf4j.LoggerFactory.getLogger(QuestionEdit.class);
     @Inject
     protected FileUploadingAPI fileUploadingAPI;
     @Inject
@@ -129,5 +130,28 @@ public class QuestionEdit extends StandardEditor<Question> {
     @Install(to = "answersTable.edit", subject = "screenConfigurer")
     protected void answersTableEditScreenConfigurer(Screen screen) {
         ((AnswerEdit) screen).setQuestionType(getEditedEntity().getType());
+    }
+
+    @Install(to = "answersTable.edit", subject = "transformation")
+    protected Answer answersTableEditTransformation(Answer answer) {
+        return answer;
+    }
+
+    @Subscribe("deleteImage")
+    protected void onDeleteImageClick(Button.ClickEvent event) {
+        getEditedEntity().setImage(null);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Subscribe
+    protected void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
+        if (imageUpload.getContentProvider() != null) {
+            try {
+                FileDescriptor fileDescriptor = imgCropBean.getFileDescriptor(imageUpload);
+                getEditedEntity().setImage(fileDescriptor != null ? dataManager.commit(fileDescriptor) : null);
+            } catch (FileStorageException e) {
+                log.error("Error", e);
+            }
+        }
     }
 }

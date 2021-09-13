@@ -22,13 +22,11 @@
                     <textArea id="textField" property="text"/>
                 </column>
             </form>
-            <vbox id="imageBox">
-
+            <vbox id="imageBox" align="TOP_CENTER">
                 <image id="image"
-                       dataContainer="questionDc"
-                       width="50%"
                        align="MIDDLE_CENTER"
-                       scaleMode="CONTAIN"
+                       dataContainer="questionDc"
+                       stylename="max-height-500"
                        property="image"/>
                 <hbox align="BOTTOM_CENTER"
                       spacing="true">
@@ -38,6 +36,7 @@
                             accept="*.png, *.jpg"
                             dataContainer="questionDc"
                             showFileName="false"/>
+                    <button id="deleteImage" caption="mainMsg://PresentationsPopup.delete"/>
                 </hbox>
             </vbox>
         </hbox>

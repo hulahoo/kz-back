@@ -1,5 +1,9 @@
 package kz.uco.tsadv.components;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.global.FileLoader;
+import com.haulmont.cuba.core.global.FileStorageException;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.FileUploadField;
 import com.haulmont.cuba.gui.components.Image;
 import com.haulmont.cuba.gui.components.StreamResource;
@@ -8,9 +12,12 @@ import cubacn.cmp.crop.web.screens.imgcrop.ImageCropWindow;
 import cubacn.cmp.crop.web.screens.imgcrop.ImageCropWindowOptions;
 import cubacn.cmp.crop.web.toolkit.ui.imgcrop.ImgCropServerComponent;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.io.*;
+import java.util.Date;
 
 import static com.haulmont.cuba.gui.screen.FrameOwner.WINDOW_COMMIT_AND_CLOSE_ACTION;
 import static com.haulmont.cuba.gui.screen.FrameOwner.WINDOW_DISCARD_AND_CLOSE_ACTION;
@@ -18,8 +25,25 @@ import static com.haulmont.cuba.gui.screen.FrameOwner.WINDOW_DISCARD_AND_CLOSE_A
 @Component(ImgCropBean.NAME)
 public class ImgCropBean {
     public static final String NAME = "tsadv_ImgCropBean";
+    protected static final Logger log = org.slf4j.LoggerFactory.getLogger(ImgCropBean.class);
 
-    protected File getFile(InputStream inputStream) {
+    @Inject
+    protected Metadata metadata;
+    @Inject
+    protected FileLoader fileLoader;
+
+    @SuppressWarnings("ConstantConditions")
+    public FileDescriptor getFileDescriptor(FileUploadField fileUploadField) throws FileStorageException {
+        if (fileUploadField.getFileName() == null) return null;
+        FileDescriptor fileDescriptor = metadata.create(FileDescriptor.class);
+        fileDescriptor.setName(fileUploadField.getFileName());
+        fileDescriptor.setExtension(fileUploadField.getFileName().substring(fileUploadField.getFileName().length() - 3));
+        fileDescriptor.setCreateDate(new Date());
+        fileLoader.saveStream(fileDescriptor, fileUploadField.getContentProvider());
+        return fileDescriptor;
+    }
+
+    public File getFile(InputStream inputStream) {
         File file = null;
         try {
             file = File.createTempFile("prefix1", "suffix1");

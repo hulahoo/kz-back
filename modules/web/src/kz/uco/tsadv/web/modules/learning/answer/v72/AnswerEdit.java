@@ -1,11 +1,18 @@
 package kz.uco.tsadv.web.modules.learning.answer.v72;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.FileStorageException;
+import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.FileUploadField;
 import com.haulmont.cuba.gui.components.Image;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import kz.uco.tsadv.components.ImgCropBean;
 import kz.uco.tsadv.modules.learning.enums.QuestionType;
 import kz.uco.tsadv.modules.learning.model.Answer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
@@ -15,13 +22,20 @@ import javax.inject.Inject;
 @LoadDataBeforeShow
 public class AnswerEdit extends StandardEditor<Answer> {
 
+    protected static final Logger log = LoggerFactory.getLogger(AnswerEdit.class);
+
     protected QuestionType questionType;
+
     @Inject
     protected ImgCropBean imgCropBean;
     @Inject
     protected FileUploadField imageUpload;
     @Inject
     protected Image image;
+    @Inject
+    protected FileUploadingAPI fileUploadingAPI;
+    @Inject
+    protected DataManager dataManager;
 
     public QuestionType getQuestionType() {
         return questionType;
@@ -31,8 +45,26 @@ public class AnswerEdit extends StandardEditor<Answer> {
         this.questionType = questionType;
     }
 
+    @SuppressWarnings("ConstantConditions")
+    @Subscribe
+    protected void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
+        if (imageUpload.getContentProvider() != null) {
+            try {
+                FileDescriptor fileDescriptor = imgCropBean.getFileDescriptor(imageUpload);
+                getEditedEntity().setImage(fileDescriptor != null ? dataManager.commit(fileDescriptor) : null);
+            } catch (FileStorageException e) {
+                log.error("Error", e);
+            }
+        }
+    }
+
     @Subscribe("imageUpload")
-    protected void onImageUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+    public void onImageUploadUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
         imgCropBean.crop(this, imageUpload.getFileContent(), image, imageUpload);
+    }
+
+    @Subscribe("deleteImage")
+    protected void onDeleteImageClick(Button.ClickEvent event) {
+        getEditedEntity().setImage(null);
     }
 }

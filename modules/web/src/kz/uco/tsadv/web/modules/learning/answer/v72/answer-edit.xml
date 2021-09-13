@@ -22,17 +22,20 @@
 
         <vbox id="imageBox" spacing="true">
             <image id="image"
+                   property="image"
                    dataContainer="answerDc"
-                   width="50%"
-                   scaleMode="CONTAIN"
-                   property="image"/>
+                   stylename="max-height-500"
+                   scaleMode="CONTAIN"/>
             <hbox spacing="true">
-                <upload id="imageUpload"
-                        fileStoragePutMode="IMMEDIATE"
-                        property="image"
-                        accept="*.png, *.jpg"
-                        dataContainer="answerDc"
-                        showFileName="false"/>
+                <hbox spacing="true">
+                    <upload id="imageUpload"
+                            property="image"
+                            accept="*.png, *.jpg"
+                            dataContainer="answerDc"
+                            fileStoragePutMode="IMMEDIATE"
+                            showFileName="false"/>
+                    <button id="deleteImage" caption="mainMsg://PresentationsPopup.delete"/>
+                </hbox>
             </hbox>
         </vbox>
         <hbox id="editActions" spacing="true">

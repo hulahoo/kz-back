@@ -1,4 +1,12 @@
+@import "kz.uco.tsadv/image-crope";
+
 @mixin tsadv {
+
+  @include image-crope;
+
+  .max-height-500{
+    max-height: 500px;
+  }
 
   .v-slot-border-top {
     border-top: 1px solid #c5c5c5;
@@ -508,23 +516,26 @@
     color: red;
   }
 
-   .check-to-radio{
-        input ~ label::before {
-           border-radius: 50% !important;
-        }
-        input:checked ~ label::before {
-            border-color: var(--checkbox-checked-border-color) !important;
-        }
-        input ~ label::after {
-            content: "" !important;
-        }
-        input:checked ~ label::after {
-           background: var(--radio-checked-color) !important;
-           width: 9px !important;
-           height: 9px !important;
-           top: 5px !important;
-           border-radius: 50% !important;
-           left: 5px !important;
-        }
+  .check-to-radio {
+    input ~ label::before {
+      border-radius: 50% !important;
     }
+
+    input:checked ~ label::before {
+      border-color: var(--checkbox-checked-border-color) !important;
+    }
+
+    input ~ label::after {
+      content: "" !important;
+    }
+
+    input:checked ~ label::after {
+      background: var(--radio-checked-color) !important;
+      width: 9px !important;
+      height: 9px !important;
+      top: 5px !important;
+      border-radius: 50% !important;
+      left: 5px !important;
+    }
+  }
 }
