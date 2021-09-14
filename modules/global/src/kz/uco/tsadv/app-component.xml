@@ -45,8 +45,6 @@
                   name="tsadv-web"/>
         <artifact configuration="themes"
                   name="tsadv-web" ext="jar"/>
-        <artifact name="tsadv-web-toolkit" classifier="web" ext="zip" configuration="webcontent"
-                  skipIfExists="web-toolkit"/>
         <property name="cuba.springContextConfig"
                   value="+kz/uco/tsadv/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"
@@ -63,9 +61,5 @@
                   value="+kz.uco.tsadv.web kz.uco.tsadv.global kz.uco.tsadv.core"/>
         <property name="cuba.restSpringContextConfig"
                   value="+kz/uco/tsadv/rest-dispatcher-spring.xml"/>
-        <property name="cuba.web.widgetSet" value="kz.uco.tsadv.web.toolkit.ui.AppWidgetSet"/>
-    </module>
-    <module name="web-toolkit" dependsOn="web">
-        <artifact name="tsadv-web-toolkit"/>
     </module>
 </app-component>
