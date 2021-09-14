@@ -1,8 +1,4 @@
-@import "kz.uco.tsadv/image-crope";
-
 @mixin tsadv {
-
-  @include image-crope;
 
   .max-height-500{
     max-height: 500px;

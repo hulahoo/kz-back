@@ -1,5 +1,8 @@
 @import "helium-ext";
+@import "styles/image-crope";
 
 @mixin kz_uco_tsadv {
   @include kz_uco_tsadv-helium-ext;
+
+  @include image-crope;
 }

@@ -45,6 +45,7 @@
                   name="tsadv-web"/>
         <artifact configuration="themes"
                   name="tsadv-web" ext="jar"/>
+        <artifact name="tsadv-web-themes" configuration="themes"/>
         <property name="cuba.springContextConfig"
                   value="+kz/uco/tsadv/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"
