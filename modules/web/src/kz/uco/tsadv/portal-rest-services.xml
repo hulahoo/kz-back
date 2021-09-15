@@ -210,6 +210,10 @@
         </method>
     </service>
     <service name="tsadv_EmployeeService">
+        <method name="getEmployees">
+            <param name="date" type="java.util.Date"/>
+            <param name="view" type="java.lang.String"/>
+        </method>
         <method name="personProfile">
             <param name="personGroupId" type="java.util.UUID"/>
         </method>

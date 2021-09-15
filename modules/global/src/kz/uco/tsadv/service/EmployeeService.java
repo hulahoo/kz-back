@@ -27,6 +27,8 @@ import java.util.UUID;
 public interface EmployeeService {
     String NAME = "tsadv_EmployeeService";
 
+    List<PersonGroupExt> getEmployees(Date date, String view);
+
     PersonProfileDto personProfile(UUID personGroupId);
 
     PersonProfileDto personGroupInfo(UUID userId);
