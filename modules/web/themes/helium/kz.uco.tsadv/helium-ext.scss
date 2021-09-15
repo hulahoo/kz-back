@@ -1,4 +1,7 @@
 /* Define your theme modifications inside next mixin */
+@import "styles/image-crope";
+
 @mixin kz_uco_tsadv-helium-ext {
 
+  @include image-crope;
 }

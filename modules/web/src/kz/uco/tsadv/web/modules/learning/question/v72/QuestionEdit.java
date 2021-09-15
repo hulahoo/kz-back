@@ -2,19 +2,20 @@ package kz.uco.tsadv.web.modules.learning.question.v72;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.FileLoader;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.actions.list.CreateAction;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
 import com.haulmont.cuba.gui.screen.*;
-import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import kz.uco.tsadv.components.ImgCropBean;
 import kz.uco.tsadv.modules.learning.enums.QuestionType;
 import kz.uco.tsadv.modules.learning.model.Answer;
 import kz.uco.tsadv.modules.learning.model.Question;
 import kz.uco.tsadv.web.modules.learning.answer.v72.AnswerEdit;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -25,9 +26,7 @@ import javax.inject.Named;
 @LoadDataBeforeShow
 public class QuestionEdit extends StandardEditor<Question> {
 
-    protected static final Logger log = org.slf4j.LoggerFactory.getLogger(QuestionEdit.class);
-    @Inject
-    protected FileUploadingAPI fileUploadingAPI;
+    protected static final Logger log = LoggerFactory.getLogger(QuestionEdit.class);
     @Inject
     protected Image image;
     @Inject
@@ -44,10 +43,27 @@ public class QuestionEdit extends StandardEditor<Question> {
     protected MessageBundle messageBundle;
     @Inject
     protected ImgCropBean imgCropBean;
+    @Inject
+    protected FileLoader fileLoader;
 
     @Subscribe("imageUpload")
-    protected void onImageUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
-        imgCropBean.crop(this, imageUpload.getFileContent(), image, imageUpload);
+    protected void onImageUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) throws FileStorageException {
+        FileDescriptor uploadValue = imageUpload.getValue();
+        if (uploadValue != null)
+            imgCropBean.crop(this,
+                    fileLoader.openStream(uploadValue),
+                    image,
+                    imageUpload,
+                    this::setImage);
+    }
+
+    protected void setImage(byte[] imageContent) {
+        try {
+            FileDescriptor fileDescriptor = imgCropBean.getFileDescriptor(imageUpload);
+            getEditedEntity().setImage(fileDescriptor != null ? dataManager.commit(fileDescriptor) : null);
+        } catch (FileStorageException e) {
+            throw new RuntimeException("Error after crop", e);
+        }
     }
 
     @Subscribe("typeField")
@@ -140,18 +156,5 @@ public class QuestionEdit extends StandardEditor<Question> {
     @Subscribe("deleteImage")
     protected void onDeleteImageClick(Button.ClickEvent event) {
         getEditedEntity().setImage(null);
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    @Subscribe
-    protected void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
-        if (imageUpload.getContentProvider() != null) {
-            try {
-                FileDescriptor fileDescriptor = imgCropBean.getFileDescriptor(imageUpload);
-                getEditedEntity().setImage(fileDescriptor != null ? dataManager.commit(fileDescriptor) : null);
-            } catch (FileStorageException e) {
-                log.error("Error", e);
-            }
-        }
     }
 }

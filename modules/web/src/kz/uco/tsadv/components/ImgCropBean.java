@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.io.*;
 import java.util.Date;
+import java.util.function.Consumer;
 
 import static com.haulmont.cuba.gui.screen.FrameOwner.WINDOW_COMMIT_AND_CLOSE_ACTION;
 import static com.haulmont.cuba.gui.screen.FrameOwner.WINDOW_DISCARD_AND_CLOSE_ACTION;
@@ -61,7 +62,15 @@ public class ImgCropBean {
         crop(origin, getFile(inputStream), image, fileUploadField);
     }
 
+    public void crop(FrameOwner origin, InputStream inputStream, Image image, FileUploadField fileUploadField, Consumer<byte[]> afterCrop) {
+        crop(origin, getFile(inputStream), image, fileUploadField, afterCrop);
+    }
+
     public void crop(FrameOwner origin, File file, Image image, FileUploadField fileUploadField) {
+        crop(origin, file, image, fileUploadField, null);
+    }
+
+    public void crop(FrameOwner origin, File file, Image image, FileUploadField fileUploadField, Consumer<byte[]> afterCrop) {
         // Create an viewport configuration object
         ImgCropServerComponent.ViewPort viewPort =
                 new ImgCropServerComponent.ViewPort(300, 200,
@@ -82,8 +91,15 @@ public class ImgCropBean {
                             .setStreamSupplier(() -> new ByteArrayInputStream(result)).setBufferSize(1024);
 
                     fileUploadField.setContentProvider(() -> new ByteArrayInputStream(result));
+
+                    if (afterCrop != null) afterCrop.accept(result);
                 }
             }
         });
     }
+
+//    @FunctionalInterface
+//    interface ImageCropWindow{
+//
+//    }
 }

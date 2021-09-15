@@ -2,12 +2,12 @@ package kz.uco.tsadv.web.modules.learning.answer.v72;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.FileLoader;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.FileUploadField;
 import com.haulmont.cuba.gui.components.Image;
 import com.haulmont.cuba.gui.screen.*;
-import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import kz.uco.tsadv.components.ImgCropBean;
 import kz.uco.tsadv.modules.learning.enums.QuestionType;
 import kz.uco.tsadv.modules.learning.model.Answer;
@@ -33,9 +33,9 @@ public class AnswerEdit extends StandardEditor<Answer> {
     @Inject
     protected Image image;
     @Inject
-    protected FileUploadingAPI fileUploadingAPI;
-    @Inject
     protected DataManager dataManager;
+    @Inject
+    protected FileLoader fileLoader;
 
     public QuestionType getQuestionType() {
         return questionType;
@@ -59,8 +59,11 @@ public class AnswerEdit extends StandardEditor<Answer> {
     }
 
     @Subscribe("imageUpload")
-    public void onImageUploadUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
-        imgCropBean.crop(this, imageUpload.getFileContent(), image, imageUpload);
+    public void onImageUploadUploadSucceed(FileUploadField.FileUploadSucceedEvent event) throws FileStorageException {
+        FileDescriptor uploadValue = imageUpload.getValue();
+
+        if (uploadValue != null)
+            imgCropBean.crop(this, fileLoader.openStream(uploadValue), image, imageUpload);
     }
 
     @Subscribe("deleteImage")
