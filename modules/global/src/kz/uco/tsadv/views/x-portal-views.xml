@@ -488,6 +488,7 @@
         <property name="logo" view="_minimal"/>
         <property name="category" view="_minimal"/>
         <property name="isOnline"/>
+        <property name="createTs"/>
     </view>
     <view entity="tsadv$Goal" name="goal.with.successCriteriaLang" extends="_local">
         <property name="successCriteriaLang"/>
