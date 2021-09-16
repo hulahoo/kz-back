@@ -948,7 +948,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     " and :date between e.startDate and e.endDate")
                             .setParameters(ParamsMap.of("legacyId"
                                     , organizationHierarchyElementJson.getParentOrganizationId()
-                                    , "companyCode", organizationHierarchyElementJson.getCompanyCode()))
+                                    , "companyCode", organizationHierarchyElementJson.getCompanyCode()
+                                    , "date", formatter.parse(organizationHierarchyElementJson.getEndDate())))
                             .view("hierarchyElementExt-for-integration-rest").list();
                     if (parentList.size() > 1) {
                         return prepareError(result, methodName, hierarchyElementData,
@@ -5555,8 +5556,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, positionIncentiveFlagData, "no incentiveFlag");
                 }
 
-                if(!positionIncentiveFlagJson.getIncentiveFlag().equals(YES_STRING)
-                        && !positionIncentiveFlagJson.getIncentiveFlag().equals(NO_STRING)){
+                if (!positionIncentiveFlagJson.getIncentiveFlag().equals(YES_STRING)
+                        && !positionIncentiveFlagJson.getIncentiveFlag().equals(NO_STRING)) {
                     return prepareError(result, methodName, positionIncentiveFlagData, "incentiveFlag not equals 'Y' or 'N' ");
                 }
 
@@ -5598,9 +5599,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 " where e.positionGroup = :positionGroup " +
                                 " and :startDate <= e.dateTo and :endDate >= e.dateFrom")
                         .setParameters(ParamsMap.of(
-                                "positionGroup",positionGroupExt,
-                                "startDate",startDateJson,
-                                "endDate",endDateJson))
+                                "positionGroup", positionGroupExt,
+                                "startDate", startDateJson,
+                                "endDate", endDateJson))
                         .list();
 
                 positionIncentiveFlagRemoveList.forEach(commitContext::addInstanceToRemove);
@@ -5619,7 +5620,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
             dataManager.commit(commitContext);
 
-        }catch (Exception e ){
+        } catch (Exception e) {
             e.printStackTrace();
 
             return prepareError(result, methodName, positionIncentiveFlagData, e.getMessage() + "\r" +
@@ -5698,8 +5699,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         return "";
     }
 
-    protected boolean isNullOrEmpty(String checkValue){
-        return  (checkValue == null || checkValue.isEmpty());
+    protected boolean isNullOrEmpty(String checkValue) {
+        return (checkValue == null || checkValue.isEmpty());
     }
 
     @Override
