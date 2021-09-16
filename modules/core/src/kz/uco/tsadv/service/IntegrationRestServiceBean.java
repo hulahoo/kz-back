@@ -944,7 +944,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     List<HierarchyElementExt> parentList = dataManager.load(HierarchyElementExt.class).query(
                             "select e from base$HierarchyElementExt e " +
                                     " where e.organizationGroup.legacyId = :legacyId " +
-                                    " and e.organizationGroup.company.legacyId  = :companyCode ")
+                                    " and e.organizationGroup.company.legacyId  = :companyCode " +
+                                    " and :date between e.startDate and e.endDate")
                             .setParameters(ParamsMap.of("legacyId"
                                     , organizationHierarchyElementJson.getParentOrganizationId()
                                     , "companyCode", organizationHierarchyElementJson.getCompanyCode()))
