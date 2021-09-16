@@ -28,13 +28,16 @@ import kz.uco.base.service.NotificationService;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
+import kz.uco.tsadv.modules.performance.dictionary.DicPerformanceStage;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.performance.model.*;
+import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.DatesService;
 import kz.uco.tsadv.service.KpiService;
+import kz.uco.tsadv.web.modules.performance.assignedperformanceplan.AssignedPerformancePlanForChangeStatusEdit;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -429,10 +432,14 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                         + (assignedPerformancePlan.getExtraPoint() != null
                         ? assignedPerformancePlan.getExtraPoint()
                         : 0.0));
-                assignedPerformancePlan.setCompanyBonus(calculateCompanyBonus(assignedPerformancePlan.getMaxBonus(),
-                        currentAssignment).doubleValue());
                 assignedPerformancePlan.setPersonalBonus(calculatePersonalBonus(assignedPerformancePlan.getMaxBonus()
                         , assignedPerformancePlan.getFinalScore()));
+                if (!assignedPerformancePlan.getPersonalBonus().equals(0.0)) {
+                    assignedPerformancePlan.setCompanyBonus(calculateCompanyBonus(assignedPerformancePlan.getMaxBonus(),
+                            currentAssignment).doubleValue());
+                } else {
+                    assignedPerformancePlan.setCompanyBonus(0.0);
+                }
                 assignedPerformancePlan.setFinalBonus(assignedPerformancePlan.getCompanyBonus()
                         + assignedPerformancePlan.getPersonalBonus());
                 if (assignedPerformancePlan.getAdjustedScore() != null) {
@@ -578,8 +585,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
             HSSFRow row = sheet.getRow(i);
             try {
                 if (row.getCell(Integer.parseInt(assignedPerformancePlanId)) != null
-                        && (row.getCell(adjustedScore).getNumericCellValue() > 0
-                        || row.getCell(adjustedBonus).getNumericCellValue() > 0)) {
+                        && (row.getCell(adjustedScore).getNumericCellValue() >= 0
+                        || row.getCell(adjustedBonus).getNumericCellValue() >= 0)) {
                     boolean isTrue = addToBase(row.getCell(Integer.parseInt(assignedPerformancePlanId)).getStringCellValue(),
                             row.getCell(adjustedScore).getNumericCellValue(),
                             row.getCell(adjustedBonus).getNumericCellValue());
@@ -831,6 +838,19 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected RuleBasedNumberFormat getAmountINText(String language) {
         return new RuleBasedNumberFormat(Locale.forLanguageTag(language),
                 RuleBasedNumberFormat.SPELLOUT);
+    }
+
+    @Subscribe("assignedPerformancePlanTable.changeStatusAndStage")
+    protected void onAssignedPerformancePlanTableChangeStatusAndStage(Action.ActionPerformedEvent event) {
+        Set<AssignedPerformancePlan> assignedPerformancePlans = assignedPerformancePlanTable.getSelected();
+        AssignedPerformancePlanForChangeStatusEdit edit = screenBuilders.editor(AssignedPerformancePlan.class, this)
+                .withScreenClass(AssignedPerformancePlanForChangeStatusEdit.class)
+                .withAfterCloseListener(e -> assignedPerformancePlansDl.load())
+                .build();
+        if (!assignedPerformancePlans.isEmpty()) {
+            edit.setParameter(assignedPerformancePlans);
+            edit.show();
+        }
     }
 
     @Subscribe("assignedPerformancePlanTable.startLetters")

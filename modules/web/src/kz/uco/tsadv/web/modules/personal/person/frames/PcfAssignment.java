@@ -49,7 +49,9 @@ public class PcfAssignment extends EditableFrame {
 
         historyTable.addGeneratedColumn("organizationGroup.organization.organizationName", this::generateOrgPath);
 
-        groupsComponent.setInDateGroups(selected, getEndDate(selected.getEndDate()));
+        if (selected != null) {
+            groupsComponent.setInDateGroups(selected, getEndDate(selected.getEndDate()));
+        }
     }
 
     protected Date getEndDate(Date endDate) {

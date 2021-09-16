@@ -169,6 +169,14 @@
             </query>
 
         </collectionDatasource>
+        <collectionDatasource id="incentiveDs"
+                              class="kz.uco.tsadv.modules.personal.model.PositionIncentiveFlag"
+                              view="positionIncentiveFlag.edit">
+            <query>
+                <![CDATA[select e from tsadv_PositionIncentiveFlag e
+                where e.positionGroup.id = :ds$positionGroupDs.id]]>
+            </query>
+        </collectionDatasource>
     </dsContext>
     <actions>
         <action id="windowCommit1"
@@ -745,6 +753,32 @@
                                 action="harmFulConditionsTable.edit"/>
                         <button
                                 action="harmFulConditionsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="incentiveFlag"
+                 caption="msg://incentiveFlag"
+                 margin="true, false, false, false"
+                 spacing="true">
+                <table id="incentiveFlagTable" height="100%" width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.create"
+                                icon="CREATE_ACTION"
+                                invoke="createIncentive"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="isIncentive"/>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                    </columns>
+                    <rows datasource="incentiveDs"/>
+                    <buttonsPanel id="incentiveFlagTableBtns">
+                        <button action="incentiveFlagTable.create"/>
+                        <button action="incentiveFlagTable.edit"/>
+                        <button action="incentiveFlagTable.remove"/>
                     </buttonsPanel>
                 </table>
             </tab>

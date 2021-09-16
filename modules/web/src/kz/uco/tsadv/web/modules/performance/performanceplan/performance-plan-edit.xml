@@ -102,6 +102,7 @@
                         <action id="importExcel" caption="msg://importExcel"/>
                         <action id="startLetters" caption="msg://startLetters" trackSelection="true"/>
                         <action id="sendLetterHappiness" caption="msg://sendLetterHappiness" trackSelection="true"/>
+                        <action id="changeStatusAndStage" caption="msg://changeStatusAndStage" trackSelection="true"/>
                     </actions>
                     <columns>
                         <column property="assignedPerson"/>
@@ -112,7 +113,8 @@
                         <column property="assignedPerson.currentAssignment.gradeGroup"/>
                         <column property="result"/>
                         <column property="gzp"/>
-                        <column property="stepStageStatus"/>
+                        <column property="stage"/>
+<!--                        <column property="stepStageStatus"/>-->
                         <column property="status"/>
                         <column property="assignedPerson.company"/>
                     </columns>
@@ -130,6 +132,8 @@
                         <button id="assignedSendLetterHappinessBtn"
                                 action="assignedPerformancePlanTable.sendLetterHappiness"
                                 caption="msg://sendBonusLetterBtnCaption"/>
+                        <button id="assignedChangeStatusAndStage"
+                                action="assignedPerformancePlanTable.changeStatusAndStage"/>
                     </buttonsPanel>
                 </dataGrid>
             </tab>

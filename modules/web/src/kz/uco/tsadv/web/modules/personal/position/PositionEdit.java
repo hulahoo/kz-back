@@ -178,6 +178,8 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     protected JobDescription jobDescription = null;
     @Inject
     protected Screens screens;
+    @Inject
+    protected Table<PositionIncentiveFlag> incentiveFlagTable;
 
     @Override
     protected FieldGroup getStartEndDateFieldGroup() {
@@ -940,5 +942,14 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
                 , new MapScreenOptions(ParamsMap.of("from", "base$Position.edit")));
         jobDescriptionRequestEdit.setEntityToEdit(jobDescriptionRequest);
         jobDescriptionRequestEdit.show();
+    }
+
+    public void createIncentive() {
+        screenBuilders.editor(incentiveFlagTable)
+                .newEntity()
+                .withInitializer(positionIncentiveFlag -> positionIncentiveFlag.setPositionGroup(getItem().getGroup()))
+                .withOpenMode(OpenMode.THIS_TAB)
+                .build().show()
+                .addAfterCloseListener(afterCloseEvent -> positionDs.refresh());
     }
 }

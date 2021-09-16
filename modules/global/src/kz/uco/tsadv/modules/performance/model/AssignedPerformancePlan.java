@@ -2,7 +2,12 @@ package kz.uco.tsadv.modules.performance.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.BeanLocator;
+import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.modules.performance.dictionary.DicPerformanceStage;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
@@ -11,6 +16,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_ASSIGNED_PERFORMANCE_PLAN")
 @Entity(name = "tsadv$AssignedPerformancePlan")
 @NamePattern("%s|requestNumber,stepStageStatus")
@@ -95,6 +101,18 @@ public class AssignedPerformancePlan extends AbstractBprocRequest {
 
     public void setLineManager(PersonGroupExt lineManager) {
         this.lineManager = lineManager;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STAGE_ID")
+    protected DicPerformanceStage stage;
+
+    public DicPerformanceStage getStage() {
+        return stage;
+    }
+
+    public void setStage(DicPerformanceStage stage) {
+        this.stage = stage;
     }
 
     public FileDescriptor getFile() {
@@ -264,13 +282,15 @@ public class AssignedPerformancePlan extends AbstractBprocRequest {
 
     @Override
     public String getProcessInstanceBusinessKey() {
-        return super.getProcessInstanceBusinessKey() + (getStepStageStatus() != null ? "/" + getStepStageStatus().getId() : null);
+        return super.getProcessInstanceBusinessKey() + (getStage() != null ? "/" + getStage().getCode() : null);
     }
 
     @PostConstruct
     public void postConstruct() {
         super.postConstruct();
+        BeanLocator beanLocator = AppBeans.get(BeanLocator.class);
         this.stepStageStatus = CardStatusEnum.DRAFT.getId();
+        this.setStage(beanLocator.get(CommonService.class).getEntity(DicPerformanceStage.class, "DRAFT"));
     }
 
     public void setNextStep() {

@@ -14,6 +14,7 @@ import com.haulmont.cuba.gui.data.DsBuilder;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.tsadv.modules.administration.enums.RuleStatus;
 import kz.uco.tsadv.modules.learning.enums.feedback.FeedbackResponsibleRole;
+import kz.uco.tsadv.modules.learning.enums.feedback.LearningFeedbackQuestionType;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.CourseSectionSession;
 import kz.uco.tsadv.modules.learning.model.feedback.*;
@@ -238,27 +239,37 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
     }
 
     public Component answerField(CourseFeedbackPersonAnswerDetail entity) {
-        LookupField lookupField = componentsFactory.createComponent(LookupField.class);
-        List<LearningFeedbackAnswer> answers = entity.getQuestion().getAnswers();
-        CollectionDatasource optionDS = new DsBuilder(getDsContext())
-                .setJavaClass(LearningFeedbackAnswer.class)
-                .setViewName(View.LOCAL)
-                .setAllowCommit(false)
-                .buildCollectionDatasource();
-        optionDS.setQuery("select e from tsadv$LearningFeedbackAnswer e where 1<>1");
-        answers.forEach(learningFeedbackAnswer -> {
-            optionDS.addItem(learningFeedbackAnswer);
-        });
-        lookupField.setOptionsDatasource(optionDS);
-        lookupField.setCaptionMode(CaptionMode.PROPERTY);
-        lookupField.setCaptionProperty("answerLangValue");
-        lookupField.setValue(entity.getAnswer());
-        lookupField.addValueChangeListener(e -> {
-            entity.setAnswer(((LearningFeedbackAnswer) ((HasValue.ValueChangeEvent) e).getValue()));
-            entity.setScore(((LearningFeedbackAnswer) ((HasValue.ValueChangeEvent) e).getValue()).getScore());
-        });
-        lookupField.setRequired(true);
-        return lookupField;
+        Component component = null;
+        if (LearningFeedbackQuestionType.ONE.getId().equals(entity.getQuestion().getQuestionType().getId())) {
+
+            LookupField lookupField = componentsFactory.createComponent(LookupField.class);
+            List<LearningFeedbackAnswer> answers = entity.getQuestion().getAnswers();
+            CollectionDatasource optionDS = new DsBuilder(getDsContext())
+                    .setJavaClass(LearningFeedbackAnswer.class)
+                    .setViewName(View.LOCAL)
+                    .setAllowCommit(false)
+                    .buildCollectionDatasource();
+            optionDS.setQuery("select e from tsadv$LearningFeedbackAnswer e where 1<>1");
+            answers.forEach(learningFeedbackAnswer -> {
+                optionDS.addItem(learningFeedbackAnswer);
+            });
+            lookupField.setOptionsDatasource(optionDS);
+            lookupField.setCaptionMode(CaptionMode.PROPERTY);
+            lookupField.setCaptionProperty("answerLangValue");
+            lookupField.setValue(entity.getAnswer());
+            lookupField.addValueChangeListener(e -> {
+                entity.setAnswer(((LearningFeedbackAnswer) ((HasValue.ValueChangeEvent) e).getValue()));
+                entity.setScore(((LearningFeedbackAnswer) ((HasValue.ValueChangeEvent) e).getValue()).getScore());
+            });
+            lookupField.setRequired(true);
+            component = lookupField;
+        } else if (LearningFeedbackQuestionType.TEXT.getId().equals(entity.getQuestion().getQuestionType().getId())) {
+            TextField textField = componentsFactory.createComponent(TextField.class);
+            textField.setValue(entity.getTextAnswer());
+            textField.addTextChangeListener(textChangeEvent -> entity.setTextAnswer(textChangeEvent.getText()));
+            component = textField;
+        }
+        return component;
     }
 
     public static double round(double value, int places) {
@@ -271,8 +282,8 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
     }
 
 
-    protected void initUI(){
-        if(!PersistenceHelper.isNew(getItem())){
+    protected void initUI() {
+        if (!PersistenceHelper.isNew(getItem())) {
             courseField.setEditable(false);
             courseSectionSessionField.setEditable(false);
             feedbackTemplateField.setEditable(false);

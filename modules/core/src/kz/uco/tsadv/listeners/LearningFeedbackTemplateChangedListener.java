@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
+import kz.uco.tsadv.modules.learning.enums.feedback.LearningFeedbackUsageType;
 import kz.uco.tsadv.modules.learning.model.feedback.LearningFeedbackQuestion;
 import kz.uco.tsadv.modules.learning.model.feedback.LearningFeedbackTemplate;
 import kz.uco.tsadv.modules.learning.model.feedback.LearningFeedbackTemplateQuestion;
@@ -51,7 +52,8 @@ public class LearningFeedbackTemplateChangedListener {
                     if (learningFeedbackTemplate.getTemplateQuestions().stream().anyMatch(learningFeedbackTemplateQuestion ->
                             learningFeedbackTemplateQuestion.getFeedbackQuestion() != null
                                     && learningFeedbackTemplateQuestion.getFeedbackQuestion().getId()
-                                    .equals(learningFeedbackQuestion.getId()))) {
+                                    .equals(learningFeedbackQuestion.getId())) ||
+                            !LearningFeedbackUsageType.COURSE.equals(learningFeedbackTemplate.getUsageType())) {
                         return;
                     }
                 }

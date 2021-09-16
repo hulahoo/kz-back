@@ -18,6 +18,7 @@ import kz.uco.tsadv.config.IncludeExternalExperienceConfig;
 import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.config.RecognitionConfig;
 import kz.uco.tsadv.entity.dbview.MyTeam;
+import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.performance.dto.BoardChangedItem;
@@ -91,6 +92,29 @@ public class EmployeeServiceBean implements EmployeeService {
     private ViewRepository viewRepository;
 
     protected int languageIndex = 0;
+
+    @Override
+    public List<PersonGroupExt> getEmployees(Date date, String view) {
+        UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
+
+        if (personGroupId == null) throw new PortalException("Person group id is null!");
+
+        DicCompany company = getCompanyByPersonGroupId(personGroupId);
+        if (company == null) throw new PortalException("Company not found!");
+
+        return dataManager.load(PersonGroupExt.class)
+                .query("select e.personGroup from base$AssignmentExt e " +
+                        "   join e.organizationGroup o" +
+                        "   join o.company c" +
+                        "   where :date between e.startDate and e.endDate" +
+                        "       and c.id = :companyId " +
+                        "       and e.primaryFlag = 'TRUE'" +
+                        "       and e.assignmentStatus.code in ('ACTIVE','SUSPENDED')")
+                .parameter("date", date)
+                .parameter("companyId", company.getId())
+                .view(view)
+                .list();
+    }
 
     @Override
     public PersonProfileDto personProfile(UUID personGroupId) {
@@ -327,7 +351,7 @@ public class EmployeeServiceBean implements EmployeeService {
                         try {
                             return em.find(TsadvUser.class, userId, View.LOCAL);
                         } catch (Exception ex) {
-                            logger.warn(String.format("Manager User by ID: %s not found!", userId.toString()));
+                            logger.warn(String.format("Manager User by ID: %s not found!", userId));
                         }
                     }
                 }
@@ -340,11 +364,11 @@ public class EmployeeServiceBean implements EmployeeService {
     public AssignmentGroupExt getAssignmentGroupByPersonGroup(PersonGroupExt personGroupExt) {
         return persistence.callInTransaction(em -> {
             Query query = em.createQuery("SELECT a.group " +
-                    "FROM base$AssignmentExt a " +
-                    "   WHERE a.personGroup.id = ?1 " +
-                    "      AND current_date BETWEEN a.startDate AND a.endDate" +
-                    "       and a.primaryFlag = true " +
-                    "       and a.assignmentStatus.code in ('ACTIVE', 'SUSPENDED') ")
+                            "FROM base$AssignmentExt a " +
+                            "   WHERE a.personGroup.id = ?1 " +
+                            "      AND current_date BETWEEN a.startDate AND a.endDate" +
+                            "       and a.primaryFlag = true " +
+                            "       and a.assignmentStatus.code in ('ACTIVE', 'SUSPENDED') ")
                     .setParameter(1, personGroupExt.getId());
             query.setView(AssignmentGroupExt.class, View.MINIMAL);
             List list = query.getResultList();
@@ -412,9 +436,9 @@ public class EmployeeServiceBean implements EmployeeService {
 
         LoadContext<PersonExt> loadContext = LoadContext.create(PersonExt.class)
                 .setQuery(LoadContext.createQuery(
-                        "select p from base$PersonExt p " +
-                                "where :currentDate between p.startDate and p.endDate " +
-                                "and p.group.id = :pgId")
+                                "select p from base$PersonExt p " +
+                                        "where :currentDate between p.startDate and p.endDate " +
+                                        "and p.group.id = :pgId")
                         .setParameter("currentDate", CommonUtils.getSystemDate())
                         .setParameter("pgId", UUID.fromString(personGroupId)))
                 .setView(view);
@@ -436,9 +460,9 @@ public class EmployeeServiceBean implements EmployeeService {
 
         LoadContext<PersonExt> loadContext = LoadContext.create(PersonExt.class)
                 .setQuery(LoadContext.createQuery(
-                        "select p from base$PersonExt p " +
-                                "where :currentDate between p.startDate and p.endDate " +
-                                "and p.employeeNumber = :employeeNumber")
+                                "select p from base$PersonExt p " +
+                                        "where :currentDate between p.startDate and p.endDate " +
+                                        "and p.employeeNumber = :employeeNumber")
                         .setParameter("currentDate", CommonUtils.getSystemDate())
                         .setParameter("employeeNumber", employeeNumber))
                 .setView(view);
@@ -469,18 +493,18 @@ public class EmployeeServiceBean implements EmployeeService {
             AssignmentExt u = null;
             EntityManager em = persistence.getEntityManager();
             TypedQuery<AssignmentExt> tq = em.createQuery(
-                    "select a " +
-                            " from base$AssignmentExt a, tsadv$PositionStructure ps, tsadv$PositionStructure psm " +
-                            " where ps.positionGroup.id = :positionGroupId" +
-                            " and ps.positionGroupPath like concat('%', concat(psm.positionGroup.id, '%')) " +
-                            " and :systemDate between ps.startDate and ps.endDate " +
-                            " and :systemDate between ps.posStartDate and ps.posEndDate " +
-                            " and :systemDate between psm.startDate and psm.endDate " +
-                            " and :systemDate between psm.posStartDate and psm.posEndDate " +
-                            " and :systemDate between a.startDate and a.endDate " +
-                            " and a.positionGroup.id = psm.positionGroup.id " +
-                            " and a.positionGroup.id <> :positionGroupId " +
-                            " order by psm.lvl desc", AssignmentExt.class)
+                            "select a " +
+                                    " from base$AssignmentExt a, tsadv$PositionStructure ps, tsadv$PositionStructure psm " +
+                                    " where ps.positionGroup.id = :positionGroupId" +
+                                    " and ps.positionGroupPath like concat('%', concat(psm.positionGroup.id, '%')) " +
+                                    " and :systemDate between ps.startDate and ps.endDate " +
+                                    " and :systemDate between ps.posStartDate and ps.posEndDate " +
+                                    " and :systemDate between psm.startDate and psm.endDate " +
+                                    " and :systemDate between psm.posStartDate and psm.posEndDate " +
+                                    " and :systemDate between a.startDate and a.endDate " +
+                                    " and a.positionGroup.id = psm.positionGroup.id " +
+                                    " and a.positionGroup.id <> :positionGroupId " +
+                                    " order by psm.lvl desc", AssignmentExt.class)
                     .setParameter("positionGroupId", positionGroupId)
                     .setParameter("systemDate", CommonUtils.getSystemDate());
 
@@ -552,21 +576,21 @@ public class EmployeeServiceBean implements EmployeeService {
     public List<PersonGroupExt> getManagersList() {
         LoadContext<PersonGroupExt> loadContext = LoadContext.create(PersonGroupExt.class);
         loadContext.setQuery(LoadContext.createQuery("SELECT a.personGroup " +
-                " FROM base$AssignmentExt a " +
-                " JOIN base$HierarchyElementExt he " +
-                " JOIN base$PositionExt p " +
-                "WHERE he.positionGroup.id = a.positionGroup.id " +
-                "  AND he.positionGroup IS NOT NULL " +
-                "  AND he.hierarchy.primaryFlag = TRUE " +
-                "  AND :systemDate BETWEEN he.startDate AND he.endDate " +
-                "  AND p.group.id = he.positionGroup.id " +
-                "  AND :systemDate BETWEEN p.startDate AND p.endDate " +
-                "  AND (he.id IN (SELECT he1.parent.id " +
-                "                   FROM base$HierarchyElementExt he1 " +
-                "                  WHERE he1.positionGroup.id IS NOT NULL " +
-                "                    AND :systemDate BETWEEN he1.startDate AND he1.endDate) " +
-                "   OR p.managerFlag = TRUE) " +
-                "  AND :systemDate BETWEEN a.startDate AND a.endDate")
+                        " FROM base$AssignmentExt a " +
+                        " JOIN base$HierarchyElementExt he " +
+                        " JOIN base$PositionExt p " +
+                        "WHERE he.positionGroup.id = a.positionGroup.id " +
+                        "  AND he.positionGroup IS NOT NULL " +
+                        "  AND he.hierarchy.primaryFlag = TRUE " +
+                        "  AND :systemDate BETWEEN he.startDate AND he.endDate " +
+                        "  AND p.group.id = he.positionGroup.id " +
+                        "  AND :systemDate BETWEEN p.startDate AND p.endDate " +
+                        "  AND (he.id IN (SELECT he1.parent.id " +
+                        "                   FROM base$HierarchyElementExt he1 " +
+                        "                  WHERE he1.positionGroup.id IS NOT NULL " +
+                        "                    AND :systemDate BETWEEN he1.startDate AND he1.endDate) " +
+                        "   OR p.managerFlag = TRUE) " +
+                        "  AND :systemDate BETWEEN a.startDate AND a.endDate")
                 .setParameter("systemDate", CommonUtils.getSystemDate()));
         return dataManager.loadList(loadContext);
     }
@@ -575,8 +599,8 @@ public class EmployeeServiceBean implements EmployeeService {
     public PersonGroupExt getPersonGroupByUserId(UUID userId) {
         return persistence.callInTransaction(em -> {
             Query query = em.createQuery("select e.personGroup " +
-                    "from tsadv$UserExt e " +
-                    "where e.id = :uId")
+                            "from tsadv$UserExt e " +
+                            "where e.id = :uId")
                     .setParameter("uId", userId);
             query.setView(PersonGroupExt.class, "personGroupExt.edit");
             List list = query.getResultList();
@@ -588,8 +612,8 @@ public class EmployeeServiceBean implements EmployeeService {
     public PersonGroupExt getPersonGroupByUserIdExtendedView(UUID userId) {
         return persistence.callInTransaction(em -> {
             Query query = em.createQuery("select e.personGroup " +
-                    "from tsadv$UserExt e " +
-                    "where e.id = :uId")
+                            "from tsadv$UserExt e " +
+                            "where e.id = :uId")
                     .setParameter("uId", userId);
             query.setView(PersonGroupExt.class, "personGroupExt-view");
             List list = query.getResultList();
@@ -617,8 +641,8 @@ public class EmployeeServiceBean implements EmployeeService {
     public OrganizationGroupExt getOrganizationGroupExtByPositionGroup(PositionGroupExt positionGroupExt, String viewName) {
         return persistence.callInTransaction(em -> {
             Query query = em.createQuery("select distinct e.organizationGroupExt from base$PositionExt e" +
-                    "            where e.group.id = :positionGroupId " +
-                    "            and :sysDate between e.startDate and e.endDate ")
+                            "            where e.group.id = :positionGroupId " +
+                            "            and :sysDate between e.startDate and e.endDate ")
                     .setParameter("positionGroupId", positionGroupExt.getId())
                     .setParameter("sysDate", CommonUtils.getSystemDate());
             query.setView(OrganizationGroupExt.class, viewName != null ? viewName : View.MINIMAL);
@@ -631,14 +655,14 @@ public class EmployeeServiceBean implements EmployeeService {
     public PositionGroupExt getPositionGroupByAssignmentGroupId(UUID assignmentGroupId, String view) {
         LoadContext<PositionGroupExt> loadContext = LoadContext.create(PositionGroupExt.class);
         loadContext.setQuery(LoadContext.createQuery(
-                "select pg from base$PositionGroupExt pg " +
-                        " join pg.assignments a " +
-                        "  on a.positionGroup.id = pg.id " +
-                        " and a.group.id = :assignmentGroupId " +
-                        " and :currentDate between a.startDate and a.endDate"
-        )
-                .setParameter("assignmentGroupId", assignmentGroupId)
-                .setParameter("currentDate", new Date()))
+                                "select pg from base$PositionGroupExt pg " +
+                                        " join pg.assignments a " +
+                                        "  on a.positionGroup.id = pg.id " +
+                                        " and a.group.id = :assignmentGroupId " +
+                                        " and :currentDate between a.startDate and a.endDate"
+                        )
+                        .setParameter("assignmentGroupId", assignmentGroupId)
+                        .setParameter("currentDate", new Date()))
                 .setView(view != null ? view : "_minimal");
         return dataManager.load(loadContext);
     }
@@ -651,13 +675,13 @@ public class EmployeeServiceBean implements EmployeeService {
     public PositionGroupExt getPositionGroupByPersonGroupId(UUID personGroupId, View view) {
         LoadContext<PositionGroupExt> loadContext = LoadContext.create(PositionGroupExt.class);
         loadContext.setQuery(LoadContext.createQuery(
-                " select a.positionGroup from base$AssignmentExt a " +
-                        " where :currentDate between a.startDate and a.endDate" +
-                        "      and a.personGroup.id = :personGroupId " +
-                        "       and a.primaryFlag = 'TRUE' " +
-                        "       and a.assignmentStatus.code in ('ACTIVE', 'SUSPENDED') ")
-                .setParameter("personGroupId", personGroupId)
-                .setParameter("currentDate", CommonUtils.getSystemDate()))
+                                " select a.positionGroup from base$AssignmentExt a " +
+                                        " where :currentDate between a.startDate and a.endDate" +
+                                        "      and a.personGroup.id = :personGroupId " +
+                                        "       and a.primaryFlag = 'TRUE' " +
+                                        "       and a.assignmentStatus.code in ('ACTIVE', 'SUSPENDED') ")
+                        .setParameter("personGroupId", personGroupId)
+                        .setParameter("currentDate", CommonUtils.getSystemDate()))
                 .setView(view);
         return dataManager.load(loadContext);
     }
@@ -665,8 +689,8 @@ public class EmployeeServiceBean implements EmployeeService {
     private boolean hasAnotherSuccessor(UUID personGroupId) {
         LoadContext<Successor> loadContext = LoadContext.create(Successor.class);
         loadContext.setQuery(LoadContext.createQuery(
-                "select e from tsadv$Successor e " +
-                        "where e.personGroup.id = :pgId")
+                        "select e from tsadv$Successor e " +
+                                "where e.personGroup.id = :pgId")
                 .setParameter("pgId", personGroupId));
         return dataManager.getCount(loadContext) > 0;
     }
@@ -852,12 +876,12 @@ public class EmployeeServiceBean implements EmployeeService {
         int minMatch = 0;
         LoadContext<GlobalValue> loadContext = LoadContext.create(GlobalValue.class);
         loadContext.setQuery(LoadContext.createQuery(
-                "select e " +
-                        "from tsadv$GlobalValue e " +
-                        "where :sysDate between e.startDate and e.endDate " +
-                        "and e.name = :name")
-                .setParameter("name", StaticVariable.MIN_MATCH_PERCENT)
-                .setParameter("sysDate", CommonUtils.getSystemDate()))
+                                "select e " +
+                                        "from tsadv$GlobalValue e " +
+                                        "where :sysDate between e.startDate and e.endDate " +
+                                        "and e.name = :name")
+                        .setParameter("name", StaticVariable.MIN_MATCH_PERCENT)
+                        .setParameter("sysDate", CommonUtils.getSystemDate()))
                 .setView(View.LOCAL);
         GlobalValue globalValue = dataManager.load(loadContext);
         if (globalValue != null) {
@@ -873,14 +897,14 @@ public class EmployeeServiceBean implements EmployeeService {
     private void fillManager(PersonPercentage personPercentage) {
         LoadContext<AssignmentExt> loadContext = LoadContext.create(AssignmentExt.class);
         loadContext.setQuery(LoadContext.createQuery(
-                "select a from base$AssignmentExt a, tsadv$PositionStructure ps " +
-                        "where :sysDate between a.startDate and a.endDate " +
-                        "and :sysDate between ps.startDate and ps.endDate " +
-                        "and :sysDate between ps.posStartDate and ps.posEndDate " +
-                        "and a.positionGroup.id = coalesce(ps.parentPositionGroup.id, ps.positionGroup.id) " +
-                        "and ps.positionGroup.id = :pId")
-                .setParameter("pId", personPercentage.getAssignment().getPositionGroup().getId())
-                .setParameter("sysDate", CommonUtils.getSystemDate()))
+                                "select a from base$AssignmentExt a, tsadv$PositionStructure ps " +
+                                        "where :sysDate between a.startDate and a.endDate " +
+                                        "and :sysDate between ps.startDate and ps.endDate " +
+                                        "and :sysDate between ps.posStartDate and ps.posEndDate " +
+                                        "and a.positionGroup.id = coalesce(ps.parentPositionGroup.id, ps.positionGroup.id) " +
+                                        "and ps.positionGroup.id = :pId")
+                        .setParameter("pId", personPercentage.getAssignment().getPositionGroup().getId())
+                        .setParameter("sysDate", CommonUtils.getSystemDate()))
                 .setView("assignment.myteam.browse");
         personPercentage.setManagerAssignment(dataManager.load(loadContext));
     }
@@ -1801,7 +1825,7 @@ public class EmployeeServiceBean implements EmployeeService {
         if (assignment.getPersonGroup() != null) {
             LoadContext<PersonContact> loadContext = LoadContext.create(PersonContact.class);
             loadContext.setQuery(LoadContext.createQuery(String.format("select e from tsadv$PersonContact e where e.personGroup.id = :pId"))
-                    .setParameter("pId", assignment.getPersonGroup().getId()))
+                            .setParameter("pId", assignment.getPersonGroup().getId()))
                     .setView("personContact.edit");
             assignment.getPersonGroup().setPersonContacts(dataManager.loadList(loadContext));
         }
@@ -2381,7 +2405,7 @@ public class EmployeeServiceBean implements EmployeeService {
     public PersonExt getPersonByPersonGroup(UUID personGroupId, Date date, String view) {
         return persistence.callInTransaction(em -> {
             Query query = em.createQuery("select e from base$PersonExt e where e.group.id = :id " +
-                    " and :date between e.startDate and e.endDate ")
+                            " and :date between e.startDate and e.endDate ")
                     .setParameter("date", date)
                     .setParameter("id", personGroupId);
             query.setView(PersonExt.class, view != null ? view : View.MINIMAL);
@@ -2468,10 +2492,10 @@ public class EmployeeServiceBean implements EmployeeService {
         Map<String, String> map = new HashMap<>();
         //noinspection unchecked
         persistence.callInTransaction(em ->
-                em.createNativeQuery(String.format("select code, lang_value%d\n" +
-                                "from tsadv_dic_goods_category where delete_ts is null and code is not null",
-                        languageIndex(userSessionSource.getLocale().getLanguage())))
-                        .getResultList())
+                        em.createNativeQuery(String.format("select code, lang_value%d\n" +
+                                                "from tsadv_dic_goods_category where delete_ts is null and code is not null",
+                                        languageIndex(userSessionSource.getLocale().getLanguage())))
+                                .getResultList())
                 .forEach(o -> {
                     Object[] row = (Object[]) o;
                     map.put((String) row[0], (String) row[1]);
@@ -2484,10 +2508,10 @@ public class EmployeeServiceBean implements EmployeeService {
     public OrganizationGroupExt getOrganizationGroupByPersonGroupId(@Nonnull UUID personGroupId, String viewName) {
         return persistence.callInTransaction(em ->
                 em.createQuery("select e.organizationGroup from base$AssignmentExt e " +
-                        "  where e.personGroup.id = :personGroupId " +
-                        "   and :systemDate between e.startDate and e.endDate" +
-                        "   and e.assignmentStatus.code <> 'TERMINATED' " +
-                        "   and e.primaryFlag = 'TRUE' ", OrganizationGroupExt.class)
+                                "  where e.personGroup.id = :personGroupId " +
+                                "   and :systemDate between e.startDate and e.endDate" +
+                                "   and e.assignmentStatus.code <> 'TERMINATED' " +
+                                "   and e.primaryFlag = 'TRUE' ", OrganizationGroupExt.class)
                         .setParameter("personGroupId", personGroupId)
                         .setParameter("systemDate", CommonUtils.getSystemDate())
                         .setViewName(viewName != null ? viewName : View.MINIMAL)
@@ -2499,11 +2523,11 @@ public class EmployeeServiceBean implements EmployeeService {
     public DicCompany getCompanyByPersonGroupId(@Nonnull UUID personGroupId) {
         return persistence.callInTransaction(em ->
                 em.createQuery("select o.company from base$AssignmentExt e " +
-                        "   join e.organizationGroup o" +
-                        "   where e.personGroup.id = :personGroupId" +
-                        "   and :systemDate between e.startDate and e.endDate " +
-                        "   and e.assignmentStatus.code <> 'TERMINATED' " +
-                        "   and e.primaryFlag = 'TRUE' ", DicCompany.class)
+                                "   join e.organizationGroup o" +
+                                "   where e.personGroup.id = :personGroupId" +
+                                "   and :systemDate between e.startDate and e.endDate " +
+                                "   and e.assignmentStatus.code <> 'TERMINATED' " +
+                                "   and e.primaryFlag = 'TRUE' ", DicCompany.class)
                         .setParameter("systemDate", CommonUtils.getSystemDate())
                         .setParameter("personGroupId", personGroupId)
                         .getFirstResult());

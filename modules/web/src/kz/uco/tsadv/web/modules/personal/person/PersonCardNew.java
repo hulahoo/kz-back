@@ -235,7 +235,7 @@ public class PersonCardNew extends AbstractEditor<PersonGroupExt> {
     @Override
     public void ready() {
         super.ready();
-        if (assignmentDs.getItem().getSubstituteEmployee() != null) {
+        if (assignmentDs.getItem() != null && assignmentDs.getItem().getSubstituteEmployee() != null) {
             if (employeeService.employeeIsExEmployee(assignmentDs.getItem().getSubstituteEmployee())) {
                 String substituteEmployeeMessage;
                 if ((substituteEmployeeMessage = generateSubstituteEmployeeMessage()) != null) {

@@ -1,0 +1,1 @@
+update REPORT_REPORT set DTYPE = 'report$Report' where DTYPE is null ;

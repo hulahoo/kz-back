@@ -3,11 +3,12 @@ package kz.uco.tsadv.modules.personal.model;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
-import kz.uco.tsadv.modules.personal.dictionary.DicSocStatus;
+import kz.uco.base.entity.dictionary.DicCountry;
+import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Listeners("tsadv_BeneficiaryListener")
@@ -94,6 +95,123 @@ public class Beneficiary extends AbstractParentEntity {
 
     @Column(name = "BENEFICIARY_JOB", length = 2500)
     protected String beneficiaryJob;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ADDRESS_TYPE_ID")
+    private DicAddressType addressType;
+
+    @Column(name = "POSTAL_CODE", length = 2500)
+    private String postalCode;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "COUNTRY_ID")
+    private DicCountry country;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ADDRESS_KATO_CODE_ID")
+    private DicKato addressKATOCode;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "STREET_TYPE_ID")
+    private DicStreetType streetType;
+
+    @Column(name = "STREET_NAME", length = 2500)
+    private String streetName;
+
+    @Column(name = "BUILDING", length = 2500)
+    private String building;
+
+    @Column(name = "BLOCK", length = 2500)
+    private String block;
+
+    @Column(name = "FLAT", length = 2500)
+    private String flat;
+
+    @Column(name = "ADDRESS_FOR_EXPATS", length = 2500)
+    private String addressForExpats;
+
+    public String getAddressForExpats() {
+        return addressForExpats;
+    }
+
+    public void setAddressForExpats(String addressForExpats) {
+        this.addressForExpats = addressForExpats;
+    }
+
+    public String getFlat() {
+        return flat;
+    }
+
+    public void setFlat(String flat) {
+        this.flat = flat;
+    }
+
+    public String getBlock() {
+        return block;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building;
+    }
+
+    public String getStreetName() {
+        return streetName;
+    }
+
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
+    }
+
+    public DicStreetType getStreetType() {
+        return streetType;
+    }
+
+    public void setStreetType(DicStreetType streetType) {
+        this.streetType = streetType;
+    }
+
+    public DicKato getAddressKATOCode() {
+        return addressKATOCode;
+    }
+
+    public void setAddressKATOCode(DicKato addressKATOCode) {
+        this.addressKATOCode = addressKATOCode;
+    }
+
+    public DicCountry getCountry() {
+        return country;
+    }
+
+    public void setCountry(DicCountry country) {
+        this.country = country;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public DicAddressType getAddressType() {
+        return addressType;
+    }
+
+    public void setAddressType(DicAddressType addressType) {
+        this.addressType = addressType;
+    }
 
     public String getBeneficiaryJob() {
         return beneficiaryJob;

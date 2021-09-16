@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://dicPortalFeedbackTypeEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.dicportalfeedbacktype">
+    <data>
+        <instance id="dicPortalFeedbackTypeDc"
+                  class="kz.uco.tsadv.modules.learning.model.DicPortalFeedbackType">
+            <view extends="_local">
+                <property name="company" view="_minimal"/>
+            </view>
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="dicPortalFeedbackTypeDc">
+                <column width="350px">
+                    <textField id="legacyIdField" property="legacyId"/>
+                    <textField id="organizationBinField" property="organizationBin"/>
+                    <textField id="integrationUserLoginField" property="integrationUserLogin"/>
+                    <pickerField id="companyField" property="company">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <textField id="langValue1Field" property="langValue1"/>
+                    <textField id="description1Field" property="description1"/>
+                    <textField id="langValue2Field" property="langValue2"/>
+                    <textField id="description2Field" property="description2"/>
+                    <textField id="langValue3Field" property="langValue3"/>
+                    <textField id="description3Field" property="description3"/>
+                    <textField id="langValue4Field" property="langValue4"/>
+                    <textField id="description4Field" property="description4"/>
+                    <textField id="langValue5Field" property="langValue5"/>
+                    <textField id="description5Field" property="description5"/>
+                    <dateField id="startDateField" property="startDate"/>
+                    <dateField id="endDateField" property="endDate"/>
+                    <textField id="codeField" property="code"/>
+                    <checkBox id="activeField" property="active"/>
+                    <textField id="orderField" property="order"/>
+                    <textArea id="systemNotificationText1Field" property="systemNotificationText1" rows="5"/>
+                    <textArea id="systemNotificationText2Field" property="systemNotificationText2" rows="5"/>
+                    <textArea id="systemNotificationText3Field" property="systemNotificationText3" rows="5"/>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

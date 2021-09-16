@@ -28,6 +28,8 @@ public interface BprocService {
 
     <T extends AbstractBprocRequest> void cancel(T entity);
 
+    <T extends AbstractBprocRequest> void revision(T entity);
+
     <T extends AbstractBprocRequest> void reject(T entity);
 
     <T extends AbstractBprocRequest> void approve(T entity);
@@ -77,5 +79,4 @@ public interface BprocService {
     void changeStatusChangeAbsenceDaysRequest(ChangeAbsenceDaysRequest entity, String status, String notificationCode);
 
     void approveAssignedPerformancePlan(AssignedPerformancePlan request);
-
 }

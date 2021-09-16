@@ -4,16 +4,18 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.chile.core.model.MetaPropertyPath;
 import com.haulmont.cuba.core.entity.Entity;
-import com.haulmont.cuba.core.global.*;
-import com.haulmont.cuba.gui.Notifications;
-import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.UiComponents;
-import com.haulmont.cuba.gui.WindowManager;
+import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.MessageTools;
+import com.haulmont.cuba.core.global.Messages;
+import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.*;
 import com.haulmont.cuba.gui.actions.list.AddAction;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.export.ExcelExporter;
 import com.haulmont.cuba.gui.export.ExportDisplay;
+import com.haulmont.cuba.gui.model.CollectionChangeType;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -29,16 +31,14 @@ import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.HierarchyService;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @UiController("tsadv_IncentiveBrowse")
@@ -115,6 +115,14 @@ public class IncentiveBrowse extends Screen {
     private UiComponents uiComponents;
     @Inject
     private MessageTools messageTools;
+    @Inject
+    private Table<PositionIncentiveFlag> positionIncentiveFlagsTable;
+    @Inject
+    private CollectionLoader<PositionIncentiveFlag> positionIncentiveFlagsDl;
+    @Inject
+    private Button positionIncentiveFlagsTableAddBtn;
+    @Inject
+    private CollectionContainer<PositionIncentiveFlag> positionIncentiveFlagsDc;
 
     protected WrapCellExcelExporter excelExporter = new WrapCellExcelExporter();
     @Inject
@@ -124,33 +132,7 @@ public class IncentiveBrowse extends Screen {
     @Inject
     private UserSession userSession;
 
-    protected class LocalizedDateFormatter implements Function<Object, String> {
 
-        protected String format;
-
-        LocalizedDateFormatter(String format) {
-            this.format = format;
-        }
-
-        public String getFormat() {
-            return format;
-        }
-
-        public void setFormat(String format) {
-            this.format = format;
-        }
-
-        @Override
-        public String apply(Object value) {
-            Date date = (Date) value;
-            UserSessionSource us = AppBeans.get(UserSessionSource.NAME);
-            Locale currentLocale = us.getLocale();
-            if (currentLocale.getLanguage().equals("kz")) currentLocale = new Locale("ru");
-            DateFormat df = new SimpleDateFormat(format, currentLocale);
-            return df.format(date);
-        }
-
-    }
 
     protected class WrapCellExcelExporter extends ExcelExporter {
 
@@ -168,7 +150,7 @@ public class IncentiveBrowse extends Screen {
     @Subscribe
     protected void onInit(InitEvent event) {
         MapScreenOptions screenOptions = (MapScreenOptions) event.getOptions();
-        if (screenOptions == null || !screenOptions.getParams().containsKey(ELEMENT_TYPE_SCREEN_PARAM)) {
+        if (!screenOptions.getParams().containsKey(ELEMENT_TYPE_SCREEN_PARAM)) {
             notifications.create().withCaption("No screen params").show();
             closeWithDefaultAction();
             return;
@@ -176,6 +158,7 @@ public class IncentiveBrowse extends Screen {
 
         ELEMENT_TYPE_SCREEN_VALUE = (String) screenOptions.getParams().get(ELEMENT_TYPE_SCREEN_PARAM);
 
+        initUI();
         initTableDoubleClickActions();
 
         tree.setIconProvider(hierarchyElement -> {
@@ -196,9 +179,9 @@ public class IncentiveBrowse extends Screen {
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
         initHierarchiesDc();
-        LocalizedDateFormatter localizedDateFormatter = new LocalizedDateFormatter(PERIOD_DATE_FORMAT);
-        organizationIncentiveResultsTable.getColumn("periodDate").setFormatter(localizedDateFormatter);
-        organizationIncentiveResultsTable.addPrintable("total", incentiveResult -> getOrganizationIncentiveResultTotal(incentiveResult));
+//        LocalizedDateFormatter localizedDateFormatter = new LocalizedDateFormatter(PERIOD_DATE_FORMAT);
+//        organizationIncentiveResultsTable.getColumn("periodDate").setFormatter(localizedDateFormatter);
+        organizationIncentiveResultsTable.addPrintable("total", this::getOrganizationIncentiveResultTotal);
     }
 
     @Subscribe("organizationIncentiveResultsTable.excel")
@@ -338,6 +321,7 @@ public class IncentiveBrowse extends Screen {
 
 
     protected void enableAddActions(boolean enable) {
+        positionIncentiveFlagsTableAddBtn.setEnabled(enable);
         organizationIncentiveFlagsTableAddBtn.setEnabled(enable);
         organizationIncentiveIndicatorsTableAddBtn.setEnabled(enable);
         organizationIncentiveResultsTableAddBtn.setEnabled(enable);
@@ -345,7 +329,20 @@ public class IncentiveBrowse extends Screen {
 
     }
 
+    protected void initUI(){
+        String hierarchyCode = ELEMENT_TYPE_SCREEN_VALUE.equals("ORGANIZATION") ? "1" : "2";
+        if(hierarchyCode.equals("1")){
+            positionIncentiveFlagsTable.setVisible(false);
+        }else if(hierarchyCode.equals("2")){
+            organizationIncentiveFlagsTable.setVisible(false);
+            organizationIncentiveIndicatorsTable.setVisible(false);
+            organizationIncentiveResultsTable.setVisible(false);
+        }
+    }
+
     protected void initTableDoubleClickActions() {
+        positionIncentiveFlagsTable.setItemClickAction(new BaseAction("doubleClickAction")
+                .withHandler(e -> editPositionIncentiveFlag()));
         organizationIncentiveFlagsTable.setItemClickAction(new BaseAction("doubleClickAction")
                 .withHandler(e -> editOrganizationIncentiveFlag()));
         organizationIncentiveIndicatorsTable.setItemClickAction(new BaseAction("doubleClickAction")
@@ -355,15 +352,48 @@ public class IncentiveBrowse extends Screen {
     }
 
     protected void loadIncentives() {
+        loadPositionIncentiveFlags();
         loadOrganizationIncentiveFlags();
         loadOrganizationIncentiveIndicators();
         loadOrganizationIncentiveResults();
     }
 
     protected void loadEmptyIncentives() {
+        loadEmptyPositionIncentiveFlags();
         loadEmptyOrganizationIncentiveFlags();
         loadEmptyOrganizationIncentiveIndicators();
         loadEmptyOrganizationIncentiveResults();
+    }
+
+    public void addPositionIncentiveFlag() {
+        Screen editScreen = screenBuilders.editor(PositionIncentiveFlag.class,this)
+                .withInitializer(i -> {
+                    i.setPositionGroup(hierarchyElementDc.getItem().getPositionGroup());
+                    i.setDateTo(CommonUtils.getMaxDate());
+                })
+                .build();
+        editScreen.addAfterCloseListener((l) -> loadPositionIncentiveFlags());
+        editScreen.show();
+    }
+
+    protected void editPositionIncentiveFlag(){
+        Screen editScreen = screenBuilders.editor(PositionIncentiveFlag.class,this)
+                .editEntity(positionIncentiveFlagsDc.getItem())
+                .build();
+        editScreen.addAfterCloseListener((l) -> loadPositionIncentiveFlags());
+        editScreen.show();
+    }
+
+    protected void loadPositionIncentiveFlags(){
+        positionIncentiveFlagsDl.setQuery("select e from tsadv_PositionIncentiveFlag e where e.positionGroup = :positionGroup");
+        positionIncentiveFlagsDl.setParameter("positionGroup",hierarchyElementDc.getItem().getPositionGroup());
+        positionIncentiveFlagsDl.load();
+    }
+
+    protected void loadEmptyPositionIncentiveFlags(){
+        positionIncentiveFlagsDl.setQuery("select e from tsadv_PositionIncentiveFlag e where 1 <> 1");
+        positionIncentiveFlagsDl.setParameters(new HashMap<>());
+        positionIncentiveFlagsDl.load();
     }
 
     public void addOrganizationIncentiveFlag() {

@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
  * <ul>
  *     <li>rejectNotificationTemplateCode - send after reject</li>
  *     <li>approveNotificationTemplateCode - send after approve</li>
+ *     <li>revisionNotificationTemplateCode - send after revision</li>
  *     <li>initiatorNotificationTemplateCode - send after complete task</li>
  * </ul>
  * <p>
@@ -55,6 +56,7 @@ import java.util.stream.Collectors;
         @Param(name = "initiatorNotificationTemplateCode"),
         @Param(name = "rejectNotificationTemplateCode"),
         @Param(name = "approveNotificationTemplateCode"),
+        @Param(name = "revisionNotificationTemplateCode"),
 })
 public class StartBprocScreen extends Screen {
 
@@ -99,6 +101,9 @@ public class StartBprocScreen extends Screen {
     @ProcessFormParam
     @SuppressWarnings("unused")
     private String approveNotificationTemplateCode;
+    @ProcessFormParam
+    @SuppressWarnings("unused")
+    private String revisionNotificationTemplateCode;
     @Inject
     protected MessageBundle messageBundle;
 
@@ -164,6 +169,7 @@ public class StartBprocScreen extends Screen {
                 .addProcessVariable("approverNotificationTemplateCode", approverNotificationTemplateCode)
                 .addProcessVariable("rejectNotificationTemplateCode", rejectNotificationTemplateCode)
                 .addProcessVariable("approveNotificationTemplateCode", approveNotificationTemplateCode)
+                .addProcessVariable("revisionNotificationTemplateCode", revisionNotificationTemplateCode)
                 .addProcessVariable("initiatorNotificationTemplateCode", initiatorNotificationTemplateCode);
 
         Map<String, List<TsadvUser>> params = startBprocParams.getDefaultApprovers();

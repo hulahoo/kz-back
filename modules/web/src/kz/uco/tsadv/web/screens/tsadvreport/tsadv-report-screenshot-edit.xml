@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.tsadvreport">
+    <data>
+        <instance id="tsadvReportDc"
+                  class="kz.uco.tsadv.modules.administration.TsadvReport"
+                  view="report.edit">
+            <loader/>
+            <collection id="templatesDc" property="templates"/>
+        </instance>
+    </data>
+    <dialogMode height="800"
+                width="1200"
+                forceDialog="true"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="tsadvReportDc">
+                <image id="photoKz"
+                       dataContainer="tsadvReportDc"
+                       width="50%"
+                       align="MIDDLE_CENTER"
+                       scaleMode="CONTAIN" property="screenshot"/>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

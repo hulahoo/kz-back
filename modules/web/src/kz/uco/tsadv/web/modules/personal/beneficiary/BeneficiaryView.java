@@ -13,6 +13,8 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import kz.uco.base.common.StaticVariable;
+import kz.uco.base.entity.dictionary.DicCountry;
+import kz.uco.tsadv.modules.personal.dictionary.DicKato;
 import kz.uco.tsadv.modules.personal.model.Beneficiary;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.personal.model.RelationshipTypeBeneficiary;
@@ -24,6 +26,9 @@ import java.util.Map;
 import java.util.UUID;
 
 public class BeneficiaryView extends AbstractEditor<Beneficiary> {
+
+    protected String KZ_COUNTRY_CODE = "1";
+
     @Inject
     protected Datasource<PersonExt> personDs;
     @Inject
@@ -48,6 +53,10 @@ public class BeneficiaryView extends AbstractEditor<Beneficiary> {
     protected CreateAction personContactsTableCreate;
     @Named("personDocumentsTable.create")
     protected CreateAction personDocumentsTableCreate;
+    @Named("fieldGroup.country")
+    private PickerField<DicCountry> countryField;
+    @Named("fieldGroup.addressKATOCode")
+    private PickerField<DicKato> addressKATOCodeField;
 
     @SuppressWarnings("all")
     @Override
@@ -159,6 +168,16 @@ public class BeneficiaryView extends AbstractEditor<Beneficiary> {
                 }
                 beneficiariesDs.modifyItem(beneficiary);
             }
+        });
+
+        if(countryField.getValue() != null && countryField.getValue().getCode().equals(KZ_COUNTRY_CODE)) addressKATOCodeField.setRequired(true);
+        countryField.addValueChangeListener(dicCountryValueChangeEvent -> {
+            if (dicCountryValueChangeEvent.getValue() == null) {
+                addressKATOCodeField.setRequired(false);
+                return;
+            }
+            DicCountry dicCountry = dicCountryValueChangeEvent.getValue();
+            if(dicCountry.getCode().equals(KZ_COUNTRY_CODE)) addressKATOCodeField.setRequired(true);
         });
 
         //getDsContext().addBeforeCommitListener(context -> context.addInstanceToCommit(personDs.getItem()));
