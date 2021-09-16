@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://answerEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.modules.learning.answer.v72">
+    <data>
+        <instance id="answerDc"
+                  class="kz.uco.tsadv.modules.learning.model.Answer"
+                  view="answer.edit">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="answerDc">
+            <column width="350px">
+                <textArea id="answerField" property="answer" required="true"/>
+                <checkBox id="correctField" property="correct"/>
+            </column>
+        </form>
+
+        <vbox id="imageBox" spacing="true">
+            <image id="image"
+                   property="image"
+                   dataContainer="answerDc"
+                   stylename="max-height-500"
+                   scaleMode="CONTAIN"/>
+            <hbox spacing="true">
+                <hbox spacing="true">
+                    <upload id="imageUpload"
+                            property="image"
+                            accept="*.png, *.jpg"
+                            dataContainer="answerDc"
+                            fileStoragePutMode="IMMEDIATE"
+                            showFileName="false"/>
+                    <button id="deleteImage" caption="mainMsg://PresentationsPopup.delete"/>
+                </hbox>
+            </hbox>
+        </vbox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

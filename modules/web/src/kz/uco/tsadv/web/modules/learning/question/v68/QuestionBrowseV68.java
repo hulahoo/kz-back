@@ -1,4 +1,4 @@
-package kz.uco.tsadv.web.modules.learning.question;
+package kz.uco.tsadv.web.modules.learning.question.v68;
 
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Table;
@@ -10,7 +10,8 @@ import javax.inject.Inject;
 import java.util.Map;
 import java.util.UUID;
 
-public class QuestionBrowse extends AbstractLookup {
+@Deprecated
+public class QuestionBrowseV68 extends AbstractLookup {
 
     @Inject
     private CollectionDatasource<Question, UUID> questionsDs;

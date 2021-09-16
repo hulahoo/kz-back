@@ -1,4 +1,4 @@
-package kz.uco.tsadv.web.modules.learning.testsection;
+package kz.uco.tsadv.web.modules.learning.testsection.v68;
 
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowManager;
@@ -10,7 +10,7 @@ import kz.uco.tsadv.modules.learning.model.Question;
 import kz.uco.tsadv.modules.learning.model.QuestionBank;
 import kz.uco.tsadv.modules.learning.model.QuestionInSection;
 import kz.uco.tsadv.modules.learning.model.TestSection;
-import kz.uco.tsadv.web.modules.learning.question.QuestionBrowse;
+import kz.uco.tsadv.web.modules.learning.question.v68.QuestionBrowseV68;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -81,7 +81,7 @@ public class TestSectionEdit extends AbstractEditor<TestSection> {
     }
 
     public void openQuestions() {
-        QuestionBrowse questionBrowse = (QuestionBrowse) openLookup(Question.class, items -> {
+        QuestionBrowseV68 questionBrowseV68 = (QuestionBrowseV68) openLookup(Question.class, items -> {
             for (Question question : (Iterable<Question>) items) {
                 QuestionInSection questionInSection = metadata.create(QuestionInSection.class);
                 questionInSection.setTestSection(testSectionDs.getItem());
@@ -93,6 +93,6 @@ public class TestSectionEdit extends AbstractEditor<TestSection> {
             put("questionInSectionDs", questionInSectionDs);
         }});
 
-        questionBrowse.ready();
+        questionBrowseV68.ready();
     }
 }

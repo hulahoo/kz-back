@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://Question.browseCaption"
-        class="kz.uco.tsadv.web.modules.learning.question.QuestionBrowse"
+        class="kz.uco.tsadv.web.modules.learning.question.v68.QuestionBrowseV68"
         focusComponent="questionsTable"
         lookupComponent="questionsTable">
     <dsContext>

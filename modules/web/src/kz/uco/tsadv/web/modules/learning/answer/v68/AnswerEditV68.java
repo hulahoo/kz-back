@@ -1,4 +1,4 @@
-package kz.uco.tsadv.web.modules.learning.answer;
+package kz.uco.tsadv.web.modules.learning.answer.v68;
 
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.FieldGroup;
@@ -12,7 +12,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Map;
 
-public class AnswerEdit extends AbstractEditor<Answer> {
+@Deprecated
+public class AnswerEditV68 extends AbstractEditor<Answer> {
 
     @Named("fieldGroup.answer")
     private TextField answerField;

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://Question.editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.modules.learning.question.v72">
+    <data>
+        <instance id="questionDc"
+                  class="kz.uco.tsadv.modules.learning.model.Question"
+                  view="question.edit">
+            <loader/>
+            <collection id="answersDc" property="answers"/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <hbox width="100%" expand="imageBox">
+            <form id="form" dataContainer="questionDc">
+                <column width="300px">
+                    <lookupField id="typeField" property="type"/>
+                    <textField id="scoreField" property="score"/>
+                    <textArea id="textField" property="text"/>
+                </column>
+            </form>
+            <vbox id="imageBox" align="TOP_CENTER">
+                <image id="image"
+                       align="MIDDLE_CENTER"
+                       dataContainer="questionDc"
+                       stylename="max-height-500"
+                       property="image"/>
+                <hbox align="BOTTOM_CENTER"
+                      spacing="true">
+                    <upload id="imageUpload"
+                            fileStoragePutMode="IMMEDIATE"
+                            property="image"
+                            accept="*.png, *.jpg"
+                            dataContainer="questionDc"
+                            showFileName="false"/>
+                    <button id="deleteImage" caption="mainMsg://PresentationsPopup.delete"/>
+                </hbox>
+            </vbox>
+        </hbox>
+        <groupBox id="answersBox" caption="msg://kz.uco.tsadv.modules.learning.model/Question.answers">
+            <table id="answersTable" dataContainer="answersDc" width="100%" height="200px">
+                <actions>
+                    <action id="create" type="create"/>
+                    <action id="edit" type="edit"/>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <columns>
+                    <column id="answer"/>
+                    <column id="correct"/>
+                </columns>
+                <buttonsPanel>
+                    <button action="answersTable.create"/>
+                    <button action="answersTable.edit"/>
+                    <button action="answersTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

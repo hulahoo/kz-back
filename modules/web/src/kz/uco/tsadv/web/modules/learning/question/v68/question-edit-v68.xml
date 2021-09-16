@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://Question.editorCaption"
-        class="kz.uco.tsadv.web.modules.learning.question.QuestionEdit"
+        class="kz.uco.tsadv.web.modules.learning.question.v68.QuestionEditV68"
         datasource="questionDs"
         focusComponent="fieldGroup">
     <dsContext>

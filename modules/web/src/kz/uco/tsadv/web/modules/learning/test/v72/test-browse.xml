@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://Test.browseCaption"
+        focusComponent="testsTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.test.v72">
+    <data readOnly="true">
+        <collection id="testsDc"
+                    class="kz.uco.tsadv.modules.learning.model.Test"
+                    view="test.browse">
+            <loader id="testsDl">
+                <query>
+                    <![CDATA[select e from tsadv$Test e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="testsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="testsTable"
+                dataLoader="testsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="testsTable"
+                    width="100%"
+                    dataContainer="testsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+                <action id="excel" type="excel"/>
+                <action id="publish"
+                        caption="msg://publish.btn"
+                        trackSelection="true"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="description"
+                        maxTextLength="60"/>
+                <column id="type.langValue"
+                        caption="msg://kz.uco.tsadv.modules.learning.model/Test.type"/>
+                <column id="active"/>
+                <column id="maxAttempt"/>
+                <column id="daysBetweenAttempts"/>
+                <column id="timer"/>
+                <column id="sectionOrder"/>
+                <column id="targetScore"/>
+                <column id="showResults"/>
+                <column id="showSectionNewPage"/>
+                <column id="questionPerPage"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="false">
+                <button id="createBtn" action="testsTable.create"/>
+                <button id="editBtn" action="testsTable.edit"/>
+                <button id="removeBtn" action="testsTable.remove"/>
+                <button id="excelBtn" action="testsTable.excel"/>
+                <button id="publishButton"
+                        action="testsTable.publish"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
